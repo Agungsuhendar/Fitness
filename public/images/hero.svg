@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="poolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="1200" height="400" fill="url(#skyGrad)"/>
+  <circle cx="1050" cy="120" r="70" fill="url(#sunGrad)" opacity="0.9"/>
+
+  <!-- Water Surface & Pool -->
+  <rect y="380" width="1200" height="420" fill="url(#poolGrad)"/>
+
+  <!-- Waves -->
+  <path d="M0,400 Q150,370 300,400 T600,400 T900,400 T1200,400 L1200,800 L0,800 Z" fill="#38bdf8" opacity="0.3"/>
+  <path d="M0,420 Q200,390 400,420 T800,420 T1200,420 L1200,800 L0,800 Z" fill="#22d3ee" opacity="0.2"/>
+
+  <!-- Swimmer Illustration Graphic -->
+  <g transform="translate(450, 480)">
+    <!-- Water Ripple -->
+    <ellipse cx="150" cy="60" rx="140" ry="25" fill="#ffffff" opacity="0.3"/>
+    <!-- Head -->
+    <circle cx="210" cy="40" r="28" fill="#fdba74"/>
+    <!-- Swim Cap -->
+    <path d="M182,38 A28,28 0 0,1 238,38 Z" fill="#0284c7"/>
+    <!-- Goggles -->
+    <rect x="200" y="32" width="22" height="12" rx="6" fill="#0f172a"/>
+    <!-- Arm Stroke -->
+    <path d="M120,60 Q170,20 220,50" stroke="#fdba74" stroke-width="22" stroke-linecap="round" fill="none"/>
+    <!-- Torso underwater -->
+    <ellipse cx="130" cy="65" rx="70" ry="28" fill="#38bdf8" opacity="0.8"/>
+  </g>
+
+  <text x="600" y="720" font-family="'Outfit', sans-serif" font-weight="800" font-size="36" fill="#ffffff" text-anchor="middle" letter-spacing="2">
+    LES RENANG JOGJA • PROFESSIONAL & TRUSTED
+  </text>
+</svg>
