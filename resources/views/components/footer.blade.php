@@ -34,16 +34,15 @@
                 </ul>
             </div>
 
-            <!-- Col 3: Service Areas (Target SEO keywords) -->
+            <!-- Col 3: Service Areas (Target Local SEO keywords) -->
             <div>
-                <h4 class="footer-title">Area Layanan</h4>
+                <h4 class="footer-title">Area Layanan SEO</h4>
                 <ul class="footer-links">
-                    <li><a href="{{ route('lokasi') }}">Sleman & Depok (UNY / DSC)</a></li>
-                    <li><a href="{{ route('lokasi') }}">Kota Yogyakarta & Umbulharjo</a></li>
-                    <li><a href="{{ route('lokasi') }}">Bantul & Kasihan</a></li>
-                    <li><a href="{{ route('lokasi') }}">Kulon Progo</a></li>
-                    <li><a href="{{ route('lokasi') }}">Semarang & Solo</a></li>
-                    <li><a href="{{ route('lokasi') }}">Magelang & Klaten</a></li>
+                    <li><a href="{{ route('area.landing', 'sleman') }}">Les Renang Sleman & Depok</a></li>
+                    <li><a href="{{ route('area.landing', 'bantul') }}">Les Renang Bantul & Sewon</a></li>
+                    <li><a href="{{ route('area.landing', 'ugm') }}">Les Renang UGM & UNY</a></li>
+                    <li><a href="{{ route('area.landing', 'kota-jogja') }}">Les Renang Kota Yogyakarta</a></li>
+                    <li><a href="{{ route('area.landing', 'kulon-progo') }}">Les Renang Kulon Progo</a></li>
                 </ul>
             </div>
 

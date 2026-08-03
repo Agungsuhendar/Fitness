@@ -499,7 +499,7 @@
             document.getElementById('trialModal').classList.remove('active');
         }
 
-        function openVideoModal(videoUrl = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1') {
+        function openVideoModal(videoUrl = 'https://www.youtube.com/embed/gh5mAtmeR3Y?autoplay=1') {
             const modal = document.getElementById('videoModal');
             const iframe = document.getElementById('videoIframe');
             iframe.src = videoUrl;

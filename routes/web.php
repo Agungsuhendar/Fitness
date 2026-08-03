@@ -20,12 +20,29 @@ use App\Http\Controllers\Admin\AdminLeadController;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/tentang-kami', [PageController::class, 'tentang'])->name('tentang');
+Route::get('/les-renang-{slug}', [PageController::class, 'areaLanding'])->name('area.landing');
+
 Route::get('/sitemap.xml', function() {
     $path = public_path('sitemap.xml');
     if (file_exists($path)) {
         return response()->file($path, ['Content-Type' => 'text/xml']);
     }
-    return response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>' . url('/') . '</loc></url></urlset>', 200, ['Content-Type' => 'text/xml']);
+    
+    $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    $xml .= '<url><loc>' . url('/') . '</loc><priority>1.0</priority></url>';
+    $xml .= '<url><loc>' . url('/tentang-kami') . '</loc><priority>0.8</priority></url>';
+    $xml .= '<url><loc>' . url('/lokasi') . '</loc><priority>0.8</priority></url>';
+    $xml .= '<url><loc>' . url('/harga') . '</loc><priority>0.8</priority></url>';
+    $xml .= '<url><loc>' . url('/faq') . '</loc><priority>0.7</priority></url>';
+    $xml .= '<url><loc>' . url('/kontak') . '</loc><priority>0.7</priority></url>';
+    
+    $areas = ['sleman', 'bantul', 'ugm', 'kota-jogja', 'kulon-progo'];
+    foreach ($areas as $areaSlug) {
+        $xml .= '<url><loc>' . url('/les-renang-' . $areaSlug) . '</loc><priority>0.9</priority></url>';
+    }
+    
+    $xml .= '</urlset>';
+    return response($xml, 200, ['Content-Type' => 'text/xml']);
 });
 
 Route::get('/clear-cache', function() {

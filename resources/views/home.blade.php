@@ -309,18 +309,111 @@
             @endforeach
         </div>
 
+        <!-- Interactive Before-After Video Gallery (Shorts / Reels Style) -->
+        <div style="margin-top: 3.5rem; margin-bottom: 3.5rem;">
+            <div class="section-header" style="margin-bottom: 2rem;">
+                <span class="section-subtitle"><i class="fa-solid fa-clapperboard"></i> Bukti Hasil Latihan Siswa</span>
+                <h2 class="section-title">Galeri Video Before-After (Gaya Reels / Shorts)</h2>
+                <p class="section-description">Lihat transformasi nyata siswa kami: dari tidak berani masuk air hingga mahir berenang hanya dalam 4-6 sesi privat!</p>
+            </div>
+
+            <!-- 3 Vertical 9:16 Shorts Cards Grid -->
+            <div class="grid-3" style="gap: 1.5rem;">
+                <!-- Reel 1: Siswa Anak -->
+                <div class="reel-card" onclick="openReelModal('Daffa (7 Tahun)', 'Hari 1: Takut Air & Menangis ➔ Hari 4: Mahir Gaya Dada 25m', 'https://www.youtube.com/embed/5ee8sX_1-9c')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
+                    <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800&auto=format&fit=crop" alt="Before After Les Renang Anak Daffa" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,4,94,0.92) 0%, rgba(3,4,94,0.2) 50%, rgba(0,0,0,0.4) 100%);"></div>
+
+                    <!-- Floating Before/After Badge Top -->
+                    <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🔴 Hari 1: Takut Air</span>
+                        <span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🟢 Hari 4: Mahir</span>
+                    </div>
+
+                    <!-- Center Play Reel Icon -->
+                    <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <i class="fa-solid fa-play" style="margin-left: 4px; color: var(--accent);"></i>
+                    </div>
+
+                    <!-- Bottom User Info & Story -->
+                    <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;">
+                        <div style="font-weight: 900; font-size: 1.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-child-reaching" style="color: var(--accent);"></i> Daffa (7 Tahun)
+                        </div>
+                        <div style="font-size: 0.85rem; color: #e0f2fe; line-height: 1.4;">
+                            Dari tidak mau lepas pegangan hingga berani meluncur & renang gaya dada 25 meter mandiri!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reel 2: Siswa Dewasa Wanita -->
+                <div class="reel-card" onclick="openReelModal('Mbak Siti (24 Tahun)', 'Hari 1: Trauma Kedalaman ➔ Hari 3: Meluncur di Kolam Dalam 2m', 'https://www.youtube.com/embed/M5cs8a3Bhfg')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
+                    <img src="https://images.unsplash.com/photo-1519315901367-f34ff9154487?q=80&w=800&auto=format&fit=crop" alt="Before After Les Renang Dewasa Wanita Siti" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,4,94,0.92) 0%, rgba(3,4,94,0.2) 50%, rgba(0,0,0,0.4) 100%);"></div>
+
+                    <!-- Floating Before/After Badge Top -->
+                    <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🔴 Hari 1: Trauma</span>
+                        <span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🟢 Hari 3: Berani 2m</span>
+                    </div>
+
+                    <!-- Center Play Reel Icon -->
+                    <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <i class="fa-solid fa-play" style="margin-left: 4px; color: var(--accent);"></i>
+                    </div>
+
+                    <!-- Bottom User Info & Story -->
+                    <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;">
+                        <div style="font-weight: 900; font-size: 1.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-person-dress" style="color: var(--accent);"></i> Mbak Siti (24 Tahun)
+                        </div>
+                        <div style="font-size: 0.85rem; color: #e0f2fe; line-height: 1.4;">
+                            Bimbingan privat 1-on-1 wanita ramah. Dalam 3 sesi berhasil mengatasi trauma air kedalaman 2 meter!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reel 3: Peserta TNI / POLRI -->
+                <div class="reel-card" onclick="openReelModal('Rian (Calon TNI/POLRI)', 'Hari 1: Renang 15m Terengah ➔ Hari 6: Lulus Tes 50m Gaya Bebas', 'https://www.youtube.com/embed/xVeXGKPOH58')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
+                    <img src="https://images.unsplash.com/photo-1438029071396-1e831a7fa6d8?q=80&w=800&auto=format&fit=crop" alt="Before After Les Renang TNI POLRI Rian" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,4,94,0.92) 0%, rgba(3,4,94,0.2) 50%, rgba(0,0,0,0.4) 100%);"></div>
+
+                    <!-- Floating Before/After Badge Top -->
+                    <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🔴 Hari 1: 15m</span>
+                        <span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🟢 Hari 6: Lulus 50m</span>
+                    </div>
+
+                    <!-- Center Play Reel Icon -->
+                    <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <i class="fa-solid fa-play" style="margin-left: 4px; color: var(--accent);"></i>
+                    </div>
+
+                    <!-- Bottom User Info & Story -->
+                    <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;">
+                        <div style="font-weight: 900; font-size: 1.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-user-ninja" style="color: var(--accent);"></i> Rian (Calon TNI/POLRI)
+                        </div>
+                        <div style="font-size: 0.85rem; color: #e0f2fe; line-height: 1.4;">
+                            Pelatihan stamina & teknik pernapasan intensif. Lulus tes renang 50m gaya bebas target waktu 55 detik!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Video Gallery Showcase with Interactive Modal Player -->
-        <div class="glass-card" style="padding: 3.5rem 2rem; text-align: center; background: linear-gradient(135deg, #0b132b 0%, #1c2541 100%); color: white; border-radius: 2rem; box-shadow: var(--shadow-glow);">
-            <span style="color: var(--cyan-glow); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: 0.875rem;">Video Showcase Aktivitas</span>
+        <div class="glass-card" style="padding: 3.5rem 2rem; text-align: center; background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; border-radius: 2rem; box-shadow: var(--shadow-glow); border: 1px solid rgba(255,255,255,0.25);">
+            <span style="color: var(--accent); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: 0.875rem;">Video Showcase Aktivitas</span>
             <h3 style="color: white; font-size: 2.3rem; margin: 0.5rem 0 1rem;">Lihat Perubahan & Kemajuan Peserta Kami di Air</h3>
-            <p style="color: #94a3b8; max-width: 680px; margin: 0 auto 2.5rem; font-size: 1.05rem;">
+            <p style="color: rgba(255, 255, 255, 0.9); max-width: 680px; margin: 0 auto 2.5rem; font-size: 1.05rem;">
                 Tonton proses dari tidak berani masuk air hingga mahir berenang gaya dada dan meluncur dengan percaya diri!
             </p>
             <div style="display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap;">
                 <button onclick="openVideoModal()" class="btn btn-accent btn-lg">
                     <i class="fa-solid fa-circle-play" style="font-size: 1.4rem;"></i> Tonton Video Aktivitas (Interactive)
                 </button>
-                <button onclick="openTrialModal()" class="btn btn-outline btn-lg" style="color: white; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1);">
+                <button onclick="openTrialModal()" class="btn btn-outline btn-lg" style="color: white; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15);">
                     <i class="fa-solid fa-bolt"></i> Booking Trial Gratis 30m
                 </button>
             </div>
@@ -464,8 +557,36 @@
     </div>
 </section>
 
+<!-- Interactive Reels Modal Player Overlay -->
+<div class="modal-overlay" id="reelModalOverlay" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
+    <div class="modal-card" style="max-width: 460px; width: 92%; padding: 0; overflow: hidden; border-radius: 2rem; background: #000;">
+        <div style="padding: 1.15rem 1.4rem; background: #0f172a; color: white; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4 id="reelModalTitle" style="margin: 0; color: white; font-size: 1.1rem; font-weight: 800;">Before-After Shorts</h4>
+                <p id="reelModalSub" style="margin: 0.2rem 0 0; color: #38bdf8; font-size: 0.8rem; font-weight: 700;"></p>
+            </div>
+            <button onclick="closeReelModal()" style="background: transparent; border: none; color: white; font-size: 1.6rem; cursor: pointer;">&times;</button>
+        </div>
+        <div style="position: relative; padding-top: 140%; width: 100%;">
+            <iframe id="reelModalIframe" style="position: absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
+    function openReelModal(title, sub, videoUrl) {
+        document.getElementById('reelModalTitle').innerText = title;
+        document.getElementById('reelModalSub').innerText = sub;
+        document.getElementById('reelModalIframe').src = videoUrl + '?autoplay=1';
+        document.getElementById('reelModalOverlay').style.display = 'flex';
+    }
+
+    function closeReelModal() {
+        document.getElementById('reelModalIframe').src = '';
+        document.getElementById('reelModalOverlay').style.display = 'none';
+    }
+
     function filterPrograms(category, btnElement) {
         // Tab buttons styling
         document.querySelectorAll('.filter-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
