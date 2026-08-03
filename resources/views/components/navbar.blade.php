@@ -40,8 +40,8 @@
                             <span>Ocean Breeze (Default)</span>
                         </button>
                         <button type="button" onclick="setWebTheme('dark')" class="theme-option-btn" data-theme-val="dark">
-                            <span class="theme-color-dot" style="background: linear-gradient(135deg, #0f172a, #38bdf8);"></span>
-                            <span>Midnight Slate (Dark)</span>
+                            <span class="theme-color-dot" style="background: linear-gradient(135deg, #070a12, #38bdf8);"></span>
+                            <span>Obsidian Night (Tema Gelap Luxury)</span>
                         </button>
                         <button type="button" onclick="setWebTheme('rose')" class="theme-option-btn" data-theme-val="rose">
                             <span class="theme-color-dot" style="background: linear-gradient(135deg, #f43f5e, #fda4af);"></span>

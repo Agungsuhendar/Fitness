@@ -118,7 +118,7 @@
 
     <!-- Local FontAwesome & CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.0.4">
 
     <style>
         /* Theme Switcher Button & Dropdown Styles */
@@ -209,7 +209,7 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Dynamic Soft & Aesthetic Theme Variable Overrides */
+        /* 🌌 Obsidian Night Theme (Tema Gelap Luxury Cyber-Aquatic) */
         [data-theme="dark"] {
             --primary: #38bdf8;
             --primary-dark: #0284c7;
@@ -217,14 +217,21 @@
             --accent: #fbbf24;
             --dark: #f8fafc;
             --text-muted: #94a3b8;
+            --light-bg: #070a12;
+            --dark-surface: #070a12;
+            --glass-bg: rgba(15, 23, 42, 0.92);
+            --glass-border: rgba(56, 189, 248, 0.25);
         }
         [data-theme="dark"] body {
-            background-color: #0f172a !important;
+            background-color: #070a12 !important;
             color: #f8fafc !important;
         }
         [data-theme="dark"] .navbar {
-            background: rgba(15, 23, 42, 0.94) !important;
-            border-bottom: 1px solid #334155 !important;
+            background: rgba(7, 10, 18, 0.94) !important;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
+        }
+        [data-theme="dark"] .hero-section {
+            background: linear-gradient(180deg, #070a12 0%, #0f172a 65%, #070a12 100%) !important;
         }
         [data-theme="dark"] .glass-card, 
         [data-theme="dark"] .program-card, 
@@ -233,32 +240,58 @@
         [data-theme="dark"] .pricing-card,
         [data-theme="dark"] .location-card,
         [data-theme="dark"] .section-bg-alt {
-            background: #1e293b !important;
-            border-color: #334155 !important;
+            background: #0f172a !important;
+            border: 1px solid rgba(56, 189, 248, 0.22) !important;
             color: #f8fafc !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
         }
         [data-theme="dark"] .section-title, 
         [data-theme="dark"] .hero-title, 
         [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 {
             color: #ffffff !important;
         }
-        [data-theme="dark"] .nav-link {
+        [data-theme="dark"] .section-subtitle {
+            color: #38bdf8 !important;
+        }
+        [data-theme="dark"] .search-box {
+            background: #0f172a !important;
+            border-color: rgba(56, 189, 248, 0.35) !important;
+        }
+        [data-theme="dark"] .search-input {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .search-input::placeholder {
+            color: #94a3b8 !important;
+        }
+        [data-theme="dark"] .faq-item {
+            background: #0f172a !important;
+            border-color: rgba(56, 189, 248, 0.22) !important;
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .faq-header {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .faq-body {
             color: #cbd5e1 !important;
+            border-top-color: #1e293b !important;
+        }
+        [data-theme="dark"] .nav-link {
+            color: #e2e8f0 !important;
         }
         [data-theme="dark"] .theme-picker-btn {
-            background: #1e293b;
-            border-color: #334155;
+            background: #0f172a;
+            border-color: rgba(56, 189, 248, 0.3);
             color: #38bdf8;
         }
         [data-theme="dark"] .theme-dropdown-menu {
-            background: #1e293b;
-            border-color: #334155;
+            background: #0f172a;
+            border-color: rgba(56, 189, 248, 0.3);
         }
         [data-theme="dark"] .theme-option-btn {
             color: #e2e8f0;
         }
         [data-theme="dark"] .theme-option-btn:hover {
-            background: #334155;
+            background: #1e293b;
         }
 
         /* 🌸 Soft Rose & Lavender Theme */

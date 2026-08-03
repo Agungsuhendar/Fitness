@@ -54,17 +54,28 @@
                 </div>
             </div>
 
-            <div class="hero-image-wrapper">
-                <div class="hero-image-card">
-                    <img src="{{ asset('images/assets/hero_pool.webp') }}" alt="Les Renang Jogja Privat Anak & Dewasa" loading="lazy" onerror="this.onerror=null; this.src='{{ asset('images/logo.webp') }}';">
-                </div>
-                <div class="floating-trust-card">
-                    <div style="width: 50px; height: 50px; background: rgba(37, 211, 102, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #25d366; font-size: 1.6rem;">
-                        <i class="fa-solid fa-user-shield"></i>
-                    </div>
-                    <div>
-                        <div style="font-weight: 900; font-size: 1.05rem; color: var(--dark);">Garansi Bisa Renang</div>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Bimbingan ekstra hingga mahir</div>
+            <div class="hero-image-wrapper" style="position: relative;">
+                <!-- Main Showcase Card (Tall 520px Height with Ambient Glow & Dark Overlay) -->
+                <div class="hero-image-card" style="height: 520px; border-radius: 2.25rem; overflow: hidden; box-shadow: 0 30px 60px -12px rgba(0, 119, 182, 0.35); border: 4px solid rgba(255, 255, 255, 0.95); position: relative;">
+                    <img src="{{ asset('images/assets/hero_pool_modern.webp') }}" alt="Les Renang Jogja Privat Anak & Dewasa Yogyakarta" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; object-position: center;" onerror="this.onerror=null; this.src='{{ asset('images/logo.webp') }}';">
+                    
+                    <!-- Bottom Dark Gradient Overlay for High Contrast -->
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3, 4, 94, 0.85) 0%, rgba(3, 4, 94, 0.25) 45%, transparent 100%); pointer-events: none;"></div>
+
+                    <!-- Interactive Glowing Play Video Button Overlay -->
+                    <button onclick="openVideoModal()" class="hero-play-btn" title="Tonton Video Suasana Latihan Les Renang" aria-label="Tonton Video Suasana Latihan" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 50%; border: 3px solid rgba(245, 158, 11, 0.6); color: var(--primary); font-size: 2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 40px rgba(0,0,0,0.4); transition: all 0.35s ease; z-index: 10;">
+                        <i class="fa-solid fa-play" style="margin-left: 5px; color: var(--accent);"></i>
+                    </button>
+
+                    <!-- Floating Badge 100% Over Image Surface (Nudged Left) -->
+                    <div class="floating-trust-card" style="position: absolute; bottom: 20px; left: 12px; z-index: 99; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(16px); padding: 0.85rem 1.25rem; border-radius: 1.25rem; box-shadow: 0 20px 45px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.95); animation: floatBadge 3.5s ease-in-out infinite;">
+                        <div style="width: 44px; height: 44px; background: rgba(16, 185, 129, 0.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--emerald); font-size: 1.4rem;">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 900; font-size: 1rem; color: var(--dark);">Garansi 100% Bisa</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Bimbingan ekstra hingga mahir</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -179,7 +190,7 @@
             @endphp
             <div class="program-card program-item-card" data-category="{{ $cat }}">
                 <div class="program-thumb">
-                    <img src="{{ Str::startsWith($image, 'http') ? $image : asset($image) }}" alt="{{ $title }}" onerror="this.onerror=null; this.src='{{ asset('images/hero.svg') }}';">
+                    <img src="{{ Str::startsWith($image, 'http') ? $image : asset($image) }}" alt="{{ $title }}" onerror="this.onerror=null; this.src='{{ asset('images/logo.webp') }}';">
                     @if($badge)
                         <span class="program-badge">{{ $badge }}</span>
                     @endif
@@ -398,24 +409,54 @@
     </div>
 </section>
 
-<!-- Big High-Conversion CTA Banner -->
-<section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; text-align: center;">
-    <div class="container">
+<!-- High-Impact Wild Surging Liquid Wave Top Divider -->
+<div class="promo-wave-divider" style="position: relative; width: 100%; overflow: hidden; line-height: 0; margin-bottom: -1px; z-index: 5;">
+    <svg viewBox="0 0 1440 220" preserveAspectRatio="none" style="width: 100%; height: 145px; display: block;">
+        <!-- Wave Layer 1 (Wild Soft Backing Curve - High Peaks & Deep Drops) -->
+        <path d="M0,40 C180,210 380,-40 620,130 C860,280 1100,-20 1280,110 C1380,180 1420,20 1440,60 L1440,220 L0,220 Z" fill="var(--primary-light)" opacity="0.4"></path>
+
+        <!-- Wave Layer 2 (Wild Mid Fluid Surge) -->
+        <path d="M0,85 C240,215 480,-10 740,120 C980,240 1220,-30 1440,90 L1440,220 L0,220 Z" fill="var(--primary)" opacity="0.65"></path>
+
+        <!-- Wild Water Splash Droplets & Bubbles -->
+        <circle cx="150" cy="50" r="8" fill="var(--primary-light)" opacity="0.85"></circle>
+        <circle cx="175" cy="30" r="5" fill="var(--primary-light)" opacity="0.9"></circle>
+        <circle cx="480" cy="20" r="10" fill="var(--primary-light)" opacity="0.85"></circle>
+        <circle cx="515" cy="45" r="6" fill="var(--primary-light)" opacity="0.95"></circle>
+        <circle cx="820" cy="35" r="9" fill="var(--primary-light)" opacity="0.8"></circle>
+        <circle cx="850" cy="15" r="5" fill="var(--primary-light)" opacity="0.9"></circle>
+        <circle cx="1180" cy="25" r="8" fill="var(--primary-light)" opacity="0.85"></circle>
+        <circle cx="1210" cy="50" r="4" fill="var(--primary-light)" opacity="0.95"></circle>
+
+        <!-- Wave Layer 3 (Foreground Wild Surging Ocean Crest - Seamless var(--primary-dark)) -->
+        <path d="M0,130 C150,15 350,185 550,70 C750,-40 950,170 1160,55 C1300,-25 1390,115 1440,85 L1440,220 L0,220 Z" fill="var(--primary-dark)"></path>
+    </svg>
+</div>
+
+<!-- Big High-Conversion CTA Banner (Seamless Fill Match with var(--primary-dark)) -->
+<section class="section" style="background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; text-align: center; padding: 2.5rem 0 5rem; position: relative;">
+    <div class="container" style="position: relative; z-index: 2;">
         <div style="max-width: 840px; margin: 0 auto;">
-            <div style="display: inline-block; padding: 0.6rem 1.35rem; background: rgba(255,255,255,0.18); border-radius: 99px; font-weight: 800; font-size: 0.875rem; margin-bottom: 1.35rem;">
-                🔥 Promo Terbatas Bulan Ini - Diskon Paket Kakak Adik
+            
+            <!-- Theme-Responsive Glowing Promo Badge -->
+            <div style="display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.85rem 2rem; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(16px); border: 2px solid rgba(255, 255, 255, 0.45); border-radius: 99px; font-weight: 900; font-size: 1.05rem; margin-bottom: 2rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2); transform: scale(1.02); transition: all 0.3s ease;">
+                <span style="font-size: 1.5rem; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));">🔥</span> 
+                <span style="color: #ffffff; letter-spacing: 0.5px;">
+                    Promo Terbatas Bulan Ini - Diskon Paket Kakak Adik
+                </span>
             </div>
-            <h2 style="color: white; font-size: 2.85rem; margin-bottom: 1.35rem; line-height: 1.2;">
+
+            <h2 style="color: white; font-size: 3rem; margin-bottom: 1.5rem; line-height: 1.25; font-weight: 900; text-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);">
                 Siap Mahir Berenang Dalam Waktu Singkat?
             </h2>
-            <p style="font-size: 1.2rem; color: #e0f2fe; margin-bottom: 2.5rem;">
+            <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 2.75rem; line-height: 1.75; font-weight: 500;">
                 Jangan tunda lagi! Konsultasikan kebutuhan les renang Anda secara gratis dengan tim admin & pelatih kami sekarang juga.
             </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button onclick="openRegistrationModal()" class="btn btn-accent btn-lg">
+            <div style="display: flex; gap: 1.35rem; justify-content: center; flex-wrap: wrap;">
+                <button onclick="openRegistrationModal()" class="btn btn-accent btn-lg" style="box-shadow: 0 12px 30px rgba(245, 158, 11, 0.45); transform: translateY(-2px);">
                     <i class="fa-solid fa-paper-plane"></i> Daftar Les Renang Sekarang
                 </button>
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20konsultasi%20gratis%20les%20renang." target="_blank" class="btn btn-whatsapp btn-lg">
+                <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20konsultasi%20gratis%20les%20renang." target="_blank" class="btn btn-whatsapp btn-lg" style="box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45); transform: translateY(-2px);">
                     <i class="fa-brands fa-whatsapp"></i> Chat Admin WhatsApp
                 </a>
             </div>
