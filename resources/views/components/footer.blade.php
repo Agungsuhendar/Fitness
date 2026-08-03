@@ -61,6 +61,23 @@
             </div>
         </div>
 
+        <!-- SEO Target Keywords Footer Tag Cloud -->
+        <div style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 2.5rem; padding-top: 1.5rem; font-size: 0.825rem; color: #64748b;">
+            <div style="font-weight: 800; color: #94a3b8; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem;">
+                <i class="fa-solid fa-tags" style="color: var(--accent);"></i> Kata Kunci Pencarian Populer:
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; line-height: 1.8;">
+                <a href="{{ route('program.show', 'les-renang-anak') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Les Renang Jogja</a>
+                <a href="{{ route('program.show', 'les-renang-anak') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Les Renang Anak Jogja</a>
+                <a href="{{ route('program.show', 'les-renang-dewasa') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Les Renang Dewasa Yogyakarta</a>
+                <a href="{{ route('program.show', 'les-renang-wanita') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Pelatih Renang Wanita Muslimah Jogja</a>
+                <a href="{{ route('program.show', 'persiapan-tni-polri') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Renang TNI POLRI Jogja</a>
+                <a href="{{ route('harga') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Biaya Les Renang Privat Jogja</a>
+                <a href="{{ route('lokasi') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Les Renang Sleman Depok UGM</a>
+                <a href="{{ route('lokasi') }}" style="color: #94a3b8; text-decoration: none; background: rgba(255,255,255,0.04); padding: 0.2rem 0.6rem; border-radius: 4px;">Les Renang Bantul & Kota Jogja</a>
+            </div>
+        </div>
+
         <div class="footer-bottom">
             <div>
                 © {{ date('Y') }} <strong>Les Renang Jogja</strong>. Hak Cipta Dilindungi Undang-Undang.

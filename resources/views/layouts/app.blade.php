@@ -10,6 +10,7 @@
     <meta name="keywords" content="Les Renang Jogja, Les Renang Yogyakarta, Les Renang Anak Jogja, Les Renang Dewasa Jogja, Les Privat Renang Jogja, Kursus Renang Jogja, Pelatih Renang Jogja, Renang TNI Jogja, Renang POLRI Jogja">
     <meta name="author" content="Les Renang Jogja">
     <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE_HERE">
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Open Graph / Social Media Meta -->
@@ -20,6 +21,100 @@
     <meta property="og:site_name" content="Les Renang Jogja">
     <meta property="og:image" content="{{ asset('images/logo.webp') }}">
     <link rel="icon" type="image/webp" href="{{ asset('images/logo.webp') }}">
+
+    <!-- Geo Meta Tags for Google Local Search -->
+    <meta name="geo.region" content="ID-YO">
+    <meta name="geo.placename" content="Yogyakarta">
+    <meta name="geo.position" content="-7.797068;110.370529">
+    <meta name="ICBM" content="-7.797068, 110.370529">
+
+    <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets & Star Ratings -->
+    <script type="application/ld+json">
+    {
+      "{{ '@context' }}": "https://schema.org",
+      "@type": "SportsActivityLocation",
+      "name": "Les Renang Jogja",
+      "image": "{{ asset('images/logo.webp') }}",
+      "@id": "http://lesrenangjogja.site.je",
+      "url": "http://lesrenangjogja.site.je",
+      "telephone": "+6281234567890",
+      "priceRange": "Rp 150.000 - Rp 850.000",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Jl. Kaliurang KM 5, Depok, Sleman",
+        "addressLocality": "Yogyakarta",
+        "addressRegion": "DI Yogyakarta",
+        "postalCode": "55281",
+        "addressCountry": "ID"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -7.797068,
+        "longitude": 110.370529
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "06:00",
+        "closes": "18:00"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "250"
+      }
+    }
+    </script>
+
+    <!-- FAQPage Schema.org JSON-LD for Google SERP Rich Accordions -->
+    <script type="application/ld+json">
+    {
+      "{{ '@context' }}": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Berapa biaya les renang privat di Les Renang Jogja?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Biaya les renang di Les Renang Jogja mulai dari Rp 150.000 per sesi atau paket privat hemat Rp 850.000 garansi sampai bisa renang."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dimana lokasi kolam renang latihan Les Renang Jogja?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Latihan dilakukan di kolam renang bersih & higienis di Yogyakarta, Sleman, Bantul, UNY, FIK, atau kolam renang pribadi/hotel sesuai permintaan Anda."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Apakah ada kelas les renang khusus wanita/muslimah di Jogja?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ya, kami menyediakan kelas les renang privat khusus wanita/muslimah di Jogja dengan pelatih wanita berlisensi yang menjaga privasi."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Berapa lama rata-rata siswa bisa mahir berenang?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dengan metode 1-on-1 privat, rata-rata peserta anak maupun dewasa bisa mengapung dan meluncur dalam 2-4 kali pertemuan."
+          }
+        }
+      ]
+    }
+    </script>
 
     <!-- Local FontAwesome & CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
@@ -255,14 +350,14 @@
     <!-- Schema.org JSON-LD Structured Data for Local Business SEO -->
     <script type="application/ld+json">
     {
-      "@@context": "https://schema.org",
-      "@@type": "SportsActivityLocation",
+      "{{ '@context' }}": "https://schema.org",
+      "@type": "SportsActivityLocation",
       "name": "Les Renang Jogja",
-      "image": "{{ asset('images/hero.svg') }}",
+      "image": "{{ asset('images/logo.webp') }}",
       "telephone": "+6281234567890",
       "email": "info@lesrenangjogja.com",
       "address": {
-        "@@type": "PostalAddress",
+        "@type": "PostalAddress",
         "streetAddress": "Jl. Colombo No.1, Caturtunggal, Depok",
         "addressLocality": "Sleman",
         "addressRegion": "D.I. Yogyakarta",
@@ -270,14 +365,14 @@
         "addressCountry": "ID"
       },
       "geo": {
-        "@@type": "GeoCoordinates",
+        "@type": "GeoCoordinates",
         "latitude": "-7.7702812",
         "longitude": "110.3853112"
       },
       "url": "{{ url('/') }}",
-      "priceRange": "Rp 350.000 - Rp 1.200.000",
+      "priceRange": "Rp 150.000 - Rp 850.000",
       "openingHoursSpecification": {
-        "@@type": "OpeningHoursSpecification",
+        "@type": "OpeningHoursSpecification",
         "dayOfWeek": [
           "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
         ],

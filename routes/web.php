@@ -20,6 +20,27 @@ use App\Http\Controllers\Admin\AdminLeadController;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/tentang-kami', [PageController::class, 'tentang'])->name('tentang');
+Route::get('/sitemap.xml', function() {
+    $path = public_path('sitemap.xml');
+    if (file_exists($path)) {
+        return response()->file($path, ['Content-Type' => 'text/xml']);
+    }
+    return response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>' . url('/') . '</loc></url></urlset>', 200, ['Content-Type' => 'text/xml']);
+});
+
+Route::get('/clear-cache', function() {
+    $dir = storage_path('framework/views');
+    $count = 0;
+    if (is_dir($dir)) {
+        foreach (glob($dir . '/*') as $file) {
+            if (is_file($file) && basename($file) !== '.gitignore') {
+                @unlink($file);
+                $count++;
+            }
+        }
+    }
+    return "View cache cleared successfully! ({$count} compiled views removed)";
+});
 
 // Programs
 Route::get('/program', [ProgramController::class, 'index'])->name('program.index');
