@@ -2,12 +2,8 @@
     <div class="container">
         <div class="navbar-inner">
             <!-- Brand Logo -->
-            <a href="{{ route('home') }}" class="brand-logo">
+            <a href="{{ route('home') }}" class="brand-logo" aria-label="Les Renang Jogja Homepage">
                 <img src="{{ asset('images/logo.webp') }}" alt="Les Renang Jogja Logo" class="brand-logo-img">
-                <div class="brand-text-group">
-                    <div class="brand-title">LES RENANG JOGJA</div>
-                    <div class="brand-subtitle">KURSUS PRIVAT & GARANSI BISA</div>
-                </div>
             </a>
 
             <!-- Desktop Nav Links -->
@@ -31,6 +27,36 @@
                 <button onclick="openRegistrationModal()" class="btn btn-primary btn-sm hidden-mobile">
                     <i class="fa-solid fa-paper-plane"></i> Daftar Now
                 </button>
+
+                <!-- Theme Switcher Dropdown -->
+                <div class="theme-switcher-wrapper">
+                    <button type="button" class="theme-picker-btn" id="themePickerToggle" title="Pilih Tema Website" aria-label="Pilih Warna Tema Website">
+                        <i class="fa-solid fa-palette"></i>
+                    </button>
+                    <div class="theme-dropdown-menu" id="themeDropdownMenu">
+                        <div class="theme-dropdown-header">Pilih Tema Website (Soft & Aesthetic)</div>
+                        <button type="button" onclick="setWebTheme('ocean')" class="theme-option-btn active" data-theme-val="ocean">
+                            <span class="theme-color-dot" style="background: linear-gradient(135deg, #0284c7, #38bdf8);"></span>
+                            <span>Ocean Breeze (Default)</span>
+                        </button>
+                        <button type="button" onclick="setWebTheme('dark')" class="theme-option-btn" data-theme-val="dark">
+                            <span class="theme-color-dot" style="background: linear-gradient(135deg, #0f172a, #38bdf8);"></span>
+                            <span>Midnight Slate (Dark)</span>
+                        </button>
+                        <button type="button" onclick="setWebTheme('rose')" class="theme-option-btn" data-theme-val="rose">
+                            <span class="theme-color-dot" style="background: linear-gradient(135deg, #f43f5e, #fda4af);"></span>
+                            <span>Pastel Rose & Lavender</span>
+                        </button>
+                        <button type="button" onclick="setWebTheme('sage')" class="theme-option-btn" data-theme-val="sage">
+                            <span class="theme-color-dot" style="background: linear-gradient(135deg, #10b981, #6ee7b7);"></span>
+                            <span>Sage Mint (Soft Green)</span>
+                        </button>
+                        <button type="button" onclick="setWebTheme('peach')" class="theme-option-btn" data-theme-val="peach">
+                            <span class="theme-color-dot" style="background: linear-gradient(135deg, #f97316, #fdba74);"></span>
+                            <span>Warm Peach Sunset</span>
+                        </button>
+                    </div>
+                </div>
 
                 <!-- Mobile Hamburger Button -->
                 <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">

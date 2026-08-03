@@ -72,25 +72,25 @@
     </div>
 </section>
 
-<!-- Stats Counter Banner -->
-<section style="background: linear-gradient(135deg, #0b132b 0%, #1c2541 100%); padding: 3.5rem 0; color: white;">
+<!-- Stats Counter Banner (Matches Big High CTA Banner) -->
+<section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; text-align: center; padding: 4rem 0;">
     <div class="container">
         <div class="grid-4" style="text-align: center;">
             <div>
-                <div style="font-size: 3rem; font-weight: 900; color: #00f2fe; margin-bottom: 0.25rem;">2.500+</div>
-                <div style="color: #94a3b8; font-weight: 700; font-size: 0.95rem;">Siswa Alumni Mahir</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">2.500+</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Siswa Alumni Mahir</div>
             </div>
             <div>
-                <div style="font-size: 3rem; font-weight: 900; color: #fbbf24; margin-bottom: 0.25rem;">10+ Th</div>
-                <div style="color: #94a3b8; font-weight: 700; font-size: 0.95rem;">Pengalaman Pelatihan</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">10+ Th</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Pengalaman Pelatihan</div>
             </div>
             <div>
-                <div style="font-size: 3rem; font-weight: 900; color: #4ade80; margin-bottom: 0.25rem;">100%</div>
-                <div style="color: #94a3b8; font-weight: 700; font-size: 0.95rem;">Pelatih Lisensi PRSI</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">100%</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Pelatih Lisensi PRSI</div>
             </div>
             <div>
-                <div style="font-size: 3rem; font-weight: 900; color: #f472b6; margin-bottom: 0.25rem;">4.9 / 5</div>
-                <div style="color: #94a3b8; font-weight: 700; font-size: 0.95rem;">Rating Kepuasan Wali</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">4.9 / 5</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Rating Kepuasan Wali</div>
             </div>
         </div>
     </div>

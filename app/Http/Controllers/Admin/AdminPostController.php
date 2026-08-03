@@ -27,11 +27,28 @@ class AdminPostController extends Controller
             'category' => 'required|string',
             'excerpt' => 'required|string',
             'content' => 'required|string',
-            'image' => 'required|string',
+            'image' => 'nullable|string',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'author' => 'required|string',
             'reading_time' => 'integer',
         ]);
 
+        if ($request->hasFile('image_file') && $request->file('image_file')->isValid()) {
+            $file = $request->file('image_file');
+            $filename = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('images/uploads');
+            if (!file_exists($uploadPath)) {
+                @mkdir($uploadPath, 0777, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['image'] = 'images/uploads/' . $filename;
+        }
+
+        if (empty($data['image'])) {
+            $data['image'] = 'images/hero-bg.webp';
+        }
+
+        unset($data['image_file']);
         $data['slug'] = Str::slug($data['title']);
         $data['published_at'] = now();
 
@@ -52,11 +69,28 @@ class AdminPostController extends Controller
             'category' => 'required|string',
             'excerpt' => 'required|string',
             'content' => 'required|string',
-            'image' => 'required|string',
+            'image' => 'nullable|string',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'author' => 'required|string',
             'reading_time' => 'integer',
         ]);
 
+        if ($request->hasFile('image_file') && $request->file('image_file')->isValid()) {
+            $file = $request->file('image_file');
+            $filename = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $uploadPath = public_path('images/uploads');
+            if (!file_exists($uploadPath)) {
+                @mkdir($uploadPath, 0777, true);
+            }
+            $file->move($uploadPath, $filename);
+            $data['image'] = 'images/uploads/' . $filename;
+        }
+
+        if (empty($data['image'])) {
+            $data['image'] = $post->image ?? 'images/hero-bg.webp';
+        }
+
+        unset($data['image_file']);
         $data['slug'] = Str::slug($data['title']);
         $post->update($data);
 

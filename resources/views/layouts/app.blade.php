@@ -25,6 +25,233 @@
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
+    <style>
+        /* Theme Switcher Button & Dropdown Styles */
+        .theme-switcher-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .theme-picker-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 99px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .theme-picker-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            transform: rotate(20deg) scale(1.05);
+        }
+        .theme-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.65rem);
+            right: 0;
+            width: 220px;
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 0.75rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.35rem;
+            z-index: 1000;
+            animation: fadeInScale 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .theme-dropdown-menu.show {
+            display: flex;
+        }
+        .theme-dropdown-header {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            padding: 0.35rem 0.5rem 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 0.25rem;
+        }
+        .theme-option-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.55rem 0.75rem;
+            border-radius: 0.65rem;
+            border: none;
+            background: transparent;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        .theme-option-btn:hover, .theme-option-btn.active {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+        .theme-color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 99px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(-5px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Dynamic Soft & Aesthetic Theme Variable Overrides */
+        [data-theme="dark"] {
+            --primary: #38bdf8;
+            --primary-dark: #0284c7;
+            --primary-light: #7dd3fc;
+            --accent: #fbbf24;
+            --dark: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        [data-theme="dark"] body {
+            background-color: #0f172a !important;
+            color: #f8fafc !important;
+        }
+        [data-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.94) !important;
+            border-bottom: 1px solid #334155 !important;
+        }
+        [data-theme="dark"] .glass-card, 
+        [data-theme="dark"] .program-card, 
+        [data-theme="dark"] .blog-card, 
+        [data-theme="dark"] .faq-card,
+        [data-theme="dark"] .pricing-card,
+        [data-theme="dark"] .location-card,
+        [data-theme="dark"] .section-bg-alt {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f8fafc !important;
+        }
+        [data-theme="dark"] .section-title, 
+        [data-theme="dark"] .hero-title, 
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .nav-link {
+            color: #cbd5e1 !important;
+        }
+        [data-theme="dark"] .theme-picker-btn {
+            background: #1e293b;
+            border-color: #334155;
+            color: #38bdf8;
+        }
+        [data-theme="dark"] .theme-dropdown-menu {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        [data-theme="dark"] .theme-option-btn {
+            color: #e2e8f0;
+        }
+        [data-theme="dark"] .theme-option-btn:hover {
+            background: #334155;
+        }
+
+        /* 🌸 Soft Rose & Lavender Theme */
+        [data-theme="rose"] {
+            --primary: #e11d48;
+            --primary-dark: #881337;
+            --primary-light: #f43f5e;
+            --accent: #fb7185;
+            --light-bg: #fff1f2;
+        }
+        [data-theme="rose"] .hero-section {
+            background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 65%, #ffffff 100%) !important;
+        }
+        [data-theme="rose"] .btn-primary {
+            background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%) !important;
+            border: none;
+        }
+
+        /* 🌿 Sage Mint (Soft Green Theme) */
+        [data-theme="sage"] {
+            --primary: #059669;
+            --primary-dark: #064e3b;
+            --primary-light: #10b981;
+            --accent: #f59e0b;
+            --light-bg: #f0fdf4;
+        }
+        [data-theme="sage"] .hero-section {
+            background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 65%, #ffffff 100%) !important;
+        }
+        [data-theme="sage"] .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+            border: none;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0, 119, 182, 0.3);
+        }
+
+        /* 🌅 Warm Peach Sunset Theme */
+        [data-theme="peach"] {
+            --primary: #ea580c;
+            --primary-dark: #7c2d12;
+            --primary-light: #f97316;
+            --accent: #0284c7;
+            --light-bg: #fff7ed;
+        }
+        [data-theme="peach"] .hero-section {
+            background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 65%, #ffffff 100%) !important;
+        }
+        [data-theme="peach"] .btn-primary {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%) !important;
+            border: none;
+        }
+    </style>
+
+    <script>
+        // Apply theme immediately before page render
+        (function() {
+            const savedTheme = localStorage.getItem('lesrenang_theme') || 'ocean';
+            if (savedTheme !== 'ocean') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        })();
+
+        function setWebTheme(themeName) {
+            if (themeName === 'ocean') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', themeName);
+            }
+            localStorage.setItem('lesrenang_theme', themeName);
+            
+            // Update active dropdown items
+            document.querySelectorAll('.theme-option-btn').forEach(btn => {
+                if (btn.getAttribute('data-theme-val') === themeName) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            const menu = document.getElementById('themeDropdownMenu');
+            if (menu) menu.classList.remove('show');
+        }
+    </script>
+
     <!-- Schema.org JSON-LD Structured Data for Local Business SEO -->
     <script type="application/ld+json">
     {
@@ -167,6 +394,31 @@
                     menu.classList.toggle('active');
                 });
             }
+
+            // Theme Picker Dropdown Toggle
+            const themeToggleBtn = document.getElementById('themePickerToggle');
+            const themeDropdownMenu = document.getElementById('themeDropdownMenu');
+            if (themeToggleBtn && themeDropdownMenu) {
+                themeToggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    themeDropdownMenu.classList.toggle('show');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!themeDropdownMenu.contains(e.target) && e.target !== themeToggleBtn) {
+                        themeDropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+
+            // Sync active theme class in dropdown
+            const currentTheme = localStorage.getItem('lesrenang_theme') || 'ocean';
+            document.querySelectorAll('.theme-option-btn').forEach(btn => {
+                if (btn.getAttribute('data-theme-val') === currentTheme) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
 
             // Accordion Logic
             const faqItems = document.querySelectorAll('.faq-item');

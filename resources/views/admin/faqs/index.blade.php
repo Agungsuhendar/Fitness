@@ -4,58 +4,73 @@
 @section('header_title', 'Kelola 20+ Pertanyaan & Jawaban FAQ')
 
 @section('admin_content')
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-    <div>
-        <h2 style="font-size: 1.35rem;">Daftar FAQ Aktif (Total {{ $faqs->count() }} Pertanyaan)</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Kelola pertanyaan dan jawaban yang tampil pada halaman FAQ dan Beranda.</p>
+<div style="background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); padding: 1.75rem 2rem; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <div>
+            <h2 style="font-size: 1.35rem; color: #0f172a; margin: 0;">
+                <i class="fa-solid fa-circle-question" style="color: #10b981; margin-right: 0.5rem;"></i>
+                Daftar FAQ (Total {{ $faqs->count() }} Pertanyaan)
+            </h2>
+            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Kelola daftar pertanyaan umum dan jawaban resmi yang tampil pada website.</p>
+        </div>
+        <a href="{{ route('admin.faqs.create') }}" class="btn btn-primary btn-sm" style="border-radius: 0.75rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 0.65rem 1.35rem; font-weight: 700; border: none;">
+            <i class="fa-solid fa-plus"></i> Tambah FAQ Baru
+        </a>
     </div>
-    <a href="{{ route('admin.faqs.create') }}" class="btn btn-primary btn-sm">
-        <i class="fa-solid fa-plus"></i> Tambah FAQ Baru
-    </a>
 </div>
 
 <div class="table-responsive">
     <table class="admin-table">
         <thead>
             <tr>
-                <th>No</th>
+                <th style="width: 60px;">No</th>
                 <th>Kategori</th>
                 <th>Pertanyaan</th>
                 <th>Jawaban (Preview)</th>
                 <th>Populer?</th>
-                <th>Aksi</th>
+                <th style="text-align: right; padding-right: 1.5rem;">Aksi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($faqs as $index => $faq)
+            @forelse($faqs as $index => $faq)
             <tr>
-                <td>{{ $index + 1 }}</td>
-                <td><span style="background: #e0f2fe; color: var(--primary-dark); padding: 0.25rem 0.65rem; border-radius: 99px; font-weight: 800; font-size: 0.75rem;">{{ $faq->category }}</span></td>
-                <td style="font-weight: 800; max-width: 250px;">{{ $faq->question }}</td>
-                <td style="font-size: 0.875rem; color: var(--text-muted); max-width: 320px;">{{ Str::limit($faq->answer, 90) }}</td>
+                <td style="font-weight: 700; color: #64748b;">{{ $index + 1 }}</td>
+                <td>
+                    <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 99px; font-weight: 800; font-size: 0.75rem;">
+                        {{ $faq->category }}
+                    </span>
+                </td>
+                <td style="font-weight: 800; color: #0f172a; max-width: 250px;">{{ $faq->question }}</td>
+                <td style="font-size: 0.875rem; color: #64748b; max-width: 340px;">{{ Str::limit(strip_tags($faq->answer), 85) }}</td>
                 <td>
                     @if($faq->is_popular)
-                        <span style="color: var(--emerald); font-weight: 800;"><i class="fa-solid fa-circle-check"></i> Ya</span>
+                        <span style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; padding: 0.35rem 0.75rem; border-radius: 99px; font-weight: 800; font-size: 0.75rem;">
+                            <i class="fa-solid fa-circle-check"></i> Populer
+                        </span>
                     @else
-                        <span style="color: var(--text-muted);">-</span>
+                        <span style="color: #94a3b8;">-</span>
                     @endif
                 </td>
-                <td>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <a href="{{ route('admin.faqs.edit', $faq->id) }}" class="btn btn-outline btn-sm" style="padding: 0.4rem 0.75rem;">
+                <td style="text-align: right; padding-right: 1.5rem;">
+                    <div style="display: inline-flex; gap: 0.5rem; justify-content: flex-end;">
+                        <a href="{{ route('admin.faqs.edit', $faq->id) }}" class="btn btn-outline btn-sm" style="padding: 0.45rem 0.85rem; border-radius: 0.65rem; border-color: #0284c7; color: #0284c7; font-weight: 700;">
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </a>
-                        <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus FAQ ini?');">
+                        <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus FAQ ini?');" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-outline btn-sm" style="padding: 0.4rem 0.75rem; border-color: #ef4444; color: #ef4444;">
+                            <button type="submit" class="btn btn-outline btn-sm" style="padding: 0.45rem 0.85rem; border-radius: 0.65rem; border-color: #ef4444; color: #ef4444; background: #fff5f5; font-weight: 700;">
                                 <i class="fa-solid fa-trash"></i> Hapus
                             </button>
                         </form>
                     </div>
                 </td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="6" style="text-align: center; color: #64748b; padding: 3rem;">Belum ada pertanyaan FAQ.</td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
 </div>
