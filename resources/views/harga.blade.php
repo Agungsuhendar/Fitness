@@ -27,71 +27,41 @@
 <section class="section section-bg-alt">
     <div class="container">
         <div class="grid-3">
-            <div class="glass-card" style="padding: 2.25rem; background: #ffffff; position: relative;">
-                <span style="background: #e0f2fe; color: var(--primary-dark); font-weight: 800; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 99px;">
-                    PRIVAT ANAK
-                </span>
-                <h3 style="font-size: 1.5rem; margin-top: 0.75rem;">Paket Anak Ceria</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Khusus usia 3 s/d 15 tahun (8x Sesi)</p>
-                <div style="font-size: 2.3rem; font-weight: 800; color: var(--primary); margin-bottom: 1.5rem;">
-                    Rp 350.000 <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 400;">/ paket</span>
+            @foreach($programs as $prog)
+            @php
+                $title = is_object($prog) ? $prog->title : ($prog['title'] ?? '');
+                $subtitle = is_object($prog) ? $prog->subtitle : ($prog['subtitle'] ?? '');
+                $badge = is_object($prog) ? $prog->badge : ($prog['badge'] ?? '');
+                $price = is_object($prog) ? $prog->price_start : ($prog['price_start'] ?? 0);
+                $features = is_object($prog) ? $prog->features : ($prog['features'] ?? []);
+                $isPopular = Str::contains(strtolower($badge), 'populer') || Str::contains(strtolower($badge), 'laris');
+            @endphp
+            <div class="glass-card" style="padding: 2.25rem; background: #ffffff; position: relative; {{ $isPopular ? 'border: 2px solid var(--primary); transform: scale(1.03); box-shadow: var(--shadow-lg);' : '' }}">
+                @if($badge)
+                <div style="position: absolute; top: -14px; right: 2rem; background: var(--accent); color: #0f172a; font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 99px; text-transform: uppercase;">
+                    {{ $badge }}
                 </div>
-                <ul style="list-style: none; margin-bottom: 2rem; color: var(--dark-surface); font-size: 0.95rem; line-height: 2;">
-                    <li>✓ 8 Kali Pertemuan (Durasi 60 Menit)</li>
-                    <li>✓ 1 Pelatih : 1–2 Anak (Privat)</li>
-                    <li>✓ Bebas Pilih Hari & Jam Latihan</li>
-                    <li>✓ Laporan Evaluasi Perkembangan</li>
-                    <li>✓ Sertifikat Kelulusan Renang</li>
+                @endif
+                <span style="background: #e0f2fe; color: var(--primary-dark); font-weight: 800; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 99px; text-transform: uppercase;">
+                    {{ $title }}
+                </span>
+                <h3 style="font-size: 1.4rem; margin-top: 0.85rem;">{{ $title }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem; line-height: 1.5;">{{ Str::limit($subtitle, 65) }}</p>
+                <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 1.5rem;">
+                    Rp {{ number_format($price, 0, ',', '.') }} <span style="font-size: 0.875rem; color: var(--text-muted); font-weight: 400;">/ paket</span>
+                </div>
+                <ul style="list-style: none; margin-bottom: 2rem; color: var(--dark-surface); font-size: 0.925rem; line-height: 2;">
+                    @if(is_array($features))
+                        @foreach($features as $feat)
+                            <li>✓ {{ $feat }}</li>
+                        @endforeach
+                    @endif
                 </ul>
-                <button onclick="openRegistrationModal('Les Renang Anak')" class="btn btn-primary" style="width: 100%;">
-                    Daftar Paket Anak
+                <button onclick="openRegistrationModal('{{ $title }}')" class="btn {{ $isPopular ? 'btn-accent' : 'btn-primary' }}" style="width: 100%;">
+                    Daftar {{ $title }}
                 </button>
             </div>
-
-            <div class="glass-card" style="padding: 2.25rem; background: #ffffff; border: 2px solid var(--primary); transform: scale(1.03); box-shadow: var(--shadow-lg);">
-                <div style="position: absolute; top: -14px; right: 2rem; background: var(--accent); color: #0f172a; font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 99px;">
-                    PALING LARIS
-                </div>
-                <span style="background: #e0f2fe; color: var(--primary-dark); font-weight: 800; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 99px;">
-                    PRIVAT DEWASA & WANITA
-                </span>
-                <h3 style="font-size: 1.5rem; margin-top: 0.75rem;">Paket Privat Intensive</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Dewasa Pemula / Instruktur Wanita (8x Sesi)</p>
-                <div style="font-size: 2.3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 1.5rem;">
-                    Rp 400.000 <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 400;">/ paket</span>
-                </div>
-                <ul style="list-style: none; margin-bottom: 2rem; color: var(--dark-surface); font-size: 0.95rem; line-height: 2;">
-                    <li>✓ 8 Kali Pertemuan Intensif (60m)</li>
-                    <li>✓ Privat 1-on-1 Eksklusif</li>
-                    <li>✓ Penanganan Khusus Trauma Air</li>
-                    <li>✓ Penguasaan 2 Gaya & Injak Air</li>
-                    <li>✓ Garansi Bimbingan Tambahan</li>
-                </ul>
-                <button onclick="openRegistrationModal('Les Renang Dewasa')" class="btn btn-accent" style="width: 100%;">
-                    Daftar Privat Intensive
-                </button>
-            </div>
-
-            <div class="glass-card" style="padding: 2.25rem; background: #ffffff;">
-                <span style="background: #fef3c7; color: #d97706; font-weight: 800; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 99px;">
-                    KEDINASAAN & MILITER
-                </span>
-                <h3 style="font-size: 1.5rem; margin-top: 0.75rem;">Paket TNI / POLRI</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Persiapan Tes Kesamaptaan 50 Meter</p>
-                <div style="font-size: 2.3rem; font-weight: 800; color: var(--dark); margin-bottom: 1.5rem;">
-                    Rp 500.000 <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 400;">/ paket</span>
-                </div>
-                <ul style="list-style: none; margin-bottom: 2rem; color: var(--dark-surface); font-size: 0.95rem; line-height: 2;">
-                    <li>✓ Drill Kecepatan & Stamina (8x Sesi)</li>
-                    <li>✓ Simulasi Waktu Standar Tes Resmi</li>
-                    <li>✓ Teknik Gaya Dada Militer Efisien</li>
-                    <li>✓ Analisis Koreksi Gerakan Video</li>
-                    <li>✓ Target Skor Maksimal 100</li>
-                </ul>
-                <button onclick="openRegistrationModal('Persiapan TNI POLRI')" class="btn btn-primary" style="width: 100%;">
-                    Daftar Paket TNI/POLRI
-                </button>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -109,10 +79,13 @@
                 <div>
                     <label class="form-label">Kategori Peserta</label>
                     <select id="calcCategory" class="form-control">
-                        <option value="350000">Anak (Rp 350.000 / 8x sesi)</option>
-                        <option value="400000">Dewasa Pemula (Rp 400.000 / 8x sesi)</option>
-                        <option value="450000">Wanita Privat (Rp 450.000 / 8x sesi)</option>
-                        <option value="500000">TNI / POLRI (Rp 500.000 / 8x sesi)</option>
+                        @foreach($programs as $p)
+                        @php
+                            $pTitle = is_object($p) ? $p->title : $p['title'];
+                            $pPrice = is_object($p) ? $p->price_start : $p['price_start'];
+                        @endphp
+                        <option value="{{ $pPrice }}">{{ $pTitle }} (Rp {{ number_format($pPrice, 0, ',', '.') }})</option>
+                        @endforeach
                     </select>
                 </div>
 

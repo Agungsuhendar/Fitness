@@ -53,7 +53,7 @@
                     <button onclick="openRegistrationModal()" class="btn btn-accent btn-sm">
                         <i class="fa-solid fa-paper-plane"></i> Daftar Now
                     </button>
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20membaca%20artikel%20{{ urlencode($post->title) }}" target="_blank" class="btn btn-whatsapp btn-sm">
+                    <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text=Halo%20Admin,%20saya%20membaca%20artikel%20{{ urlencode($post->title) }}" target="_blank" class="btn btn-whatsapp btn-sm">
                         <i class="fa-brands fa-whatsapp"></i> Chat Admin WA
                     </a>
                 </div>

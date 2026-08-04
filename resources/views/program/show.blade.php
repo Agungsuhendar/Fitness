@@ -78,7 +78,7 @@
                         <i class="fa-solid fa-bolt"></i> Booking Trial Gratis
                     </button>
 
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20tanya%20detail%20{{ urlencode($program->title) }}" target="_blank" class="btn btn-whatsapp" style="width: 100%;">
+                    <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text=Halo%20Admin,%20saya%20tanya%20detail%20{{ urlencode($program->title) }}" target="_blank" class="btn btn-whatsapp" style="width: 100%;">
                         <i class="fa-brands fa-whatsapp"></i> Chat Admin WA
                     </a>
                 </div>

@@ -79,7 +79,7 @@
                     <button onclick="openRegistrationModal()" class="btn btn-primary btn-sm" style="flex: 1;">
                         <i class="fa-solid fa-calendar-plus"></i> Pilih Lokasi Ini
                     </button>
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20tanya%20jadwal%20di%20{{ urlencode($loc->name) }}" target="_blank" class="btn btn-whatsapp btn-sm">
+                    <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text=Halo%20Admin,%20saya%20tanya%20jadwal%20di%20{{ urlencode($loc->name) }}" target="_blank" class="btn btn-whatsapp btn-sm">
                         <i class="fa-brands fa-whatsapp"></i> Chat WA
                     </a>
                 </div>

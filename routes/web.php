@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminLeadController;
 
+use App\Http\Controllers\Admin\AdminSettingController;
+
 /*
 |--------------------------------------------------------------------------
 | Public Web Routes
@@ -106,4 +108,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Lead Entries
     Route::get('/registrations', [AdminLeadController::class, 'registrations'])->name('registrations');
     Route::get('/trials', [AdminLeadController::class, 'trials'])->name('trials');
+
+    // Site Settings Management
+    Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
 });

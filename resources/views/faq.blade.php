@@ -57,7 +57,7 @@
 
         <div style="text-align: center; margin-top: 3.5rem;">
             <p style="color: var(--text-muted); margin-bottom: 1rem;">Pertanyaan Anda belum terjawab di sini?</p>
-            <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20tanya%20pertanyaan%20seputar%20les%20renang." target="_blank" class="btn btn-whatsapp btn-lg">
+            <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode(site_setting('whatsapp_message', 'Halo Admin, saya tanya pertanyaan seputar les renang.')) }}" target="_blank" class="btn btn-whatsapp btn-lg">
                 <i class="fa-brands fa-whatsapp"></i> Tanya Langsung via WhatsApp Admin
             </a>
         </div>

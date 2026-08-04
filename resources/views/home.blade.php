@@ -33,7 +33,7 @@
                     <button onclick="openTrialModal()" class="btn btn-accent btn-lg">
                         <i class="fa-solid fa-bolt"></i> Booking Trial Gratis
                     </button>
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Les%20Renang%20Jogja,%20saya%20konsultasi%20gratis." target="_blank" class="btn btn-whatsapp btn-lg">
+                    <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode(site_setting('whatsapp_message', 'Halo Admin Les Renang Jogja, saya konsultasi gratis.')) }}" target="_blank" class="btn btn-whatsapp btn-lg">
                         <i class="fa-brands fa-whatsapp"></i> Chat WhatsApp
                     </a>
                 </div>
@@ -600,7 +600,7 @@
                 <button onclick="openRegistrationModal()" class="btn btn-accent btn-lg" style="box-shadow: 0 12px 30px rgba(245, 158, 11, 0.45); transform: translateY(-2px);">
                     <i class="fa-solid fa-paper-plane"></i> Daftar Les Renang Sekarang
                 </button>
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20konsultasi%20gratis%20les%20renang." target="_blank" class="btn btn-whatsapp btn-lg" style="box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45); transform: translateY(-2px);">
+                <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode(site_setting('whatsapp_message', 'Halo Admin, saya konsultasi gratis les renang.')) }}" target="_blank" class="btn btn-whatsapp btn-lg" style="box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45); transform: translateY(-2px);">
                     <i class="fa-brands fa-whatsapp"></i> Chat Admin WhatsApp
                 </a>
             </div>

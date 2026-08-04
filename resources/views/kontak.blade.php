@@ -30,7 +30,7 @@
                         </div>
                         <div>
                             <div style="font-weight: 800; color: var(--dark);">WhatsApp Admin Direct</div>
-                            <div style="color: var(--text-muted); font-size: 0.9rem;">+62 812-3456-7890 (Respon Cepat)</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">{{ site_setting('site_phone', '+62 812-3456-7890') }} (Respon Cepat)</div>
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                         </div>
                         <div>
                             <div style="font-weight: 800; color: var(--dark);">Jam Operasional Latihan</div>
-                            <div style="color: var(--text-muted); font-size: 0.9rem;">Senin – Minggu: 06.00 – 20.00 WIB</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">{{ site_setting('office_hours', 'Senin – Minggu: 06.00 – 20.00 WIB') }}</div>
                         </div>
                     </div>
 
@@ -50,12 +50,12 @@
                         </div>
                         <div>
                             <div style="font-weight: 800; color: var(--dark);">Kantor & Basecamp</div>
-                            <div style="color: var(--text-muted); font-size: 0.9rem;">Jl. Colombo No.1, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">{{ site_setting('office_address', 'Jl. Colombo No.1, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281') }}</div>
                         </div>
                     </div>
                 </div>
 
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20konsultasi%20langsung" target="_blank" class="btn btn-whatsapp btn-lg" style="width: 100%;">
+                <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode(site_setting('whatsapp_message', 'Halo Admin, saya konsultasi langsung')) }}" target="_blank" class="btn btn-whatsapp btn-lg" style="width: 100%;">
                     <i class="fa-brands fa-whatsapp"></i> Chat WhatsApp Sekarang
                 </a>
             </div>

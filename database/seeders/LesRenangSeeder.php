@@ -22,6 +22,22 @@ class LesRenangSeeder extends Seeder
                 'password' => \Illuminate\Support\Facades\Hash::make('password123'),
             ]
         );
+
+        // 0.1 DEFAULT SITE SETTINGS
+        $defaultSettings = [
+            'whatsapp_number' => '6281234567890',
+            'whatsapp_message' => 'Halo Admin Les Renang Jogja, saya ingin bertanya info dan pendaftaran.',
+            'site_email' => 'info@lesrenangjogja.com',
+            'site_phone' => '+62 812-3456-7890',
+            'office_address' => 'Sleman, D.I. Yogyakarta',
+            'instagram_url' => 'https://instagram.com/lesrenangjogja',
+            'tiktok_url' => 'https://tiktok.com/@lesrenangjogja',
+            'youtube_url' => 'https://youtube.com/@lesrenangjogja',
+            'office_hours' => 'Buka Setiap Hari: 06.00 - 20.00 WIB',
+        ];
+        foreach ($defaultSettings as $key => $val) {
+            \App\Models\Setting::set($key, $val);
+        }
         // 1. PROGRAMS (Real Unsplash High-Res Aquatic Photos)
         $programs = [
             [

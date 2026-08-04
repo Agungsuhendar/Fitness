@@ -235,6 +235,12 @@
                         <span class="nav-text">Data Booking Trial</span>
                     </a>
                 </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" title="Pengaturan Website">
+                        <i class="fa-solid fa-gears"></i>
+                        <span class="nav-text">Pengaturan Website</span>
+                    </a>
+                </li>
             </ul>
 
             <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">

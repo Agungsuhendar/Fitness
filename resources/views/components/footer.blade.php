@@ -1,3 +1,10 @@
+@php
+    if (!function_exists('site_setting')) {
+        function site_setting($key, $default = null) {
+            return class_exists('\App\Models\Setting') ? \App\Models\Setting::get($key, $default) : $default;
+        }
+    }
+@endphp
 <footer class="footer">
     <div class="container">
         <div class="footer-grid">
@@ -10,10 +17,10 @@
                     Pusat pelatihan & kursus privat renang terpercaya di Yogyakarta. Menyediakan program khusus anak-anak, dewasa pemula, privat wanita/muslimah, serta kelas intensif persiapan tes TNI, POLRI & Kedinasan.
                 </p>
                 <div style="display: flex; gap: 0.75rem;">
-                    <a href="https://instagram.com" target="_blank" style="width: 38px; height: 38px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://tiktok.com" target="_blank" style="width: 38px; height: 38px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="https://youtube.com" target="_blank" style="width: 38px; height: 38px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="https://wa.me/6281234567890" target="_blank" style="width: 38px; height: 38px; background: #25d366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="{{ site_setting('instagram_url', 'https://instagram.com') }}" target="_blank" style="width: 38px; height: 38px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="{{ site_setting('tiktok_url', 'https://tiktok.com') }}" target="_blank" style="width: 38px; height: 38px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="{{ site_setting('youtube_url', 'https://youtube.com') }}" target="_blank" style="width: 38px; height: 38px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}" target="_blank" style="width: 38px; height: 38px; background: #25d366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
 
@@ -46,9 +53,9 @@
             <div>
                 <h4 class="footer-title">Informasi & Kontak</h4>
                 <div style="font-size: 0.9rem; margin-bottom: 1rem; color: #94a3b8;">
-                    <p style="margin-bottom: 0.5rem;"><i class="fa-solid fa-location-dot" style="color: var(--primary); margin-right: 0.5rem;"></i> Head Office: Sleman, D.I. Yogyakarta</p>
-                    <p style="margin-bottom: 0.5rem;"><i class="fa-brands fa-whatsapp" style="color: #25d366; margin-right: 0.5rem;"></i> +62 812-3456-7890 (Admin WA)</p>
-                    <p style="margin-bottom: 0.5rem;"><i class="fa-regular fa-clock" style="color: var(--accent); margin-right: 0.5rem;"></i> Buka Setiap Hari: 06.00 - 20.00 WIB</p>
+                    <p style="margin-bottom: 0.5rem;"><i class="fa-solid fa-location-dot" style="color: var(--primary); margin-right: 0.5rem;"></i> Head Office: {{ site_setting('office_address', 'Sleman, D.I. Yogyakarta') }}</p>
+                    <p style="margin-bottom: 0.5rem;"><i class="fa-brands fa-whatsapp" style="color: #25d366; margin-right: 0.5rem;"></i> {{ site_setting('site_phone', '+62 812-3456-7890') }} (Admin WA)</p>
+                    <p style="margin-bottom: 0.5rem;"><i class="fa-regular fa-clock" style="color: var(--accent); margin-right: 0.5rem;"></i> {{ site_setting('office_hours', 'Buka Setiap Hari: 06.00 - 20.00 WIB') }}</p>
                 </div>
                 <button onclick="openTrialModal()" class="btn btn-accent btn-sm" style="width: 100%;">
                     <i class="fa-solid fa-bolt"></i> Booking Trial Gratis 30m

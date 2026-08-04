@@ -24,7 +24,7 @@
                 <button onclick="openRegistrationModal()" class="btn btn-primary btn-lg">
                     <i class="fa-solid fa-paper-plane"></i> Daftar Les Renang {{ $area['area_name'] }}
                 </button>
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20tanya%20jadwal%20les%20renang%20area%20{{ urlencode($area['area_name']) }}." target="_blank" class="btn btn-whatsapp btn-lg">
+                <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text=Halo%20Admin,%20saya%20tanya%20jadwal%20les%20renang%20area%20{{ urlencode($area['area_name']) }}." target="_blank" class="btn btn-whatsapp btn-lg">
                     <i class="fa-brands fa-whatsapp"></i> Chat Admin WhatsApp
                 </a>
             </div>
