@@ -20,7 +20,7 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="Les Renang Jogja">
     <meta property="og:image" content="{{ asset('images/logo.webp') }}">
-    <link rel="icon" type="image/webp" href="{{ asset('images/logo.webp') }}">
+    <link rel="icon" type="image/webp" href="{{ asset('images/logo-icon.webp') }}">
 
     <!-- Geo Meta Tags for Google Local Search -->
     <meta name="geo.region" content="ID-YO">
