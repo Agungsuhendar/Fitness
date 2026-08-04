@@ -21,13 +21,6 @@
 
             <!-- Header Actions -->
             <div class="nav-actions">
-                <button onclick="openTrialModal()" class="btn btn-outline btn-sm hidden-mobile" style="border-radius: 99px;">
-                    <i class="fa-solid fa-calendar-check"></i> Trial Gratis
-                </button>
-                <button onclick="openRegistrationModal()" class="btn btn-primary btn-sm hidden-mobile">
-                    <i class="fa-solid fa-paper-plane"></i> Daftar Now
-                </button>
-
                 <!-- Theme Switcher Dropdown -->
                 <div class="theme-switcher-wrapper">
                     <button type="button" class="theme-picker-btn" id="themePickerToggle" title="Pilih Tema Website" aria-label="Pilih Warna Tema Website">
