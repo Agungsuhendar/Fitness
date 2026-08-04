@@ -4,11 +4,7 @@
             <!-- Col 1: Brand Info & SEO Text -->
             <div>
                 <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.25rem;">
-                    <img src="{{ asset('images/logo.webp?v=2') }}" alt="Les Renang Jogja Logo" style="height: 64px; width: auto; object-fit: contain; border-radius: 8px; background: white; padding: 4px;">
-                    <div>
-                        <span style="font-size: 1.35rem; font-weight: 900; color: #ffffff; display: block; line-height: 1.1;">LES RENANG JOGJA</span>
-                        <span style="font-size: 0.725rem; font-weight: 700; color: var(--accent); letter-spacing: 1px; text-transform: uppercase;">KURSUS PRIVAT TERPERCAYA</span>
-                    </div>
+                    <img src="{{ asset('images/logo.webp?v=4') }}" alt="Les Renang Jogja Logo" style="height: 64px; width: auto; object-fit: contain; border-radius: 8px; background: white; padding: 4px 10px;">
                 </div>
                 <p style="font-size: 0.925rem; line-height: 1.7; margin-bottom: 1.5rem; color: #94a3b8;">
                     Pusat pelatihan & kursus privat renang terpercaya di Yogyakarta. Menyediakan program khusus anak-anak, dewasa pemula, privat wanita/muslimah, serta kelas intensif persiapan tes TNI, POLRI & Kedinasan.
