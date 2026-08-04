@@ -15,7 +15,7 @@
 
     <div class="container">
         <div class="hero-grid">
-            <div>
+            <div class="hero-text-col">
                 <div class="hero-badge">
                     <i class="fa-solid fa-award" style="color: var(--accent);"></i> #1 Kursus & Privat Renang Terpercaya di Yogyakarta
                 </div>
@@ -54,28 +54,79 @@
                 </div>
             </div>
 
-            <div class="hero-image-wrapper" style="position: relative;">
-                <!-- Main Showcase Card (Tall 520px Height with Ambient Glow & Dark Overlay) -->
-                <div class="hero-image-card" style="height: 520px; border-radius: 2.25rem; overflow: hidden; box-shadow: 0 30px 60px -12px rgba(0, 119, 182, 0.35); border: 4px solid rgba(255, 255, 255, 0.95); position: relative;">
-                    <img src="{{ asset('images/assets/hero_pool_modern.webp') }}" alt="Les Renang Jogja Privat Anak & Dewasa Yogyakarta" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; object-position: center;" onerror="this.onerror=null; this.src='{{ asset('images/logo.webp') }}';">
-                    
-                    <!-- Bottom Dark Gradient Overlay for High Contrast -->
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3, 4, 94, 0.85) 0%, rgba(3, 4, 94, 0.25) 45%, transparent 100%); pointer-events: none;"></div>
+            <div class="hero-image-wrapper">
+                <!-- SVG ClipPath Definition for Left & Right Vertical Wave Edges -->
+                <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+                    <defs>
+                        <clipPath id="heroLeftWaveClip" clipPathUnits="objectBoundingBox">
+                            <path d="M 0.07 0 
+                                     C -0.02 0.18, 0.12 0.38, 0.01 0.58 
+                                     C 0.10 0.78, 0.02 0.90, 0.07 1.0 
+                                     L 1.0 1.0 
+                                     L 1.0 0 
+                                     Z" />
+                        </clipPath>
+                    </defs>
+                </svg>
 
-                    <!-- Interactive Glowing Play Video Button Overlay -->
-                    <button onclick="openVideoModal()" class="hero-play-btn" title="Tonton Video Suasana Latihan Les Renang" aria-label="Tonton Video Suasana Latihan" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 50%; border: 3px solid rgba(245, 158, 11, 0.6); color: var(--primary); font-size: 2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 40px rgba(0,0,0,0.4); transition: all 0.35s ease; z-index: 10;">
-                        <i class="fa-solid fa-play" style="margin-left: 5px; color: var(--accent);"></i>
-                    </button>
+                <div class="hero-image-container">
+                    <!-- SVG Left & Right Garis Wave Glowing Outline Borders -->
+                    <svg viewBox="0 0 500 400" preserveAspectRatio="none" class="hero-wave-border-svg">
+                        <defs>
+                            <linearGradient id="waveBorderGradLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#00f2fe" stop-opacity="1"/>
+                                <stop offset="50%" stop-color="#0077b6" stop-opacity="0.9"/>
+                                <stop offset="100%" stop-color="#00b4d8" stop-opacity="1"/>
+                            </linearGradient>
+                            <linearGradient id="waveBorderGradRight" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#f59e0b" stop-opacity="1"/>
+                                <stop offset="50%" stop-color="#00b4d8" stop-opacity="0.9"/>
+                                <stop offset="100%" stop-color="#00f2fe" stop-opacity="1"/>
+                            </linearGradient>
+                            <filter id="waveGlowEffect" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="5" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
 
-                    <!-- Floating Badge 100% Over Image Surface (Nudged Left) -->
-                    <div class="floating-trust-card" style="position: absolute; bottom: 20px; left: 12px; z-index: 99; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(16px); padding: 0.85rem 1.25rem; border-radius: 1.25rem; box-shadow: 0 20px 45px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.95); animation: floatBadge 3.5s ease-in-out infinite;">
-                        <div style="width: 44px; height: 44px; background: rgba(16, 185, 129, 0.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--emerald); font-size: 1.4rem;">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-                        <div>
-                            <div style="font-weight: 900; font-size: 1rem; color: var(--dark);">Garansi 100% Bisa</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Bimbingan ekstra hingga mahir</div>
-                        </div>
+                        <!-- Left Wave Line Stroke -->
+                        <path d="M 30 0 C -10 72 60 152 5 232 C 50 312 10 360 30 400" 
+                              stroke="url(#waveBorderGradLeft)" stroke-width="5" fill="none" filter="url(#waveGlowEffect)"/>
+
+                        <!-- Right Wave Line Stroke -->
+                        <path d="M 470 0 C 490 72 440 152 495 232 C 450 312 490 360 470 400" 
+                              stroke="url(#waveBorderGradRight)" stroke-width="5" fill="none" filter="url(#waveGlowEffect)"/>
+                              
+                        <!-- Decorative Water Droplets -->
+                        <circle cx="15" cy="80" r="6" fill="#00f2fe" opacity="0.9"/>
+                        <circle cx="485" cy="120" r="7" fill="#f59e0b" opacity="0.9"/>
+                        <circle cx="25" cy="310" r="5" fill="#00b4d8" opacity="0.85"/>
+                        <circle cx="480" cy="330" r="6" fill="#00f2fe" opacity="0.9"/>
+                    </svg>
+
+                    <!-- Swimmer Image Card with Left-Right Wave Clip-Path & Full Display -->
+                    <div class="hero-swimmer-card-full">
+                        <img src="{{ asset('images/assets/hero_wave_right.webp') }}" 
+                             alt="Les Renang Jogja Latihan Privat" 
+                             onerror="this.onerror=null; this.src='{{ asset('images/logo.webp') }}';">
+
+                        <!-- Bottom Gradient Overlay for Text Contrast -->
+                        <div class="hero-img-gradient-overlay"></div>
+
+                        <!-- Inner Wave Line Overlay at Bottom -->
+                        <svg viewBox="0 0 500 80" preserveAspectRatio="none" class="hero-img-bottom-wave-svg">
+                            <path d="M0,35 C150,70 350,5 500,45 L500,80 L0,80 Z" fill="rgba(0, 119, 182, 0.4)"/>
+                            <path d="M0,48 C210,12 370,68 500,28 L500,80 L0,80 Z" fill="rgba(3, 4, 94, 0.6)"/>
+                            <path d="M0,48 C210,12 370,68 500,28" stroke="#00f2fe" stroke-width="3" fill="none" opacity="0.95"/>
+                        </svg>
+
+
+                    </div>
+
+                    <!-- Floating Top Right PRSI Badge -->
+                    <div class="hero-floating-prsi-badge">
+                        <i class="fa-solid fa-certificate" style="color: #ffffff; font-size: 1rem;"></i>
+                        <span>Pelatih PRSI</span>
                     </div>
                 </div>
             </div>
