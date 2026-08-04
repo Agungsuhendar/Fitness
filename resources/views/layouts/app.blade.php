@@ -19,8 +19,8 @@
     <meta property="og:description" content="@yield('meta_description', 'Pelatih renang berlisensi di Yogyakarta untuk Anak, Dewasa, & TNI/POLRI.')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="Les Renang Jogja">
-    <meta property="og:image" content="{{ asset('images/logo.webp') }}">
-    <link rel="icon" type="image/webp" href="{{ asset('images/logo-icon.webp') }}">
+    <meta property="og:image" content="{{ asset('images/logo.webp?v=2') }}">
+    <link rel="icon" type="image/webp" href="{{ asset('images/logo-icon.webp?v=2') }}">
 
     <!-- Geo Meta Tags for Google Local Search -->
     <meta name="geo.region" content="ID-YO">

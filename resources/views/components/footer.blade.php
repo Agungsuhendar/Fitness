@@ -4,7 +4,7 @@
             <!-- Col 1: Brand Info & SEO Text -->
             <div>
                 <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.25rem;">
-                    <img src="{{ asset('images/logo.webp') }}" alt="Les Renang Jogja Logo" style="height: 64px; width: auto; object-fit: contain; border-radius: 8px; background: white; padding: 4px;">
+                    <img src="{{ asset('images/logo.webp?v=2') }}" alt="Les Renang Jogja Logo" style="height: 64px; width: auto; object-fit: contain; border-radius: 8px; background: white; padding: 4px;">
                     <div>
                         <span style="font-size: 1.35rem; font-weight: 900; color: #ffffff; display: block; line-height: 1.1;">LES RENANG JOGJA</span>
                         <span style="font-size: 0.725rem; font-weight: 700; color: var(--accent); letter-spacing: 1px; text-transform: uppercase;">KURSUS PRIVAT TERPERCAYA</span>

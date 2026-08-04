@@ -3,7 +3,7 @@
         <div class="navbar-inner">
             <!-- Brand Logo -->
             <a href="{{ route('home') }}" class="brand-logo" aria-label="Les Renang Jogja Homepage">
-                <img src="{{ asset('images/logo.webp') }}" alt="Les Renang Jogja Logo" class="brand-logo-img">
+                <img src="{{ asset('images/logo.webp?v=2') }}" alt="Les Renang Jogja Logo" class="brand-logo-img">
             </a>
 
             <!-- Desktop Nav Links -->
