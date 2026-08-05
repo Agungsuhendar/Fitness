@@ -34,6 +34,11 @@ class LesRenangSeeder extends Seeder
             'instagram_url' => 'https://instagram.com/apexfitness.id',
             'tiktok_url' => 'https://tiktok.com/@apexfitness.id',
             'youtube_url' => 'https://youtube.com/@apexfitnessid',
+            'site_seo_title' => 'ApexFitness Center - Gym & Personal Trainer Privat 1-on-1 Yogyakarta',
+            'site_seo_description' => 'ApexFitness Center Yogyakarta. Pusat fitness gym & Personal Trainer privat 1-on-1 tersertifikasi APKI. Program Weight Loss, Muscle Building, Female Body Shaping & Persiapan TNI POLRI.',
+            'site_footer_about' => 'Pusat kebugaran fitness gym & Personal Trainer privat 1-on-1 terpercaya di Yogyakarta. Menyediakan program Weight Loss & Fat Burning, Muscle Building, Female Body Shaping, serta Persiapan Fisik TNI POLRI & Rehabilitasi Postur.',
+            'hero_subtitle' => 'Bimbingan Personal Trainer 1-on-1 tersertifikasi APKI dengan garansi hasil terukur. Program Weight Loss, Muscle Building, Female Body Shaping, serta Persiapan Fisik TNI & POLRI.',
+            'promo_text' => '🔥 Promo Terbatas Bulan Ini - Diskon Sesi PT 20% + Free InBody 3D Scan',
             'office_hours' => 'Buka Setiap Hari: 06.00 - 22.00 WIB',
         ];
         foreach ($defaultSettings as $key => $val) {
