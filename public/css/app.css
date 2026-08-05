@@ -58,9 +58,9 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1380px;
   margin: 0 auto;
-  padding: 0 1.25rem;
+  padding: 0 1.5rem;
 }
 
 /* Vibrant Gradients & Text Glow */
@@ -1424,4 +1424,39 @@ body {
   }
 }
 
+/* Full Size & Responsive FitLife Enhancements */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+  .hero-title {
+    font-size: 3.1rem !important;
+  }
+  .hero-image-col {
+    height: auto !important;
+  }
+  .bottom-stats-bar-inner {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.25rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.4rem !important;
+  }
+  .bottom-stats-bar {
+    margin-top: 1.5rem !important;
+  }
+  .bottom-stats-bar-inner {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .stats-tour-col {
+    grid-column: span 2 !important;
+  }
+  .mobile-toggle {
+    display: flex !important;
+  }
+}
 

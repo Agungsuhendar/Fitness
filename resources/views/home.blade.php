@@ -108,10 +108,10 @@
         <!-- Bottom Floating Stats Bar (5 Columns Card - Positioned Cleanly Overlapping Bottom Hero) -->
         <div class="bottom-stats-bar" style="margin-top: -3.5rem; position: relative; z-index: 15;">
             <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.75rem; padding: 1.35rem 1.75rem; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);">
-                <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr; gap: 1.5rem; align-items: center;">
+                <div class="bottom-stats-bar-inner" style="display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr; gap: 1.5rem; align-items: center;">
                     
                     <!-- Column 1: Tour Gym Thumbnail Card -->
-                    <div style="position: relative; border-radius: 1.15rem; overflow: hidden; height: 105px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;" onclick="openTrialModal()">
+                    <div class="stats-tour-col" style="position: relative; border-radius: 1.15rem; overflow: hidden; height: 105px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;" onclick="openTrialModal()">
                         <img src="{{ asset('images/assets/fitlife_gym_tour.png') }}" alt="FitLife Tour Gym" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/pool_uny.webp') }}';">
                         <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 100%); flex-direction: column; justify-content: flex-end; padding: 0.75rem;">
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 1.05rem; box-shadow: 0 4px 14px rgba(0,0,0,0.5);">
