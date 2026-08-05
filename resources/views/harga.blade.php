@@ -1,32 +1,32 @@
 @extends('layouts.app')
 
-@section('title', 'Harga Paket Les Renang Jogja - Transparan & Hemat')
-@section('meta_description', 'Daftar harga paket les renang privat di Yogyakarta. Paket anak, dewasa, privat wanita, & kelas TNI POLRI. Tanpa biaya tersembunyi!')
+@section('title', 'Harga Member & Paket Personal Trainer ApexFitness Center')
+@section('meta_description', 'Daftar harga paket Personal Trainer & membership gym ApexFitness Yogyakarta. Transparan, bergaransi hasil, InBody Scan gratis!')
 
 @section('content')
-<section class="hero-section" style="padding: 3rem 0;">
+<section class="hero-section" style="padding: 4rem 0; background: #070a12; color: white;">
     <div class="container">
         <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <span class="section-subtitle">Investasi Kesehatan</span>
-            <h1 class="hero-title">Daftar Harga & <span class="text-gradient">Paket Les Renang</span></h1>
-            <p class="hero-description">
-                Pilihan paket investasi privat transparan tanpa biaya tersembunyi. Dapatkan jaminan kualitas & bimbingan instruktur profesional.
+            <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Investasi Kesehatan</span>
+            <h1 class="hero-title" style="font-size: 3rem; font-weight: 900; margin-top: 0.5rem; font-family: 'Outfit', sans-serif;">Daftar Harga & <span style="color: #10b981;">Paket Gym & PT</span></h1>
+            <p class="hero-description" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem;">
+                Pilihan investasi paket Personal Trainer & membership gym transparan tanpa biaya tersembunyi. Dapatkan jaminan kualitas & evaluasi fisik terukur.
             </p>
         </div>
     </div>
 </section>
 
-<!-- Promo Countdown Header -->
-<section style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0f172a; padding: 1rem 0; text-align: center; font-weight: 800;">
+<!-- Promo Header -->
+<section style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #ffffff; padding: 1rem 0; text-align: center; font-weight: 800; font-size: 0.95rem;">
     <div class="container">
-        {{ site_setting('promo_text', '🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Kacamata Renang untuk Pendaftaran Paket Privat 2 Orang!') }}
+        {{ site_setting('promo_text', '🔥 PROMO SPESIAL BULAN INI: Diskon Sesi PT 20% + Gratis InBody 3D Scan untuk Pendaftaran Paket Couple / Buddy!') }}
     </div>
 </section>
 
 <!-- Pricing Cards Grid -->
-<section class="section section-bg-alt">
+<section class="section" style="background: #0f172a; padding: 5rem 0;">
     <div class="container">
-        <div class="grid-3">
+        <div class="grid-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.75rem;">
             @foreach($programs as $prog)
             @php
                 $title = is_object($prog) ? $prog->title : ($prog['title'] ?? '');
@@ -34,31 +34,31 @@
                 $badge = is_object($prog) ? $prog->badge : ($prog['badge'] ?? '');
                 $price = is_object($prog) ? $prog->price_start : ($prog['price_start'] ?? 0);
                 $features = is_object($prog) ? $prog->features : ($prog['features'] ?? []);
-                $isPopular = Str::contains(strtolower($badge), 'populer') || Str::contains(strtolower($badge), 'laris');
+                $isPopular = Str::contains(strtolower($badge), 'populer') || Str::contains(strtolower($badge), 'rekomendasi');
             @endphp
-            <div class="glass-card" style="padding: 2.25rem; background: #ffffff; position: relative; {{ $isPopular ? 'border: 2px solid var(--primary); transform: scale(1.03); box-shadow: var(--shadow-lg);' : '' }}">
+            <div class="glass-card" style="padding: 2.25rem; background: #1e293b; border: {{ $isPopular ? '2px solid #10b981' : '1px solid rgba(255,255,255,0.1)' }}; border-radius: 1.25rem; position: relative; color: white; display: flex; flex-direction: column;">
                 @if($badge)
-                <div style="position: absolute; top: -14px; right: 2rem; background: var(--accent); color: #0f172a; font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 99px; text-transform: uppercase;">
+                <div style="position: absolute; top: -14px; right: 2rem; background: #10b981; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 99px; text-transform: uppercase;">
                     {{ $badge }}
                 </div>
                 @endif
-                <span style="background: #e0f2fe; color: var(--primary-dark); font-weight: 800; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 99px; text-transform: uppercase;">
+                <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 800; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 99px; text-transform: uppercase; align-self: flex-start;">
                     {{ $title }}
                 </span>
-                <h3 style="font-size: 1.4rem; margin-top: 0.85rem;">{{ $title }}</h3>
-                <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem; line-height: 1.5;">{{ Str::limit($subtitle, 65) }}</p>
-                <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 1.5rem;">
-                    Rp {{ number_format($price, 0, ',', '.') }} <span style="font-size: 0.875rem; color: var(--text-muted); font-weight: 400;">/ paket</span>
+                <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 1rem; color: #ffffff;">{{ $title }}</h3>
+                <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1.5rem; line-height: 1.5;">{{ Str::limit($subtitle, 70) }}</p>
+                <div style="font-size: 2.2rem; font-weight: 900; color: #ffffff; margin-bottom: 1.5rem;">
+                    Rp {{ number_format($price, 0, ',', '.') }} <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 400;">/ paket sesi</span>
                 </div>
-                <ul style="list-style: none; margin-bottom: 2rem; color: var(--dark-surface); font-size: 0.925rem; line-height: 2;">
+                <ul style="list-style: none; padding: 0; margin-bottom: 2rem; color: #cbd5e1; font-size: 0.9rem; line-height: 2; flex-grow: 1;">
                     @if(is_array($features))
                         @foreach($features as $feat)
-                            <li>✓ {{ $feat }}</li>
+                            <li style="display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-check" style="color: #10b981;"></i> {{ $feat }}</li>
                         @endforeach
                     @endif
                 </ul>
-                <button onclick="openRegistrationModal('{{ $title }}')" class="btn {{ $isPopular ? 'btn-accent' : 'btn-primary' }}" style="width: 100%;">
-                    Daftar {{ $title }}
+                <button onclick="openRegistrationModal('{{ $title }}')" class="btn" style="width: 100%; background: {{ $isPopular ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : '#334155' }}; color: white; padding: 0.85rem; border-radius: 0.75rem; font-weight: 800; border: none; cursor: pointer;">
+                    Ambil Paket {{ $title }}
                 </button>
             </div>
             @endforeach
@@ -66,19 +66,19 @@
     </div>
 </section>
 
-<!-- Interactive Price Calculator Section -->
-<section class="section">
+<!-- Price Calculator Section -->
+<section class="section" style="background: #070a12; padding: 5rem 0; color: white;">
     <div class="container">
-        <div class="glass-card" style="padding: 3rem; background: #ffffff; max-width: 800px; margin: 0 auto;">
+        <div class="glass-card" style="padding: 3rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; max-width: 800px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 2rem;">
-                <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-calculator" style="color: var(--primary);"></i> Kalkulator Simulasi Biaya</h3>
-                <p style="color: var(--text-muted);">Hitung estimasi biaya les renang privat sesuai jumlah peserta & sesi latihan.</p>
+                <h3 style="font-size: 1.8rem; color: #ffffff; font-weight: 800; margin-bottom: 0.5rem;"><i class="fa-solid fa-calculator" style="color: #10b981;"></i> Kalkulator Simulasi Biaya PT</h3>
+                <p style="color: #94a3b8; font-size: 0.95rem;">Hitung estimasi investasi Personal Trainer sesuai jumlah peserta & sesi latihan.</p>
             </div>
 
-            <div class="grid-2" style="gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
                 <div>
-                    <label class="form-label">Kategori Peserta</label>
-                    <select id="calcCategory" class="form-control">
+                    <label class="form-label" style="color: #cbd5e1; font-weight: 700;">Program Fitness</label>
+                    <select id="calcCategory" class="form-control" style="background: #1e293b; border-color: #334155; color: #ffffff;">
                         @foreach($programs as $p)
                         @php
                             $pTitle = is_object($p) ? $p->title : $p['title'];
@@ -90,25 +90,25 @@
                 </div>
 
                 <div>
-                    <label class="form-label">Jumlah Peserta</label>
-                    <select id="calcPersons" class="form-control">
-                        <option value="1">1 Peserta (Privat Single)</option>
-                        <option value="2">2 Peserta (Semi Privat Kakak/Adik - Diskon 10%)</option>
-                        <option value="3">3 Peserta (Grup Keluarga - Diskon 15%)</option>
+                    <label class="form-label" style="color: #cbd5e1; font-weight: 700;">Jumlah Peserta</label>
+                    <select id="calcPersons" class="form-control" style="background: #1e293b; border-color: #334155; color: #ffffff;">
+                        <option value="1">1 Orang (Privat Single)</option>
+                        <option value="2">2 Orang (Buddy Package - Diskon 10%)</option>
+                        <option value="3">3 Orang (Group Trio - Diskon 15%)</option>
                     </select>
                 </div>
             </div>
 
-            <div style="text-align: center; padding: 1.5rem; background: #f0f9ff; border-radius: 1rem; border: 1px dashed var(--primary); margin-bottom: 1.5rem;">
-                <div style="font-size: 0.9rem; color: var(--text-muted);">Estimasi Total Investasi:</div>
-                <div id="calcResult" style="font-size: 2.25rem; font-weight: 800; color: var(--primary-dark); margin: 0.25rem 0;">
-                    Rp {{ isset($programs[0]) ? number_format(is_object($programs[0]) ? $programs[0]->price_start : $programs[0]['price_start'], 0, ',', '.') : '350.000' }}
+            <div style="text-align: center; padding: 1.5rem; background: #1e293b; border-radius: 1rem; border: 1px dashed #10b981; margin-bottom: 1.5rem;">
+                <div style="font-size: 0.9rem; color: #94a3b8;">Estimasi Total Investasi Sesi PT:</div>
+                <div id="calcResult" style="font-size: 2.25rem; font-weight: 900; color: #10b981; margin: 0.25rem 0;">
+                    Rp {{ isset($programs[0]) ? number_format(is_object($programs[0]) ? $programs[0]->price_start : $programs[0]['price_start'], 0, ',', '.') : '450.000' }}
                 </div>
-                <div style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">Termasuk garansi bimbingan & sertifikat!</div>
+                <div style="font-size: 0.85rem; color: #34d399; font-weight: 700;">Sudah termasuk InBody 3D Scan & Custom Meal Plan!</div>
             </div>
 
-            <button onclick="openRegistrationModal()" class="btn btn-accent btn-lg" style="width: 100%;">
-                <i class="fa-solid fa-paper-plane"></i> Ambil Promo Simulasi Ini Now
+            <button onclick="openRegistrationModal()" class="btn btn-accent btn-lg" style="width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; font-weight: 800; border-radius: 0.75rem;">
+                <i class="fa-solid fa-paper-plane"></i> Klaim Promo Simulasi Ini Now
             </button>
         </div>
     </div>

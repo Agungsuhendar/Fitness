@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Testimoni & Video Galeri Alumni - Les Renang Jogja')
-@section('meta_description', 'Kisah nyata, testimoni foto & galeri video perkembangan siswa les renang anak, dewasa, & TNI POLRI di Yogyakarta.')
+@section('title', 'Transformasi & Review Member ApexFitness Center')
+@section('meta_description', 'Kisah nyata, ulasan, & galeri video sebelum-sesudah member ApexFitness Yogyakarta. Penurunan berat badan, pembentukan otot, & persiapan TNI POLRI.')
 
 @section('content')
-<section class="hero-section" style="padding: 3rem 0;">
+<section class="hero-section" style="padding: 4rem 0; background: #070a12; color: white;">
     <div class="container">
         <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <span class="section-subtitle">Bukti Nyata</span>
-            <h1 class="hero-title">Galeri Testimoni & <span class="text-gradient">Video Alumni</span></h1>
-            <p class="hero-description">
-                Simak pengalaman asli para orang tua murid dan peserta les renang yang telah berhasil menguasai gaya renang bersama kami.
+            <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Hasil Terukur</span>
+            <h1 class="hero-title" style="font-size: 3rem; font-weight: 900; margin-top: 0.5rem; font-family: 'Outfit', sans-serif;">Galeri Transformasi & <span style="color: #10b981;">Review Member</span></h1>
+            <p class="hero-description" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem;">
+                Simak kisah sukses nyata para member yang telah berhasil memangkas lemak, membentuk massa otot, dan meningkatkan stamina puncak bersama Personal Trainer ApexFitness.
             </p>
         </div>
     </div>
 </section>
 
 @if(session('success'))
-<section style="padding: 0;">
+<section style="padding: 0; background: #070a12;">
     <div class="container">
         <div style="background: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 1rem 1.25rem; border-radius: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">
             <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
@@ -26,202 +26,138 @@
 </section>
 @endif
 
-<section class="section section-bg-alt">
+<section class="section" style="background: #0f172a; padding: 5rem 0; color: white;">
     <div class="container">
-        <div class="grid-2">
+        <div class="grid-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
             @forelse($testimonials as $testi)
-            <div class="testimonial-card">
-                <div class="rating-stars">
+            <div class="testimonial-card" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 1.25rem; padding: 1.75rem;">
+                <div class="rating-stars" style="color: #f97316; margin-bottom: 1rem;">
                     @for($i = 0; $i < $testi->rating; $i++)
                         <i class="fa-solid fa-star"></i>
                     @endfor
                 </div>
-                <p style="font-style: italic; color: var(--dark-surface); font-size: 1.05rem; line-height: 1.7; margin-bottom: 1rem;">
+                <p style="font-style: italic; color: #e2e8f0; font-size: 1rem; line-height: 1.7; margin-bottom: 1.25rem;">
                     "{{ $testi->review }}"
                 </p>
                 <div class="testimonial-user" style="display: flex; align-items: center; gap: 0.85rem;">
-                    <div class="testimonial-avatar" style="width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary-light); flex-shrink: 0;">
-                        @if($testi->avatar)
-                            <img src="{{ Str::startsWith($testi->avatar, 'http') ? $testi->avatar : asset($testi->avatar) }}" alt="{{ $testi->name }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;\'>{{ substr($testi->name, 0, 1) }}</div>';">
-                        @else
-                            <div style="width:100%;height:100%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;">
-                                {{ strtoupper(substr($testi->name, 0, 1)) }}
-                            </div>
-                        @endif
+                    <div class="testimonial-avatar" style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+                        {{ strtoupper(substr($testi->name, 0, 1)) }}
                     </div>
                     <div>
-                        <div style="font-weight: 800; color: var(--dark);">{{ $testi->name }}</div>
-                        <div style="font-size: 0.85rem; color: var(--primary);">{{ $testi->role }} • {{ $testi->program }}</div>
+                        <div style="font-weight: 800; color: #ffffff;">{{ $testi->name }}</div>
+                        <div style="font-size: 0.85rem; color: #10b981;">{{ $testi->role }} • {{ $testi->program }}</div>
                     </div>
                 </div>
             </div>
             @empty
             <div style="grid-column: span 2; text-align: center; padding: 3rem; color: #94a3b8;">
                 <i class="fa-solid fa-comment-dots" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
-                <p style="font-size: 1.1rem;">Belum ada testimoni. Jadilah yang pertama mengirim pengalaman Anda!</p>
-            </div>
-            @endforelse
-        </div>
-
-        <div style="text-align: center; margin-top: 3.5rem;">
-            <button onclick="openTrialModal()" class="btn btn-primary btn-lg">
-                <i class="fa-solid fa-bolt"></i> Rasakan Pengalaman Berenang Sekarang!
-            </button>
-        </div>
-    </div>
-<!-- Interactive Before-After Video Gallery Section -->
-<section class="section">
-    <div class="container">
-        <div class="section-header">
-            <span class="section-subtitle"><i class="fa-solid fa-clapperboard"></i> Bukti Hasil Latihan Siswa</span>
-            <h2 class="section-title">Galeri Video Before-After Alumni</h2>
-            <p class="section-description">Lihat dokumentasi video nyata siswa kami: dari belum berani air hingga mahir berenang gaya dada & bebas!</p>
-        </div>
-
-        <div class="grid-3" style="gap: 1.5rem;">
-            @forelse($videos as $vid)
-            @php
-                $vidThumb = $vid->thumbnail
-                    ? (Str::startsWith($vid->thumbnail, 'http') ? $vid->thumbnail : asset($vid->thumbnail))
-                    : asset('images/assets/video_thumb_daffa.png');
-            @endphp
-            <div class="reel-card" onclick="openReelModal('{{ $vid->title }}', '{{ $vid->subtitle }}', '{{ $vid->video_url }}')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
-                <img src="{{ $vidThumb }}" alt="{{ $vid->title }}" style="width: 100%; height: 100%; object-fit: cover;">
-                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,4,94,0.92) 0%, rgba(3,4,94,0.2) 50%, rgba(0,0,0,0.4) 100%);"></div>
-
-                @if($vid->before_badge || $vid->after_badge)
-                <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                    @if($vid->before_badge)<span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">{{ $vid->before_badge }}</span>@endif
-                    @if($vid->after_badge)<span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">{{ $vid->after_badge }}</span>@endif
-                </div>
-                @endif
-
-                <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                    <i class="fa-solid fa-play" style="margin-left: 4px; color: var(--accent);"></i>
-                </div>
-
-                <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;">
-                    <div style="font-weight: 900; font-size: 1.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem;">
-                        <i class="fa-solid fa-circle-play" style="color: var(--accent);"></i> {{ $vid->title }}
-                    </div>
-                    @if($vid->description)
-                    <div style="font-size: 0.85rem; color: #e0f2fe; line-height: 1.4;">
-                        {{ $vid->description }}
-                    </div>
-                    @endif
-                </div>
-            </div>
-            @empty
-            <div style="grid-column: span 3; text-align: center; color: var(--text-muted); padding: 3rem;">
-                <p>Belum ada video galeri yang diaktifkan.</p>
+                <p style="font-size: 1.1rem;">Belum ada testimoni. Kirim ulasan Anda setelah latihan bersama kami!</p>
             </div>
             @endforelse
         </div>
     </div>
 </section>
 
-<!-- Form Kirim Testimoni Peserta -->
-<section class="section">
+<!-- Video Gallery Before-After -->
+<section class="section" style="background: #070a12; padding: 5rem 0; color: white;">
     <div class="container">
-        <div class="glass-card" style="padding: 3rem; background: #ffffff; max-width: 750px; margin: 0 auto;">
+        <div class="section-header" style="text-align: center; max-width: 700px; margin: 0 auto 3.5rem;">
+            <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;"><i class="fa-solid fa-clapperboard"></i> Video Transformasi</span>
+            <h2 class="section-title" style="color: #ffffff; font-size: 2.2rem; font-weight: 900; margin-top: 0.5rem;">Perubahan Fisik Member</h2>
+        </div>
+
+        <div class="grid-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            @forelse($videos as $vid)
+            <div class="reel-card" onclick="openReelModal('{{ $vid->title }}', '{{ $vid->subtitle }}', '{{ $vid->video_url }}')" style="position: relative; height: 380px; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.4); cursor: pointer; border: 2px solid rgba(255,255,255,0.15);">
+                <img src="{{ asset('images/assets/video_thumb_daffa.png') }}" alt="{{ $vid->title }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/pool_depok.webp') }}';">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, #0f172a 0%, transparent 60%);"></div>
+
+                @if($vid->before_badge || $vid->after_badge)
+                <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                    @if($vid->before_badge)<span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px;">{{ $vid->before_badge }}</span>@endif
+                    @if($vid->after_badge)<span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px;">{{ $vid->after_badge }}</span>@endif
+                </div>
+                @endif
+
+                <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; background: rgba(16, 185, 129, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 1.4rem;">
+                    <i class="fa-solid fa-play" style="margin-left: 3px;"></i>
+                </div>
+
+                <div style="position: absolute; bottom: 18px; left: 18px; right: 18px; color: white;">
+                    <div style="font-weight: 900; font-size: 1.1rem; margin-bottom: 0.2rem;">
+                        {{ $vid->title }}
+                    </div>
+                    <div style="font-size: 0.825rem; color: #94a3b8; line-height: 1.4;">
+                        {{ $vid->description }}
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div style="grid-column: span 3; text-align: center; color: #94a3b8; padding: 2rem;">
+                <p>Video galeri sedang diperbarui.</p>
+            </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<!-- Form Kirim Testimoni -->
+<section class="section" style="background: #0f172a; padding: 5rem 0; color: white;">
+    <div class="container">
+        <div class="glass-card" style="padding: 3rem; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; max-width: 750px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 2rem;">
-                <span class="section-subtitle">Bagikan Pengalaman Anda</span>
-                <h2 style="font-size: 1.85rem; margin-bottom: 0.5rem;">
-                    <i class="fa-solid fa-pen-fancy" style="color: var(--primary);"></i> Kirim Testimoni
+                <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Bagikan Pengalaman Anda</span>
+                <h2 style="font-size: 1.85rem; color: #ffffff; font-weight: 900; margin-top: 0.3rem;">
+                    <i class="fa-solid fa-pen-fancy" style="color: #10b981;"></i> Kirim Ulasan Member
                 </h2>
-                <p style="color: var(--text-muted); font-size: 0.925rem;">
-                    Ceritakan pengalaman Anda belajar renang bersama kami. Testimoni Anda akan ditampilkan setelah disetujui admin.
+                <p style="color: #94a3b8; font-size: 0.95rem;">
+                    Ceritakan hasil transformasi & pengalaman Anda berlatih di ApexFitness Center.
                 </p>
             </div>
 
-            @if($errors->any())
-                <div style="padding: 1rem; background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; border-radius: 0.85rem; margin-bottom: 1.5rem;">
-                    @foreach($errors->all() as $error)
-                        <div>{{ $error }}</div>
-                    @endforeach
-                </div>
-            @endif
-
-            <form action="{{ route('testimoni.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('testimoni.store') }}" method="POST">
                 @csrf
-
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
                     <div>
-                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.4rem;">
-                            Nama Lengkap <span style="color: #ef4444;">*</span>
-                        </label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required placeholder="Contoh: Ibu Dewi Sari" style="border-radius: 0.75rem; padding: 0.75rem 1rem;">
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.4rem;">Nama Lengkap <span style="color: #ef4444;">*</span></label>
+                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required placeholder="Contoh: Bima Perkasa" style="background: #0f172a; border-color: #334155; color: #ffffff; padding: 0.75rem 1rem; border-radius: 0.75rem;">
                     </div>
                     <div>
-                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.4rem;">
-                            Keterangan / Role <span style="color: #ef4444;">*</span>
-                        </label>
-                        <input type="text" name="role" class="form-control" value="{{ old('role') }}" required placeholder="Contoh: Ibu dari Kenzo (7th)" style="border-radius: 0.75rem; padding: 0.75rem 1rem;">
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.4rem;">Pekerjaan / Keterangan <span style="color: #ef4444;">*</span></label>
+                        <input type="text" name="role" class="form-control" value="{{ old('role') }}" required placeholder="Contoh: Software Engineer" style="background: #0f172a; border-color: #334155; color: #ffffff; padding: 0.75rem 1rem; border-radius: 0.75rem;">
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
                     <div>
-                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.4rem;">
-                            Program yang Diikuti <span style="color: #ef4444;">*</span>
-                        </label>
-                        <select name="program" class="form-control" required style="border-radius: 0.75rem; padding: 0.75rem 1rem;">
-                            <option value="">-- Pilih Program --</option>
-                            @foreach(\App\Models\Program::all() as $prog)
-                                <option value="{{ $prog->title }}" {{ old('program') == $prog->title ? 'selected' : '' }}>{{ $prog->title }}</option>
-                            @endforeach
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.4rem;">Program Fitness <span style="color: #ef4444;">*</span></label>
+                        <select name="program" class="form-control" required style="background: #0f172a; border-color: #334155; color: #ffffff; padding: 0.75rem 1rem; border-radius: 0.75rem;">
+                            <option value="Weight Loss & Fat Burn">Weight Loss & Fat Burn</option>
+                            <option value="Muscle Building & Hypertrophy">Muscle Building & Hypertrophy</option>
+                            <option value="Female Fitness & Body Shaping">Female Fitness & Body Shaping</option>
+                            <option value="Strength & Persiapan TNI POLRI">Strength & Persiapan TNI POLRI</option>
                         </select>
                     </div>
                     <div>
-                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.4rem;">
-                            Rating Kepuasan <span style="color: #ef4444;">*</span>
-                        </label>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 0.35rem;" id="starRating">
-                            @for($s = 1; $s <= 5; $s++)
-                            <label style="cursor: pointer; font-size: 1.75rem; color: {{ $s <= 5 ? '#f59e0b' : '#cbd5e1' }}; transition: color 0.2s;" onclick="setRating({{ $s }})">
-                                <i class="fa-solid fa-star" id="star{{ $s }}"></i>
-                            </label>
-                            @endfor
-                            <input type="hidden" name="rating" id="ratingInput" value="{{ old('rating', 5) }}">
-                        </div>
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.4rem;">Rating Kepuasan <span style="color: #ef4444;">*</span></label>
+                        <select name="rating" class="form-control" required style="background: #0f172a; border-color: #334155; color: #ffffff; padding: 0.75rem 1rem; border-radius: 0.75rem;">
+                            <option value="5">⭐⭐⭐⭐⭐ Bintang 5 (Sangat Puas)</option>
+                            <option value="4">⭐⭐⭐⭐ Bintang 4 (Bagus)</option>
+                        </select>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 1.25rem;">
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.4rem;">
-                        Ceritakan Pengalaman Anda <span style="color: #ef4444;">*</span>
-                    </label>
-                    <textarea name="review" class="form-control" required rows="4" placeholder="Ceritakan pengalaman Anda belajar renang bersama Les Renang Jogja..." style="border-radius: 0.75rem; padding: 0.75rem 1rem; resize: vertical;">{{ old('review') }}</textarea>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.4rem;">Ceritakan Hasil Transformasi Anda <span style="color: #ef4444;">*</span></label>
+                    <textarea name="review" class="form-control" required rows="4" placeholder="Turun berapa kg / hasil otot / bimbingan trainer..." style="background: #0f172a; border-color: #334155; color: #ffffff; padding: 0.75rem 1rem; border-radius: 0.75rem;">{{ old('review') }}</textarea>
                 </div>
 
-                <div style="margin-bottom: 2rem;">
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.4rem;">
-                        Upload Foto Anda (opsional):
-                    </label>
-                    <input type="file" name="avatar_file" accept="image/*" style="font-size: 0.85rem;">
-                    <small style="color: #94a3b8; display: block; margin-top: 0.3rem;">Format: JPG, PNG, WEBP. Maks 2MB.</small>
-                </div>
-
-                <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">
-                    <i class="fa-solid fa-paper-plane"></i> Kirim Testimoni Saya
+                <button type="submit" class="btn btn-accent btn-lg" style="width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; font-weight: 800; border-radius: 0.75rem; color: white;">
+                    <i class="fa-solid fa-paper-plane"></i> Kirim Review Sekarang
                 </button>
             </form>
         </div>
     </div>
 </section>
-
-@push('scripts')
-<script>
-    function setRating(val) {
-        document.getElementById('ratingInput').value = val;
-        for (let i = 1; i <= 5; i++) {
-            document.getElementById('star' + i).parentElement.style.color = i <= val ? '#f59e0b' : '#cbd5e1';
-        }
-    }
-    // Init rating from old value
-    document.addEventListener('DOMContentLoaded', function() {
-        setRating(parseInt(document.getElementById('ratingInput').value) || 5);
-    });
-</script>
-@endpush
 @endsection

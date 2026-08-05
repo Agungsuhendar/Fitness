@@ -27,6 +27,7 @@ use App\Http\Controllers\TestimonialController;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/tentang-kami', [PageController::class, 'tentang'])->name('tentang');
+Route::get('/fitness-{slug}', [PageController::class, 'areaLanding'])->name('area.fitness');
 Route::get('/les-renang-{slug}', [PageController::class, 'areaLanding'])->name('area.landing');
 
 Route::get('/sitemap.xml', function() {

@@ -101,25 +101,27 @@ class PageController extends Controller
                 });
             }
 
-            if (\App\Models\Video::count() === 0) {
+            // Always ensure video contents match fitness transformations
+            if (\App\Models\Video::count() === 0 || \App\Models\Video::where('title', 'like', '%Daffa%')->exists()) {
+                \App\Models\Video::truncate();
                 $dummyVideos = [
                     [
-                        'title' => 'Daffa (7 Tahun)',
-                        'subtitle' => 'Hari 1: Takut Air & Menangis ➔ Hari 4: Mahir Gaya Dada 25m',
-                        'before_badge' => '🔴 Hari 1: Takut Air',
-                        'after_badge' => '🟢 Hari 4: Mahir',
-                        'description' => 'Dari tidak mau lepas pegangan hingga berani meluncur & renang gaya dada 25 meter mandiri!',
+                        'title' => 'Bima (28 Tahun)',
+                        'subtitle' => 'Hari 1: 88 kg & Lemak Perut ➔ Hari 90: 72 kg Sixpack & Lean Muscle',
+                        'before_badge' => '🔴 Hari 1: 88 kg Fat',
+                        'after_badge' => '🟢 Hari 90: 72 kg Lean',
+                        'description' => 'Transformasi total 16 kg lemak terpangkas dalam 90 hari bimbingan privat Personal Trainer ApexFitness & custom diet plan!',
                         'video_url' => 'https://www.youtube.com/embed/5ee8sX_1-9c',
                         'thumbnail' => 'images/assets/video_thumb_daffa.png',
                         'order' => 1,
                         'is_active' => true,
                     ],
                     [
-                        'title' => 'Mbak Siti (24 Tahun)',
-                        'subtitle' => 'Hari 1: Trauma Kedalaman ➔ Hari 3: Meluncur di Kolam Dalam 2m',
-                        'before_badge' => '🔴 Hari 1: Trauma',
-                        'after_badge' => '🟢 Hari 3: Berani 2m',
-                        'description' => 'Bimbingan privat 1-on-1 wanita ramah. Dalam 3 sesi berhasil mengatasi trauma air kedalaman 2 meter!',
+                        'title' => 'Anisa (25 Tahun)',
+                        'subtitle' => 'Bulan 1: Posture Bungkuk ➔ Bulan 3: Hourglass Shape & Toned Body',
+                        'before_badge' => '🔴 Bulan 1: Gelambir & Bungkuk',
+                        'after_badge' => '🟢 Bulan 3: Hourglass',
+                        'description' => 'Bimbingan Personal Trainer wanita 1-on-1. Membentuk lekuk pinggul, mengencangkan paha & memperbaiki postur tegap!',
                         'video_url' => 'https://www.youtube.com/embed/M5cs8a3Bhfg',
                         'thumbnail' => 'images/assets/video_thumb_siti.png',
                         'order' => 2,
@@ -127,10 +129,10 @@ class PageController extends Controller
                     ],
                     [
                         'title' => 'Rian (Calon TNI/POLRI)',
-                        'subtitle' => 'Hari 1: Renang 15m Terengah ➔ Hari 6: Lulus Tes 50m Gaya Bebas',
-                        'before_badge' => '🔴 Hari 1: 15m',
-                        'after_badge' => '🟢 Hari 6: Lulus 50m',
-                        'description' => 'Pelatihan stamina fisik & ketahanan napas intensif. Lulus tes renang 50 meter gaya bebas dengan nilai 100!',
+                        'subtitle' => 'Hari 1: Pull-up 3x & Lari 1800m ➔ Hari 60: Pull-up 18x & Lari 3100m',
+                        'before_badge' => '🔴 Hari 1: Skor 40',
+                        'after_badge' => '🟢 Hari 60: Lulus 100',
+                        'description' => 'Pelatihan stamina fisik & kekuatan kalistenik intensif. Lulus tes kesamaptaan jasmani dengan nilai sempurna 100!',
                         'video_url' => 'https://www.youtube.com/embed/xVeXGKPOH58',
                         'thumbnail' => 'images/assets/video_thumb_rian.png',
                         'order' => 3,
@@ -193,60 +195,63 @@ class PageController extends Controller
 
     public function areaLanding($slug)
     {
+        // Strip prefixes if user comes from les-renang- or fitness-
+        $cleanSlug = str_replace(['les-renang-', 'fitness-'], '', $slug);
+
         $areasData = [
             'sleman' => [
                 'area_name' => 'Sleman & Depok',
-                'title' => 'Les Renang Sleman - Kursus Privat Renang Anak & Dewasa Terdekat',
-                'meta_description' => 'Les renang privat di Sleman Yogyakarta. Bimbingan 1-on-1 pelatih berlisensi di Depok Sport Center, UNY, UGM. Privat anak, wanita & persiapan TNI POLRI. Garansi cepat bisa!',
-                'pools' => 'Depok Sport Center (DSC), Kolam Renang UNY Karangmalang, Kolam Renang Kampus UGM, FIK UNY',
-                'description' => 'Layanan les renang privat terbaik untuk wilayah Kabupaten Sleman, meliputi kecamatan Depok, Ngaglik, Mlati, Kalasan, hingga area kampus UGM & UNY.',
-                'subdistricts' => ['Depok', 'Ngaglik', 'Mlati', 'Kalasan', 'Sleman Kota', 'Godean', 'Ngemplak'],
-                'icon' => 'fa-mountain-sun'
+                'title' => 'Gym & Personal Trainer Sleman - ApexFitness Center Terdekat',
+                'meta_description' => 'Pusat fitness & personal trainer privat di Sleman Yogyakarta. Bimbingan 1-on-1 pelatih berlisensi APKI di Kaliurang, Depok, Seturan, UGM. Penurunan BB & pembentukan otot!',
+                'pools' => 'ApexFitness Headquarters Kaliurang, Apex Studio Seturan, Depok Gym Center',
+                'description' => 'Layanan fitness & Personal Trainer privat terbaik di wilayah Sleman, meliputi Depok, Seturan, Kaliurang, Monjali, hingga kawasan kampus UGM & UNY.',
+                'subdistricts' => ['Depok', 'Seturan', 'Kaliurang', 'Mlati', 'Sleman Kota', 'Godean', 'Ngaglik'],
+                'icon' => 'fa-dumbbell'
             ],
             'bantul' => [
                 'area_name' => 'Bantul & Sewon',
-                'title' => 'Les Renang Bantul - Kursus Privat Renang Anak, Wanita & Dewasa',
-                'meta_description' => 'Kursus les renang privat terpercaya di Bantul & Sewon Yogyakarta. Bimbingan privat ramah anak, wanita, & dewasa pemula. Garansi 100% cepat bisa berenang!',
-                'pools' => 'Kolam Renang Tirta Tamansari Bantul, Grand Puri Waterpark, Tirto Asri, Sewon',
-                'description' => 'Program privat renang terpercaya di wilayah Kabupaten Bantul, melayani area Sewon, Kasihan, Banguntapan, Piyungan, hingga Bantul Kota.',
-                'subdistricts' => ['Sewon', 'Kasihan', 'Banguntapan', 'Piyungan', 'Bantul Kota', 'Pundong', 'Jetis'],
-                'icon' => 'fa-water'
+                'title' => 'Gym & Personal Trainer Bantul - ApexFitness Studio',
+                'meta_description' => 'Pusat gym privat & Personal Trainer profesional di Bantul & Sewon Jogja. Bimbingan ramah pemula, wanita, & weight loss. Garansi hasil terukur!',
+                'pools' => 'Apex Studio Sewon, Tirto Gym Fitness, Apex Bantul Branch',
+                'description' => 'Program privat fitness terpercaya di wilayah Kabupaten Bantul, melayani area Sewon, Kasihan, Banguntapan, Piyungan, hingga Bantul Kota.',
+                'subdistricts' => ['Sewon', 'Kasihan', 'Banguntapan', 'Piyungan', 'Bantul Kota', 'Jetis'],
+                'icon' => 'fa-fire'
             ],
             'ugm' => [
                 'area_name' => 'UGM & Area Kampus Depok',
-                'title' => 'Les Renang UGM & UNY Depok - Privat Renang Mahasiswa & Umum',
-                'meta_description' => 'Les privat renang terdekat dari UGM & UNY Yogyakarta. Spesialis mahasiswa, anak-anak, & dewasa pemula. Jadwal fleksibel & pelatih berpengalaman!',
-                'pools' => 'Kolam Renang UGM, Kolam Renang FIK UNY Karangmalang, Depok Sport Center Seturan',
-                'description' => 'Les privat renang terdekat untuk mahasiswa UGM, UNY, UPN, Sanata Dharma, Atma Jaya, serta warga di kawasan Gejayan, Seturan, dan Kaliurang.',
+                'title' => 'Gym Mahasiswa UGM & UNY Depok - Personal Trainer Terdekat',
+                'meta_description' => 'Gym & Personal Trainer terdekat UGM & UNY Yogyakarta. Spesialis mahasiswa, pemula, & body transformation. Promo membership mahasiswa & jadwal fleksibel!',
+                'pools' => 'Apex Studio Seturan, Apex Headquarters Kaliurang, UNY Sport Fitness',
+                'description' => 'Latihan fitness privat terdekat untuk mahasiswa UGM, UNY, UPN, Sanata Dharma, Atma Jaya, serta warga di kawasan Gejayan, Seturan, dan Kaliurang.',
                 'subdistricts' => ['UGM', 'UNY', 'Gejayan', 'Seturan', 'Babarsari', 'Kaliurang Km 5-8', 'Condongcatur'],
                 'icon' => 'fa-graduation-cap'
             ],
             'kota-jogja' => [
                 'area_name' => 'Kota Yogyakarta',
-                'title' => 'Les Renang Kota Jogja - Kursus Privat Renang Terpercaya',
-                'meta_description' => 'Les renang privat di Kota Yogyakarta. Melayani privat renang anak, wanita/muslimah, dewasa, & persiapan TNI/POLRI. Garansi cepat mahir berenang!',
-                'pools' => 'Kolam Renang Umbulharjo, Muja Muju, UNY, Tirto Guwo Yogyakarta',
-                'description' => 'Melayani les privat renang di seluruh wilayah Kota Yogyakarta, meliputi Umbulharjo, Gondokusuman, Mergangsan, Mantrijeron, dan sekitar Malioboro.',
+                'title' => 'Gym & Personal Trainer Kota Jogja - ApexFitness Center',
+                'meta_description' => 'Pusat gym & Personal Trainer di Kota Yogyakarta. Melayani privat weight loss, muscle building, privat wanita, & tes fisik TNI/POLRI. Garansi hasil terukur!',
+                'pools' => 'Apex Performance Gym Umbulharjo, Apex City Center Malioboro',
+                'description' => 'Melayani privat fitness & gym di seluruh wilayah Kota Yogyakarta, meliputi Umbulharjo, Gondokusuman, Mergangsan, Mantrijeron, dan sekitar Malioboro.',
                 'subdistricts' => ['Umbulharjo', 'Gondokusuman', 'Mergangsan', 'Mantrijeron', 'Tegalrejo', 'Danurejan', 'Kotabaru'],
                 'icon' => 'fa-city'
             ],
             'kulon-progo' => [
                 'area_name' => 'Kulon Progo & Wates',
-                'title' => 'Les Renang Kulon Progo & Wates - Privat Renang Terpercaya',
-                'meta_description' => 'Les renang privat profesional di Kulon Progo & Wates. Melayani privat anak, dewasa, & wanita. Garansi bisa berenang bersama pelatih lisensi resmi!',
-                'pools' => 'Kolam Renang UNY Wates, Kolam Renang Pengasih Kulon Progo',
-                'description' => 'Layanan privat renang profesional untuk masyarakat Kulon Progo dan sekitarnya, melayani area Wates, Pengasih, Sentolo, hingga Temon.',
+                'title' => 'Gym & Personal Trainer Kulon Progo - ApexFitness Studio',
+                'meta_description' => 'Personal Trainer privat profesional di Kulon Progo & Wates. Melayani privat fat burn, pembentukan otot, & privat wanita. Trainer tersertifikasi resmi!',
+                'pools' => 'Apex Branch Wates, Wates Fitness Center',
+                'description' => 'Layanan privat fitness profesional untuk masyarakat Kulon Progo dan sekitarnya, melayani area Wates, Pengasih, Sentolo, hingga Temon.',
                 'subdistricts' => ['Wates', 'Pengasih', 'Sentolo', 'Temon', 'Lendah', 'Galur'],
                 'icon' => 'fa-compass'
             ]
         ];
 
-        if (!array_key_exists($slug, $areasData)) {
+        if (!array_key_exists($cleanSlug, $areasData)) {
             abort(404);
         }
 
-        $area = $areasData[$slug];
-        $slugKey = $slug;
+        $area = $areasData[$cleanSlug];
+        $slugKey = $cleanSlug;
         $programs = Program::orderBy('order')->get();
         $testimonials = Testimonial::where('is_featured', true)->get();
         $popularFaqs = Faq::orderBy('order')->take(8)->get();
@@ -264,44 +269,45 @@ class PageController extends Controller
                     $table->string('icon')->default('fa-solid fa-star');
                     $table->string('title');
                     $table->text('description')->nullable();
-                    $table->string('color')->default('#0077b6');
+                    $table->string('color')->default('#10b981');
                     $table->integer('order')->default(0);
                     $table->boolean('is_active')->default(true);
                     $table->timestamps();
                 });
             }
 
-            if (\App\Models\Feature::count() === 0) {
+            if (\App\Models\Feature::count() === 0 || \App\Models\Feature::where('title', 'like', '%PRSI%')->exists()) {
+                \App\Models\Feature::truncate();
                 $dummyFeatures = [
                     [
-                        'icon' => 'fa-solid fa-user-graduate',
-                        'title' => 'Pelatih Sabar & Pro',
-                        'description' => 'Lulusan FIK Keolahragaan UNY, pemegang lisensi PRSI/POSSI, dan tersertifikasi First Aid.',
-                        'color' => '#0077b6',
+                        'icon' => 'fa-solid fa-certificate',
+                        'title' => 'Trainer Berlisensi APKI / IFBB',
+                        'description' => 'Didampingi Personal Trainer profesional tersertifikasi nasional & internasional yang berpengalaman melatih 1000+ member.',
+                        'color' => '#10b981',
                         'order' => 1,
                         'is_active' => true,
                     ],
                     [
-                        'icon' => 'fa-solid fa-calendar-days',
-                        'title' => 'Jadwal Super Fleksibel',
-                        'description' => 'Bebas pilih jam latihan sesuai kesibukan Anda (Pagi 06.00 WIB s/d Malam 20.00 WIB).',
-                        'color' => '#00b4d8',
+                        'icon' => 'fa-solid fa-chart-line',
+                        'title' => 'InBody 3D Scan & Body Assessment',
+                        'description' => 'Evaluasi massa otot, % lemak tubuh, dan kadar metabolisme tubuh secara akurat setiap 2 minggu sekali.',
+                        'color' => '#f97316',
                         'order' => 2,
                         'is_active' => true,
                     ],
                     [
                         'icon' => 'fa-solid fa-person-dress',
-                        'title' => 'Instruktur Wanita Privat',
-                        'description' => 'Khusus siswa perempuan / muslimah dengan pelatih wanita sabar & lokasi kolam privat aman.',
-                        'color' => '#d946ef',
+                        'title' => 'Trainer Wanita & Studio Privat',
+                        'description' => 'Khusus member wanita / muslimah dengan Personal Trainer wanita sabar & area studio gym privat aman 100%.',
+                        'color' => '#ec4899',
                         'order' => 3,
                         'is_active' => true,
                     ],
                     [
                         'icon' => 'fa-solid fa-trophy',
-                        'title' => 'Garansi Cepat Bisa',
-                        'description' => 'Dibimbing intensif 1-on-1 hingga berani air, mengapung, meluncur, dan mahir berenang gaya dada & bebas.',
-                        'color' => '#10b981',
+                        'title' => 'Garansi Hasil Terukur',
+                        'description' => 'Program latihan terstruktur, custom meal plan harian, & garansi pemangkasan lemak/pembentukan otot progresif.',
+                        'color' => '#3b82f6',
                         'order' => 4,
                         'is_active' => true,
                     ],

@@ -1,8 +1,7 @@
 @php
-    $defaultSeoTitle = site_setting('site_seo_title', 'Les Renang Jogja - Privat Anak, Dewasa, Wanita & Persiapan TNI POLRI');
-    $defaultSeoDesc = site_setting('site_seo_description', 'Les Renang Jogja profesional & privat di Yogyakarta. Melayani les renang anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI. Garansi cepat bisa!');
+    $defaultSeoTitle = site_setting('site_seo_title', 'ApexFitness Center - Gym, Personal Trainer Privat & Body Transformation Studio');
+    $defaultSeoDesc = site_setting('site_seo_description', 'ApexFitness Center Yogyakarta. Pusat fitness gym & Personal Trainer privat 1-on-1 tersertifikasi APKI. Program Weight Loss, Muscle Building, Female Body Shaping & Persiapan TNI POLRI. InBody Scan & Garansi Hasil!');
     $rawShareLogo = site_setting('site_share_image', 'images/logo.png');
-    // Force PNG/JPG format fallback if logo is webp
     if (Str::endsWith($rawShareLogo, '.webp') && file_exists(public_path('images/logo.png'))) {
         $rawShareLogo = 'images/logo.png';
     }
@@ -14,16 +13,16 @@
         $recentRegs = \App\Models\Registration::orderByDesc('created_at')->take(4)->get();
         foreach ($recentRegs as $r) {
             $liveToasts[] = [
-                'title' => '🎉 Pendaftaran Baru!',
-                'msg' => $r->name . ' mendaftar ' . ($r->program_name ?? 'Les Renang') . ($r->preferred_location ? ' (' . $r->preferred_location . ')' : ''),
+                'title' => '🎉 Pendaftaran PT Baru!',
+                'msg' => $r->name . ' mendaftar ' . ($r->program_name ?? 'ApexFitness Sesi PT') . ($r->preferred_location ? ' (' . $r->preferred_location . ')' : ''),
             ];
         }
 
         $recentTrials = \App\Models\TrialBooking::orderByDesc('created_at')->take(3)->get();
         foreach ($recentTrials as $t) {
             $liveToasts[] = [
-                'title' => '⚡ Booking Trial Gratis!',
-                'msg' => ($t->parent_name ?: $t->participant_name) . ' booking trial ' . ($t->program_name ?? 'Les Renang'),
+                'title' => '⚡ Free Trial PT Booked!',
+                'msg' => ($t->parent_name ?: $t->participant_name) . ' booking Free Sesi Trial ' . ($t->program_name ?? 'ApexFitness'),
             ];
         }
 
@@ -38,10 +37,10 @@
 
     if (empty($liveToasts)) {
         $liveToasts = [
-            ['title' => '🎉 Pendaftaran Baru!', 'msg' => 'Budi Santoso mendaftar Paket Les Renang Anak (UNY Sleman)'],
-            ['title' => '⚡ Booking Trial Gratis!', 'msg' => 'Ibu Anisa booking trial Les Renang Anak'],
-            ['title' => '🌸 Pendaftaran Muslimah!', 'msg' => 'Siti Rahmawati mendaftar Les Renang Wanita Privat'],
-            ['title' => '⭐ Ulasan Bintang 5!', 'msg' => 'Ibu Dewi Sari: "Anak saya dari tidak mau lepas..."'],
+            ['title' => '🎉 Free Trial PT Booked!', 'msg' => 'Bima Santoso booking Sesi Trial PT (Apex Fitness Sleman)'],
+            ['title' => '⚡ Target Weight Loss Tembus!', 'msg' => 'Ibu Anisa pangkas 8kg lemak tubuh dalam 6 minggu'],
+            ['title' => '🌸 Member Wanita Baru!', 'msg' => 'Siti Rahmawati mendaftar Female Fitness & Pilates Studio'],
+            ['title' => '⭐ Transformasi Bintang 5!', 'msg' => 'Rian A.: "Pull-up dari 3x jadi 18x & lulus tes TNI POLRI"'],
         ];
     }
 @endphp
@@ -54,15 +53,15 @@
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="@yield('meta_description', $defaultSeoDesc)">
-    <meta name="keywords" content="Les Renang Jogja, Les Renang Yogyakarta, Les Renang Anak Jogja, Les Renang Dewasa Jogja, Les Privat Renang Jogja, Kursus Renang Jogja, Pelatih Renang Jogja, Renang TNI Jogja, Renang POLRI Jogja">
-    <meta name="author" content="Les Renang Jogja">
+    <meta name="keywords" content="ApexFitness, Gym Jogja, Personal Trainer Jogja, Weight Loss Jogja, Fitness Center Sleman, Private PT Jogja, Tempat Fitnes Jogja, Fitnes Wanita Jogja, Latihan Beban Jogja, Persiapan Fisik TNI POLRI">
+    <meta name="author" content="ApexFitness Center">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{{ url()->current() }}">
 
-    <!-- Open Graph / WhatsApp / Facebook / Telegram Sharing Meta -->
+    <!-- Open Graph Sharing Meta -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:site_name" content="Les Renang Jogja">
+    <meta property="og:site_name" content="ApexFitness Center">
     <meta property="og:title" content="@yield('title', $defaultSeoTitle)">
     <meta property="og:description" content="@yield('meta_description', $defaultSeoDesc)">
     <meta property="og:image" content="{{ $shareImageUrl }}">
@@ -70,7 +69,6 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="600">
     <meta property="og:image:height" content="315">
-    <meta property="og:image:alt" content="Les Renang Jogja Logo">
 
     <!-- Twitter Card Meta -->
     <meta name="twitter:card" content="summary_large_image">
@@ -82,109 +80,51 @@
 
     <!-- PWA Web Manifest & App Meta Tags -->
     <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <meta name="theme-color" content="#0077b6">
+    <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Les Renang">
-    <link rel="apple-touch-icon" href="{{ asset('images/icon-192.png') }}">
+    <meta name="apple-mobile-web-app-title" content="ApexFitness">
 
     <!-- Geo Meta Tags for Google Local Search -->
     <meta name="geo.region" content="ID-YO">
     <meta name="geo.placename" content="Yogyakarta">
-    <meta name="geo.position" content="-7.797068;110.370529">
-    <meta name="ICBM" content="-7.797068, 110.370529">
+    <meta name="geo.position" content="-7.7702812;110.3853112">
 
-    <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets & Star Ratings -->
+    <!-- Schema.org JSON-LD Structured Data for ApexFitness -->
     <script type="application/ld+json">
     {
       "{{ '@context' }}": "https://schema.org",
-      "@type": "SportsActivityLocation",
-      "name": "Les Renang Jogja",
+      "@type": "ExerciseGym",
+      "name": "ApexFitness Center & Personal Training Studio",
       "image": "{{ asset('images/logo.webp') }}",
-      "@id": "http://lesrenangjogja.site.je",
-      "url": "http://lesrenangjogja.site.je",
+      "url": "{{ url('/') }}",
       "telephone": "+{{ site_setting('whatsapp_number', '6281234567890') }}",
-      "priceRange": "Rp 150.000 - Rp 850.000",
+      "priceRange": "Rp 450.000 - Rp 1.500.000",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "{{ site_setting('office_address', 'Jl. Kaliurang KM 5, Depok, Sleman') }}",
+        "streetAddress": "{{ site_setting('office_address', 'Jl. Kaliurang KM 5.5, Depok, Sleman') }}",
         "addressLocality": "Yogyakarta",
         "addressRegion": "DI Yogyakarta",
         "postalCode": "55281",
         "addressCountry": "ID"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": -7.797068,
-        "longitude": 110.370529
-      },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ],
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
         "opens": "06:00",
-        "closes": "18:00"
+        "closes": "22:00"
       },
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
-        "reviewCount": "250"
+        "reviewCount": "320"
       }
     }
     </script>
 
-    <!-- FAQPage Schema.org JSON-LD for Google SERP Rich Accordions -->
-    <script type="application/ld+json">
-    {
-      "{{ '@context' }}": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Berapa biaya les renang privat di Les Renang Jogja?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Biaya les renang di Les Renang Jogja mulai dari Rp 150.000 per sesi atau paket privat hemat Rp 850.000 garansi sampai bisa renang."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Dimana lokasi kolam renang latihan Les Renang Jogja?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Latihan dilakukan di kolam renang bersih & higienis di Yogyakarta, Sleman, Bantul, UNY, FIK, atau kolam renang pribadi/hotel sesuai permintaan Anda."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Apakah ada kelas les renang khusus wanita/muslimah di Jogja?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ya, kami menyediakan kelas les renang privat khusus wanita/muslimah di Jogja dengan pelatih wanita berlisensi yang menjaga privasi."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Berapa lama rata-rata siswa bisa mahir berenang?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Dengan metode 1-on-1 privat, rata-rata peserta anak maupun dewasa bisa mengapung dan meluncur dalam 2-4 kali pertemuan."
-          }
-        }
-      ]
-    }
-    </script>
-
-    <!-- Local FontAwesome & CSS -->
+    <!-- Local FontAwesome & Custom CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.0.4">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.0.5">
 
     <style>
         /* Theme Switcher Button & Dropdown Styles */
@@ -196,21 +136,21 @@
             width: 38px;
             height: 38px;
             border-radius: 99px;
-            border: 1px solid #cbd5e1;
-            background: #ffffff;
-            color: var(--primary);
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(15, 23, 42, 0.8);
+            color: #10b981;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.25s ease;
             font-size: 1rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
         .theme-picker-btn:hover {
-            background: var(--primary);
+            background: #10b981;
             color: #ffffff;
-            border-color: var(--primary);
+            border-color: #10b981;
             transform: rotate(20deg) scale(1.05);
         }
         .theme-dropdown-menu {
@@ -218,10 +158,10 @@
             top: calc(100% + 0.65rem);
             right: 0;
             width: 220px;
-            background: #ffffff;
+            background: #0f172a;
             border-radius: 1rem;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             padding: 0.75rem;
             display: none;
             flex-direction: column;
@@ -239,7 +179,7 @@
             letter-spacing: 0.05em;
             color: #94a3b8;
             padding: 0.35rem 0.5rem 0.5rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid #1e293b;
             margin-bottom: 0.25rem;
         }
         .theme-option-btn {
@@ -250,7 +190,7 @@
             border-radius: 0.65rem;
             border: none;
             background: transparent;
-            color: #334155;
+            color: #cbd5e1;
             font-weight: 700;
             font-size: 0.85rem;
             cursor: pointer;
@@ -259,8 +199,8 @@
             width: 100%;
         }
         .theme-option-btn:hover, .theme-option-btn.active {
-            background: #f1f5f9;
-            color: var(--primary);
+            background: #1e293b;
+            color: #10b981;
         }
         .theme-color-dot {
             width: 14px;
@@ -274,165 +214,24 @@
             from { opacity: 0; transform: scale(0.95) translateY(-5px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
-
-        /* 🌌 Obsidian Night Theme (Tema Gelap Luxury Cyber-Aquatic) */
-        [data-theme="dark"] {
-            --primary: #38bdf8;
-            --primary-dark: #0284c7;
-            --primary-light: #7dd3fc;
-            --accent: #fbbf24;
-            --dark: #f8fafc;
-            --text-muted: #94a3b8;
-            --light-bg: #070a12;
-            --dark-surface: #070a12;
-            --glass-bg: rgba(15, 23, 42, 0.92);
-            --glass-border: rgba(56, 189, 248, 0.25);
-        }
-        [data-theme="dark"] body {
-            background-color: #070a12 !important;
-            color: #f8fafc !important;
-        }
-        [data-theme="dark"] .navbar {
-            background: rgba(7, 10, 18, 0.94) !important;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
-        }
-        [data-theme="dark"] .hero-section {
-            background: linear-gradient(180deg, #070a12 0%, #0f172a 65%, #070a12 100%) !important;
-        }
-        [data-theme="dark"] .glass-card, 
-        [data-theme="dark"] .program-card, 
-        [data-theme="dark"] .blog-card, 
-        [data-theme="dark"] .faq-card,
-        [data-theme="dark"] .pricing-card,
-        [data-theme="dark"] .location-card,
-        [data-theme="dark"] .section-bg-alt {
-            background: #0f172a !important;
-            border: 1px solid rgba(56, 189, 248, 0.22) !important;
-            color: #f8fafc !important;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
-        }
-        [data-theme="dark"] .section-title, 
-        [data-theme="dark"] .hero-title, 
-        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 {
-            color: #ffffff !important;
-        }
-        [data-theme="dark"] .section-subtitle {
-            color: #38bdf8 !important;
-        }
-        [data-theme="dark"] .search-box {
-            background: #0f172a !important;
-            border-color: rgba(56, 189, 248, 0.35) !important;
-        }
-        [data-theme="dark"] .search-input {
-            color: #ffffff !important;
-        }
-        [data-theme="dark"] .search-input::placeholder {
-            color: #94a3b8 !important;
-        }
-        [data-theme="dark"] .faq-item {
-            background: #0f172a !important;
-            border-color: rgba(56, 189, 248, 0.22) !important;
-            color: #ffffff !important;
-        }
-        [data-theme="dark"] .faq-header {
-            color: #ffffff !important;
-        }
-        [data-theme="dark"] .faq-body {
-            color: #cbd5e1 !important;
-            border-top-color: #1e293b !important;
-        }
-        [data-theme="dark"] .nav-link {
-            color: #e2e8f0 !important;
-        }
-        [data-theme="dark"] .theme-picker-btn {
-            background: #0f172a;
-            border-color: rgba(56, 189, 248, 0.3);
-            color: #38bdf8;
-        }
-        [data-theme="dark"] .theme-dropdown-menu {
-            background: #0f172a;
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-        [data-theme="dark"] .theme-option-btn {
-            color: #e2e8f0;
-        }
-        [data-theme="dark"] .theme-option-btn:hover {
-            background: #1e293b;
-        }
-
-        /* 🌸 Soft Rose & Lavender Theme */
-        [data-theme="rose"] {
-            --primary: #e11d48;
-            --primary-dark: #881337;
-            --primary-light: #f43f5e;
-            --accent: #fb7185;
-            --light-bg: #fff1f2;
-        }
-        [data-theme="rose"] .hero-section {
-            background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 65%, #ffffff 100%) !important;
-        }
-        [data-theme="rose"] .btn-primary {
-            background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%) !important;
-            border: none;
-        }
-
-        /* 🌿 Sage Mint (Soft Green Theme) */
-        [data-theme="sage"] {
-            --primary: #059669;
-            --primary-dark: #064e3b;
-            --primary-light: #10b981;
-            --accent: #f59e0b;
-            --light-bg: #f0fdf4;
-        }
-        [data-theme="sage"] .hero-section {
-            background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 65%, #ffffff 100%) !important;
-        }
-        [data-theme="sage"] .btn-primary {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
-            border: none;
-        }
-        .tab-btn:hover, .tab-btn.active {
-            background: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 8px 20px rgba(0, 119, 182, 0.3);
-        }
-
-        /* 🌅 Warm Peach Sunset Theme */
-        [data-theme="peach"] {
-            --primary: #ea580c;
-            --primary-dark: #7c2d12;
-            --primary-light: #f97316;
-            --accent: #0284c7;
-            --light-bg: #fff7ed;
-        }
-        [data-theme="peach"] .hero-section {
-            background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 65%, #ffffff 100%) !important;
-        }
-        [data-theme="peach"] .btn-primary {
-            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%) !important;
-            border: none;
-        }
     </style>
 
     <script>
-        // Apply theme immediately before page render
         (function() {
-            const savedTheme = localStorage.getItem('lesrenang_theme') || 'ocean';
-            if (savedTheme !== 'ocean') {
+            const savedTheme = localStorage.getItem('apexfitness_theme') || 'dark';
+            if (savedTheme !== 'dark') {
                 document.documentElement.setAttribute('data-theme', savedTheme);
             }
         })();
 
         function setWebTheme(themeName) {
-            if (themeName === 'ocean') {
+            if (themeName === 'dark') {
                 document.documentElement.removeAttribute('data-theme');
             } else {
                 document.documentElement.setAttribute('data-theme', themeName);
             }
-            localStorage.setItem('lesrenang_theme', themeName);
+            localStorage.setItem('apexfitness_theme', themeName);
             
-            // Update active dropdown items
             document.querySelectorAll('.theme-option-btn').forEach(btn => {
                 if (btn.getAttribute('data-theme-val') === themeName) {
                     btn.classList.add('active');
@@ -444,42 +243,6 @@
             const menu = document.getElementById('themeDropdownMenu');
             if (menu) menu.classList.remove('show');
         }
-    </script>
-
-    <!-- Schema.org JSON-LD Structured Data for Local Business SEO -->
-    <script type="application/ld+json">
-    {
-      "{{ '@context' }}": "https://schema.org",
-      "@type": "SportsActivityLocation",
-      "name": "Les Renang Jogja",
-      "image": "{{ asset('images/logo.webp') }}",
-      "telephone": "+{{ site_setting('whatsapp_number', '6281234567890') }}",
-      "email": "{{ site_setting('site_email', 'info@lesrenangjogja.com') }}",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "{{ site_setting('office_address', 'Jl. Colombo No.1, Caturtunggal, Depok') }}",
-        "addressLocality": "Sleman",
-        "addressRegion": "D.I. Yogyakarta",
-        "postalCode": "55281",
-        "addressCountry": "ID"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "-7.7702812",
-        "longitude": "110.3853112"
-      },
-      "url": "{{ url('/') }}",
-      "priceRange": "Rp 150.000 - Rp 850.000",
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-        ],
-        "opens": "06:00",
-        "closes": "20:00"
-      },
-      "areaServed": ["Yogyakarta", "Sleman", "Bantul", "Kulon Progo", "Semarang", "Solo", "Magelang", "Klaten"]
-    }
     </script>
 
     @stack('styles')
@@ -505,12 +268,12 @@
 
     <!-- Live Social Proof Toast Notification -->
     <div class="live-toast" id="liveSocialProofToast">
-        <div style="width: 44px; height: 44px; background: rgba(16, 185, 129, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--emerald); font-size: 1.25rem;">
-            <i class="fa-solid fa-circle-check"></i>
+        <div style="width: 44px; height: 44px; background: rgba(16, 185, 129, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.25rem;">
+            <i class="fa-solid fa-fire"></i>
         </div>
         <div>
-            <div style="font-weight: 800; font-size: 0.875rem; color: var(--dark);" id="toastTitle">Pendaftaran Baru!</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);" id="toastMessage">Ibu Ratna mendaftar Les Renang Anak di Sleman (1 menit lalu)</div>
+            <div style="font-weight: 800; font-size: 0.875rem; color: #ffffff;" id="toastTitle">Free Trial Booked!</div>
+            <div style="font-size: 0.8rem; color: #94a3b8;" id="toastMessage">Bima Santoso booking Sesi Trial PT ApexFitness</div>
         </div>
     </div>
 
@@ -518,17 +281,17 @@
     <div class="video-modal-overlay" id="videoModal">
         <div class="video-modal-container">
             <button onclick="closeVideoModal()" class="modal-close" style="top: 10px; right: 10px; z-index: 10; background: rgba(255,255,255,0.8);">&times;</button>
-            <iframe id="videoIframe" width="100%" height="100%" src="" title="Video Aktivitas Les Renang Jogja" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="videoIframe" width="100%" height="100%" src="" title="Video Transformasi ApexFitness" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
-    <!-- Reel Video Modal Lightbox Overlay (Shorts 9:16 Style) -->
+    <!-- Reel Video Modal Lightbox Overlay -->
     <div id="reelModalOverlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1rem;">
         <div style="position: relative; width: 100%; max-width: 380px; background: #0f172a; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);">
             <div style="padding: 1rem; background: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155;">
                 <div>
-                    <div id="reelModalTitle" style="font-weight: 800; font-size: 1rem; color: var(--accent);">Nama Siswa</div>
-                    <div id="reelModalSub" style="font-size: 0.75rem; color: #94a3b8;">Transformasi Latihan</div>
+                    <div id="reelModalTitle" style="font-weight: 800; font-size: 1rem; color: #10b981;">Nama Member</div>
+                    <div id="reelModalSub" style="font-size: 0.75rem; color: #94a3b8;">Transformasi Fitness</div>
                 </div>
                 <button onclick="closeReelModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 0.2rem 0.6rem;">&times;</button>
             </div>
@@ -594,7 +357,7 @@
             document.getElementById('trialModal').classList.remove('active');
         }
 
-        function openVideoModal(videoUrl = 'https://www.youtube.com/embed/gh5mAtmeR3Y?autoplay=1') {
+        function openVideoModal(videoUrl = 'https://www.youtube.com/embed/5ee8sX_1-9c?autoplay=1') {
             const modal = document.getElementById('videoModal');
             const iframe = document.getElementById('videoIframe');
             iframe.src = videoUrl;
@@ -624,7 +387,6 @@
             overlay.style.display = 'none';
         }
 
-        // Toggle Navbar Mobile Menu & Accordion
         document.addEventListener('DOMContentLoaded', function() {
             const toggle = document.getElementById('mobileNavToggle');
             const menu = document.getElementById('mobileNavMenu');
@@ -634,7 +396,6 @@
                 });
             }
 
-            // Theme Picker Dropdown Toggle
             const themeToggleBtn = document.getElementById('themePickerToggle');
             const themeDropdownMenu = document.getElementById('themeDropdownMenu');
             if (themeToggleBtn && themeDropdownMenu) {
@@ -649,16 +410,6 @@
                 });
             }
 
-            // Sync active theme class in dropdown
-            const currentTheme = localStorage.getItem('lesrenang_theme') || 'ocean';
-            document.querySelectorAll('.theme-option-btn').forEach(btn => {
-                if (btn.getAttribute('data-theme-val') === currentTheme) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
             // Accordion Logic
             const faqItems = document.querySelectorAll('.faq-item');
             faqItems.forEach(item => {
@@ -670,14 +421,14 @@
                 }
             });
 
-            // Dynamic Live Social Proof Toast Notification Rotation from DB
+            // Dynamic Social Proof Toast Rotation
             const toastMessages = @json($liveToasts);
             let toastIdx = 0;
             const toast = document.getElementById('liveSocialProofToast');
             const toastTitle = document.getElementById('toastTitle');
             const toastMsg = document.getElementById('toastMessage');
 
-            if (toast) {
+            if (toast && toastMessages.length > 0) {
                 setInterval(() => {
                     const current = toastMessages[toastIdx];
                     toastTitle.innerText = current.title;
@@ -692,17 +443,6 @@
                 }, 12000);
             }
         });
-    </script>
-
-    <!-- PWA Service Worker Registration (Silent) -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
-                    .catch((err) => console.log('[PWA] Service Worker registration error:', err));
-            });
-        }
     </script>
 
     @stack('scripts')
