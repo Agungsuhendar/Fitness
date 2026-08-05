@@ -8,13 +8,20 @@ use App\Models\Location;
 use App\Models\Faq;
 use App\Models\Post;
 use App\Models\Testimonial;
+use App\Models\Coach;
+use App\Models\Video;
+use App\Models\Feature;
+use App\Models\Registration;
+use App\Models\TrialBooking;
+use App\Models\Setting;
+use App\Models\User;
 
 class LesRenangSeeder extends Seeder
 {
     public function run(): void
     {
         // 0. ADMIN USER
-        \App\Models\User::updateOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@apexfitness.id'],
             [
                 'name' => 'Admin ApexFitness',
@@ -25,9 +32,9 @@ class LesRenangSeeder extends Seeder
 
         // 0.1 DEFAULT SITE SETTINGS
         $defaultSettings = [
+            'site_name' => 'ApexFitness Center',
             'whatsapp_number' => '6281234567890',
             'whatsapp_message' => 'Halo Admin ApexFitness, saya ingin klaim Free Sesi Trial Personal Trainer & konsultasi program fitness.',
-            'site_name' => 'ApexFitness Center',
             'site_email' => 'info@apexfitness.id',
             'site_phone' => '+62 812-3456-7890',
             'office_address' => 'Jl. Kaliurang Km 5.5 No. 88, Sleman, D.I. Yogyakarta 55281',
@@ -40,12 +47,21 @@ class LesRenangSeeder extends Seeder
             'hero_subtitle' => 'Bimbingan Personal Trainer 1-on-1 tersertifikasi APKI dengan garansi hasil terukur. Program Weight Loss, Muscle Building, Female Body Shaping, serta Persiapan Fisik TNI & POLRI.',
             'promo_text' => '🔥 Promo Terbatas Bulan Ini - Diskon Sesi PT 20% + Free InBody 3D Scan',
             'office_hours' => 'Buka Setiap Hari: 06.00 - 22.00 WIB',
+            'stat_alumni' => '1.000+',
+            'stat_alumni_label' => 'Member Sukses Transformasi',
+            'stat_experience' => '10+ Th',
+            'stat_experience_label' => 'Pengalaman Personal Trainer',
+            'stat_trainers' => '100%',
+            'stat_trainers_label' => 'PT Sertifikasi APKI / IFBB',
+            'stat_rating' => '4.9 / 5',
+            'stat_rating_label' => 'Rating Kepuasan Member',
         ];
         foreach ($defaultSettings as $key => $val) {
-            \App\Models\Setting::set($key, $val);
+            Setting::set($key, $val);
         }
 
         // 1. FITNESS PROGRAMS
+        Program::truncate();
         $programs = [
             [
                 'slug' => 'weight-loss-fat-burn',
@@ -226,10 +242,11 @@ class LesRenangSeeder extends Seeder
         ];
 
         foreach ($programs as $prog) {
-            Program::updateOrCreate(['slug' => $prog['slug']], $prog);
+            Program::create($prog);
         }
 
         // 2. GYM BRANCH LOCATIONS / STUDIOS
+        Location::truncate();
         $locations = [
             [
                 'slug' => 'apex-gym-sleman-center',
@@ -274,10 +291,11 @@ class LesRenangSeeder extends Seeder
         ];
 
         foreach ($locations as $loc) {
-            Location::updateOrCreate(['slug' => $loc['slug']], $loc);
+            Location::create($loc);
         }
 
-        // 3. FAQS FOR FITNESS (20+ ITEMS)
+        // 3. FAQS FOR FITNESS (16+ ITEMS)
+        Faq::truncate();
         $faqs = [
             [
                 'category' => 'Umum',
@@ -398,6 +416,7 @@ class LesRenangSeeder extends Seeder
         }
 
         // 4. TESTIMONIALS & CLIENT TRANSFORMATIONS
+        Testimonial::truncate();
         $testimonials = [
             [
                 'name' => 'Bima Perkasa (28 th)',
@@ -408,6 +427,7 @@ class LesRenangSeeder extends Seeder
                 'avatar' => 'images/assets/coach_hendra.webp',
                 'video_url' => 'https://www.youtube.com/embed/5ee8sX_1-9c',
                 'is_featured' => true,
+                'is_approved' => true,
             ],
             [
                 'name' => 'Rian Ardianto',
@@ -418,6 +438,7 @@ class LesRenangSeeder extends Seeder
                 'avatar' => 'images/assets/coach_danu.webp',
                 'video_url' => 'https://www.youtube.com/embed/xVeXGKPOH58',
                 'is_featured' => true,
+                'is_approved' => true,
             ],
             [
                 'name' => 'Anisa Rahma, S.Farm',
@@ -428,6 +449,7 @@ class LesRenangSeeder extends Seeder
                 'avatar' => 'images/assets/coach_rina.webp',
                 'video_url' => 'https://www.youtube.com/embed/M5cs8a3Bhfg',
                 'is_featured' => true,
+                'is_approved' => true,
             ],
             [
                 'name' => 'Drs. Supriyanto (49 th)',
@@ -438,6 +460,7 @@ class LesRenangSeeder extends Seeder
                 'avatar' => 'images/assets/coach_bima.webp',
                 'video_url' => null,
                 'is_featured' => true,
+                'is_approved' => true,
             ],
         ];
 
@@ -446,6 +469,7 @@ class LesRenangSeeder extends Seeder
         }
 
         // 5. POSTS (FITNESS BLOG ARTICLES)
+        Post::truncate();
         $posts = [
             [
                 'slug' => 'panduan-lengkap-defisit-kalori-dan-latihan-beban-penurunan-berat-badan',
@@ -494,7 +518,188 @@ class LesRenangSeeder extends Seeder
         ];
 
         foreach ($posts as $post) {
-            Post::updateOrCreate(['slug' => $post['slug']], $post);
+            Post::create($post);
+        }
+
+        // 6. PERSONAL TRAINERS (COACHES)
+        Coach::truncate();
+        $coaches = [
+            [
+                'name' => 'Coach Hendra',
+                'title' => 'S.Or, CSCS',
+                'specialty' => 'Head PT & Weight Loss Specialist',
+                'description' => 'Lulusan Ilmu Keolahragaan UNY & APKI Certified. Pengalaman 10+ tahun melatih 500+ member fat burn & body transformation.',
+                'photo' => 'images/assets/coach_hendra.webp',
+                'color' => '#10b981',
+                'order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Coach Danu',
+                'title' => 'APKI Certified',
+                'specialty' => 'Persiapan TNI/POLRI & Muscle Building',
+                'description' => 'Mantan instruktur fisik militer. Spesialis drill kalistenik, stamina lari 12 menit, & pull-up presisi nilai 100.',
+                'photo' => 'images/assets/coach_danu.webp',
+                'color' => '#f97316',
+                'order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Coach Rina',
+                'title' => 'Pilates & Female Fitness Specialist',
+                'specialty' => 'Female Body Shaping & Glute Workout',
+                'description' => 'Personal Trainer wanita khusus member cewek & muslimah. Penguasaan Reformer Pilates & shaping lekuk tubuh.',
+                'photo' => 'images/assets/coach_rina.webp',
+                'color' => '#ec4899',
+                'order' => 3,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Coach Bima',
+                'title' => 'S.Fis, AIFO',
+                'specialty' => 'Posture Rehab & Pain Relief',
+                'description' => 'Fisioterapis keolahragaan. Spesialis penanganan bungkuk (Kyphosis), scoliosis ringan, & rehabilitasi pasca cedera.',
+                'photo' => 'images/assets/coach_bima.webp',
+                'color' => '#38bdf8',
+                'order' => 4,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($coaches as $coach) {
+            Coach::create($coach);
+        }
+
+        // 7. TRANSFORMATION VIDEOS
+        Video::truncate();
+        $videos = [
+            [
+                'title' => 'Bima (28 Tahun)',
+                'subtitle' => 'Hari 1: 88 kg & Perut Buncit ➔ Hari 90: 72 kg Lean Muscle',
+                'before_badge' => '🔴 Hari 1: 88 kg Fat',
+                'after_badge' => '🟢 Hari 90: 72 kg Lean',
+                'description' => 'Transformasi total 16 kg lemak terpangkas dalam 90 hari bimbingan privat Personal Trainer ApexFitness & custom diet plan!',
+                'video_url' => 'https://www.youtube.com/embed/5ee8sX_1-9c',
+                'thumbnail' => 'images/assets/video_thumb_daffa.png',
+                'order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Anisa (25 Tahun)',
+                'subtitle' => 'Bulan 1: Posture Bungkuk ➔ Bulan 3: Hourglass Shape & Toned Body',
+                'before_badge' => '🔴 Bulan 1: Gelambir & Bungkuk',
+                'after_badge' => '🟢 Bulan 3: Hourglass',
+                'description' => 'Bimbingan Personal Trainer wanita 1-on-1. Membentuk lekuk pinggul, mengencangkan paha & memperbaiki postur tegap!',
+                'video_url' => 'https://www.youtube.com/embed/M5cs8a3Bhfg',
+                'thumbnail' => 'images/assets/video_thumb_siti.png',
+                'order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Rian (Calon TNI/POLRI)',
+                'subtitle' => 'Hari 1: Pull-up 3x & Lari 1800m ➔ Hari 60: Pull-up 18x & Lari 3100m',
+                'before_badge' => '🔴 Hari 1: Skor 40',
+                'after_badge' => '🟢 Hari 60: Lulus 100',
+                'description' => 'Pelatihan stamina fisik & kekuatan kalistenik intensif. Lulus tes kesamaptaan jasmani dengan nilai sempurna 100!',
+                'video_url' => 'https://www.youtube.com/embed/xVeXGKPOH58',
+                'thumbnail' => 'images/assets/video_thumb_rian.png',
+                'order' => 3,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($videos as $vid) {
+            Video::create($vid);
+        }
+
+        // 8. FEATURES
+        Feature::truncate();
+        $features = [
+            [
+                'icon' => 'fa-solid fa-certificate',
+                'title' => 'Trainer Berlisensi APKI / IFBB',
+                'description' => 'Didampingi Personal Trainer profesional tersertifikasi nasional & internasional yang berpengalaman melatih 1000+ member.',
+                'color' => '#10b981',
+                'order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'icon' => 'fa-solid fa-chart-line',
+                'title' => 'InBody 3D Scan & Body Assessment',
+                'description' => 'Evaluasi massa otot, % lemak tubuh, dan kadar metabolisme tubuh secara akurat setiap 2 minggu sekali.',
+                'color' => '#f97316',
+                'order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'icon' => 'fa-solid fa-person-dress',
+                'title' => 'Trainer Wanita & Studio Privat',
+                'description' => 'Khusus member wanita / muslimah dengan Personal Trainer wanita sabar & area studio gym privat aman 100%.',
+                'color' => '#ec4899',
+                'order' => 3,
+                'is_active' => true,
+            ],
+            [
+                'icon' => 'fa-solid fa-trophy',
+                'title' => 'Garansi Hasil Terukur',
+                'description' => 'Program latihan terstruktur, custom meal plan harian, & garansi pemangkasan lemak/pembentukan otot progresif.',
+                'color' => '#38bdf8',
+                'order' => 4,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($features as $feat) {
+            Feature::create($feat);
+        }
+
+        // 9. SAMPLE REGISTRATIONS & TRIALS
+        Registration::truncate();
+        $sampleRegs = [
+            [
+                'name' => 'Budi Santoso',
+                'phone' => '081234567890',
+                'email' => 'budi@example.com',
+                'age_category' => 'Dewasa Pemula',
+                'program_name' => 'Weight Loss & Body Transformation',
+                'preferred_location' => 'ApexFitness Center Sleman (HQ)',
+                'preferred_schedule' => 'Pagi Hari (06:00 - 09:00 WIB)',
+                'notes' => 'Ingin turun BB 10 kg & perbaiki postur',
+                'status' => 'pending',
+            ],
+            [
+                'name' => 'Siti Nurhaliza',
+                'phone' => '081987654321',
+                'email' => 'siti@example.com',
+                'age_category' => 'Wanita / Muslimah Privat',
+                'program_name' => 'Female Fitness & Body Shaping',
+                'preferred_location' => 'Apex Studio Seturan',
+                'preferred_schedule' => 'Sore Hari (15:30 - 18:30 WIB)',
+                'notes' => 'Minta Personal Trainer wanita',
+                'status' => 'confirmed',
+            ],
+        ];
+        foreach ($sampleRegs as $reg) {
+            Registration::create($reg);
+        }
+
+        TrialBooking::truncate();
+        $sampleTrials = [
+            [
+                'parent_name' => 'Bima Perkasa',
+                'participant_name' => 'Bima Perkasa',
+                'participant_age' => '28 Tahun',
+                'phone' => '081234567890',
+                'program_name' => 'Weight Loss & Body Transformation',
+                'preferred_location' => 'ApexFitness Center Sleman HQ',
+                'trial_date' => now()->addDays(2),
+                'trial_time' => '08.00 WIB',
+                'notes' => 'Mau klaim Free InBody Scan',
+                'status' => 'pending',
+            ]
+        ];
+        foreach ($sampleTrials as $tr) {
+            TrialBooking::create($tr);
         }
     }
 }

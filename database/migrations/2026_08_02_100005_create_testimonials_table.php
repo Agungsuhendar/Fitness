@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('video_url')->nullable();
             $table->boolean('is_featured')->default(true);
+            $table->boolean('is_approved')->default(true);
             $table->timestamps();
         });
     }
