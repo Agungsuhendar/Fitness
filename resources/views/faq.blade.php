@@ -27,7 +27,7 @@
         <!-- Category Pills -->
         <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">
             <a href="{{ route('faq') }}" class="btn btn-sm {{ !request('category') ? 'btn-primary' : 'btn-outline' }}">
-                Semua Category (20+)
+                Semua Kategori ({{ count($faqs) }})
             </a>
             @foreach($categories as $cat)
                 <a href="{{ route('faq', ['category' => $cat]) }}" class="btn btn-sm {{ request('category') == $cat ? 'btn-primary' : 'btn-outline' }}">

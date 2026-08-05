@@ -19,7 +19,7 @@
 <!-- Promo Countdown Header -->
 <section style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0f172a; padding: 1rem 0; text-align: center; font-weight: 800;">
     <div class="container">
-        🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Kacamata Renang untuk Pendaftaran Paket Privat 2 Orang!
+        {{ site_setting('promo_text', '🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Kacamata Renang untuk Pendaftaran Paket Privat 2 Orang!') }}
     </div>
 </section>
 
@@ -102,7 +102,7 @@
             <div style="text-align: center; padding: 1.5rem; background: #f0f9ff; border-radius: 1rem; border: 1px dashed var(--primary); margin-bottom: 1.5rem;">
                 <div style="font-size: 0.9rem; color: var(--text-muted);">Estimasi Total Investasi:</div>
                 <div id="calcResult" style="font-size: 2.25rem; font-weight: 800; color: var(--primary-dark); margin: 0.25rem 0;">
-                    Rp 350.000
+                    Rp {{ isset($programs[0]) ? number_format(is_object($programs[0]) ? $programs[0]->price_start : $programs[0]['price_start'], 0, ',', '.') : '350.000' }}
                 </div>
                 <div style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">Termasuk garansi bimbingan & sertifikat!</div>
             </div>
@@ -117,8 +117,11 @@
 @push('scripts')
 <script>
     function updateCalc() {
-        const cat = parseInt(document.getElementById('calcCategory').value);
-        const persons = parseInt(document.getElementById('calcPersons').value);
+        const catSelect = document.getElementById('calcCategory');
+        const personsSelect = document.getElementById('calcPersons');
+        if (!catSelect || !personsSelect) return;
+        const cat = parseInt(catSelect.value) || 0;
+        const persons = parseInt(personsSelect.value) || 1;
         let total = cat * persons;
         if (persons === 2) total *= 0.9;
         if (persons === 3) total *= 0.85;
@@ -126,6 +129,7 @@
         document.getElementById('calcResult').innerText = 'Rp ' + Math.round(total).toLocaleString('id-ID');
     }
 
+    document.addEventListener('DOMContentLoaded', updateCalc);
     document.getElementById('calcCategory')?.addEventListener('change', updateCalc);
     document.getElementById('calcPersons')?.addEventListener('change', updateCalc);
 </script>

@@ -13,6 +13,11 @@ use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminLeadController;
 
 use App\Http\Controllers\Admin\AdminSettingController;
+use App\Http\Controllers\Admin\AdminCoachController;
+use App\Http\Controllers\Admin\AdminTestimonialController;
+use App\Http\Controllers\Admin\AdminVideoController;
+use App\Http\Controllers\Admin\AdminFeatureController;
+use App\Http\Controllers\TestimonialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +87,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 // Lead Generation Form Actions
 Route::post('/daftar', [LeadController::class, 'storeRegistration'])->name('lead.register');
 Route::post('/trial', [LeadController::class, 'storeTrial'])->name('lead.trial');
+Route::post('/testimoni', [TestimonialController::class, 'store'])->name('testimoni.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +110,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('programs', AdminProgramController::class);
     Route::resource('faqs', AdminFaqController::class);
     Route::resource('posts', AdminPostController::class);
+    Route::resource('coaches', AdminCoachController::class);
+    Route::resource('testimonials', AdminTestimonialController::class);
+    Route::post('/testimonials/{testimonial}/toggle-approve', [AdminTestimonialController::class, 'toggleApprove'])->name('testimonials.toggle-approve');
+    Route::resource('videos', AdminVideoController::class);
+    Route::resource('features', AdminFeatureController::class);
     
     // Lead Entries
     Route::get('/registrations', [AdminLeadController::class, 'registrations'])->name('registrations');

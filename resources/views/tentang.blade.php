@@ -9,7 +9,7 @@
             <span class="section-subtitle">Profil Lembaga</span>
             <h1 class="hero-title">Tentang <span class="text-gradient">Les Renang Jogja</span></h1>
             <p class="hero-description">
-                Lembaga pelatihan renang privat profesional di Yogyakarta dengan pengalaman lebih dari 10 tahun mencetak 2.500+ alumni mahir berenang.
+                Lembaga pelatihan renang privat profesional di Yogyakarta dengan pengalaman lebih dari {{ site_setting('stat_experience', '10 tahun') }} mencetak {{ site_setting('stat_alumni', '2.500+') }} alumni mahir berenang.
             </p>
         </div>
     </div>
@@ -43,20 +43,20 @@
                 <h3 style="color: white; font-size: 1.9rem; margin-bottom: 1rem;">Pengalaman & Rekam Jejak</h3>
                 <div class="grid-2" style="gap: 1.5rem; margin-top: 2rem;">
                     <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 1.25rem;">
-                        <div style="font-size: 2.75rem; font-weight: 900; color: #fbbf24;">10+</div>
-                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">Tahun Pengalaman</div>
+                        <div style="font-size: 2.75rem; font-weight: 900; color: #fbbf24;">{{ site_setting('stat_experience', '10+ Th') }}</div>
+                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">{{ site_setting('stat_experience_label', 'Tahun Pengalaman') }}</div>
                     </div>
                     <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 1.25rem;">
-                        <div style="font-size: 2.75rem; font-weight: 900; color: #90e0ef;">2.500+</div>
-                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">Alumni Mahir</div>
+                        <div style="font-size: 2.75rem; font-weight: 900; color: #90e0ef;">{{ site_setting('stat_alumni', '2.500+') }}</div>
+                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">{{ site_setting('stat_alumni_label', 'Alumni Mahir') }}</div>
                     </div>
                     <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 1.25rem;">
-                        <div style="font-size: 2.75rem; font-weight: 900; color: #4ade80;">100%</div>
-                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">Pelatih Berlisensi</div>
+                        <div style="font-size: 2.75rem; font-weight: 900; color: #4ade80;">{{ site_setting('stat_trainers', '100%') }}</div>
+                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">{{ site_setting('stat_trainers_label', 'Pelatih Berlisensi') }}</div>
                     </div>
                     <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 1.25rem;">
-                        <div style="font-size: 2.75rem; font-weight: 900; color: #f472b6;">4.9/5</div>
-                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">Rating Kepuasan</div>
+                        <div style="font-size: 2.75rem; font-weight: 900; color: #f472b6;">{{ site_setting('stat_rating', '4.9/5') }}</div>
+                        <div style="font-size: 0.925rem; color: #e0f2fe; font-weight: 700;">{{ site_setting('stat_rating_label', 'Rating Kepuasan') }}</div>
                     </div>
                 </div>
             </div>
@@ -74,32 +74,37 @@
         </div>
 
         <div class="grid-3">
+            @forelse($coaches as $coach)
+            @php
+                $coachPhotoUrl = $coach->photo
+                    ? (Str::startsWith($coach->photo, 'http') ? $coach->photo : asset($coach->photo))
+                    : null;
+                $borderColor = $coach->color ?? 'var(--primary-light)';
+            @endphp
             <div class="glass-card" style="padding: 2.25rem; text-align: center; background: #ffffff;">
-                <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 1.25rem; border: 3px solid var(--primary-light);">
-                    <img src="{{ asset('images/assets/coach_hendra.webp') }}" alt="Coach Hendra" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 1.25rem; border: 3px solid {{ $borderColor }};">
+                    @if($coachPhotoUrl)
+                        <img src="{{ $coachPhotoUrl }}" alt="{{ $coach->name }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                    @else
+                        <div style="width: 100%; height: 100%; background: {{ $borderColor }}; color: white; display: flex; align-items: center; justify-content: center; font-size: 2.25rem; font-weight: 900;">
+                            {{ strtoupper(substr($coach->name, 0, 1)) }}
+                        </div>
+                    @endif
                 </div>
-                <h3 style="font-size: 1.35rem;">Coach Hendra, S.Pd.</h3>
-                <div style="color: var(--primary); font-weight: 800; font-size: 0.875rem; margin-bottom: 0.85rem;">Head Coach & Spesialis Anak</div>
-                <p style="color: var(--text-muted); font-size: 0.925rem; line-height: 1.6;">Lulusan FIK UNY, Pemegang Sertifikat Pelatih PRSI Tingkat Nasional. Pengalaman 12 tahun mengajar renang anak & trauma air.</p>
+                <h3 style="font-size: 1.35rem;">{{ $coach->name }}{{ $coach->title ? ', ' . $coach->title : '' }}</h3>
+                <div style="color: {{ $borderColor }}; font-weight: 800; font-size: 0.875rem; margin-bottom: 0.85rem;">{{ $coach->specialty }}</div>
+                @if($coach->description)
+                    <p style="color: var(--text-muted); font-size: 0.925rem; line-height: 1.6;">{{ $coach->description }}</p>
+                @endif
             </div>
-
-            <div class="glass-card" style="padding: 2.25rem; text-align: center; background: #ffffff;">
-                <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 1.25rem; border: 3px solid #d946ef;">
-                    <img src="{{ asset('images/assets/coach_rina.webp') }}" alt="Coach Rina" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                </div>
-                <h3 style="font-size: 1.35rem;">Coach Rina, S.Or.</h3>
-                <div style="color: #d946ef; font-weight: 800; font-size: 0.875rem; margin-bottom: 0.85rem;">Spesialis Wanita & Muslimah</div>
-                <p style="color: var(--text-muted); font-size: 0.925rem; line-height: 1.6;">Ahli hydrotherapy & instruktur khusus wanita. Ramah, sabar, dan menguasai teknik adaptasi kolam privat.</p>
+            @empty
+            <!-- Fallback jika belum ada data pelatih di database -->
+            <div class="glass-card" style="padding: 2.25rem; text-align: center; background: #ffffff; grid-column: span 3;">
+                <i class="fa-solid fa-user-group" style="font-size: 3rem; color: var(--primary-light); margin-bottom: 1rem;"></i>
+                <h3 style="font-size: 1.35rem;">Tim Pelatih Profesional</h3>
+                <p style="color: var(--text-muted); font-size: 0.925rem;">Seluruh pelatih kami bersertifikat PRSI & berlisensi nasional. Hubungi kami untuk info lengkap.</p>
             </div>
-
-            <div class="glass-card" style="padding: 2.25rem; text-align: center; background: #ffffff;">
-                <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 1.25rem; border: 3px solid #d97706;">
-                    <img src="{{ asset('images/assets/coach_danu.webp') }}" alt="Coach Danu" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                </div>
-                <h3 style="font-size: 1.35rem;">Coach Danu (Purn)</h3>
-                <div style="color: #d97706; font-weight: 800; font-size: 0.875rem; margin-bottom: 0.85rem;">Head Trainer TNI & POLRI</div>
-                <p style="color: var(--text-muted); font-size: 0.925rem; line-height: 1.6;">Mantan instruktur jasmani militer. Berpengalaman melatih fisik 500+ calon taruna Akpol, Bintara, dan Sekolah Kedinasan.</p>
-            </div>
+            @endforelse
         </div>
 
         <div style="text-align: center; margin-top: 3.5rem;">

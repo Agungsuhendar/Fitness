@@ -23,11 +23,20 @@
             <h3 style="font-size: 1.35rem;">Cakupan Wilayah Operasional Pelatih</h3>
         </div>
         <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-            <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 DIY (Yogyakarta, Sleman, Bantul, Kulon Progo)</span>
-            <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Semarang</span>
-            <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Solo / Surakarta</span>
-            <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Magelang</span>
-            <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Klaten</span>
+            @php
+                $uniqueCities = isset($locations) ? $locations->pluck('city')->unique()->filter() : collect();
+            @endphp
+            @if($uniqueCities->count() > 0)
+                @foreach($uniqueCities as $city)
+                    <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 {{ $city }}</span>
+                @endforeach
+            @else
+                <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 DIY (Yogyakarta, Sleman, Bantul, Kulon Progo)</span>
+                <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Semarang</span>
+                <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Solo / Surakarta</span>
+                <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Magelang</span>
+                <span style="padding: 0.65rem 1.35rem; background: #e0f2fe; color: var(--primary-dark); font-weight: 800; border-radius: 99px;">📍 Klaten</span>
+            @endif
         </div>
     </div>
 </section>

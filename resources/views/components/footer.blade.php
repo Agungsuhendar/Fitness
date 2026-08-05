@@ -10,11 +10,16 @@
         <div class="footer-grid">
             <!-- Col 1: Brand Info & SEO Text -->
             <div>
+                @php
+                    $footerLogo = site_setting('site_logo_footer', 'images/logo-footer.webp');
+                    $footerLogoUrl = Str::startsWith($footerLogo, 'http') ? $footerLogo : asset($footerLogo);
+                    $footerAbout = site_setting('site_footer_about', 'Pusat pelatihan & kursus privat renang terpercaya di Yogyakarta. Menyediakan program khusus anak-anak, dewasa pemula, privat wanita/muslimah, serta kelas intensif persiapan tes TNI, POLRI & Kedinasan.');
+                @endphp
                 <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.25rem;">
-                    <img src="{{ asset('images/logo-footer.webp?v=1') }}" alt="Les Renang Jogja Logo Footer" style="height: 68px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0, 242, 254, 0.25));">
+                    <img src="{{ $footerLogoUrl }}" alt="Les Renang Jogja Logo Footer" style="height: 68px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0, 242, 254, 0.25));">
                 </div>
                 <p style="font-size: 0.925rem; line-height: 1.7; margin-bottom: 1.5rem; color: #94a3b8;">
-                    Pusat pelatihan & kursus privat renang terpercaya di Yogyakarta. Menyediakan program khusus anak-anak, dewasa pemula, privat wanita/muslimah, serta kelas intensif persiapan tes TNI, POLRI & Kedinasan.
+                    {{ $footerAbout }}
                 </p>
                 <div style="display: flex; gap: 0.75rem;">
                     <a href="{{ site_setting('instagram_url', 'https://instagram.com') }}" target="_blank" style="width: 38px; height: 38px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s;"><i class="fa-brands fa-instagram"></i></a>
@@ -24,16 +29,25 @@
                 </div>
             </div>
 
-            <!-- Col 2: Navigation Links -->
+            <!-- Col 2: Dynamic Navigation Links -->
             <div>
                 <h4 class="footer-title">Program Pilihan</h4>
                 <ul class="footer-links">
-                    <li><a href="{{ route('program.show', 'les-renang-anak') }}">Les Renang Anak (3-15 Th)</a></li>
-                    <li><a href="{{ route('program.show', 'les-renang-dewasa') }}">Les Renang Dewasa Pemula</a></li>
-                    <li><a href="{{ route('program.show', 'les-renang-wanita') }}">Les Renang Wanita / Muslimah</a></li>
-                    <li><a href="{{ route('program.show', 'persiapan-tni-polri') }}">Persiapan Tes TNI & POLRI</a></li>
-                    <li><a href="{{ route('program.show', 'terapi-renang') }}">Terapi Renang Medis</a></li>
-                    <li><a href="{{ route('program.show', 'corporate-training') }}">Corporate & Group Class</a></li>
+                    @php
+                        try {
+                            $footerPrograms = \App\Models\Program::orderBy('order')->take(6)->get();
+                        } catch (\Exception $e) {
+                            $footerPrograms = collect();
+                        }
+                    @endphp
+                    @forelse($footerPrograms as $fp)
+                        <li><a href="{{ route('program.show', $fp->slug) }}">{{ $fp->title }}</a></li>
+                    @empty
+                        <li><a href="{{ route('program.show', 'les-renang-anak') }}">Les Renang Anak</a></li>
+                        <li><a href="{{ route('program.show', 'les-renang-dewasa') }}">Les Renang Dewasa</a></li>
+                        <li><a href="{{ route('program.show', 'les-renang-wanita') }}">Les Renang Wanita</a></li>
+                        <li><a href="{{ route('program.show', 'persiapan-tni-polri') }}">Persiapan TNI POLRI</a></li>
+                    @endforelse
                 </ul>
             </div>
 

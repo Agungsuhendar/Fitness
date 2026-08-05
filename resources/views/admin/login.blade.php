@@ -30,8 +30,9 @@
 <body>
     <div class="login-card">
         <div style="text-align: center; margin-bottom: 2rem;">
-            <div style="margin-bottom: 1.25rem;">
-                <img src="{{ asset('images/logo.webp') }}" alt="Les Renang Jogja Logo" style="height: 64px; width: auto; object-fit: contain; border-radius: 10px;">
+            <div style="margin-bottom: 1.25rem; display: flex; justify-content: center; align-items: center;">
+                @php $loginLogoUrl = site_setting('site_logo', 'images/logo.webp'); @endphp
+                <img src="{{ Str::startsWith($loginLogoUrl, 'http') ? $loginLogoUrl : asset($loginLogoUrl) }}" alt="Admin Logo" style="height: 64px; width: auto; object-fit: contain; border-radius: 10px;">
             </div>
             <h1 style="font-size: 1.65rem; color: #0f172a; margin-bottom: 0.25rem; font-weight: 900;">Admin Panel Login</h1>
             <p style="color: #64748b; font-size: 0.875rem;">Kelola Konten & Lead Pendaftaran Les Renang Jogja</p>

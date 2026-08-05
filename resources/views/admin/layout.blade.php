@@ -195,7 +195,8 @@
     <div class="admin-wrapper" id="adminWrapper">
         <aside class="admin-sidebar" id="adminSidebar">
             <a href="{{ route('admin.dashboard') }}" class="admin-brand" style="justify-content: center;">
-                <img src="{{ asset('images/logo.webp') }}" alt="Les Renang Jogja Logo" style="height: 52px; width: auto; object-fit: contain; border-radius: 8px; transition: all 0.3s ease;">
+                @php $adminLogoUrl = site_setting('site_logo_footer', 'images/logo-footer.webp'); @endphp
+                <img src="{{ Str::startsWith($adminLogoUrl, 'http') ? $adminLogoUrl : asset($adminLogoUrl) }}" alt="Admin Logo" style="height: 52px; width: auto; object-fit: contain; border-radius: 8px; transition: all 0.3s ease;">
             </a>
 
             <ul class="admin-nav">
@@ -221,6 +222,30 @@
                     <a href="{{ route('admin.posts.index') }}" class="{{ request()->routeIs('admin.posts.*') ? 'active' : '' }}" title="Kelola Artikel Blog">
                         <i class="fa-solid fa-newspaper"></i>
                         <span class="nav-text">Kelola Artikel Blog</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.coaches.index') }}" class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}" title="Kelola Tim Pelatih">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span class="nav-text">Kelola Tim Pelatih</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}" title="Kelola Testimoni">
+                        <i class="fa-solid fa-comments"></i>
+                        <span class="nav-text">Kelola Testimoni</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.videos.index') }}" class="{{ request()->routeIs('admin.videos.*') ? 'active' : '' }}" title="Kelola Galeri Video">
+                        <i class="fa-solid fa-clapperboard"></i>
+                        <span class="nav-text">Kelola Galeri Video</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.features.index') }}" class="{{ request()->routeIs('admin.features.*') ? 'active' : '' }}" title="Kelola Keunggulan">
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <span class="nav-text">Kelola Keunggulan</span>
                     </a>
                 </li>
                 <li class="admin-nav-item">

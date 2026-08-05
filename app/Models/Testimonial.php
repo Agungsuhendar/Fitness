@@ -18,9 +18,21 @@ class Testimonial extends Model
         'avatar',
         'video_url',
         'is_featured',
+        'is_approved',
     ];
 
     protected $casts = [
         'is_featured' => 'boolean',
+        'is_approved' => 'boolean',
     ];
+
+    public function scopeApproved($query)
+    {
+        return $query->where('is_approved', true);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
 }

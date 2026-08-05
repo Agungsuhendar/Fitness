@@ -1,25 +1,83 @@
+@php
+    $defaultSeoTitle = site_setting('site_seo_title', 'Les Renang Jogja - Privat Anak, Dewasa, Wanita & Persiapan TNI POLRI');
+    $defaultSeoDesc = site_setting('site_seo_description', 'Les Renang Jogja profesional & privat di Yogyakarta. Melayani les renang anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI. Garansi cepat bisa!');
+    $rawShareLogo = site_setting('site_share_image', 'images/logo.png');
+    // Force PNG/JPG format fallback if logo is webp
+    if (Str::endsWith($rawShareLogo, '.webp') && file_exists(public_path('images/logo.png'))) {
+        $rawShareLogo = 'images/logo.png';
+    }
+    $shareImageUrl = Str::startsWith($rawShareLogo, 'http') ? $rawShareLogo : url('/') . '/' . ltrim($rawShareLogo, '/');
+
+    // Build Dynamic Live Toast Notifications from Database
+    $liveToasts = [];
+    try {
+        $recentRegs = \App\Models\Registration::orderByDesc('created_at')->take(4)->get();
+        foreach ($recentRegs as $r) {
+            $liveToasts[] = [
+                'title' => '🎉 Pendaftaran Baru!',
+                'msg' => $r->name . ' mendaftar ' . ($r->program_name ?? 'Les Renang') . ($r->preferred_location ? ' (' . $r->preferred_location . ')' : ''),
+            ];
+        }
+
+        $recentTrials = \App\Models\TrialBooking::orderByDesc('created_at')->take(3)->get();
+        foreach ($recentTrials as $t) {
+            $liveToasts[] = [
+                'title' => '⚡ Booking Trial Gratis!',
+                'msg' => ($t->parent_name ?: $t->participant_name) . ' booking trial ' . ($t->program_name ?? 'Les Renang'),
+            ];
+        }
+
+        $recentReviews = \App\Models\Testimonial::where('is_approved', true)->orderByDesc('created_at')->take(3)->get();
+        foreach ($recentReviews as $rev) {
+            $liveToasts[] = [
+                'title' => '⭐ Ulasan Bintang ' . $rev->rating . '!',
+                'msg' => $rev->name . ': "' . Str::limit($rev->review, 45) . '"',
+            ];
+        }
+    } catch (\Exception $e) {}
+
+    if (empty($liveToasts)) {
+        $liveToasts = [
+            ['title' => '🎉 Pendaftaran Baru!', 'msg' => 'Budi Santoso mendaftar Paket Les Renang Anak (UNY Sleman)'],
+            ['title' => '⚡ Booking Trial Gratis!', 'msg' => 'Ibu Anisa booking trial Les Renang Anak'],
+            ['title' => '🌸 Pendaftaran Muslimah!', 'msg' => 'Siti Rahmawati mendaftar Les Renang Wanita Privat'],
+            ['title' => '⭐ Ulasan Bintang 5!', 'msg' => 'Ibu Dewi Sari: "Anak saya dari tidak mau lepas..."'],
+        ];
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Les Renang Jogja - Privat Anak, Dewasa, Wanita & Persiapan TNI POLRI')</title>
+    <title>@yield('title', $defaultSeoTitle)</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="@yield('meta_description', 'Les Renang Jogja profesional & privat di Yogyakarta. Melayani les renang anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI. Garansi cepat bisa!')">
+    <meta name="description" content="@yield('meta_description', $defaultSeoDesc)">
     <meta name="keywords" content="Les Renang Jogja, Les Renang Yogyakarta, Les Renang Anak Jogja, Les Renang Dewasa Jogja, Les Privat Renang Jogja, Kursus Renang Jogja, Pelatih Renang Jogja, Renang TNI Jogja, Renang POLRI Jogja">
     <meta name="author" content="Les Renang Jogja">
     <meta name="robots" content="index, follow">
-    <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE_HERE">
     <link rel="canonical" href="{{ url()->current() }}">
 
-    <!-- Open Graph / Social Media Meta -->
+    <!-- Open Graph / WhatsApp / Facebook / Telegram Sharing Meta -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="@yield('title', 'Les Renang Jogja - Kursus Privat & Garansi Cepat Bisa')">
-    <meta property="og:description" content="@yield('meta_description', 'Pelatih renang berlisensi di Yogyakarta untuk Anak, Dewasa, & TNI/POLRI.')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="Les Renang Jogja">
-    <meta property="og:image" content="{{ asset('images/logo.webp?v=2') }}">
+    <meta property="og:title" content="@yield('title', $defaultSeoTitle)">
+    <meta property="og:description" content="@yield('meta_description', $defaultSeoDesc)">
+    <meta property="og:image" content="{{ $shareImageUrl }}">
+    <meta property="og:image:secure_url" content="{{ $shareImageUrl }}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="600">
+    <meta property="og:image:height" content="315">
+    <meta property="og:image:alt" content="Les Renang Jogja Logo">
+
+    <!-- Twitter Card Meta -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', $defaultSeoTitle)">
+    <meta name="twitter:description" content="@yield('meta_description', $defaultSeoDesc)">
+    <meta name="twitter:image" content="{{ $shareImageUrl }}">
+
     <link rel="icon" type="image/webp" href="{{ asset('images/logo-icon.webp?v=2') }}">
 
     <!-- Geo Meta Tags for Google Local Search -->
@@ -37,11 +95,11 @@
       "image": "{{ asset('images/logo.webp') }}",
       "@id": "http://lesrenangjogja.site.je",
       "url": "http://lesrenangjogja.site.je",
-      "telephone": "+6281234567890",
+      "telephone": "+{{ site_setting('whatsapp_number', '6281234567890') }}",
       "priceRange": "Rp 150.000 - Rp 850.000",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Jl. Kaliurang KM 5, Depok, Sleman",
+        "streetAddress": "{{ site_setting('office_address', 'Jl. Kaliurang KM 5, Depok, Sleman') }}",
         "addressLocality": "Yogyakarta",
         "addressRegion": "DI Yogyakarta",
         "postalCode": "55281",
@@ -387,11 +445,11 @@
       "@type": "SportsActivityLocation",
       "name": "Les Renang Jogja",
       "image": "{{ asset('images/logo.webp') }}",
-      "telephone": "+6281234567890",
-      "email": "info@lesrenangjogja.com",
+      "telephone": "+{{ site_setting('whatsapp_number', '6281234567890') }}",
+      "email": "{{ site_setting('site_email', 'info@lesrenangjogja.com') }}",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Jl. Colombo No.1, Caturtunggal, Depok",
+        "streetAddress": "{{ site_setting('office_address', 'Jl. Colombo No.1, Caturtunggal, Depok') }}",
         "addressLocality": "Sleman",
         "addressRegion": "D.I. Yogyakarta",
         "postalCode": "55281",
@@ -456,6 +514,22 @@
         </div>
     </div>
 
+    <!-- Reel Video Modal Lightbox Overlay (Shorts 9:16 Style) -->
+    <div id="reelModalOverlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1rem;">
+        <div style="position: relative; width: 100%; max-width: 380px; background: #0f172a; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);">
+            <div style="padding: 1rem; background: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155;">
+                <div>
+                    <div id="reelModalTitle" style="font-weight: 800; font-size: 1rem; color: var(--accent);">Nama Siswa</div>
+                    <div id="reelModalSub" style="font-size: 0.75rem; color: #94a3b8;">Transformasi Latihan</div>
+                </div>
+                <button onclick="closeReelModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 0.2rem 0.6rem;">&times;</button>
+            </div>
+            <div style="position: relative; padding-top: 140%; width: 100%;">
+                <iframe id="reelModalIframe" style="position: absolute; top:0; left:0; width:100%; height:100%; border:none;" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Component -->
     @include('components.footer')
 
@@ -513,6 +587,22 @@
             modal.classList.remove('active');
         }
 
+        function openReelModal(title, sub, videoUrl) {
+            const overlay = document.getElementById('reelModalOverlay');
+            if (!overlay) return;
+            document.getElementById('reelModalTitle').innerText = title;
+            document.getElementById('reelModalSub').innerText = sub;
+            document.getElementById('reelModalIframe').src = videoUrl + '?autoplay=1';
+            overlay.style.display = 'flex';
+        }
+
+        function closeReelModal() {
+            const overlay = document.getElementById('reelModalOverlay');
+            if (!overlay) return;
+            document.getElementById('reelModalIframe').src = '';
+            overlay.style.display = 'none';
+        }
+
         // Toggle Navbar Mobile Menu & Accordion
         document.addEventListener('DOMContentLoaded', function() {
             const toggle = document.getElementById('mobileNavToggle');
@@ -559,13 +649,8 @@
                 }
             });
 
-            // Live Social Proof Toast Notification Rotation
-            const toastMessages = [
-                { title: '🎉 Pendaftaran Baru!', msg: 'Ibu Dewi mendaftar Les Renang Anak (Sleman)' },
-                { title: '⚡ Booking Trial Gratis!', msg: 'Bagas booking trial Persiapan TNI POLRI (UNY)' },
-                { title: '🌸 Pendaftaran Muslimah!', msg: 'Mba Siti mendaftar Les Renang Wanita Privat' },
-                { title: '⭐ Ulasan Bintang 5!', msg: 'Dr. Hendra memberi ulasan 5/5 Terapi Renang' }
-            ];
+            // Dynamic Live Social Proof Toast Notification Rotation from DB
+            const toastMessages = @json($liveToasts);
             let toastIdx = 0;
             const toast = document.getElementById('liveSocialProofToast');
             const toastTitle = document.getElementById('toastTitle');

@@ -2,8 +2,12 @@
     <div class="container">
         <div class="navbar-inner">
             <!-- Brand Logo -->
+            @php
+                $siteLogo = site_setting('site_logo', 'images/logo.webp');
+                $siteLogoUrl = Str::startsWith($siteLogo, 'http') ? $siteLogo : asset($siteLogo);
+            @endphp
             <a href="{{ route('home') }}" class="brand-logo" aria-label="Les Renang Jogja Homepage">
-                <img src="{{ asset('images/logo.webp?v=2') }}" alt="Les Renang Jogja Logo" class="brand-logo-img">
+                <img src="{{ $siteLogoUrl }}" alt="Les Renang Jogja Logo" class="brand-logo-img">
             </a>
 
             <!-- Desktop Nav Links -->

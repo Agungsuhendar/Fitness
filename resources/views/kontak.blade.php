@@ -77,10 +77,17 @@
                         <div class="form-group">
                             <label class="form-label">Kategori Program</label>
                             <select name="program_name" class="form-control">
-                                <option value="Les Renang Anak">Les Renang Anak</option>
-                                <option value="Les Renang Dewasa Pemula">Les Renang Dewasa Pemula</option>
-                                <option value="Les Renang Wanita">Les Renang Wanita</option>
-                                <option value="Persiapan TNI/POLRI">Persiapan TNI/POLRI</option>
+                                @if(isset($programs) && count($programs) > 0)
+                                    @foreach($programs as $p)
+                                        @php $pTitle = is_object($p) ? $p->title : $p['title']; @endphp
+                                        <option value="{{ $pTitle }}">{{ $pTitle }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="Les Renang Anak">Les Renang Anak</option>
+                                    <option value="Les Renang Dewasa Pemula">Les Renang Dewasa Pemula</option>
+                                    <option value="Les Renang Wanita">Les Renang Wanita</option>
+                                    <option value="Persiapan TNI/POLRI">Persiapan TNI/POLRI</option>
+                                @endif
                             </select>
                         </div>
                         <input type="hidden" name="age_category" value="Umum">

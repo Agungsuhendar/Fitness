@@ -23,7 +23,7 @@
                     Kuasai Renang Cepat & Aman Bersama <span class="text-gradient">Les Renang Jogja</span>
                 </h1>
                 <p class="hero-description">
-                    Bimbingan privat 1-on-1 bergaransi cepat bisa! Melayani les renang anak, dewasa pemula (bebas trauma air), khusus wanita/muslimah, serta persiapan tes TNI/POLRI.
+                    {{ site_setting('hero_subtitle', 'Bimbingan privat 1-on-1 bergaransi cepat bisa! Melayani les renang anak, dewasa pemula (bebas trauma air), khusus wanita/muslimah, serta persiapan tes TNI/POLRI.') }}
                 </p>
 
                 <div class="hero-cta-group">
@@ -115,8 +115,12 @@
                     </svg>
 
                     <!-- Swimmer Image Card with Left-Right Wave Clip-Path & Full Display -->
+                    @php
+                        $heroImgPath = site_setting('hero_image', 'images/assets/hero_wave_right.webp');
+                        $heroImgUrl = Str::startsWith($heroImgPath, 'http') ? $heroImgPath : asset($heroImgPath);
+                    @endphp
                     <div class="hero-swimmer-card-full">
-                        <img src="{{ asset('images/assets/hero_wave_right.webp') }}" 
+                        <img src="{{ $heroImgUrl }}" 
                              alt="Les Renang Jogja Latihan Privat" 
                              onerror="this.onerror=null; this.src='{{ asset('images/logo.webp') }}';">
 
@@ -149,20 +153,20 @@
     <div class="container">
         <div class="grid-4" style="text-align: center;">
             <div>
-                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">2.500+</div>
-                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Siswa Alumni Mahir</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">{{ site_setting('stat_alumni', '2.500+') }}</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">{{ site_setting('stat_alumni_label', 'Siswa Alumni Mahir') }}</div>
             </div>
             <div>
-                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">10+ Th</div>
-                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Pengalaman Pelatihan</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">{{ site_setting('stat_experience', '10+ Th') }}</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">{{ site_setting('stat_experience_label', 'Pengalaman Pelatihan') }}</div>
             </div>
             <div>
-                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">100%</div>
-                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Pelatih Lisensi PRSI</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">{{ site_setting('stat_trainers', '100%') }}</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">{{ site_setting('stat_trainers_label', 'Pelatih Lisensi PRSI') }}</div>
             </div>
             <div>
-                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">4.9 / 5</div>
-                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">Rating Kepuasan Wali</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">{{ site_setting('stat_rating', '4.9 / 5') }}</div>
+                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">{{ site_setting('stat_rating_label', 'Rating Kepuasan Wali') }}</div>
             </div>
         </div>
     </div>
@@ -180,37 +184,19 @@
         </div>
 
         <div class="grid-4">
+            @forelse($features as $feat)
             <div class="glass-card" style="padding: 2.25rem 1.5rem; text-align: center;">
-                <div style="width: 64px; height: 64px; background: rgba(0, 119, 182, 0.12); color: var(--primary); border-radius: 1.35rem; display: flex; align-items: center; justify-content: center; font-size: 1.85rem; margin: 0 auto 1.35rem;">
-                    <i class="fa-solid fa-user-graduate"></i>
+                <div style="width: 64px; height: 64px; background: {{ $feat->color }}18; color: {{ $feat->color }}; border-radius: 1.35rem; display: flex; align-items: center; justify-content: center; font-size: 1.85rem; margin: 0 auto 1.35rem;">
+                    <i class="{{ $feat->icon }}"></i>
                 </div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Pelatih Sabar & Pro</h3>
-                <p style="color: var(--text-muted); font-size: 0.925rem;">Lulusan FIK Keolahragaan, lisensi PRSI/POSSI, dan tersertifikasi First Aid.</p>
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">{{ $feat->title }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.925rem;">{{ $feat->description }}</p>
             </div>
-
-            <div class="glass-card" style="padding: 2.25rem 1.5rem; text-align: center;">
-                <div style="width: 64px; height: 64px; background: rgba(0, 180, 216, 0.12); color: var(--primary-light); border-radius: 1.35rem; display: flex; align-items: center; justify-content: center; font-size: 1.85rem; margin: 0 auto 1.35rem;">
-                    <i class="fa-solid fa-calendar-days"></i>
-                </div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Jadwal Super Fleksibel</h3>
-                <p style="color: var(--text-muted); font-size: 0.925rem;">Pilih jam latihan sesuai kesibukan Anda (Pagi 06.00 s/d Malam 20.00 WIB).</p>
+            @empty
+            <div style="grid-column: span 4; text-align: center; color: var(--text-muted); padding: 2rem;">
+                <p>Belum ada poin keunggulan yang diaktifkan.</p>
             </div>
-
-            <div class="glass-card" style="padding: 2.25rem 1.5rem; text-align: center;">
-                <div style="width: 64px; height: 64px; background: rgba(245, 158, 11, 0.12); color: var(--accent-hover); border-radius: 1.35rem; display: flex; align-items: center; justify-content: center; font-size: 1.85rem; margin: 0 auto 1.35rem;">
-                    <i class="fa-solid fa-person-dress"></i>
-                </div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Instruktur Wanita Privat</h3>
-                <p style="color: var(--text-muted); font-size: 0.925rem;">Khusus siswa perempuan / muslimah dengan pilihan kolam privat aman.</p>
-            </div>
-
-            <div class="glass-card" style="padding: 2.25rem 1.5rem; text-align: center;">
-                <div style="width: 64px; height: 64px; background: rgba(16, 185, 129, 0.12); color: var(--emerald); border-radius: 1.35rem; display: flex; align-items: center; justify-content: center; font-size: 1.85rem; margin: 0 auto 1.35rem;">
-                    <i class="fa-solid fa-trophy"></i>
-                </div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Garansi Bimbingan</h3>
-                <p style="color: var(--text-muted); font-size: 0.925rem;">Diimbimbing hingga berani air, mengapung, meluncur, dan mahir berenang.</p>
-            </div>
+            @endforelse
         </div>
     </div>
 </section>
@@ -380,16 +366,23 @@
 
             <!-- 3 Vertical 9:16 Shorts Cards Grid -->
             <div class="grid-3" style="gap: 1.5rem;">
-                <!-- Reel 1: Siswa Anak -->
-                <div class="reel-card" onclick="openReelModal('Daffa (7 Tahun)', 'Hari 1: Takut Air & Menangis ➔ Hari 4: Mahir Gaya Dada 25m', 'https://www.youtube.com/embed/5ee8sX_1-9c')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
-                    <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800&auto=format&fit=crop" alt="Before After Les Renang Anak Daffa" style="width: 100%; height: 100%; object-fit: cover;">
+                @forelse($videos as $vid)
+                @php
+                    $vidThumb = $vid->thumbnail
+                        ? (Str::startsWith($vid->thumbnail, 'http') ? $vid->thumbnail : asset($vid->thumbnail))
+                        : asset('images/assets/video_thumb_daffa.png');
+                @endphp
+                <div class="reel-card" onclick="openReelModal('{{ $vid->title }}', '{{ $vid->subtitle }}', '{{ $vid->video_url }}')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
+                    <img src="{{ $vidThumb }}" alt="{{ $vid->title }}" style="width: 100%; height: 100%; object-fit: cover;">
                     <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,4,94,0.92) 0%, rgba(3,4,94,0.2) 50%, rgba(0,0,0,0.4) 100%);"></div>
 
                     <!-- Floating Before/After Badge Top -->
+                    @if($vid->before_badge || $vid->after_badge)
                     <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                        <span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🔴 Hari 1: Takut Air</span>
-                        <span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🟢 Hari 4: Mahir</span>
+                        @if($vid->before_badge)<span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">{{ $vid->before_badge }}</span>@endif
+                        @if($vid->after_badge)<span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">{{ $vid->after_badge }}</span>@endif
                     </div>
+                    @endif
 
                     <!-- Center Play Reel Icon -->
                     <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
@@ -399,67 +392,20 @@
                     <!-- Bottom User Info & Story -->
                     <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;">
                         <div style="font-weight: 900; font-size: 1.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem;">
-                            <i class="fa-solid fa-child-reaching" style="color: var(--accent);"></i> Daffa (7 Tahun)
+                            <i class="fa-solid fa-circle-play" style="color: var(--accent);"></i> {{ $vid->title }}
                         </div>
+                        @if($vid->description)
                         <div style="font-size: 0.85rem; color: #e0f2fe; line-height: 1.4;">
-                            Dari tidak mau lepas pegangan hingga berani meluncur & renang gaya dada 25 meter mandiri!
+                            {{ $vid->description }}
                         </div>
+                        @endif
                     </div>
                 </div>
-
-                <!-- Reel 2: Siswa Dewasa Wanita -->
-                <div class="reel-card" onclick="openReelModal('Mbak Siti (24 Tahun)', 'Hari 1: Trauma Kedalaman ➔ Hari 3: Meluncur di Kolam Dalam 2m', 'https://www.youtube.com/embed/M5cs8a3Bhfg')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
-                    <img src="https://images.unsplash.com/photo-1519315901367-f34ff9154487?q=80&w=800&auto=format&fit=crop" alt="Before After Les Renang Dewasa Wanita Siti" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,4,94,0.92) 0%, rgba(3,4,94,0.2) 50%, rgba(0,0,0,0.4) 100%);"></div>
-
-                    <!-- Floating Before/After Badge Top -->
-                    <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                        <span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🔴 Hari 1: Trauma</span>
-                        <span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🟢 Hari 3: Berani 2m</span>
-                    </div>
-
-                    <!-- Center Play Reel Icon -->
-                    <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                        <i class="fa-solid fa-play" style="margin-left: 4px; color: var(--accent);"></i>
-                    </div>
-
-                    <!-- Bottom User Info & Story -->
-                    <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;">
-                        <div style="font-weight: 900; font-size: 1.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem;">
-                            <i class="fa-solid fa-person-dress" style="color: var(--accent);"></i> Mbak Siti (24 Tahun)
-                        </div>
-                        <div style="font-size: 0.85rem; color: #e0f2fe; line-height: 1.4;">
-                            Bimbingan privat 1-on-1 wanita ramah. Dalam 3 sesi berhasil mengatasi trauma air kedalaman 2 meter!
-                        </div>
-                    </div>
+                @empty
+                <div style="grid-column: span 3; text-align: center; color: var(--text-muted); padding: 3rem;">
+                    <p>Belum ada video galeri yang diaktifkan.</p>
                 </div>
-
-                <!-- Reel 3: Peserta TNI / POLRI -->
-                <div class="reel-card" onclick="openReelModal('Rian (Calon TNI/POLRI)', 'Hari 1: Renang 15m Terengah ➔ Hari 6: Lulus Tes 50m Gaya Bebas', 'https://www.youtube.com/embed/xVeXGKPOH58')" style="position: relative; height: 420px; border-radius: 1.75rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); cursor: pointer; border: 3px solid rgba(255,255,255,0.9); transition: all 0.35s ease;">
-                    <img src="https://images.unsplash.com/photo-1438029071396-1e831a7fa6d8?q=80&w=800&auto=format&fit=crop" alt="Before After Les Renang TNI POLRI Rian" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,4,94,0.92) 0%, rgba(3,4,94,0.2) 50%, rgba(0,0,0,0.4) 100%);"></div>
-
-                    <!-- Floating Before/After Badge Top -->
-                    <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                        <span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🔴 Hari 1: 15m</span>
-                        <span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px; text-transform: uppercase;">🟢 Hari 6: Lulus 50m</span>
-                    </div>
-
-                    <!-- Center Play Reel Icon -->
-                    <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                        <i class="fa-solid fa-play" style="margin-left: 4px; color: var(--accent);"></i>
-                    </div>
-
-                    <!-- Bottom User Info & Story -->
-                    <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; color: white;">
-                        <div style="font-weight: 900; font-size: 1.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem;">
-                            <i class="fa-solid fa-user-ninja" style="color: var(--accent);"></i> Rian (Calon TNI/POLRI)
-                        </div>
-                        <div style="font-size: 0.85rem; color: #e0f2fe; line-height: 1.4;">
-                            Pelatihan stamina & teknik pernapasan intensif. Lulus tes renang 50m gaya bebas target waktu 55 detik!
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
 
