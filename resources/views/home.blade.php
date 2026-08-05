@@ -82,17 +82,17 @@
                 </div>
             </div>
 
-            <!-- Right Column - Seamless Models Standing in Gym Environment -->
+            <!-- Right Column - Transparent Cutout Models Standing Seamlessly on Gym Background -->
             <div class="hero-image-col" style="position: relative; z-index: 5;">
-                <div style="position: relative; width: 100%; height: 520px; display: flex; justify-content: center; align-items: flex-end;">
+                <div style="position: relative; width: 100%; height: 530px; display: flex; justify-content: center; align-items: flex-end;">
                     
-                    <!-- Seamless Models Figure (Without thick border container, integrated in gym scene) -->
-                    <div style="position: relative; height: 100%; width: 100%; border-radius: 2rem; overflow: hidden; mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);">
-                        <img src="{{ asset('images/assets/fitlife_hero_couple.png') }}" alt="FitLife Muscular Couple" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));" onerror="this.onerror=null; this.src='{{ asset('images/assets/program_tni.webp') }}';">
+                    <!-- Transparent Cutout Models Figure (No border box, stands directly in gym scene) -->
+                    <div style="position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: flex-end;">
+                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" style="height: 100%; max-width: 100%; object-fit: contain; filter: drop-shadow(0 20px 35px rgba(0,0,0,0.85));" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
                     </div>
 
                     <!-- Right Floating Trial Card (Matches Screenshot Exactly) -->
-                    <div class="floating-trial-card" style="position: absolute; right: 0.5rem; bottom: 25%; background: rgba(10, 15, 12, 0.88); backdrop-filter: blur(16px); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.25rem 1.4rem; text-align: center; color: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.7); min-width: 145px; z-index: 10;">
+                    <div class="floating-trial-card" style="position: absolute; right: -0.5rem; bottom: 25%; background: rgba(10, 15, 12, 0.88); backdrop-filter: blur(16px); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.25rem 1.4rem; text-align: center; color: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.7); min-width: 145px; z-index: 10;">
                         <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.15); border-radius: 0.85rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.3rem; margin: 0 auto 0.65rem;">
                             <i class="fa-regular fa-calendar-check"></i>
                         </div>
