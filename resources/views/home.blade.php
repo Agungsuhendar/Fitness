@@ -84,11 +84,11 @@
 
             <!-- Right Column - Transparent Cutout Models Standing Seamlessly on Gym Background -->
             <div class="hero-image-col" style="position: relative; z-index: 5;">
-                <div style="position: relative; width: 100%; height: 620px; display: flex; justify-content: center; align-items: flex-end;">
+                <div style="position: relative; width: 100%; height: 580px; display: flex; justify-content: center; align-items: flex-end;">
                     
-                    <!-- Transparent Cutout Models Figure (Enlarged) -->
+                    <!-- Transparent Cutout Models Figure (Enlarged slightly for maximum impact) -->
                     <div style="position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: flex-end;">
-                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" style="height: 118%; width: auto; max-width: none; object-fit: contain; filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9)); transform: scale(1.2) translateY(20px);" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
+                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" style="height: 108%; max-width: none; object-fit: contain; transform: scale(1.12); transform-origin: bottom center; filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9));" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
                     </div>
 
                     <!-- Right Floating Trial Card (Matches Screenshot Exactly) -->
