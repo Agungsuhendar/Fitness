@@ -80,6 +80,14 @@
 
     <link rel="icon" type="image/webp" href="{{ asset('images/logo-icon.webp?v=2') }}">
 
+    <!-- PWA Web Manifest & App Meta Tags -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#0077b6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Les Renang">
+    <link rel="apple-touch-icon" href="{{ asset('images/icon-192.png') }}">
+
     <!-- Geo Meta Tags for Google Local Search -->
     <meta name="geo.region" content="ID-YO">
     <meta name="geo.placename" content="Yogyakarta">
@@ -671,6 +679,17 @@
                 }, 12000);
             }
         });
+    </script>
+
+    <!-- PWA Service Worker Registration (Silent) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+                    .catch((err) => console.log('[PWA] Service Worker registration error:', err));
+            });
+        }
     </script>
 
     @stack('scripts')

@@ -168,11 +168,13 @@
             border-radius: 1.25rem;
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            -webkit-overflow-scrolling: touch;
         }
         table.admin-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
+            min-width: 600px;
         }
         table.admin-table th, table.admin-table td {
             padding: 1.1rem 1.35rem;
@@ -189,15 +191,81 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
+
+        /* Mobile Overlay Backdrop */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-backdrop.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Responsive Breakpoints (< 992px) */
+        @media (max-width: 991.98px) {
+            .admin-sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: -290px; /* FULL HIDE off-screen */
+                width: 280px !important;
+                z-index: 1050;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+            }
+            .admin-wrapper.mobile-open .admin-sidebar {
+                left: 0; /* SLIDE IN DRAWER */
+            }
+            .admin-main {
+                padding: 1.25rem 1rem !important;
+                width: 100%;
+            }
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .admin-header > div:last-child {
+                align-self: stretch;
+                display: flex;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
+            .admin-header h1 {
+                font-size: 1.35rem !important;
+            }
+            .admin-card {
+                padding: 1.25rem 1rem !important;
+            }
+        }
     </style>
 </head>
 <body class="admin-body">
+    <!-- Backdrop Overlay for Mobile Drawer -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
     <div class="admin-wrapper" id="adminWrapper">
         <aside class="admin-sidebar" id="adminSidebar">
-            <a href="{{ route('admin.dashboard') }}" class="admin-brand" style="justify-content: center;">
-                @php $adminLogoUrl = site_setting('site_logo_footer', 'images/logo-footer.webp'); @endphp
-                <img src="{{ Str::startsWith($adminLogoUrl, 'http') ? $adminLogoUrl : asset($adminLogoUrl) }}" alt="Admin Logo" style="height: 52px; width: auto; object-fit: contain; border-radius: 8px; transition: all 0.3s ease;">
-            </a>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                <a href="{{ route('admin.dashboard') }}" class="admin-brand" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                    @php $adminLogoUrl = site_setting('site_logo_footer', 'images/logo-footer.webp'); @endphp
+                    <img src="{{ Str::startsWith($adminLogoUrl, 'http') ? $adminLogoUrl : asset($adminLogoUrl) }}" alt="Admin Logo" style="height: 52px; width: auto; object-fit: contain; border-radius: 8px;">
+                </a>
+                <button type="button" id="mobileCloseSidebar" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; display: none;" title="Tutup Menu">
+                    &times;
+                </button>
+            </div>
 
             <ul class="admin-nav">
                 <li class="admin-nav-item">
@@ -334,16 +402,46 @@
         document.addEventListener('DOMContentLoaded', function() {
             const wrapper = document.getElementById('adminWrapper');
             const toggleBtn = document.getElementById('sidebarToggle');
-            
-            // Load saved sidebar state
-            if (localStorage.getItem('admin_sidebar_collapsed') === 'true') {
+            const backdrop = document.getElementById('sidebarBackdrop');
+            const closeBtn = document.getElementById('mobileCloseSidebar');
+
+            // Load saved sidebar state for Desktop
+            if (window.innerWidth >= 992 && localStorage.getItem('admin_sidebar_collapsed') === 'true') {
                 wrapper.classList.add('collapsed');
             }
-            
-            toggleBtn.addEventListener('click', function() {
-                wrapper.classList.toggle('collapsed');
-                const isCollapsed = wrapper.classList.contains('collapsed');
-                localStorage.setItem('admin_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+
+            function openMobileSidebar() {
+                wrapper.classList.add('mobile-open');
+                if (backdrop) backdrop.classList.add('active');
+            }
+
+            function closeMobileSidebar() {
+                wrapper.classList.remove('mobile-open');
+                if (backdrop) backdrop.classList.remove('active');
+            }
+
+            toggleBtn?.addEventListener('click', function() {
+                if (window.innerWidth < 992) {
+                    if (wrapper.classList.contains('mobile-open')) {
+                        closeMobileSidebar();
+                    } else {
+                        openMobileSidebar();
+                    }
+                } else {
+                    wrapper.classList.toggle('collapsed');
+                    const isCollapsed = wrapper.classList.contains('collapsed');
+                    localStorage.setItem('admin_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+                }
+            });
+
+            backdrop?.addEventListener('click', closeMobileSidebar);
+            closeBtn?.addEventListener('click', closeMobileSidebar);
+
+            // Auto-close mobile sidebar when clicking a nav link
+            document.querySelectorAll('.admin-nav-item a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 992) closeMobileSidebar();
+                });
             });
 
             // Initialize CKEditor on all .rich-editor elements
