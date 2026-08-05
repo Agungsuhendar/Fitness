@@ -1131,36 +1131,40 @@ body {
   box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.18);
 }
 
-/* Footer */
+/* Footer Styling - Luxury Dark Gym Theme */
 .footer {
-  background: var(--dark);
+  background: #050806;
   color: #94a3b8;
-  padding: 5.5rem 0 2.25rem;
+  padding: 5rem 0 2.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 10;
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
   gap: 3.5rem;
-  margin-bottom: 4rem;
+  margin-bottom: 3.5rem;
 }
 
 @media (max-width: 992px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 576px) { .footer-grid { grid-template-columns: 1fr; } }
 
-.footer-title { color: #ffffff; font-size: 1.2rem; margin-bottom: 1.35rem; }
-.footer-links { list-style: none; }
+.footer-title { color: #ffffff; font-size: 1.15rem; font-weight: 800; margin-bottom: 1.35rem; font-family: 'Outfit', sans-serif; }
+.footer-links { list-style: none; padding: 0; }
 .footer-links li { margin-bottom: 0.85rem; }
-.footer-links a { color: #94a3b8; text-decoration: none; transition: color 0.25s ease; }
-.footer-links a:hover { color: #ffffff; }
+.footer-links a { color: #94a3b8; text-decoration: none; transition: all 0.25s ease; font-size: 0.9rem; }
+.footer-links a:hover { color: #84cc16; padding-left: 4px; }
 
 .footer-bottom {
-  border-top: 1px solid #1c2541;
-  padding-top: 2.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  color: #64748b;
 }
 
 @media (max-width: 768px) {
