@@ -5,7 +5,7 @@
 
 @section('content')
 <!-- Hero Section with Full-Width Gym Background & Overhead Neon Lights -->
-<section class="hero-section" style="background: linear-gradient(90deg, rgba(7, 10, 8, 0.96) 0%, rgba(7, 10, 8, 0.82) 42%, rgba(7, 10, 8, 0.35) 75%, rgba(7, 10, 8, 0.88) 100%), url('{{ asset('images/assets/fitlife_hero_gym_bg.png') }}') center/cover no-repeat; color: #ffffff; padding: 4.5rem 0 6.5rem; position: relative; overflow: hidden; min-height: 640px;">
+<section class="hero-section" style="background: linear-gradient(90deg, rgba(7, 10, 8, 0.96) 0%, rgba(7, 10, 8, 0.82) 42%, rgba(7, 10, 8, 0.35) 75%, rgba(7, 10, 8, 0.88) 100%), url('{{ asset('images/assets/fitlife_hero_gym_bg.png') }}') center/cover no-repeat; color: #ffffff; padding: 7rem 0 6.5rem; position: relative; overflow: hidden; min-height: 640px;">
     
     <!-- Neon Glow Overlay Effects -->
     <div style="position: absolute; top: 0; right: 20%; width: 450px; height: 450px; background: radial-gradient(circle, rgba(132, 204, 22, 0.15) 0%, transparent 70%); pointer-events: none; filter: blur(50px);"></div>

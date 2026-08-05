@@ -212,12 +212,13 @@ img {
 .btn-lg { padding: 1.2rem 2.5rem; font-size: 1.15rem; }
 
 body {
-  padding-top: 84px;
+  padding-top: 0 !important;
+  margin: 0;
 }
 
 @media (max-width: 640px) {
   body {
-    padding-top: 72px;
+    padding-top: 0 !important;
   }
 }
 

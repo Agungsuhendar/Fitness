@@ -1,4 +1,4 @@
-<nav class="navbar" style="background: rgba(10, 15, 13, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: sticky; top: 0; z-index: 1000; padding: 0.9rem 0;">
+<nav class="navbar" style="background: rgba(10, 15, 13, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: fixed; top: 0; left: 0; width: 100%; z-index: 10000; padding: 0.9rem 0; margin: 0;">
     <div class="container">
         <div class="navbar-inner" style="display: flex; align-items: center; justify-content: space-between;">
             <!-- Brand Logo FitLife -->
