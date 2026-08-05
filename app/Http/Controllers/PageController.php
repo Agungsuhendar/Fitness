@@ -202,8 +202,8 @@ class PageController extends Controller
 
     public function areaLanding($slug)
     {
-        // Strip prefixes if user comes from les-renang- or fitness-
-        $cleanSlug = str_replace(['les-renang-', 'fitness-'], '', $slug);
+        // Strip prefixes if user comes from les-fitness- or fitness-
+        $cleanSlug = str_replace(['les-fitness-', 'fitness-'], '', $slug);
 
         $areasData = [
             'sleman' => [

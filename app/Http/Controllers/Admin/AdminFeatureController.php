@@ -46,7 +46,7 @@ class AdminFeatureController extends Controller
                 [
                     'icon' => 'fa-solid fa-person-dress',
                     'title' => 'Instruktur Wanita Privat',
-                    'description' => 'Khusus siswa perempuan / muslimah dengan pelatih wanita sabar & lokasi kolam privat aman.',
+                    'description' => 'Khusus siswa perempuan / muslimah dengan pelatih wanita sabar & lokasi gym privat aman.',
                     'color' => '#d946ef',
                     'order' => 3,
                     'is_active' => true,
@@ -54,7 +54,7 @@ class AdminFeatureController extends Controller
                 [
                     'icon' => 'fa-solid fa-trophy',
                     'title' => 'Garansi Cepat Bisa',
-                    'description' => 'Dibimbing intensif 1-on-1 hingga berani air, mengapung, meluncur, dan mahir berenang gaya dada & bebas.',
+                    'description' => 'Dibimbing intensif 1-on-1 hingga berani air, mengapung, meluncur, dan mahir befitness gaya dada & bebas.',
                     'color' => '#10b981',
                     'order' => 4,
                     'is_active' => true,

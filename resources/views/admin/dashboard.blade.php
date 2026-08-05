@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Admin Dashboard Analytics - Les Renang Jogja')
+@section('title', 'Admin Dashboard Analytics - FitLife Gym Jogja')
 @section('header_title', 'Dashboard Analytics & Overview')
 
 @section('admin_content')
@@ -139,8 +139,8 @@
         <!-- Lokasi Favorit Bar Chart -->
         <div class="admin-card" style="padding: 2rem; border-radius: 1.5rem; background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
             <div style="margin-bottom: 1.25rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.85rem;">
-                <h3 style="font-size: 1.1rem; color: #0f172a; margin: 0; font-weight: 900;">Lokasi Kolam Renang Terfavorit</h3>
-                <span style="font-size: 0.8rem; color: #64748b;">Ranking lokasi kolam pilihan utama peserta di Yogyakarta</span>
+                <h3 style="font-size: 1.1rem; color: #0f172a; margin: 0; font-weight: 900;">Lokasi Studio Gym Terfavorit</h3>
+                <span style="font-size: 0.8rem; color: #64748b;">Ranking lokasi gym pilihan utama peserta di Yogyakarta</span>
             </div>
             <div style="position: relative; height: 260px; width: 100%;">
                 <canvas id="locationBarChart"></canvas>
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <h2 style="font-size: 1.35rem; color: #0f172a; margin: 0; font-weight: 900; display: flex; align-items: center; gap: 0.5rem;">
                 <i class="fa-solid fa-clock-rotate-left" style="color: #0284c7;"></i> Lead Pendaftaran Terbaru
             </h2>
-            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.2rem;">Data calon peserta les renang yang baru mendaftar secara real-time.</p>
+            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.2rem;">Data calon peserta fitness & personal trainer yang baru mendaftar secara real-time.</p>
         </div>
         <a href="{{ route('admin.registrations') }}" class="btn btn-outline btn-sm" style="border-radius: 0.85rem; font-weight: 800;">
             Lihat Semua Pendaftar →
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <th style="padding: 1.1rem 1.25rem;">Nama Pendaftar</th>
                     <th style="padding: 1.1rem 1.25rem;">WhatsApp</th>
                     <th style="padding: 1.1rem 1.25rem;">Program Pilihan</th>
-                    <th style="padding: 1.1rem 1.25rem;">Lokasi Kolam</th>
+                    <th style="padding: 1.1rem 1.25rem;">Lokasi Gym</th>
                 </tr>
             </thead>
             <tbody>
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div>
                 <div style="font-weight: 800; font-size: 0.9rem;">Tulis Artikel Blog</div>
-                <div style="font-size: 0.75rem; color: #16a34a;">Edukasi & berita renang</div>
+                <div style="font-size: 0.75rem; color: #16a34a;">Edukasi & berita fitness</div>
             </div>
         </a>
     </div>

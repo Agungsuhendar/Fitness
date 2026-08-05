@@ -17,7 +17,7 @@
                 <i class="fa-solid fa-sliders" style="color: #0284c7; margin-right: 0.45rem;"></i> Pengaturan Gambar Logo, Hero & Informasi Website
             </h3>
             <p style="color: #64748b; font-size: 0.925rem; margin: 0;">
-                Ganti logo header/footer, gambar hero perenang beranda, nomor WhatsApp admin, serta teks statistik secara terpusat.
+                Ganti logo header/footer, gambar hero pefitness beranda, nomor WhatsApp admin, serta teks statistik secara terpusat.
             </p>
         </div>
 
@@ -56,7 +56,7 @@
                     <!-- Hero Swimmer Image -->
                     <div style="background: white; padding: 1.15rem; border-radius: 1rem; border: 1px solid #cbd5e1; text-align: center;">
                         <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.75rem;">
-                            Gambar Hero Perenang (Beranda):
+                            Gambar Hero Fitness (Beranda):
                         </label>
                         <div style="height: 70px; background: #f1f5f9; border-radius: 0.5rem; overflow: hidden; margin-bottom: 0.85rem;">
                             <img src="{{ Str::startsWith($settings['hero_image'], 'http') ? $settings['hero_image'] : asset($settings['hero_image']) }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -102,14 +102,14 @@
                         <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
                             Judul Banner CTA Utama (Bagian Bawah Beranda):
                         </label>
-                        <input type="text" name="cta_banner_title" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('cta_banner_title', $settings['cta_banner_title'] ?? 'Siap Mahir Berenang Dalam Waktu Singkat?') }}">
+                        <input type="text" name="cta_banner_title" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('cta_banner_title', $settings['cta_banner_title'] ?? 'Siap Memulai Perjalanan Fitness Dalam Waktu Singkat?') }}">
                     </div>
 
                     <div style="margin-bottom: 0.5rem;">
                         <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
                             Sub-Judul / Deskripsi Banner CTA Utama:
                         </label>
-                        <textarea name="cta_banner_subtitle" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; height: 70px; box-sizing: border-box;">{{ old('cta_banner_subtitle', $settings['cta_banner_subtitle'] ?? 'Jangan tunda lagi! Konsultasikan kebutuhan les renang Anda secara gratis dengan tim admin & pelatih kami sekarang juga.') }}</textarea>
+                        <textarea name="cta_banner_subtitle" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; height: 70px; box-sizing: border-box;">{{ old('cta_banner_subtitle', $settings['cta_banner_subtitle'] ?? 'Jangan tunda lagi! Konsultasikan kebutuhan fitness & personal trainer Anda secara gratis dengan tim admin & pelatih kami sekarang juga.') }}</textarea>
                     </div>
                 </div>
             </div>
@@ -283,7 +283,7 @@
                     <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
                         Teks Promo (muncul di banner kuning halaman Harga):
                     </label>
-                    <input type="text" name="promo_text" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('promo_text', $settings['promo_text'] ?? '🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Kacamata Renang untuk Pendaftaran Paket Privat 2 Orang!') }}">
+                    <input type="text" name="promo_text" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('promo_text', $settings['promo_text'] ?? '🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Shaker & Handuk Gym untuk Pendaftaran Paket Privat 2 Orang!') }}">
                     <small style="color: #64748b; font-size: 0.8rem; display: block; margin-top: 0.35rem;">Kosongkan jika tidak ingin menampilkan promo.</small>
                 </div>
             </div>

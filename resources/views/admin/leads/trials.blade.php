@@ -9,7 +9,7 @@
         <i class="fa-solid fa-calendar-check" style="color: #f59e0b; margin-right: 0.5rem;"></i>
         Semua Booking Trial Uji Coba Gratis
     </h2>
-    <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Daftar lengkap pemohon uji coba sesi renang 30 menit gratis.</p>
+    <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Daftar lengkap pemohon uji coba sesi fitness 30 menit gratis.</p>
 </div>
 
 <div class="table-responsive">
@@ -22,7 +22,7 @@
                 <th>Nama Peserta (Usia)</th>
                 <th>No. WhatsApp</th>
                 <th>Program</th>
-                <th>Lokasi Kolam</th>
+                <th>Lokasi Gym</th>
                 <th>Tgl & Jam Trial</th>
             </tr>
         </thead>

@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('title', 'Kelola Program - Admin Panel')
-@section('header_title', 'Kelola Program Les Renang')
+@section('header_title', 'Kelola Program FitLife Fitness & PT')
 
 @section('admin_content')
 <div style="background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); padding: 1.75rem 2rem; margin-bottom: 2rem;">
@@ -11,7 +11,7 @@
                 <i class="fa-solid fa-swatchbook" style="color: #0284c7; margin-right: 0.5rem;"></i>
                 Daftar Program Aktif
             </h2>
-            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Kelola judul, deskripsi, harga, dan badge program les renang.</p>
+            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Kelola judul, deskripsi, harga, dan badge program fitness & personal trainer.</p>
         </div>
         <a href="{{ route('admin.programs.create') }}" class="btn btn-primary btn-sm" style="border-radius: 0.75rem; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 0.65rem 1.35rem; font-weight: 700;">
             <i class="fa-solid fa-plus"></i> Tambah Program Baru
@@ -68,7 +68,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="7" style="text-align: center; color: #64748b; padding: 3rem;">Belum ada program renang.</td>
+                <td colspan="7" style="text-align: center; color: #64748b; padding: 3rem;">Belum ada program fitness.</td>
             </tr>
             @endforelse
         </tbody>

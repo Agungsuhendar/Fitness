@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('title', ($program->exists ? 'Edit' : 'Tambah') . ' Program - Admin Panel')
-@section('header_title', ($program->exists ? 'Edit' : 'Tambah') . ' Program Renang')
+@section('header_title', ($program->exists ? 'Edit' : 'Tambah') . ' Program Fitness')
 
 @section('admin_content')
 <div style="background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); padding: 2rem 2.5rem; width: 100%;">
@@ -9,7 +9,7 @@
         <div>
             <h2 style="font-size: 1.35rem; margin: 0; color: var(--dark);">
                 <i class="fa-solid fa-swatchbook" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                Form {{ $program->exists ? 'Edit' : 'Tambah' }} Program Renang
+                Form {{ $program->exists ? 'Edit' : 'Tambah' }} Program Fitness
             </h2>
             <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Lengkapi informasi detail paket program pelatihan di bawah ini.</p>
         </div>
@@ -27,7 +27,7 @@
         <div class="grid-2" style="gap: 1.5rem;">
             <div class="form-group">
                 <label class="form-label">Judul Program <span style="color:red;">*</span></label>
-                <input type="text" name="title" class="form-control" value="{{ old('title', $program->title) }}" required placeholder="Contoh: Les Renang Anak (Usia 3–15 Tahun)">
+                <input type="text" name="title" class="form-control" value="{{ old('title', $program->title) }}" required placeholder="Contoh: FitLife Fitness & PT Anak (Usia 3–15 Tahun)">
             </div>
 
             <div class="form-group">

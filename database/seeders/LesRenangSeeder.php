@@ -16,7 +16,7 @@ use App\Models\TrialBooking;
 use App\Models\Setting;
 use App\Models\User;
 
-class LesRenangSeeder extends Seeder
+class LesFitnessSeeder extends Seeder
 {
     public function run(): void
     {
@@ -253,7 +253,7 @@ class LesRenangSeeder extends Seeder
                 'name' => 'ApexFitness Center Sleman (Headquarters)',
                 'city' => 'Yogyakarta (Sleman)',
                 'address' => 'Jl. Kaliurang Km 5.5 No. 88, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281',
-                'map_embed_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.189569035177!2d110.3853112!3d-7.7702812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59b20ab248bf%3A0xb3adacbfdf5d16e0!2sKolam%20Renang%20FIK%20UNY!5e0!3m2!1sid!2sid!4v1700000000000',
+                'map_embed_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.189569035177!2d110.3853112!3d-7.7702812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59b20ab248bf%3A0xb3adacbfdf5d16e0!2sGym%20Fitness%20FIK%20UNY!5e0!3m2!1sid!2sid!4v1700000000000',
                 'features' => ['Peralatan Gym Impor Hammer Strength', 'InBody 3D Scan Test', 'Area VIP PT 1-on-1', 'Locker & Shower Air Hangat', 'Protein Bar Cafe'],
                 'image' => 'images/assets/pool_uny.webp',
                 'is_featured' => true,

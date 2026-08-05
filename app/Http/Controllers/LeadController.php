@@ -23,16 +23,16 @@ class LeadController extends Controller
 
         $registration = Registration::create($validated);
 
-        // Target WhatsApp phone number (Admin Les Renang Jogja)
+        // Target WhatsApp phone number (Admin FitLife Gym Jogja)
         $targetWa = '6281234567890'; // Default admin contact
 
-        $waMessage = "Halo Admin Les Renang Jogja, saya ingin mendaftar les renang!%0A%0A"
+        $waMessage = "Halo Admin FitLife Gym Jogja, saya ingin mendaftar fitness & personal trainer!%0A%0A"
             . "*Data Pendaftar:*%0A"
             . "• Nama: {$registration->name}%0A"
             . "• WhatsApp: {$registration->phone}%0A"
             . "• Kategori Usia: {$registration->age_category}%0A"
             . "• Program Pilihan: {$registration->program_name}%0A"
-            . "• Lokasi Kolam: {$registration->preferred_location}%0A"
+            . "• Lokasi Gym: {$registration->preferred_location}%0A"
             . "• Jadwal Mulai: {$registration->preferred_schedule}%0A"
             . ($registration->notes ? "• Catatan Tambahan: {$registration->notes}%0A" : "")
             . "%0AMohon informasi ketersediaan pelatih dan konfirmasi pendaftaran. Terima kasih!";
@@ -68,7 +68,7 @@ class LeadController extends Controller
 
         $targetWa = '6281234567890';
 
-        $waMessage = "Halo Admin Les Renang Jogja, saya ingin Booking Trial Gratis!%0A%0A"
+        $waMessage = "Halo Admin FitLife Gym Jogja, saya ingin Booking Trial Gratis!%0A%0A"
             . "*Data Booking Trial:*%0A"
             . "• Nama Orang Tua/Pendaftar: {$trial->parent_name}%0A"
             . "• Nama Peserta: {$trial->participant_name} ({$trial->participant_age})%0A"

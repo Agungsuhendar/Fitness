@@ -38,7 +38,7 @@
                     <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
                         Program yang Diikuti: <span style="color: #ef4444;">*</span>
                     </label>
-                    <input type="text" name="program" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('program', $testimonial->program ?? '') }}" required placeholder="Les Renang Anak">
+                    <input type="text" name="program" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('program', $testimonial->program ?? '') }}" required placeholder="FitLife Fitness & PT Anak">
                 </div>
                 <div>
                     <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">

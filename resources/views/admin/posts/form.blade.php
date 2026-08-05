@@ -11,7 +11,7 @@
                 <i class="fa-solid fa-newspaper" style="color: var(--accent-hover); margin-right: 0.5rem;"></i>
                 Form {{ $post->exists ? 'Edit' : 'Tulis Baru' }} Artikel Blog
             </h2>
-            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Tulis konten edukasi renang, tips kesehatan, dan artikel menarik lainnya.</p>
+            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Tulis konten edukasi fitness, tips kesehatan, dan artikel menarik lainnya.</p>
         </div>
         <a href="{{ route('admin.posts.index') }}" class="btn btn-outline btn-sm">
             <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Artikel
@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label class="form-label">Kategori Artikel <span style="color:red;">*</span></label>
                 <select name="category" class="form-control" required>
-                    <option value="Tips Renang" {{ old('category', $post->category) == 'Tips Renang' ? 'selected' : '' }}>Tips Renang</option>
+                    <option value="Tips Fitness" {{ old('category', $post->category) == 'Tips Fitness' ? 'selected' : '' }}>Tips Fitness</option>
                     <option value="Parenting" {{ old('category', $post->category) == 'Parenting' ? 'selected' : '' }}>Parenting</option>
                     <option value="Persiapan TNI" {{ old('category', $post->category) == 'Persiapan TNI' ? 'selected' : '' }}>Persiapan TNI</option>
                     <option value="Kesehatan" {{ old('category', $post->category) == 'Kesehatan' ? 'selected' : '' }}>Kesehatan</option>
@@ -97,7 +97,7 @@
 
         <div class="form-group">
             <label class="form-label">Isi Konten Lengkap Artikel (WYSIWYG Visual Editor) <span style="color:red;">*</span></label>
-            <textarea name="content" class="form-control rich-editor" rows="12" placeholder="Tulis artikel edukasi renang yang menarik...">{{ old('content', $post->content) }}</textarea>
+            <textarea name="content" class="form-control rich-editor" rows="12" placeholder="Tulis artikel edukasi fitness yang menarik...">{{ old('content', $post->content) }}</textarea>
         </div>
 
         <div style="display: flex; gap: 1rem; margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9;">

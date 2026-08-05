@@ -7,7 +7,7 @@
 <div style="background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); padding: 1.75rem 2rem; margin-bottom: 2rem;">
     <h2 style="font-size: 1.35rem; color: #0f172a; margin: 0;">
         <i class="fa-solid fa-address-card" style="color: #0284c7; margin-right: 0.5rem;"></i>
-        Semua Lead Pendaftaran Sesi Les Renang
+        Semua Lead Pendaftaran Sesi FitLife Fitness & PT
     </h2>
     <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Daftar lengkap peserta yang telah mendaftar melalui formulir website resmi.</p>
 </div>
@@ -22,7 +22,7 @@
                 <th>No. WhatsApp</th>
                 <th>Kategori Usia</th>
                 <th>Program Pilihan</th>
-                <th>Lokasi Kolam</th>
+                <th>Lokasi Gym</th>
                 <th>Preferensi Jadwal</th>
                 <th>Catatan Khusus</th>
             </tr>

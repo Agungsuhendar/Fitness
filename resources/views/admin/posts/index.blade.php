@@ -11,7 +11,7 @@
                 <i class="fa-solid fa-newspaper" style="color: #f59e0b; margin-right: 0.5rem;"></i>
                 Daftar Artikel Blog
             </h2>
-            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Kelola artikel edukasi tips renang, parenting, dan persiapan tes TNI POLRI.</p>
+            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Kelola artikel edukasi tips fitness, parenting, dan persiapan tes TNI POLRI.</p>
         </div>
         <a href="{{ route('admin.posts.create') }}" class="btn btn-primary btn-sm" style="border-radius: 0.75rem; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 0.65rem 1.35rem; font-weight: 700; border: none;">
             <i class="fa-solid fa-plus"></i> Tulis Artikel Baru

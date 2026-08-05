@@ -95,15 +95,15 @@ class AdminDashboardController extends Controller
 
         if (empty($programChart)) {
             $programChart = [
-                'Les Renang Anak' => 18,
-                'Les Renang Dewasa Pemula' => 12,
-                'Les Renang Khusus Wanita' => 10,
+                'FitLife Fitness & PT Anak' => 18,
+                'FitLife Fitness & PT Dewasa Pemula' => 12,
+                'FitLife Fitness & PT Khusus Wanita' => 10,
                 'Persiapan Tes TNI/POLRI' => 7,
-                'Terapi Renang Medis' => 4
+                'Terapi Fitness Medis' => 4
             ];
         }
 
-        // 3. Lokasi Kolam Renang Favorit (Registration + Trial Combined)
+        // 3. Lokasi Studio Gym Favorit (Registration + Trial Combined)
         $locationChart = [];
         foreach ($allRegistrations as $reg) {
             $l = $reg->preferred_location;

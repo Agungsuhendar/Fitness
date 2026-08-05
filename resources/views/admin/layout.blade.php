@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Dashboard - Les Renang Jogja')</title>
+    <title>@yield('title', 'Admin Dashboard - FitLife Gym Jogja')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
@@ -377,7 +377,7 @@
                     </button>
                     <div>
                         <h1 style="font-size: 1.75rem; margin: 0; line-height: 1.2; color: #0f172a;">@yield('header_title', 'Dashboard Overview')</h1>
-                        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.2rem;">Selamat datang di Panel Admin Les Renang Jogja</p>
+                        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.2rem;">Selamat datang di Panel Admin FitLife Gym Jogja</p>
                     </div>
                 </div>
                 <div>

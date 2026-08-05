@@ -31,7 +31,7 @@
                     <option value="Umum" {{ old('category', $faq->category) == 'Umum' ? 'selected' : '' }}>Umum</option>
                     <option value="Pendaftaran" {{ old('category', $faq->category) == 'Pendaftaran' ? 'selected' : '' }}>Pendaftaran</option>
                     <option value="Pelatih" {{ old('category', $faq->category) == 'Pelatih' ? 'selected' : '' }}>Pelatih</option>
-                    <option value="Kolam & Safety" {{ old('category', $faq->category) == 'Kolam & Safety' ? 'selected' : '' }}>Kolam & Safety</option>
+                    <option value="Gym & Safety" {{ old('category', $faq->category) == 'Gym & Safety' ? 'selected' : '' }}>Gym & Safety</option>
                     <option value="TNI/POLRI & Terapi" {{ old('category', $faq->category) == 'TNI/POLRI & Terapi' ? 'selected' : '' }}>TNI/POLRI & Terapi</option>
                     <option value="Pembayaran" {{ old('category', $faq->category) == 'Pembayaran' ? 'selected' : '' }}>Pembayaran</option>
                 </select>
@@ -45,7 +45,7 @@
 
         <div class="form-group">
             <label class="form-label">Pertanyaan <span style="color:red;">*</span></label>
-            <input type="text" name="question" class="form-control" value="{{ old('question', $faq->question) }}" required placeholder="Contoh: Apakah ada garansi sampai bisa renang?">
+            <input type="text" name="question" class="form-control" value="{{ old('question', $faq->question) }}" required placeholder="Contoh: Apakah ada garansi sampai bisa fitness?">
         </div>
 
         <div class="form-group">

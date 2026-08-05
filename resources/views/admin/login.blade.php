@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - Les Renang Jogja</title>
+    <title>Login Admin - FitLife Gym Jogja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
@@ -35,7 +35,7 @@
                 <img src="{{ Str::startsWith($loginLogoUrl, 'http') ? $loginLogoUrl : asset($loginLogoUrl) }}" alt="Admin Logo" style="height: 64px; width: auto; object-fit: contain; border-radius: 10px;">
             </div>
             <h1 style="font-size: 1.65rem; color: #0f172a; margin-bottom: 0.25rem; font-weight: 900;">Admin Panel Login</h1>
-            <p style="color: #64748b; font-size: 0.875rem;">Kelola Konten & Lead Pendaftaran Les Renang Jogja</p>
+            <p style="color: #64748b; font-size: 0.875rem;">Kelola Konten & Lead Pendaftaran FitLife Gym Jogja</p>
         </div>
 
         @if($errors->any())
@@ -48,7 +48,7 @@
             @csrf
             <div class="form-group">
                 <label class="form-label" style="color: #334155;">Email Admin</label>
-                <input type="email" name="email" class="form-control" placeholder="admin@lesrenangjogja.com" value="{{ old('email') }}" required autofocus style="border-radius: 0.75rem; padding: 0.85rem 1.15rem;">
+                <input type="email" name="email" class="form-control" placeholder="admin@lesfitnessjogja.com" value="{{ old('email') }}" required autofocus style="border-radius: 0.75rem; padding: 0.85rem 1.15rem;">
             </div>
 
             <div class="form-group" style="margin-bottom: 1.75rem;">
