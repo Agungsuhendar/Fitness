@@ -11,6 +11,19 @@
         </div>
     @endif
 
+    @if($errors->any())
+        <div style="padding: 1rem 1.25rem; background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; border-radius: 0.85rem; font-weight: 700; margin-bottom: 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.5rem;">
+                <i class="fa-solid fa-circle-exclamation" style="font-size: 1.2rem;"></i> Upload / Gagal Memperbarui Pengaturan:
+            </div>
+            <ul style="margin: 0; padding-left: 1.5rem; font-weight: 600; font-size: 0.875rem;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="admin-card" style="padding: 1.75rem 1.5rem; border-radius: 1.5rem; background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
         <div style="margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.15rem;">
             <h3 style="font-size: 1.35rem; color: #0f172a; margin-bottom: 0.35rem; font-weight: 900;">
