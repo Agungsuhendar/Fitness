@@ -98,8 +98,8 @@
                 © {{ date('Y') }} <strong style="color: #ffffff;">FitLife Center</strong>. All Rights Reserved.
             </div>
             <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
-                <a href="{{ route('halaman', 'privasi') }}" style="color: #64748b; text-decoration: none;">Kebijakan Privasi</a>
-                <a href="{{ route('halaman', 'syarat-ketentuan') }}" style="color: #64748b; text-decoration: none;">Syarat & Ketentuan</a>
+                <a href="{{ route('tentang') }}" style="color: #64748b; text-decoration: none;">Tentang Kami</a>
+                <a href="{{ route('harga') }}" style="color: #64748b; text-decoration: none;">Harga & Paket</a>
                 <a href="{{ route('faq') }}" style="color: #64748b; text-decoration: none;">FAQ Bantuan</a>
             </div>
         </div>
