@@ -1475,10 +1475,6 @@ body {
 }
 
 .fitlife-card-img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  object-position: center top !important;
   transition: transform 0.5s ease !important;
 }
 .fitlife-card:hover .fitlife-card-img {

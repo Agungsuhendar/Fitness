@@ -107,14 +107,14 @@
 
         <!-- Bottom Floating Stats Bar (5 Columns Card) -->
         <div class="bottom-stats-bar" style="margin-top: -3.5rem; position: relative; z-index: 15;">
-            <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.75rem; padding: 1.35rem 1.75rem; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);">
+            <div style="background: rgba(13, 19, 16, 0.95); backdrop-filter: blur(20px); border: 1.5px solid rgba(132, 204, 22, 0.25); border-radius: 1.75rem; padding: 1.5rem 1.85rem; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);">
                 <div class="bottom-stats-bar-inner" style="display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr; gap: 1.5rem; align-items: center;">
                     
                     <!-- Column 1: Tour Gym Thumbnail Card -->
-                    <div class="stats-tour-col fitlife-card" style="position: relative; border-radius: 1.15rem; overflow: hidden; height: 105px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;" onclick="openTrialModal()">
+                    <div class="stats-tour-col fitlife-card" style="position: relative; border-radius: 1.15rem; overflow: hidden; height: 110px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;" onclick="openTrialModal()">
                         <img src="{{ asset('images/assets/fitlife_gym_tour.png') }}" alt="FitLife Tour Gym" class="fitlife-card-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/pool_uny.webp') }}';">
-                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 100%); flex-direction: column; justify-content: flex-end; padding: 0.75rem;">
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 1.05rem; box-shadow: 0 4px 14px rgba(0,0,0,0.5);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.75rem;">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 1.05rem; box-shadow: 0 0 20px rgba(132, 204, 22, 0.6);">
                                 <i class="fa-solid fa-play" style="margin-left: 2px;"></i>
                             </div>
                             <div style="position: absolute; bottom: 0.65rem; left: 0.75rem; right: 0.75rem;">
@@ -125,43 +125,43 @@
                     </div>
 
                     <!-- Column 2: Member Aktif -->
-                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
+                    <div class="fitlife-card" style="display: flex; flex-direction: column; align-items: flex-start; padding: 0.5rem; border-radius: 1rem; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.15); border: 1px solid rgba(132, 204, 22, 0.3); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-solid fa-users"></i>
                         </div>
-                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">2.500+</div>
-                        <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Member Aktif</div>
-                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Bergabung dan raih tujuan bersama kami</div>
+                        <div style="font-size: 1.85rem; font-weight: 900; color: #84cc16; line-height: 1; font-family: 'Outfit', sans-serif;">2.500+</div>
+                        <div style="font-weight: 800; color: #ffffff; font-size: 0.875rem; margin-top: 0.3rem;">Member Aktif</div>
+                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.35; margin-top: 0.15rem;">Bergabung dan raih tujuan bersama kami</div>
                     </div>
 
                     <!-- Column 3: Program Latihan -->
-                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
+                    <div class="fitlife-card" style="display: flex; flex-direction: column; align-items: flex-start; padding: 0.5rem; border-radius: 1rem; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.15); border: 1px solid rgba(132, 204, 22, 0.3); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-solid fa-dumbbell"></i>
                         </div>
-                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">50+</div>
-                        <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Program Latihan</div>
-                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Dari fat loss, muscle building hingga strength</div>
+                        <div style="font-size: 1.85rem; font-weight: 900; color: #84cc16; line-height: 1; font-family: 'Outfit', sans-serif;">50+</div>
+                        <div style="font-weight: 800; color: #ffffff; font-size: 0.875rem; margin-top: 0.3rem;">Program Latihan</div>
+                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.35; margin-top: 0.15rem;">Dari fat loss, muscle building hingga strength</div>
                     </div>
 
                     <!-- Column 4: Trainer Profesional -->
-                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
+                    <div class="fitlife-card" style="display: flex; flex-direction: column; align-items: flex-start; padding: 0.5rem; border-radius: 1rem; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.15); border: 1px solid rgba(132, 204, 22, 0.3); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-regular fa-star"></i>
                         </div>
-                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">15+</div>
-                        <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Trainer Profesional</div>
-                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Berpengalaman & bersertifikasi</div>
+                        <div style="font-size: 1.85rem; font-weight: 900; color: #84cc16; line-height: 1; font-family: 'Outfit', sans-serif;">15+</div>
+                        <div style="font-weight: 800; color: #ffffff; font-size: 0.875rem; margin-top: 0.3rem;">Trainer Profesional</div>
+                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.35; margin-top: 0.15rem;">Berpengalaman & bersertifikasi</div>
                     </div>
 
                     <!-- Column 5: Lokasi Strategis -->
-                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
+                    <div class="fitlife-card" style="display: flex; flex-direction: column; align-items: flex-start; padding: 0.5rem; border-radius: 1rem; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+                        <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.15); border: 1px solid rgba(132, 204, 22, 0.3); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
-                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">1 Lokasi</div>
-                        <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Strategis di Jogja</div>
-                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Mudah diakses dengan fasilitas parkir luas</div>
+                        <div style="font-size: 1.85rem; font-weight: 900; color: #84cc16; line-height: 1; font-family: 'Outfit', sans-serif;">1 Lokasi</div>
+                        <div style="font-weight: 800; color: #ffffff; font-size: 0.875rem; margin-top: 0.3rem;">Strategis di Jogja</div>
+                        <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.35; margin-top: 0.15rem;">Mudah diakses dengan fasilitas parkir luas</div>
                     </div>
 
                 </div>
@@ -183,7 +183,7 @@
         <div class="grid-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.75rem;">
             @foreach($programs as $prog)
             <div class="program-card fitlife-card" style="background: #0d1310; border: 1px solid rgba(255,255,255,0.08); border-radius: 1.35rem; overflow: hidden; display: flex; flex-direction: column;">
-                <div class="program-thumb" style="position: relative; height: 260px; background: #161f19; overflow: hidden;">
+                <div class="program-thumb" style="position: relative; height: 210px; background: #161f19; overflow: hidden;">
                     <img src="{{ Str::startsWith($prog->image, 'http') ? $prog->image : asset($prog->image) }}" alt="{{ $prog->title }}" class="fitlife-card-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_gym_tour.png') }}';">
                     @if($prog->badge)
                         <span style="position: absolute; top: 14px; right: 14px; background: #84cc16; color: #090d0b; padding: 0.35rem 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase;">{{ $prog->badge }}</span>
@@ -278,7 +278,7 @@
             @if(isset($coaches) && count($coaches) > 0)
                 @foreach($coaches as $coach)
                 <div class="glass-card fitlife-card" style="background: #0d1310; border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; overflow: hidden; text-align: center;">
-                    <div style="height: 310px; overflow: hidden; background: #161f19;">
+                    <div style="height: 250px; overflow: hidden; background: #161f19;">
                         <img src="{{ Str::startsWith($coach->photo, 'http') ? $coach->photo : asset($coach->photo) }}" alt="{{ $coach->name }}" class="fitlife-card-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/coach_hendra.webp') }}';">
                     </div>
                     <div style="padding: 1.35rem;">
