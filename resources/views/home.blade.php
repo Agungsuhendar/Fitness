@@ -58,12 +58,22 @@
                 <!-- SVG ClipPath Definition for Left & Right Vertical Wave Edges -->
                 <svg width="0" height="0" style="position: absolute; pointer-events: none;">
                     <defs>
-                        <clipPath id="heroLeftWaveClip" clipPathUnits="objectBoundingBox">
-                            <path d="M 0.07 0 
+                        <clipPath id="heroBothWavesClip" clipPathUnits="objectBoundingBox">
+                            <path d="M 0.06 0 
                                      C -0.02 0.18, 0.12 0.38, 0.01 0.58 
-                                     C 0.10 0.78, 0.02 0.90, 0.07 1.0 
-                                     L 1.0 1.0 
-                                     L 1.0 0 
+                                     C 0.10 0.78, 0.02 0.90, 0.06 1.0 
+                                     L 0.94 1.0 
+                                     C 0.98 0.90, 0.88 0.78, 0.99 0.58 
+                                     C 0.88 0.38, 1.02 0.18, 0.94 0 
+                                     Z" />
+                        </clipPath>
+                        <clipPath id="heroLeftWaveClip" clipPathUnits="objectBoundingBox">
+                            <path d="M 0.06 0 
+                                     C -0.02 0.18, 0.12 0.38, 0.01 0.58 
+                                     C 0.10 0.78, 0.02 0.90, 0.06 1.0 
+                                     L 0.94 1.0 
+                                     C 0.98 0.90, 0.88 0.78, 0.99 0.58 
+                                     C 0.88 0.38, 1.02 0.18, 0.94 0 
                                      Z" />
                         </clipPath>
                     </defs>
