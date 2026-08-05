@@ -3,25 +3,25 @@
         class="back-to-top-btn" 
         aria-label="Kembali ke atas"
         title="Kembali ke atas">
-    <i class="fa-solid fa-arrow-up"></i>
+    <i class="fa-solid fa-chevron-up"></i>
 </button>
 
 <style>
 .back-to-top-btn {
     position: fixed;
-    bottom: 94px;
-    right: 30px;
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
-    color: #ffffff;
-    border: 2px solid rgba(255, 255, 255, 0.9);
+    bottom: 90px;
+    right: 24px;
+    width: 54px;
+    height: 54px;
+    background: #0d1310;
+    color: #84cc16;
+    border: 2px solid #84cc16;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.15rem;
-    box-shadow: 0 10px 25px rgba(0, 119, 182, 0.35);
+    font-size: 1.2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(132, 204, 22, 0.2);
     cursor: pointer;
     z-index: 9998;
     opacity: 0;
@@ -37,17 +37,18 @@
 }
 
 .back-to-top-btn:hover {
-    background: linear-gradient(135deg, #03045e 0%, #0077b6 100%);
+    background: #84cc16;
+    color: #090d0b;
     transform: translateY(-4px) scale(1.08);
-    box-shadow: 0 16px 32px rgba(0, 119, 182, 0.5);
+    box-shadow: 0 15px 30px rgba(132, 204, 22, 0.5);
 }
 
 @media (max-width: 640px) {
     .back-to-top-btn {
-        bottom: 84px;
-        right: 25px;
-        width: 44px;
-        height: 44px;
+        bottom: 136px;
+        right: 18px;
+        width: 48px;
+        height: 48px;
         font-size: 1.05rem;
     }
 }
@@ -61,7 +62,7 @@
     window.addEventListener('scroll', function() {
         const btn = document.getElementById('backToTopBtn');
         if (btn) {
-            if (window.scrollY > 280) {
+            if (window.scrollY > 300) {
                 btn.classList.add('show');
             } else {
                 btn.classList.remove('show');

@@ -57,15 +57,15 @@
 
 <style>
 .wa-float-btn {
-    width: 60px;
-    height: 60px;
+    width: 54px;
+    height: 54px;
     background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
     color: #ffffff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.85rem;
+    font-size: 1.75rem;
     box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45);
     position: relative;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -90,5 +90,17 @@
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
+}
+
+@media (max-width: 640px) {
+    .wa-float-container {
+        bottom: 78px !important;
+        right: 18px !important;
+    }
+    .wa-float-btn {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 1.55rem !important;
+    }
 }
 </style>
