@@ -113,12 +113,44 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-weight: 800; border-radius: 0.75rem;">
-                <i class="fa-solid fa-paper-plane"></i> Kirim Pendaftaran & Konfirmasi Slot WA
-            </button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-weight: 800; border-radius: 0.75rem;">
+                    <i class="fa-solid fa-paper-plane"></i> Daftar via Web
+                </button>
+                <button type="button" onclick="submitRegistrationToWA()" class="btn btn-whatsapp" style="width: 100%; padding: 0.85rem; font-weight: 800; border-radius: 0.75rem;">
+                    <i class="fa-brands fa-whatsapp"></i> Daftar via WA
+                </button>
+            </div>
         </form>
     </div>
 </div>
+
+<script>
+    function submitRegistrationToWA() {
+        const form = document.getElementById('formRegistration');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        const name = form.querySelector('[name="name"]').value;
+        const phone = form.querySelector('[name="phone"]').value;
+        const prog = form.querySelector('[name="program_name"]').value;
+        const ageCat = form.querySelector('[name="age_category"]').value;
+        const loc = document.getElementById('selectedLocationInput').value;
+        const sched = document.getElementById('selectedScheduleInput').value;
+
+        const text = `Halo Admin Les Renang Jogja, saya ingin mendaftar *Paket Les Renang*:\n` +
+                     `• Nama Pendaftar: *${name}*\n` +
+                     `• No. WA: *${phone}*\n` +
+                     `• Program: *${prog}* (${ageCat})\n` +
+                     `• Lokasi Kolam: *${loc}*\n` +
+                     `• Jadwal Pilihan: *${sched}*\n\n` +
+                     `Mohon informasi total biaya & konfirmasi slot pelatihnya ya admin!`;
+
+        const waNum = "{{ site_setting('whatsapp_number', '6281234567890') }}";
+        window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+</script>
 
 <script>
 let currentDayPref = "Sabtu / Minggu";

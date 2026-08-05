@@ -70,9 +70,44 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-accent" style="width: 100%; border-radius: var(--radius-sm);">
-                <i class="fa-solid fa-bolt"></i> Konfirmasi Booking Trial Gratis
-            </button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
+                <button type="submit" class="btn btn-accent" style="width: 100%; border-radius: var(--radius-sm); font-weight: 800;">
+                    <i class="fa-solid fa-bolt"></i> Booking via Web
+                </button>
+                <button type="button" onclick="submitTrialToWA()" class="btn btn-whatsapp" style="width: 100%; border-radius: var(--radius-sm); font-weight: 800;">
+                    <i class="fa-brands fa-whatsapp"></i> Booking via WA
+                </button>
+            </div>
         </form>
     </div>
 </div>
+
+<script>
+    function submitTrialToWA() {
+        const form = document.getElementById('formTrial');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        const parentName = form.querySelector('[name="parent_name"]').value;
+        const partName = form.querySelector('[name="participant_name"]').value;
+        const partAge = form.querySelector('[name="participant_age"]').value;
+        const phone = form.querySelector('[name="phone"]').value;
+        const prog = form.querySelector('[name="program_name"]').value;
+        const loc = form.querySelector('[name="preferred_location"]').value;
+        const date = form.querySelector('[name="trial_date"]').value;
+        const time = form.querySelector('[name="trial_time"]').value;
+
+        const text = `Halo Admin Les Renang Jogja, saya ingin konfirmasi *Booking Trial Uji Coba Gratis 30 Menit*:\n` +
+                     `• Nama Pemesan: *${parentName}*\n` +
+                     `• Nama Peserta: *${partName}* (${partAge})\n` +
+                     `• No. WA: *${phone}*\n` +
+                     `• Program: *${prog}*\n` +
+                     `• Lokasi: *${loc}*\n` +
+                     `• Rencana Jadwal: *${date} jam ${time}*\n\n` +
+                     `Mohon diproses slot jadwal trial gratis saya ya admin!`;
+
+        const waNum = "{{ site_setting('whatsapp_number', '6281234567890') }}";
+        window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+</script>

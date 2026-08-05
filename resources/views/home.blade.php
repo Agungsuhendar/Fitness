@@ -38,6 +38,10 @@
                     </a>
                 </div>
 
+                <div style="margin-top: 1rem; margin-bottom: 1.5rem; display: inline-flex; align-items: center; gap: 0.6rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); color: #dc2626; padding: 0.45rem 1rem; border-radius: 99px; font-size: 0.825rem; font-weight: 800;">
+                    <i class="fa-solid fa-fire" style="color: #ef4444;"></i> 🔥 Sisa 3 Slot Pelatih Privat Bulan Ini! • Garansi Cepat Bisa
+                </div>
+
                 <div class="trust-badges">
                     <div class="trust-item">
                         <i class="fa-solid fa-shield-halved" style="color: var(--primary); font-size: 1.35rem;"></i>
@@ -540,17 +544,16 @@
             
             <!-- Theme-Responsive Glowing Promo Badge -->
             <div style="display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.85rem 2rem; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(16px); border: 2px solid rgba(255, 255, 255, 0.45); border-radius: 99px; font-weight: 900; font-size: 1.05rem; margin-bottom: 2rem; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2); transform: scale(1.02); transition: all 0.3s ease;">
-                <span style="font-size: 1.5rem; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));">🔥</span> 
                 <span style="color: #ffffff; letter-spacing: 0.5px;">
-                    Promo Terbatas Bulan Ini - Diskon Paket Kakak Adik
+                    {{ site_setting('promo_text', '🔥 Promo Terbatas Bulan Ini - Diskon Paket Kakak Adik') }}
                 </span>
             </div>
 
             <h2 style="color: white; font-size: 3rem; margin-bottom: 1.5rem; line-height: 1.25; font-weight: 900; text-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);">
-                Siap Mahir Berenang Dalam Waktu Singkat?
+                {{ site_setting('cta_banner_title', 'Siap Mahir Berenang Dalam Waktu Singkat?') }}
             </h2>
             <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 2.75rem; line-height: 1.75; font-weight: 500;">
-                Jangan tunda lagi! Konsultasikan kebutuhan les renang Anda secara gratis dengan tim admin & pelatih kami sekarang juga.
+                {{ site_setting('cta_banner_subtitle', 'Jangan tunda lagi! Konsultasikan kebutuhan les renang Anda secara gratis dengan tim admin & pelatih kami sekarang juga.') }}
             </p>
             <div style="display: flex; gap: 1.35rem; justify-content: center; flex-wrap: wrap;">
                 <button onclick="openRegistrationModal()" class="btn btn-accent btn-lg" style="box-shadow: 0 12px 30px rgba(245, 158, 11, 0.45); transform: translateY(-2px);">

@@ -553,8 +553,21 @@
     <!-- Booking Trial Modal -->
     @include('components.trial-modal')
 
+    <!-- CTA Choice Decision Modal -->
+    @include('components.cta-choice-modal')
+
     <!-- Global Javascript Interactivity -->
     <script>
+        function openCtaChoiceModal() {
+            const modal = document.getElementById('ctaChoiceModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeCtaChoiceModal() {
+            const modal = document.getElementById('ctaChoiceModal');
+            if (modal) modal.classList.remove('active');
+        }
+
         function openRegistrationModal(programName = '') {
             const modal = document.getElementById('registrationModal');
             if (programName) {

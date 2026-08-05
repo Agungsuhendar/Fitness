@@ -96,6 +96,48 @@
                     </label>
                     <textarea name="hero_subtitle" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; height: 75px;">{{ old('hero_subtitle', $settings['hero_subtitle']) }}</textarea>
                 </div>
+
+                <div style="margin-top: 1.25rem; border-top: 1px dashed #cbd5e1; padding-top: 1.15rem;">
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                            Judul Banner CTA Utama (Bagian Bawah Beranda):
+                        </label>
+                        <input type="text" name="cta_banner_title" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('cta_banner_title', $settings['cta_banner_title'] ?? 'Siap Mahir Berenang Dalam Waktu Singkat?') }}">
+                    </div>
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                            Sub-Judul / Deskripsi Banner CTA Utama:
+                        </label>
+                        <textarea name="cta_banner_subtitle" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; height: 65px;">{{ old('cta_banner_subtitle', $settings['cta_banner_subtitle'] ?? 'Jangan tunda lagi! Konsultasikan kebutuhan les renang Anda secara gratis dengan tim admin & pelatih kami sekarang juga.') }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section CTA Popup Settings -->
+            <div style="margin-bottom: 2.25rem; background: #eff6ff; border: 1px solid #bfdbfe; padding: 1.5rem; border-radius: 1.25rem;">
+                <h4 style="font-size: 1.1rem; color: #1e40af; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-window-restore" style="color: #0284c7;"></i> Pengaturan Pop-up CTA Decision Modal ("Trial Gratis vs Chat WA")
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                    <div>
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                            Status Kemunculan Pop-up:
+                        </label>
+                        <select name="cta_popup_enabled" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; font-weight: 700;">
+                            <option value="1" {{ old('cta_popup_enabled', $settings['cta_popup_enabled'] ?? '1') == '1' ? 'selected' : '' }}>✅ Aktif (Otomatis Muncul)</option>
+                            <option value="0" {{ old('cta_popup_enabled', $settings['cta_popup_enabled'] ?? '1') == '0' ? 'selected' : '' }}>❌ Nonaktifkan Pop-up</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                            Waktu Penundaan Muncul (Detik):
+                        </label>
+                        <input type="number" name="cta_popup_delay" min="3" max="180" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; font-weight: 700;" value="{{ old('cta_popup_delay', $settings['cta_popup_delay'] ?? '20') }}" placeholder="Contoh: 20">
+                    </div>
+                </div>
+            </div>
+
             <!-- Section 2.5: SEO & Share Link Meta (WhatsApp Preview) -->
             <div style="margin-bottom: 2.25rem;">
                 <h4 style="font-size: 1.1rem; color: #03045e; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">

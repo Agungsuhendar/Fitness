@@ -43,6 +43,10 @@ class AdminSettingController extends Controller
             'site_share_image' => Setting::get('site_share_image', 'images/logo.png'),
             'site_footer_about' => Setting::get('site_footer_about', 'Pusat pelatihan & kursus privat renang terpercaya di Yogyakarta. Menyediakan program khusus anak-anak, dewasa pemula, privat wanita/muslimah, serta kelas intensif persiapan tes TNI, POLRI & Kedinasan.'),
             'promo_text' => Setting::get('promo_text', '🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Kacamata Renang untuk Pendaftaran Paket Privat 2 Orang!'),
+            'cta_banner_title' => Setting::get('cta_banner_title', 'Siap Mahir Berenang Dalam Waktu Singkat?'),
+            'cta_banner_subtitle' => Setting::get('cta_banner_subtitle', 'Jangan tunda lagi! Konsultasikan kebutuhan les renang Anda secara gratis dengan tim admin & pelatih kami sekarang juga.'),
+            'cta_popup_enabled' => Setting::get('cta_popup_enabled', '1'),
+            'cta_popup_delay' => Setting::get('cta_popup_delay', '20'),
         ];
 
         return view('admin.settings.index', compact('settings'));
@@ -122,7 +126,9 @@ class AdminSettingController extends Controller
             'tiktok_url', 'youtube_url', 'office_hours',
             'stat_alumni', 'stat_alumni_label', 'stat_experience', 'stat_experience_label',
             'stat_trainers', 'stat_trainers_label', 'stat_rating', 'stat_rating_label',
-            'site_seo_title', 'site_seo_description', 'promo_text', 'site_footer_about'
+            'site_seo_title', 'site_seo_description', 'promo_text', 'site_footer_about',
+            'cta_banner_title', 'cta_banner_subtitle',
+            'cta_popup_enabled', 'cta_popup_delay'
         ];
 
         foreach ($textFields as $field) {
