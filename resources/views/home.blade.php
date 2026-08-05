@@ -23,7 +23,7 @@
 
                 <!-- Hero Title -->
                 <h1 class="hero-title" style="font-size: 4.1rem; font-weight: 900; line-height: 1.08; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.03em;">
-                    Stronger Body<br>
+                    <span style="color: #ffffff;">Stronger Body</span><br>
                     <span style="color: #84cc16; text-shadow: 0 0 30px rgba(132, 204, 22, 0.35);">Better Life</span>
                 </h1>
 
