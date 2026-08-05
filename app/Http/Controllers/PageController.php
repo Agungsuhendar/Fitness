@@ -16,6 +16,7 @@ class PageController extends Controller
         $programs = Program::orderBy('order')->get();
         $featuredLocations = Location::where('is_featured', true)->get();
         $popularFaqs = Faq::orderBy('order')->take(10)->get();
+        $faqs = $popularFaqs;
         $testimonials = Testimonial::where('is_featured', true)->get();
         $latestPosts = Post::orderBy('published_at', 'desc')->take(3)->get();
         
@@ -34,7 +35,13 @@ class PageController extends Controller
             $features = collect();
         }
 
-        return view('home', compact('programs', 'featuredLocations', 'popularFaqs', 'testimonials', 'latestPosts', 'videos', 'features'));
+        try {
+            $coaches = \App\Models\Coach::active()->ordered()->get();
+        } catch (\Exception $e) {
+            $coaches = collect();
+        }
+
+        return view('home', compact('programs', 'featuredLocations', 'popularFaqs', 'faqs', 'testimonials', 'latestPosts', 'videos', 'features', 'coaches'));
     }
 
     public function tentang()

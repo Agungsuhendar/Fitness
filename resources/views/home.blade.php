@@ -334,7 +334,8 @@
         </div>
 
         <div style="max-width: 850px; margin: 0 auto;" id="faqHomeContainer">
-            @foreach($faqs->take(6) as $faq)
+            @php $faqItems = isset($faqs) ? $faqs : (isset($popularFaqs) ? $popularFaqs : collect()); @endphp
+            @foreach($faqItems->take(6) as $faq)
             <div class="faq-item fitlife-card" style="background: #0d1310; border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; margin-bottom: 1rem; overflow: hidden;">
                 <div class="faq-header" style="padding: 1.25rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 800; color: #ffffff;" onclick="toggleHomeFaq(this)">
                     <span>
