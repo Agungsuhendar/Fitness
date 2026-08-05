@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AdminSettingController extends Controller
 {
@@ -16,8 +17,8 @@ class AdminSettingController extends Controller
         Setting::ensureTable();
 
         $settings = [
-            'site_logo' => Setting::get('site_logo', 'images/assets/fitlife_models_cutout.png'),
-            'site_logo_footer' => Setting::get('site_logo_footer', 'images/assets/fitlife_models_cutout.png'),
+            'site_logo' => Setting::get('site_logo', 'images/logo.png'),
+            'site_logo_footer' => Setting::get('site_logo_footer', 'images/logo-footer.png'),
             'hero_image' => Setting::get('hero_image', 'images/assets/fitlife_hero_gym_bg.png'),
             'hero_title' => Setting::get('hero_title', 'FitLife Fitness & PT Privat Jogja'),
             'hero_subtitle' => Setting::get('hero_subtitle', 'Bimbingan privat 1-on-1 bergaransi cepat bisa! Melayani fitness & personal trainer anak, dewasa pemula, khusus wanita/muslimah, serta persiapan tes TNI/POLRI.'),
@@ -40,7 +41,7 @@ class AdminSettingController extends Controller
             'stat_rating_label' => Setting::get('stat_rating_label', 'Rating Kepuasan Member'),
             'site_seo_title' => Setting::get('site_seo_title', 'FitLife Gym Jogja - Privat Anak, Dewasa, Wanita & Persiapan TNI POLRI'),
             'site_seo_description' => Setting::get('site_seo_description', 'FitLife Gym Jogja profesional & privat di Yogyakarta. Melayani fitness & personal trainer anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI.'),
-            'site_share_image' => Setting::get('site_share_image', 'images/assets/fitlife_hero_gym_bg.png'),
+            'site_share_image' => Setting::get('site_share_image', 'images/logo.png'),
             'site_footer_about' => Setting::get('site_footer_about', 'Pusat kebugaran fitness gym & Personal Trainer privat 1-on-1 terpercaya di Yogyakarta. Menyediakan program Weight Loss & Fat Burning, Muscle Building, Female Body Shaping, serta Persiapan Fisik TNI POLRI & Rehabilitasi Postur.'),
             'promo_text' => Setting::get('promo_text', '🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Shaker & Handuk Gym untuk Pendaftaran Paket Privat 2 Orang!'),
             'cta_banner_title' => Setting::get('cta_banner_title', 'Siap Memulai Perjalanan Fitness Dalam Waktu Singkat?'),
@@ -59,7 +60,8 @@ class AdminSettingController extends Controller
     {
         Setting::ensureTable();
 
-        $validated = $request->validate([
+        // 1. Validate text fields without file constraints to prevent validation.uploaded error
+        $request->validate([
             'hero_title' => 'nullable|string|max:255',
             'hero_subtitle' => 'nullable|string',
             'whatsapp_number' => 'nullable|string|max:50',
@@ -79,44 +81,43 @@ class AdminSettingController extends Controller
             'stat_trainers_label' => 'nullable|string|max:100',
             'stat_rating' => 'nullable|string|max:50',
             'stat_rating_label' => 'nullable|string|max:100',
-            'site_logo_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,svg,ico|max:10240',
-            'site_logo_footer_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,svg,ico|max:10240',
-            'hero_image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,svg,ico|max:10240',
-            'site_share_image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,svg,ico|max:10240',
         ]);
 
-        // Upload images if provided
         $uploadDir = public_path('uploads');
         if (!file_exists($uploadDir)) {
             @mkdir($uploadDir, 0777, true);
         }
 
-        if ($request->hasFile('site_logo_file') && $request->file('site_logo_file')->isValid()) {
-            $file = $request->file('site_logo_file');
-            $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            Setting::set('site_logo', 'uploads/' . $filename);
+        $fileKeys = [
+            'site_logo_file' => ['setting_key' => 'site_logo', 'prefix' => 'logo_'],
+            'site_logo_footer_file' => ['setting_key' => 'site_logo_footer', 'prefix' => 'logo_footer_'],
+            'hero_image_file' => ['setting_key' => 'hero_image', 'prefix' => 'hero_'],
+            'site_share_image_file' => ['setting_key' => 'site_share_image', 'prefix' => 'share_'],
+        ];
+
+        $uploadErrors = [];
+
+        foreach ($fileKeys as $fileInput => $info) {
+            if ($request->hasFile($fileInput)) {
+                $file = $request->file($fileInput);
+                if ($file && $file->isValid()) {
+                    $ext = strtolower($file->getClientOriginalExtension() ?: 'png');
+                    $filename = $info['prefix'] . time() . '_' . rand(100, 999) . '.' . $ext;
+                    $file->move($uploadDir, $filename);
+                    Setting::set($info['setting_key'], 'uploads/' . $filename);
+                } else {
+                    $errorCode = $file ? $file->getError() : UPLOAD_ERR_NO_FILE;
+                    if ($errorCode === UPLOAD_ERR_INI_SIZE || $errorCode === UPLOAD_ERR_FORM_SIZE) {
+                        $uploadErrors[] = "Ukuran file '{$fileInput}' terlalu besar (melebihi limit PHP server 2MB). Silakan gunakan file gambar di bawah 2MB.";
+                    } elseif ($errorCode !== UPLOAD_ERR_NO_FILE) {
+                        $uploadErrors[] = "Gagal mengunggah file '{$fileInput}' (Error code: {$errorCode}).";
+                    }
+                }
+            }
         }
 
-        if ($request->hasFile('site_logo_footer_file') && $request->file('site_logo_footer_file')->isValid()) {
-            $file = $request->file('site_logo_footer_file');
-            $filename = 'logo_footer_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            Setting::set('site_logo_footer', 'uploads/' . $filename);
-        }
-
-        if ($request->hasFile('hero_image_file') && $request->file('hero_image_file')->isValid()) {
-            $file = $request->file('hero_image_file');
-            $filename = 'hero_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            Setting::set('hero_image', 'uploads/' . $filename);
-        }
-
-        if ($request->hasFile('site_share_image_file') && $request->file('site_share_image_file')->isValid()) {
-            $file = $request->file('site_share_image_file');
-            $filename = 'share_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            Setting::set('site_share_image', 'uploads/' . $filename);
+        if (!empty($uploadErrors)) {
+            return redirect()->back()->withErrors($uploadErrors)->withInput();
         }
 
         // Save text settings
@@ -137,6 +138,6 @@ class AdminSettingController extends Controller
             }
         }
 
-        return redirect()->route('admin.settings.index')->with('success', 'Pengaturan logo, hero, media & informasi website berhasil diperbarui!');
+        return redirect()->route('admin.settings.index')->with('success', 'Pengaturan logo, hero & informasi website berhasil diperbarui!');
     }
 }
