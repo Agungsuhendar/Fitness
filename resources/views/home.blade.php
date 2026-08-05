@@ -183,7 +183,7 @@
         <div class="grid-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.75rem;">
             @foreach($programs as $prog)
             <div class="program-card fitlife-card" style="background: #0d1310; border: 1px solid rgba(255,255,255,0.08); border-radius: 1.35rem; overflow: hidden; display: flex; flex-direction: column;">
-                <div class="program-thumb" style="position: relative; height: 210px; background: #161f19; overflow: hidden;">
+                <div class="program-thumb" style="position: relative; height: 260px; background: #161f19; overflow: hidden;">
                     <img src="{{ Str::startsWith($prog->image, 'http') ? $prog->image : asset($prog->image) }}" alt="{{ $prog->title }}" class="fitlife-card-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_gym_tour.png') }}';">
                     @if($prog->badge)
                         <span style="position: absolute; top: 14px; right: 14px; background: #84cc16; color: #090d0b; padding: 0.35rem 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase;">{{ $prog->badge }}</span>
@@ -278,7 +278,7 @@
             @if(isset($coaches) && count($coaches) > 0)
                 @foreach($coaches as $coach)
                 <div class="glass-card fitlife-card" style="background: #0d1310; border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; overflow: hidden; text-align: center;">
-                    <div style="height: 250px; overflow: hidden; background: #161f19;">
+                    <div style="height: 310px; overflow: hidden; background: #161f19;">
                         <img src="{{ Str::startsWith($coach->photo, 'http') ? $coach->photo : asset($coach->photo) }}" alt="{{ $coach->name }}" class="fitlife-card-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/coach_hendra.webp') }}';">
                     </div>
                     <div style="padding: 1.35rem;">
