@@ -14,10 +14,7 @@
                     $footerAbout = site_setting('site_footer_about', 'FitLife Center adalah pusat kebugaran fitness gym & Personal Trainer privat 1-on-1 terpercaya di Yogyakarta. Menyediakan program Weight Loss & Fat Burning, Muscle Building, Female Body Shaping, serta Persiapan Fisik TNI POLRI & Rehabilitasi Postur.');
                 @endphp
                 <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1.25rem;">
-                    <div style="width: 40px; height: 40px; background: rgba(132, 204, 22, 0.15); border: 1.5px solid #84cc16; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.2rem; box-shadow: 0 0 20px rgba(132,204,22,0.3);">
-                        <i class="fa-solid fa-dumbbell"></i>
-                    </div>
-                    <span style="font-weight: 900; font-size: 1.5rem; color: #ffffff; letter-spacing: -0.02em; font-family: 'Outfit', sans-serif;">Fit<span style="color: #84cc16;">Life</span></span>
+                    <img src="{{ asset('images/logo-footer.png') }}" alt="FitLife Logo Footer" style="height: 52px; width: auto; object-fit: contain; filter: drop-shadow(0 0 10px rgba(132, 204, 22, 0.3));">
                 </div>
                 <p style="font-size: 0.925rem; line-height: 1.7; margin-bottom: 1.5rem; color: #94a3b8;">
                     {{ $footerAbout }}

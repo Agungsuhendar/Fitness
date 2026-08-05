@@ -3,13 +3,7 @@
         <div class="navbar-inner" style="display: flex; align-items: center; justify-content: space-between;">
             <!-- Brand Logo FitLife -->
             <a href="{{ route('home') }}" class="brand-logo" aria-label="FitLife Homepage" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
-                <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.15); border: 2px solid #84cc16; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.2rem; box-shadow: 0 0 15px rgba(132, 204, 22, 0.25);">
-                    <i class="fa-solid fa-person-running" style="color: #84cc16;"></i>
-                </div>
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-weight: 900; font-size: 1.4rem; color: #ffffff; letter-spacing: -0.02em; font-family: 'Outfit', sans-serif;">Fit<span style="color: #84cc16;">Life</span></span>
-                    <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em; margin-top: -3px;">Stronger Every Day</span>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="FitLife Logo" style="height: 46px; width: auto; object-fit: contain; filter: drop-shadow(0 0 10px rgba(132, 204, 22, 0.3));">
             </a>
 
             <!-- Desktop Nav Links -->
