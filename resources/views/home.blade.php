@@ -4,39 +4,39 @@
 @section('meta_description', 'Raih versi terbaik dirimu bersama program latihan dan bimbingan profesional dari trainer berpengalaman di FitLife Yogyakarta. Trial Gratis 7 Hari tanpa komitmen!')
 
 @section('content')
-<!-- Hero Section -->
-<section class="hero-section" style="background: #090d0b; color: #ffffff; padding: 4.5rem 0 6rem; position: relative; overflow: hidden;">
-    <!-- Subtle Background Ambient Light -->
-    <div style="position: absolute; top: -100px; right: 10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(132, 204, 22, 0.12) 0%, transparent 70%); pointer-events: none; filter: blur(60px);"></div>
-    <div style="position: absolute; bottom: -100px; left: 5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(132, 204, 22, 0.08) 0%, transparent 70%); pointer-events: none; filter: blur(60px);"></div>
+<!-- Hero Section with Full-Width Gym Background & Overhead Neon Lights -->
+<section class="hero-section" style="background: linear-gradient(90deg, rgba(7, 10, 8, 0.96) 0%, rgba(7, 10, 8, 0.82) 42%, rgba(7, 10, 8, 0.35) 75%, rgba(7, 10, 8, 0.88) 100%), url('{{ asset('images/assets/fitlife_hero_gym_bg.png') }}') center/cover no-repeat; color: #ffffff; padding: 4.5rem 0 6.5rem; position: relative; overflow: hidden; min-height: 640px;">
+    
+    <!-- Neon Glow Overlay Effects -->
+    <div style="position: absolute; top: 0; right: 20%; width: 450px; height: 450px; background: radial-gradient(circle, rgba(132, 204, 22, 0.15) 0%, transparent 70%); pointer-events: none; filter: blur(50px);"></div>
 
     <div class="container">
-        <div class="hero-grid" style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 3rem; align-items: center;">
+        <div class="hero-grid" style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 2rem; align-items: center;">
             
             <!-- Left Text Column -->
-            <div class="hero-text-col" style="z-index: 2;">
+            <div class="hero-text-col" style="z-index: 5; padding-right: 1rem;">
                 <!-- Hero Badge -->
-                <div class="hero-badge" style="display: inline-flex; align-items: center; gap: 0.6rem; background: rgba(132, 204, 22, 0.08); border: 1px solid rgba(132, 204, 22, 0.3); color: #ffffff; padding: 0.45rem 1.1rem; border-radius: 99px; font-weight: 700; font-size: 0.85rem; margin-bottom: 1.75rem;">
+                <div class="hero-badge" style="display: inline-flex; align-items: center; gap: 0.6rem; background: rgba(132, 204, 22, 0.08); border: 1px solid rgba(132, 204, 22, 0.35); color: #ffffff; padding: 0.45rem 1.15rem; border-radius: 99px; font-weight: 700; font-size: 0.85rem; margin-bottom: 1.75rem; backdrop-filter: blur(10px);">
                     <i class="fa-solid fa-trophy" style="color: #84cc16; font-size: 0.9rem;"></i>
                     <span>#1 Fitness Center Terpercaya di Yogyakarta</span>
                 </div>
 
                 <!-- Hero Title -->
-                <h1 class="hero-title" style="font-size: 4rem; font-weight: 900; line-height: 1.1; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.03em;">
+                <h1 class="hero-title" style="font-size: 4.1rem; font-weight: 900; line-height: 1.08; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.03em;">
                     Stronger Body<br>
-                    <span style="color: #84cc16;">Better Life</span>
+                    <span style="color: #84cc16; text-shadow: 0 0 30px rgba(132, 204, 22, 0.3);">Better Life</span>
                 </h1>
 
                 <!-- Hero Description -->
-                <p class="hero-description" style="font-size: 1.15rem; color: #94a3b8; line-height: 1.7; margin-bottom: 2.25rem; max-width: 540px;">
+                <p class="hero-description" style="font-size: 1.15rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 2.25rem; max-width: 520px;">
                     Raih versi terbaik dirimu bersama program latihan dan bimbingan profesional dari trainer berpengalaman.
                 </p>
 
                 <!-- 3 Feature Bullets Row -->
-                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem;">
+                <div style="display: flex; gap: 1.75rem; flex-wrap: wrap; margin-bottom: 2.5rem;">
                     <!-- Feature 1 -->
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; flex-shrink: 0;">
+                        <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.15); border: 1px solid rgba(132, 204, 22, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 0 15px rgba(132, 204, 22, 0.2);">
                             <i class="fa-solid fa-dumbbell"></i>
                         </div>
                         <div>
@@ -47,7 +47,7 @@
 
                     <!-- Feature 2 -->
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; flex-shrink: 0;">
+                        <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.15); border: 1px solid rgba(132, 204, 22, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 0 15px rgba(132, 204, 22, 0.2);">
                             <i class="fa-solid fa-user-check"></i>
                         </div>
                         <div>
@@ -58,7 +58,7 @@
 
                     <!-- Feature 3 -->
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; flex-shrink: 0;">
+                        <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.15); border: 1px solid rgba(132, 204, 22, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 0 15px rgba(132, 204, 22, 0.2);">
                             <i class="fa-solid fa-heart-pulse"></i>
                         </div>
                         <div>
@@ -70,32 +70,33 @@
 
                 <!-- CTA Action Buttons -->
                 <div class="hero-cta-group" style="display: flex; gap: 1.15rem; align-items: center; flex-wrap: wrap;">
-                    <button onclick="openRegistrationModal()" class="btn btn-lg" style="background: #84cc16; color: #090d0b; border: none; padding: 0.95rem 2.2rem; font-weight: 900; border-radius: 99px; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; box-shadow: 0 0 25px rgba(132, 204, 22, 0.45); cursor: pointer;">
+                    <button onclick="openRegistrationModal()" class="btn btn-lg" style="background: #84cc16; color: #090d0b; border: none; padding: 0.95rem 2.2rem; font-weight: 900; border-radius: 99px; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; box-shadow: 0 0 25px rgba(132, 204, 22, 0.5); cursor: pointer;">
                         <span>Daftar Sekarang</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
 
-                    <button onclick="openTrialModal()" class="btn btn-lg" style="background: rgba(255, 255, 255, 0.05); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.95rem 2rem; font-weight: 700; border-radius: 99px; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; cursor: pointer;">
+                    <button onclick="openTrialModal()" class="btn btn-lg" style="background: rgba(255, 255, 255, 0.06); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.22); padding: 0.95rem 2rem; font-weight: 700; border-radius: 99px; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; backdrop-filter: blur(10px); cursor: pointer;">
                         <i class="fa-solid fa-circle-play" style="color: #cbd5e1; font-size: 1.1rem;"></i>
                         <span>Lihat Video</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Right Image Column with Floating Card -->
-            <div class="hero-image-col" style="position: relative; z-index: 2;">
-                <!-- Main Fitness Couple Photo -->
-                <div style="position: relative; border-radius: 2.2rem; overflow: hidden; height: 500px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1);">
-                    <img src="{{ asset('images/assets/fitlife_hero_couple.png') }}" alt="FitLife Muscular Couple" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/program_tni.webp') }}';">
+            <!-- Right Column - Seamless Models Standing in Gym Environment -->
+            <div class="hero-image-col" style="position: relative; z-index: 5;">
+                <div style="position: relative; width: 100%; height: 520px; display: flex; justify-content: center; align-items: flex-end;">
                     
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,13,11,0.6) 0%, transparent 40%);"></div>
+                    <!-- Seamless Models Figure (Without thick border container, integrated in gym scene) -->
+                    <div style="position: relative; height: 100%; width: 100%; border-radius: 2rem; overflow: hidden; mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);">
+                        <img src="{{ asset('images/assets/fitlife_hero_couple.png') }}" alt="FitLife Muscular Couple" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));" onerror="this.onerror=null; this.src='{{ asset('images/assets/program_tni.webp') }}';">
+                    </div>
 
-                    <!-- Right Floating Trial Card -->
-                    <div class="floating-trial-card" style="position: absolute; right: 1.25rem; bottom: 35%; background: rgba(13, 18, 15, 0.9); backdrop-filter: blur(16px); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.25rem 1.5rem; text-align: center; color: #ffffff; box-shadow: 0 15px 35px rgba(0,0,0,0.5); min-width: 150px;">
-                        <div style="width: 46px; height: 46px; background: rgba(132, 204, 22, 0.15); border-radius: 0.85rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.35rem; margin: 0 auto 0.75rem;">
+                    <!-- Right Floating Trial Card (Matches Screenshot Exactly) -->
+                    <div class="floating-trial-card" style="position: absolute; right: 0.5rem; bottom: 25%; background: rgba(10, 15, 12, 0.88); backdrop-filter: blur(16px); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.25rem 1.4rem; text-align: center; color: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.7); min-width: 145px; z-index: 10;">
+                        <div style="width: 44px; height: 44px; background: rgba(132, 204, 22, 0.15); border-radius: 0.85rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.3rem; margin: 0 auto 0.65rem;">
                             <i class="fa-regular fa-calendar-check"></i>
                         </div>
-                        <div style="font-weight: 800; font-size: 1rem; color: #ffffff; line-height: 1.2;">Trial Gratis</div>
+                        <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff; line-height: 1.2;">Trial Gratis</div>
                         <div style="font-weight: 900; font-size: 1.4rem; color: #84cc16; margin: 0.15rem 0;">7 Hari</div>
                         <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Tanpa komitmen</div>
                     </div>
@@ -104,19 +105,19 @@
 
         </div>
 
-        <!-- Bottom Floating Stats Bar (5 Columns Card) -->
-        <div class="bottom-stats-bar" style="margin-top: -3.5rem; position: relative; z-index: 10;">
-            <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.75rem; padding: 1.25rem 1.75rem; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);">
+        <!-- Bottom Floating Stats Bar (5 Columns Card - Positioned Cleanly Overlapping Bottom Hero) -->
+        <div class="bottom-stats-bar" style="margin-top: -3.5rem; position: relative; z-index: 15;">
+            <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.75rem; padding: 1.35rem 1.75rem; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);">
                 <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr; gap: 1.5rem; align-items: center;">
                     
                     <!-- Column 1: Tour Gym Thumbnail Card -->
-                    <div style="position: relative; border-radius: 1.15rem; overflow: hidden; height: 100px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;" onclick="openTrialModal()">
+                    <div style="position: relative; border-radius: 1.15rem; overflow: hidden; height: 105px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;" onclick="openTrialModal()">
                         <img src="{{ asset('images/assets/fitlife_gym_tour.png') }}" alt="FitLife Tour Gym" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/pool_uny.webp') }}';">
                         <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 100%); flex-direction: column; justify-content: flex-end; padding: 0.75rem;">
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 1rem; box-shadow: 0 4px 14px rgba(0,0,0,0.4);">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; background: rgba(255,255,255,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 1.05rem; box-shadow: 0 4px 14px rgba(0,0,0,0.5);">
                                 <i class="fa-solid fa-play" style="margin-left: 2px;"></i>
                             </div>
-                            <div style="position: absolute; bottom: 0.6rem; left: 0.75rem; right: 0.75rem;">
+                            <div style="position: absolute; bottom: 0.65rem; left: 0.75rem; right: 0.75rem;">
                                 <div style="font-weight: 800; color: #ffffff; font-size: 0.9rem;">Tour Gym</div>
                                 <div style="color: #cbd5e1; font-size: 0.725rem;">Lihat fasilitas kami</div>
                             </div>
@@ -128,7 +129,7 @@
                         <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-solid fa-users"></i>
                         </div>
-                        <div style="font-size: 1.75rem; font-weight: 900; color: #ffffff; line-height: 1;">2.500+</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">2.500+</div>
                         <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Member Aktif</div>
                         <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Bergabung dan raih tujuan bersama kami</div>
                     </div>
@@ -138,7 +139,7 @@
                         <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-solid fa-dumbbell"></i>
                         </div>
-                        <div style="font-size: 1.75rem; font-weight: 900; color: #ffffff; line-height: 1;">50+</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">50+</div>
                         <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Program Latihan</div>
                         <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Dari fat loss, muscle building hingga strength</div>
                     </div>
@@ -148,7 +149,7 @@
                         <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-regular fa-star"></i>
                         </div>
-                        <div style="font-size: 1.75rem; font-weight: 900; color: #ffffff; line-height: 1;">15+</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">15+</div>
                         <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Trainer Profesional</div>
                         <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Berpengalaman & bersertifikasi</div>
                     </div>
@@ -158,7 +159,7 @@
                         <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.15rem; margin-bottom: 0.6rem;">
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
-                        <div style="font-size: 1.75rem; font-weight: 900; color: #ffffff; line-height: 1;">4 Lokasi</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1; font-family: 'Outfit', sans-serif;">1 Lokasi</div>
                         <div style="font-weight: 800; color: #ffffff; font-size: 0.85rem; margin-top: 0.25rem;">Strategis di Jogja</div>
                         <div style="color: #94a3b8; font-size: 0.75rem; line-height: 1.3;">Mudah diakses dengan fasilitas parkir luas</div>
                     </div>
