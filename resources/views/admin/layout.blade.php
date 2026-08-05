@@ -161,6 +161,24 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         }
 
+        /* High Contrast Admin Inputs & Form Controls */
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="url"],
+        input[type="password"],
+        select,
+        textarea,
+        .search-input {
+            color: #0f172a !important;
+            background-color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        input::placeholder,
+        textarea::placeholder {
+            color: #94a3b8 !important;
+        }
+
         .table-responsive {
             width: 100%;
             overflow-x: auto;

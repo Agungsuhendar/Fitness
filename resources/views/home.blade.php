@@ -169,8 +169,8 @@
                 <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">{{ site_setting('stat_trainers_label', 'Pelatih Lisensi PRSI') }}</div>
             </div>
             <div>
-                <div style="font-size: 3.2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem; line-height: 1.1;">{{ site_setting('stat_rating', '4.9 / 5') }}</div>
-                <div style="color: #e0f2fe; font-weight: 700; font-size: 1rem;">{{ site_setting('stat_rating_label', 'Rating Kepuasan Wali') }}</div>
+                <div style="font-size: 3.2rem; font-weight: 900; color: #fde047; margin-bottom: 0.35rem; line-height: 1.1;">{{ site_setting('stat_rating', '4.9 / 5') }}</div>
+                <div style="color: #fde047; font-weight: 800; font-size: 1rem;"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 0.35rem;"></i>{{ site_setting('stat_rating_label', 'Rating Kepuasan Wali') }}</div>
             </div>
         </div>
     </div>
