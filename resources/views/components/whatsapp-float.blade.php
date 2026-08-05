@@ -39,10 +39,10 @@
     $waUrl = "https://wa.me/" . $waNumber . "?text=" . urlencode($waMessage);
 @endphp
 
-<!-- Floating Action Stack Container (100% Perfectly Aligned Vertical Column) -->
-<div class="floating-action-stack" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 0; padding: 0;">
+<!-- Floating Action Stack Container (100% Mathematically Aligned 1-Column Stack) -->
+<div class="floating-action-stack" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; margin: 0; padding: 0; width: 52px;">
 
-    <!-- Top Floating Element: Back To Top Button -->
+    <!-- Top Button: Back To Top -->
     <button onclick="scrollToTop()" 
             id="backToTopBtn" 
             class="back-to-top-btn" 
@@ -51,9 +51,9 @@
         <i class="fa-solid fa-chevron-up"></i>
     </button>
 
-    <!-- Bottom Floating Element: WhatsApp Button -->
-    <div class="wa-float-container" style="position: relative; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;">
-        <div class="wa-smart-tooltip" style="position: absolute; right: 68px; background: #ffffff; color: #0f172a; padding: 0.55rem 0.95rem; border-radius: 99px; font-size: 0.82rem; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.18); border: 1.5px solid #cbd5e1; display: flex; align-items: center; gap: 0.45rem; opacity: 0; visibility: hidden; transform: translateX(12px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; pointer-events: none; z-index: 10000;">
+    <!-- Bottom Button: WhatsApp Floating -->
+    <div class="wa-float-container" style="position: relative; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;">
+        <div class="wa-smart-tooltip" style="position: absolute; right: 64px; top: 50%; transform: translateY(-50%) translateX(12px); background: #ffffff; color: #0f172a; padding: 0.55rem 0.95rem; border-radius: 99px; font-size: 0.82rem; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.18); border: 1.5px solid #cbd5e1; display: flex; align-items: center; gap: 0.45rem; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; pointer-events: none; z-index: 10000;">
             <span style="width: 8px; height: 8px; background: #84cc16; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #84cc16;"></span>
             <span style="color: #0f172a; font-weight: 800;">Admin Online • Konsultasi Gratis</span>
         </div>
@@ -63,7 +63,6 @@
            title="Chat WhatsApp Admin FitLife Center Jogja"
            id="whatsappFloatingButton"
            style="z-index: 9999;">
-            <div class="wa-pulse"></div>
             <i class="fa-brands fa-whatsapp"></i>
         </a>
     </div>
@@ -71,6 +70,10 @@
 </div>
 
 <style>
+.floating-action-stack {
+    box-sizing: border-box;
+}
+
 .wa-float-btn {
     width: 52px;
     height: 52px;
@@ -82,30 +85,20 @@
     justify-content: center;
     font-size: 1.65rem;
     box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45);
-    position: relative;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     text-decoration: none;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 .wa-float-btn:hover {
     transform: scale(1.1) rotate(6deg);
 }
-.wa-pulse {
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 2px solid #25d366;
-    animation: waPulse 2s infinite ease-out;
-    pointer-events: none;
-}
-@keyframes waPulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.35); opacity: 0; }
-}
+
 .wa-float-container:hover .wa-smart-tooltip {
     opacity: 1;
     visibility: visible;
-    transform: translateX(0);
+    transform: translateY(-50%) translateX(0);
 }
 
 .back-to-top-btn {
@@ -126,6 +119,8 @@
     transform: scale(0.8);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 .back-to-top-btn.show {
@@ -145,7 +140,12 @@
     .floating-action-stack {
         bottom: 78px !important;
         right: 16px !important;
+        width: 46px !important;
         gap: 10px !important;
+    }
+    .wa-float-container {
+        width: 46px !important;
+        height: 46px !important;
     }
     .wa-float-btn, .back-to-top-btn {
         width: 46px !important;
