@@ -7,8 +7,8 @@
 <section class="hero-section" style="padding: 4rem 0; background: #070a12; color: white;">
     <div class="container">
         <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Investasi Kesehatan</span>
-            <h1 class="hero-title" style="font-size: 3rem; font-weight: 900; margin-top: 0.5rem; font-family: 'Outfit', sans-serif;">Daftar Harga & <span style="color: #10b981;">Paket Gym & PT</span></h1>
+            <span class="section-subtitle" style="color: var(--brand-primary, #84cc16); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Investasi Kesehatan</span>
+            <h1 class="hero-title" style="font-size: 3rem; font-weight: 900; margin-top: 0.5rem; font-family: 'Outfit', sans-serif; color: #ffffff;">Daftar Harga <span style="color: var(--brand-primary, #84cc16);">&amp; Paket Gym &amp; PT</span></h1>
             <p class="hero-description" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem;">
                 Pilihan investasi paket Personal Trainer & membership gym transparan tanpa biaya tersembunyi. Dapatkan jaminan kualitas & evaluasi fisik terukur.
             </p>
@@ -38,7 +38,7 @@
             @endphp
             <div class="glass-card" style="padding: 2.25rem; background: #1e293b; border: {{ $isPopular ? '2px solid #10b981' : '1px solid rgba(255,255,255,0.1)' }}; border-radius: 1.25rem; position: relative; color: white; display: flex; flex-direction: column;">
                 @if($badge)
-                <div style="position: absolute; top: -14px; right: 2rem; background: #10b981; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 99px; text-transform: uppercase;">
+                <div style="position: absolute; top: -14px; right: 2rem; background: var(--brand-primary, #84cc16); color: #ffffff !important; font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.85rem; border-radius: 99px; text-transform: uppercase;">
                     {{ $badge }}
                 </div>
                 @endif

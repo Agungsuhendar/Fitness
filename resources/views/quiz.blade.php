@@ -197,9 +197,9 @@
 
             <!-- Action Buttons Grid -->
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button type="button" onclick="claimMatchedTrial()" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.9rem 2.2rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.6rem; box-shadow: 0 0 25px rgba(132, 204, 22, 0.5);">
-                    <i class="fa-solid fa-bolt"></i>
-                    <span>Klaim Free Trial 7 Hari</span>
+                <button type="button" onclick="claimMatchedTrial()" class="btn glow-btn" style="background: var(--brand-primary, #84cc16); color: #ffffff !important; border: none; padding: 0.9rem 2.2rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.6rem; box-shadow: 0 0 25px rgba(132, 204, 22, 0.5);">
+                    <i class="fa-solid fa-bolt" style="color: #ffffff !important;"></i>
+                    <span style="color: #ffffff !important;">Klaim Free Trial 7 Hari</span>
                 </button>
 
                 <a href="#" id="waQuizBtn" target="_blank" class="btn" style="background: #25d366; color: #ffffff; border: none; padding: 0.9rem 2rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(37,211,102,0.4);">

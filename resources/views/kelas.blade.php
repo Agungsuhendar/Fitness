@@ -13,8 +13,8 @@
                 <span>GROUP FITNESS STUDIO CLASSES</span>
             </div>
 
-            <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em;">
-                Jadwal &amp; <span style="color: #84cc16;">Kelas Group Fitness</span>
+            <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; color: #ffffff;">
+                Jadwal &amp; <span style="color: var(--brand-primary, #84cc16);">Kelas Group Fitness</span>
             </h1>
             <p style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem;">
                 Tingkatkan semangat latihan Anda bersama komunitas &amp; instruktur berpengalaman. Pilih kelas favorit Anda &amp; amankan slot tempat sekarang!

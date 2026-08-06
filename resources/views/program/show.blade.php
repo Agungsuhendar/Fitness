@@ -7,11 +7,11 @@
 <section class="hero-section" style="padding: 4rem 0; background: #070a12; color: white;">
     <div class="container">
         <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-            <a href="{{ route('program.index') }}" style="color: #10b981; text-decoration: none; font-weight: 700; font-size: 0.9rem;">
+            <a href="{{ route('program.index') }}" style="color: var(--brand-primary, #84cc16); text-decoration: none; font-weight: 700; font-size: 0.9rem;">
                 <i class="fa-solid fa-arrow-left"></i> Kembali ke Semua Program
             </a>
             <h1 class="hero-title" style="margin-top: 0.75rem; font-size: 2.75rem; font-weight: 900; font-family: 'Outfit', sans-serif;">{{ $program->title }}</h1>
-            <p class="hero-description" style="font-size: 1.15rem; color: #10b981; font-weight: 700;">
+            <p class="hero-description" style="font-size: 1.15rem; color: var(--brand-primary, #84cc16); font-weight: 700;">
                 {{ $program->subtitle }}
             </p>
         </div>
@@ -34,7 +34,7 @@
                         @if($program->features)
                             @foreach($program->features as $feat)
                                 <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.975rem; margin-bottom: 0.75rem; color: #cbd5e1;">
-                                    <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.15rem;"></i>
+                                    <i class="fa-solid fa-circle-check" style="color: var(--brand-primary, #84cc16); font-size: 1.15rem;"></i>
                                     <span>{{ $feat }}</span>
                                 </div>
                             @endforeach
@@ -46,10 +46,10 @@
                     <div style="background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.5rem;">
                         @foreach($program->curriculum as $index => $curr)
                             <div style="display: flex; gap: 1rem; margin-bottom: 1rem; align-items: flex-start;">
-                                <div style="width: 32px; height: 32px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0;">
-                                    {{ $index + 1 }}
+                                <div style="width: 32px; height: 32px; background: var(--brand-primary, #84cc16); color: #ffffff !important; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0;">
+                                    <span style="color: #ffffff !important;">{{ $index + 1 }}</span>
                                 </div>
-                                <div style="font-size: 0.95rem; font-weight: 600; color: #e2e8f0; padding-top: 0.2rem; line-height: 1.5;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #ffffff !important; padding-top: 0.2rem; line-height: 1.5;">
                                     {{ $curr }}
                                 </div>
                             </div>

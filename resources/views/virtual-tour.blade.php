@@ -45,8 +45,8 @@
                 <span>360° IMMERSIVE STUDIO SHOWCASE</span>
             </div>
 
-            <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em;">
-                Tur Virtual 360° <span style="color: #84cc16;">Studio &amp; Fasilitas</span>
+            <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; color: #ffffff;">
+                Tur Virtual 360° <span style="color: var(--brand-primary, #84cc16);">Studio &amp; Fasilitas</span>
             </h1>
             <p style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem;">
                 Jelajahi suasana kenyamanan studio privat, area angkatan beban komersial, &amp; fasilitas sauna FitLife Center secara 360° interaktif!

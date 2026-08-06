@@ -53,10 +53,8 @@
             <div class="coach-card-item" data-tags="fat_loss muscle">
                 <div style="background: #0d1310; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.borderColor='#84cc16'; this.style.transform='translateY(-6px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
                     <div style="position: relative; height: 260px; background: linear-gradient(135deg, #162019 0%, #0d1310 100%); display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <div style="width: 130px; height: 130px; background: linear-gradient(135deg, #84cc16 0%, #3f6212 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 4rem; font-weight: 900; box-shadow: 0 0 30px rgba(132,204,22,0.4); border: 4px solid #ffffff;">
-                            <i class="fa-solid fa-user-ninja"></i>
-                        </div>
-                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(132, 204, 22, 0.9); color: #090d0b; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(132,204,22,0.5);">
+                        <img src="{{ asset('images/assets/coach_hendra.webp') }}" alt="Coach Hendra Wijaya" style="width: 100%; height: 100%; object-fit: cover;">
+                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(132, 204, 22, 0.9); color: #090d0b; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(132,204,22,0.5); z-index: 2;">
                             <i class="fa-solid fa-award"></i> APKI CERTIFIED
                         </span>
                     </div>
@@ -100,10 +98,8 @@
             <div class="coach-card-item" data-tags="female fat_loss">
                 <div style="background: #0d1310; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.borderColor='#f472b6'; this.style.transform='translateY(-6px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
                     <div style="position: relative; height: 260px; background: linear-gradient(135deg, #281923 0%, #0d1310 100%); display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <div style="width: 130px; height: 130px; background: linear-gradient(135deg, #f472b6 0%, #db2777 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 4rem; font-weight: 900; box-shadow: 0 0 30px rgba(244,114,182,0.4); border: 4px solid #ffffff;">
-                            <i class="fa-solid fa-person-dress"></i>
-                        </div>
-                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(244, 114, 182, 0.9); color: #ffffff; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(244,114,182,0.5);">
+                        <img src="{{ asset('images/assets/coach_rina.webp') }}" alt="Coach Rina Febriana" style="width: 100%; height: 100%; object-fit: cover;">
+                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(244, 114, 182, 0.9); color: #ffffff; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(244,114,182,0.5); z-index: 2;">
                             <i class="fa-solid fa-award"></i> FEMALE TRAINER APKI
                         </span>
                     </div>
@@ -147,10 +143,8 @@
             <div class="coach-card-item" data-tags="tni muscle">
                 <div style="background: #0d1310; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.borderColor='#fbbf24'; this.style.transform='translateY(-6px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
                     <div style="position: relative; height: 260px; background: linear-gradient(135deg, #262116 0%, #0d1310 100%); display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <div style="width: 130px; height: 130px; background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 4rem; font-weight: 900; box-shadow: 0 0 30px rgba(251,191,36,0.4); border: 4px solid #ffffff;">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(251, 191, 36, 0.9); color: #090d0b; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(251,191,36,0.5);">
+                        <img src="{{ asset('images/assets/coach_bima.webp') }}" alt="Coach Bima Prasetyo" style="width: 100%; height: 100%; object-fit: cover;">
+                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(251, 191, 36, 0.9); color: #090d0b; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(251,191,36,0.5); z-index: 2;">
                             <i class="fa-solid fa-award"></i> TACTICAL COACH
                         </span>
                     </div>
@@ -194,10 +188,8 @@
             <div class="coach-card-item" data-tags="rehab fat_loss">
                 <div style="background: #0d1310; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.borderColor='#38bdf8'; this.style.transform='translateY(-6px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
                     <div style="position: relative; height: 260px; background: linear-gradient(135deg, #16222b 0%, #0d1310 100%); display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <div style="width: 130px; height: 130px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 4rem; font-weight: 900; box-shadow: 0 0 30px rgba(56,189,248,0.4); border: 4px solid #ffffff;">
-                            <i class="fa-solid fa-user-doctor"></i>
-                        </div>
-                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(56, 189, 248, 0.9); color: #ffffff; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(56,189,248,0.5);">
+                        <img src="{{ asset('images/assets/coach_danu.webp') }}" alt="Coach Aris Subagyo" style="width: 100%; height: 100%; object-fit: cover;">
+                        <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(56, 189, 248, 0.9); color: #ffffff; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px; box-shadow: 0 0 12px rgba(56,189,248,0.5); z-index: 2;">
                             <i class="fa-solid fa-stethoscope"></i> REHAB SPECIALIST
                         </span>
                     </div>

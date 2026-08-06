@@ -69,8 +69,8 @@
                     <p style="margin-bottom: 0.5rem;"><i class="fa-brands fa-whatsapp" style="color: #25d366; margin-right: 0.5rem;"></i> {{ site_setting('site_phone', '+62 812-3456-7890') }} (CS Admin)</p>
                     <p style="margin-bottom: 0.5rem;"><i class="fa-regular fa-clock" style="color: #84cc16; margin-right: 0.5rem;"></i> {{ site_setting('office_hours', 'Buka Setiap Hari: 06.00 - 22.00 WIB') }}</p>
                 </div>
-                <button onclick="openTrialModal()" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.75rem 1.2rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
-                    <i class="fa-solid fa-bolt"></i> Klaim Free Trial 7 Hari
+                <button onclick="openTrialModal()" class="btn glow-btn" style="width: 100%; background: var(--brand-primary, #84cc16); color: #ffffff !important; border: none; padding: 0.75rem 1.2rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                    <i class="fa-solid fa-bolt" style="color: #ffffff !important;"></i> <span style="color: #ffffff !important;">Klaim Free Trial 7 Hari</span>
                 </button>
             </div>
         </div>

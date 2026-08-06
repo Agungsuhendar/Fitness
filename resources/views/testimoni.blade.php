@@ -7,15 +7,15 @@
 <section class="hero-section" style="padding: 4rem 0; background: #070a12; color: white;">
     <div class="container">
         <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Hasil Terukur</span>
-            <h1 class="hero-title" style="font-size: 3rem; font-weight: 900; margin-top: 0.5rem; font-family: 'Outfit', sans-serif;">Galeri Transformasi & <span style="color: #10b981;">Review Member</span></h1>
+            <span class="section-subtitle" style="color: var(--brand-primary, #84cc16); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Hasil Terukur</span>
+            <h1 class="hero-title" style="font-size: 3rem; font-weight: 900; margin-top: 0.5rem; font-family: 'Outfit', sans-serif; color: #ffffff;">Galeri Transformasi &amp; <span style="color: var(--brand-primary, #84cc16);">Review Member</span></h1>
             <p class="hero-description" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem; margin-bottom: 1.5rem;">
                 Simak kisah sukses nyata para member yang telah berhasil memangkas lemak, membentuk massa otot, dan meningkatkan stamina puncak bersama Personal Trainer FitLife Center.
             </p>
             <div style="display: flex; justify-content: center; gap: 1rem;">
-                <a href="{{ route('tulis-testimoni') }}" class="btn glow-btn" style="background: #84cc16; color: #090d0b; padding: 0.85rem 1.6rem; border-radius: 99px; font-weight: 900; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <span>Tulis Ulasan & Pengalaman Saya</span>
+                <a href="#tulis-ulasan" class="btn glow-btn" style="background: var(--brand-primary, #84cc16); color: #ffffff !important; padding: 0.85rem 1.6rem; border-radius: 99px; font-weight: 900; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                    <i class="fa-solid fa-pen-to-square" style="color: #ffffff !important;"></i>
+                    <span style="color: #ffffff !important;">Tulis Ulasan &amp; Pengalaman Saya</span>
                 </a>
             </div>
         </div>
@@ -46,12 +46,20 @@
                     "{{ $testi->review }}"
                 </p>
                 <div class="testimonial-user" style="display: flex; align-items: center; gap: 0.85rem;">
-                    <div class="testimonial-avatar" style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
-                        {{ strtoupper(substr($testi->name, 0, 1)) }}
+                    <div class="testimonial-avatar" style="width: 52px; height: 52px; border-radius: 50%; overflow: hidden; background: var(--brand-primary, #84cc16); color: #090d0b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; border: 2px solid var(--brand-primary, #84cc16); flex-shrink: 0; box-shadow: 0 0 15px rgba(132,204,22,0.35);">
+                        @if(Str::contains(strtolower($testi->name), 'bima'))
+                            <img src="{{ asset('images/assets/member_bima_avatar.png') }}" onerror="this.onerror=null; this.src='{{ asset('public/images/assets/member_bima_avatar.png') }}';" alt="{{ $testi->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        @elseif(Str::contains(strtolower($testi->name), 'anisa') || Str::contains(strtolower($testi->name), 'siti') || Str::contains(strtolower($testi->name), 'rina') || Str::contains(strtolower($testi->name), 'diana'))
+                            <img src="{{ asset('images/assets/member_anisa_avatar.png') }}" onerror="this.onerror=null; this.src='{{ asset('public/images/assets/member_anisa_avatar.png') }}';" alt="{{ $testi->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        @elseif(isset($testi->avatar) && $testi->avatar)
+                            <img src="{{ Str::startsWith($testi->avatar, 'http') ? $testi->avatar : asset($testi->avatar) }}" onerror="this.onerror=null; this.src='{{ asset('public/images/assets/member_bima_avatar.png') }}';" alt="{{ $testi->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        @else
+                            <img src="{{ asset('images/assets/member_bima_avatar.png') }}" onerror="this.onerror=null; this.src='{{ asset('public/images/assets/member_bima_avatar.png') }}';" alt="{{ $testi->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        @endif
                     </div>
                     <div>
-                        <div style="font-weight: 800; color: #ffffff;">{{ $testi->name }}</div>
-                        <div style="font-size: 0.85rem; color: #10b981;">{{ $testi->role }} • {{ $testi->program }}</div>
+                        <div style="font-weight: 800; color: #ffffff; font-size: 1.05rem;">{{ $testi->name }}</div>
+                        <div style="font-size: 0.85rem; color: var(--brand-primary, #84cc16); font-weight: 700;">{{ $testi->role }} • {{ $testi->program }}</div>
                     </div>
                 </div>
             </div>
@@ -69,7 +77,7 @@
 <section class="section" style="background: #070a12; padding: 5rem 0; color: white;">
     <div class="container">
         <div class="section-header" style="text-align: center; max-width: 700px; margin: 0 auto 3.5rem;">
-            <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;"><i class="fa-solid fa-clapperboard"></i> Video Transformasi</span>
+            <span class="section-subtitle" style="color: var(--brand-primary, #84cc16); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;"><i class="fa-solid fa-clapperboard"></i> Video Transformasi</span>
             <h2 class="section-title" style="color: #ffffff; font-size: 2.2rem; font-weight: 900; margin-top: 0.5rem;">Perubahan Fisik Member</h2>
         </div>
 
@@ -82,11 +90,11 @@
                 @if($vid->before_badge || $vid->after_badge)
                 <div style="position: absolute; top: 15px; left: 15px; display: flex; gap: 0.4rem; flex-wrap: wrap;">
                     @if($vid->before_badge)<span style="background: #ef4444; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px;">{{ $vid->before_badge }}</span>@endif
-                    @if($vid->after_badge)<span style="background: #10b981; color: white; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px;">{{ $vid->after_badge }}</span>@endif
+                    @if($vid->after_badge)<span style="background: var(--brand-primary, #84cc16); color: #ffffff !important; font-weight: 800; font-size: 0.725rem; padding: 0.25rem 0.65rem; border-radius: 99px;">{{ $vid->after_badge }}</span>@endif
                 </div>
                 @endif
 
-                <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; background: rgba(16, 185, 129, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 1.4rem;">
+                <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; background: var(--brand-primary, #84cc16); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-size: 1.4rem;">
                     <i class="fa-solid fa-play" style="margin-left: 3px;"></i>
                 </div>
 
@@ -109,16 +117,16 @@
 </section>
 
 <!-- Form Kirim Testimoni -->
-<section class="section" style="background: #0f172a; padding: 5rem 0; color: white;">
+<section class="section" style="background: #0f172a; padding: 5rem 0; color: white;" id="tulis-ulasan">
     <div class="container">
         <div class="glass-card" style="padding: 3rem; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; max-width: 750px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 2rem;">
-                <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Bagikan Pengalaman Anda</span>
+                <span class="section-subtitle" style="color: var(--brand-primary, #84cc16); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Bagikan Pengalaman Anda</span>
                 <h2 style="font-size: 1.85rem; color: #ffffff; font-weight: 900; margin-top: 0.3rem;">
-                    <i class="fa-solid fa-pen-fancy" style="color: #10b981;"></i> Kirim Ulasan Member
+                    <i class="fa-solid fa-pen-fancy" style="color: var(--brand-primary, #84cc16);"></i> Kirim Ulasan Member
                 </h2>
                 <p style="color: #94a3b8; font-size: 0.95rem;">
-                    Ceritakan hasil transformasi & pengalaman Anda berlatih di ApexFitness Center.
+                    Ceritakan hasil transformasi & pengalaman Anda berlatih di FitLife Center.
                 </p>
             </div>
 
@@ -159,8 +167,8 @@
                     <textarea name="review" class="form-control" required rows="4" placeholder="Turun berapa kg / hasil otot / bimbingan trainer..." style="background: #0f172a; border-color: #334155; color: #ffffff; padding: 0.75rem 1rem; border-radius: 0.75rem;">{{ old('review') }}</textarea>
                 </div>
 
-                <button type="submit" class="btn btn-accent btn-lg" style="width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; font-weight: 800; border-radius: 0.75rem; color: white;">
-                    <i class="fa-solid fa-paper-plane"></i> Kirim Review Sekarang
+                <button type="submit" class="btn btn-accent btn-lg" style="width: 100%; background: var(--brand-primary, #84cc16); border: none; font-weight: 800; border-radius: 0.75rem; color: #ffffff !important;">
+                    <i class="fa-solid fa-paper-plane" style="color: #ffffff !important;"></i> <span style="color: #ffffff !important;">Kirim Review Sekarang</span>
                 </button>
             </form>
         </div>

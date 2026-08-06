@@ -95,13 +95,16 @@
                             </div>
                         </div>
 
-                        <div style="margin-bottom: 1.25rem; position: relative; z-index: 2;">
-                            <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: block;">MEMBER ATHLETE NAME</span>
-                            <div style="font-size: 1.4rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;" id="cardMemberName">
-                                {{ $member->name }}
-                            </div>
-                            <div style="font-family: monospace; font-size: 0.95rem; color: #84cc16; font-weight: 800; margin-top: 0.25rem;" id="cardMemberId">
-                                8840 •••• •••• {{ substr($member->id, -4) }}
+                        <div style="margin-bottom: 1.25rem; position: relative; z-index: 2; display: flex; align-items: center; gap: 1rem;">
+                            <img src="{{ asset('images/assets/member_bima_avatar.png') }}" onerror="this.onerror=null; this.src='{{ asset('public/images/assets/member_bima_avatar.png') }}';" alt="Bima Perkasa (28 th)" style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2.5px solid #84cc16; box-shadow: 0 0 15px rgba(132, 204, 22, 0.45); flex-shrink: 0;">
+                            <div>
+                                <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: block;">MEMBER ATHLETE NAME</span>
+                                <div style="font-size: 1.35rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;" id="cardMemberName">
+                                    {{ $member->name }} <span style="font-size: 0.9rem; color: #94a3b8; font-weight: 700;">(28 th)</span>
+                                </div>
+                                <div style="font-family: monospace; font-size: 0.9rem; color: #84cc16; font-weight: 800; margin-top: 0.15rem;" id="cardMemberId">
+                                    8840 •••• •••• {{ substr($member->id, -4) }}
+                                </div>
                             </div>
                         </div>
 

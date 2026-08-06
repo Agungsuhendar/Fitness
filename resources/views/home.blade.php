@@ -264,7 +264,7 @@
                 <div class="program-thumb" style="position: relative; height: 210px; background: #161f19; overflow: hidden;">
                     <img src="{{ Str::startsWith($prog->image, 'http') ? $prog->image : asset($prog->image) }}" alt="{{ $prog->title }}" class="fitlife-card-img" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_gym_tour.png') }}';">
                     @if($prog->badge)
-                        <span style="position: absolute; top: 14px; right: 14px; background: #84cc16; color: #090d0b; padding: 0.35rem 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase;">{{ $prog->badge }}</span>
+                        <span style="position: absolute; top: 14px; right: 14px; background: var(--brand-primary, #84cc16); color: #ffffff !important; padding: 0.35rem 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.75rem; text-transform: uppercase;">{{ $prog->badge }}</span>
                     @endif
                 </div>
                 <div class="program-body" style="padding: 1.6rem; display: flex; flex-direction: column; flex-grow: 1;">

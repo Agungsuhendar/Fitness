@@ -33,9 +33,9 @@
                             <i class="fa-solid fa-location-dot" style="color: #84cc16; width: 16px;"></i>
                             <span>Lokasi Studio</span>
                         </a>
-                        <a href="{{ route('virtual-tour') }}" class="nav-dropdown-link" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 1rem; border-radius: 0.75rem; color: #cbd5e1 !important; font-size: 0.85rem; font-weight: 700; text-decoration: none; white-space: nowrap;">
-                            <i class="fa-solid fa-vr-cardboard" style="color: #38bdf8; width: 16px;"></i>
-                            <span>Tur Virtual 360°</span>
+                        <a href="{{ route('virtual-tour') }}" class="nav-dropdown-link" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 1rem; border-radius: 0.75rem; color: #ffffff !important; font-size: 0.85rem; font-weight: 700; text-decoration: none; white-space: nowrap;">
+                            <i class="fa-solid fa-vr-cardboard" style="color: #ffffff; width: 16px;"></i>
+                            <span style="color: #ffffff !important;">Tur Virtual 360°</span>
                         </a>
                         <a href="{{ route('kelas') }}" class="nav-dropdown-link" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 1rem; border-radius: 0.75rem; color: #cbd5e1 !important; font-size: 0.85rem; font-weight: 700; text-decoration: none; white-space: nowrap;">
                             <i class="fa-solid fa-people-group" style="color: #fbbf24; width: 16px;"></i>
@@ -81,9 +81,9 @@
                         <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: #84cc16;"></i>
                     </a>
                     <div class="nav-dropdown-menu" style="display: none; position: absolute; top: 100%; left: 0; background: #0d1310; border: 1.5px solid rgba(132, 204, 22, 0.4); border-radius: 1.15rem; padding: 0.75rem 0.5rem; min-width: 240px; box-shadow: 0 20px 40px rgba(0,0,0,0.95), 0 0 25px rgba(132,204,22,0.2); flex-direction: column; gap: 0.25rem; z-index: 100005;">
-                        <a href="{{ route('harga') }}" class="nav-dropdown-link" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 1rem; border-radius: 0.75rem; color: #cbd5e1 !important; font-size: 0.85rem; font-weight: 700; text-decoration: none; white-space: nowrap;">
-                            <i class="fa-solid fa-tags" style="color: #84cc16; width: 16px;"></i>
-                            <span>Harga &amp; Paket</span>
+                        <a href="{{ route('harga') }}" class="nav-dropdown-link" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 1rem; border-radius: 0.75rem; color: #ffffff !important; font-size: 0.85rem; font-weight: 700; text-decoration: none; white-space: nowrap;">
+                            <i class="fa-solid fa-tags" style="color: #ffffff; width: 16px;"></i>
+                            <span style="color: #ffffff !important;">Harga &amp; Paket</span>
                         </a>
                         <a href="{{ route('tentang') }}" class="nav-dropdown-link" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 1rem; border-radius: 0.75rem; color: #cbd5e1 !important; font-size: 0.85rem; font-weight: 700; text-decoration: none; white-space: nowrap;">
                             <i class="fa-solid fa-circle-info" style="color: #38bdf8; width: 16px;"></i>
@@ -173,9 +173,9 @@
                 <i class="fa-solid fa-location-dot" style="color: #84cc16; width: 18px;"></i>
                 <span>Lokasi Studio Gym</span>
             </a>
-            <a href="{{ route('virtual-tour') }}" style="display: flex; align-items: center; gap: 0.75rem; color: #cbd5e1; text-decoration: none; font-weight: 700; padding: 0.5rem 0.65rem; border-radius: 0.5rem; background: rgba(255,255,255,0.03);">
-                <i class="fa-solid fa-vr-cardboard" style="color: #38bdf8; width: 18px;"></i>
-                <span>Tur Virtual 360°</span>
+            <a href="{{ route('virtual-tour') }}" style="display: flex; align-items: center; gap: 0.75rem; color: #ffffff !important; text-decoration: none; font-weight: 700; padding: 0.5rem 0.65rem; border-radius: 0.5rem; background: rgba(255,255,255,0.03);">
+                <i class="fa-solid fa-vr-cardboard" style="color: #ffffff; width: 18px;"></i>
+                <span style="color: #ffffff !important;">Tur Virtual 360°</span>
             </a>
             <a href="{{ route('kelas') }}" style="display: flex; align-items: center; gap: 0.75rem; color: #cbd5e1; text-decoration: none; font-weight: 700; padding: 0.5rem 0.65rem; border-radius: 0.5rem; background: rgba(255,255,255,0.03);">
                 <i class="fa-solid fa-people-group" style="color: #fbbf24; width: 18px;"></i>
@@ -207,9 +207,9 @@
 
             <!-- Category 3: Informasi -->
             <div style="font-size: 0.7rem; font-weight: 800; color: #84cc16; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 0.6rem; padding-bottom: 0.15rem;">Informasi</div>
-            <a href="{{ route('harga') }}" style="display: flex; align-items: center; gap: 0.75rem; color: #cbd5e1; text-decoration: none; font-weight: 700; padding: 0.5rem 0.65rem; border-radius: 0.5rem; background: rgba(255,255,255,0.03);">
-                <i class="fa-solid fa-tags" style="color: #84cc16; width: 18px;"></i>
-                <span>Harga &amp; Paket</span>
+            <a href="{{ route('harga') }}" style="display: flex; align-items: center; gap: 0.75rem; color: #ffffff !important; text-decoration: none; font-weight: 700; padding: 0.5rem 0.65rem; border-radius: 0.5rem; background: rgba(255,255,255,0.03);">
+                <i class="fa-solid fa-tags" style="color: #ffffff; width: 18px;"></i>
+                <span style="color: #ffffff !important;">Harga &amp; Paket</span>
             </a>
             <a href="{{ route('tentang') }}" style="display: flex; align-items: center; gap: 0.75rem; color: #cbd5e1; text-decoration: none; font-weight: 700; padding: 0.5rem 0.65rem; border-radius: 0.5rem; background: rgba(255,255,255,0.03);">
                 <i class="fa-solid fa-circle-info" style="color: #38bdf8; width: 18px;"></i>
@@ -236,14 +236,14 @@
 
             <!-- Action Buttons Mobile -->
             <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.5rem; padding-bottom: 0.5rem;">
-                <button type="button" onclick="openTrialModal()" style="width: 100%; background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.75rem 1.2rem; border-radius: 99px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                <button type="button" onclick="openTrialModal()" style="width: 100%; background: rgba(255, 255, 255, 0.08); color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.75rem 1.2rem; border-radius: 99px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
                     <i class="fa-regular fa-compass" style="color: #84cc16;"></i>
-                    <span>Daftar Trial 7 Hari</span>
+                    <span style="color: #ffffff !important;">Daftar Trial 7 Hari</span>
                 </button>
 
                 <button type="button" onclick="openRegistrationModal()" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.75rem 1.35rem; border-radius: 99px; font-weight: 900; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132, 204, 22, 0.4);">
-                    <span>Daftar Member Sekarang</span>
-                    <i class="fa-solid fa-arrow-right"></i>
+                    <span style="color: #ffffff !important;">Daftar Member Sekarang</span>
+                    <i class="fa-solid fa-arrow-right" style="color: #ffffff !important;"></i>
                 </button>
             </div>
         </div>

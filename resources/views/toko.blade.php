@@ -8,13 +8,13 @@
 <section style="padding: 4rem 0 3rem; background: linear-gradient(180deg, #060907 0%, #0d1310 100%); color: white; border-bottom: 1px solid rgba(255,255,255,0.08);">
     <div class="container">
         <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(132, 204, 22, 0.12); border: 1px solid rgba(132, 204, 22, 0.4); color: #84cc16; padding: 0.4rem 1.1rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; margin-bottom: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(132, 204, 22, 0.12); border: 1px solid var(--brand-primary, #84cc16); color: var(--brand-primary, #84cc16); padding: 0.4rem 1.1rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; margin-bottom: 1rem;">
                 <i class="fa-solid fa-store"></i>
                 <span>FITLIFE OFFICIAL STORE &amp; GEAR SHOP</span>
             </div>
 
-            <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em;">
-                Suplemen &amp; <span style="color: #84cc16;">Gear Fitness Resmi</span>
+            <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; color: #ffffff;">
+                Suplemen &amp; <span style="color: var(--brand-primary, #84cc16);">Gear Fitness Resmi</span>
             </h1>
             <p style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem;">
                 Suplemen teruji BPOM, gear angkatan berat berkualitas, &amp; merchandise resmi FitLife Center dengan harga spesial member!
@@ -26,10 +26,10 @@
 <!-- SUPPLEMENT DOSAGE CALCULATOR WIDGET SECTION -->
 <section style="background: #090d0b; padding: 2.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08);">
     <div class="container" style="max-width: 900px;">
-        <div style="background: #0d1310; border: 1.5px solid rgba(132,204,22,0.4); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.6);">
+        <div style="background: #0d1310; border: 1.5px solid var(--brand-primary, #84cc16); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.6);">
             
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
-                <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.2rem;">
+                <div style="width: 42px; height: 42px; background: rgba(132, 204, 22, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-primary, #84cc16); font-size: 1.2rem;">
                     <i class="fa-solid fa-flask"></i>
                 </div>
                 <div>
@@ -55,8 +55,8 @@
                     </select>
                 </div>
 
-                <div style="background: rgba(132,204,22,0.1); border: 1.5px solid #84cc16; border-radius: 1rem; padding: 1rem; text-align: center;">
-                    <span style="font-size: 0.725rem; color: #84cc16; font-weight: 800; text-transform: uppercase;">REKOMENDASI DOSIS HARIAN</span>
+                <div style="background: rgba(132,204,22,0.1); border: 1.5px solid var(--brand-primary, #84cc16); border-radius: 1rem; padding: 1rem; text-align: center;">
+                    <span style="font-size: 0.725rem; color: var(--brand-primary, #84cc16); font-weight: 800; text-transform: uppercase;">REKOMENDASI DOSIS HARIAN</span>
                     <div style="font-size: 1.15rem; font-weight: 900; color: white; margin-top: 0.25rem;" id="suppCalcResult">
                         🥤 2 Scoop Whey (50g Protein) <br>
                         ⚡ 5 Gram Creatine
@@ -72,7 +72,7 @@
 <section style="padding: 1.5rem 0; background: #060907; border-bottom: 1px solid rgba(255,255,255,0.08);">
     <div class="container">
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; align-items: center;" id="storeCategoryPillNav">
-            <button onclick="filterCategory('all', this)" class="btn btn-sm store-filter-btn active" style="background: #84cc16; color: #090d0b; border: 1.5px solid #84cc16; padding: 0.55rem 1.35rem; border-radius: 99px; font-weight: 800; cursor: pointer; transition: all 0.2s;">
+            <button onclick="filterCategory('all', this)" class="btn btn-sm store-filter-btn active" style="background: var(--brand-primary, #84cc16); color: #ffffff !important; border: 1.5px solid var(--brand-primary, #84cc16); padding: 0.55rem 1.35rem; border-radius: 99px; font-weight: 800; cursor: pointer; transition: all 0.2s;">
                 🛒 Semua Produk
             </button>
             <button onclick="filterCategory('Whey & Protein', this)" class="btn btn-sm store-filter-btn" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1.5px solid rgba(255,255,255,0.12); padding: 0.55rem 1.35rem; border-radius: 99px; font-weight: 800; cursor: pointer; transition: all 0.2s;">
@@ -97,17 +97,17 @@
         
         <div class="grid-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
             @foreach($products as $p)
-            <div class="product-card-item" data-category="{{ $p->category }}" style="overflow: hidden; background: #0d1310; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 1.5rem; display: flex; flex-direction: column; transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#84cc16';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.1)';">
+            <div class="product-card-item" data-category="{{ $p->category }}" style="overflow: hidden; background: #0d1310; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 1.5rem; display: flex; flex-direction: column; transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='var(--brand-primary, #84cc16)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.1)';">
                 
                 <div style="height: 220px; overflow: hidden; background: #1e293b; position: relative;">
                     <img src="{{ $p->image }}" alt="{{ $p->name }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                    <div style="position: absolute; top: 1rem; left: 1rem; background: rgba(9, 13, 11, 0.85); backdrop-filter: blur(8px); border: 1px solid #84cc16; color: #84cc16; font-size: 0.7rem; font-weight: 900; padding: 0.35rem 0.75rem; border-radius: 99px; text-transform: uppercase;">
+                    <div style="position: absolute; top: 1rem; left: 1rem; background: rgba(9, 13, 11, 0.85); backdrop-filter: blur(8px); border: 1px solid var(--brand-primary, #84cc16); color: var(--brand-primary, #84cc16); font-size: 0.7rem; font-weight: 900; padding: 0.35rem 0.75rem; border-radius: 99px; text-transform: uppercase;">
                         {{ $p->badge }}
                     </div>
                 </div>
 
                 <div style="padding: 1.65rem; display: flex; flex-direction: column; flex-grow: 1;">
-                    <div style="font-size: 0.775rem; font-weight: 800; color: #84cc16; text-transform: uppercase; margin-bottom: 0.35rem;">
+                    <div style="font-size: 0.775rem; font-weight: 800; color: var(--brand-primary, #84cc16); text-transform: uppercase; margin-bottom: 0.35rem;">
                         {{ $p->category }}
                     </div>
 
@@ -121,7 +121,7 @@
 
                     <!-- Price Bar -->
                     <div style="display: flex; align-items: baseline; gap: 0.65rem; margin-bottom: 1.25rem;">
-                        <span style="font-size: 1.4rem; font-weight: 900; color: #84cc16; font-family: monospace;">
+                        <span style="font-size: 1.4rem; font-weight: 900; color: var(--brand-primary, #84cc16); font-family: monospace;">
                             Rp {{ number_format($p->promo_price, 0, ',', '.') }}
                         </span>
                         <span style="font-size: 0.85rem; color: #64748b; text-decoration: line-through; font-family: monospace;">
@@ -130,9 +130,9 @@
                     </div>
 
                     <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; margin-top: auto;">
-                        <button type="button" onclick="openProductOrderModal('{{ $p->name }}', 'Rp {{ number_format($p->promo_price, 0, ',', '.') }}')" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 15px rgba(132,204,22,0.4);">
-                            <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i>
-                            <span>PESAN VIA WHATSAPP KASIR</span>
+                        <button type="button" onclick="openProductOrderModal('{{ $p->name }}', 'Rp {{ number_format($p->promo_price, 0, ',', '.') }}')" class="btn glow-btn" style="width: 100%; background: var(--brand-primary, #84cc16); color: #ffffff !important; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 15px rgba(132,204,22,0.4);">
+                            <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem; color: #ffffff !important;"></i>
+                            <span style="color: #ffffff !important;">PESAN VIA WHATSAPP KASIR</span>
                         </button>
                     </div>
                 </div>
@@ -146,16 +146,16 @@
 
 <!-- PRODUCT ORDER MODAL -->
 <div id="productOrderModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1.5rem;">
-    <div style="background: #0d1310; border: 2px solid #84cc16; border-radius: 1.75rem; padding: 2.25rem; max-width: 440px; width: 100%; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 35px rgba(132, 204, 22, 0.3); position: relative; color: white;">
+    <div style="background: #0d1310; border: 2px solid var(--brand-primary, #84cc16); border-radius: 1.75rem; padding: 2.25rem; max-width: 440px; width: 100%; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 35px rgba(132, 204, 22, 0.3); position: relative; color: white;">
         <button onclick="closeProductOrderModal()" style="position: absolute; top: 1rem; right: 1.25rem; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer;">&times;</button>
 
-        <div style="font-size: 0.8rem; color: #84cc16; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.35rem;">
+        <div style="font-size: 0.8rem; color: var(--brand-primary, #84cc16); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.35rem;">
             <i class="fa-solid fa-cart-shopping"></i> ORDER PRODUK FITLIFE STORE
         </div>
         <h3 style="font-size: 1.3rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-bottom: 0.25rem;" id="modalProductName">
             FitLife Whey Isolate Protein
         </h3>
-        <div style="font-size: 1.2rem; font-weight: 900; color: #84cc16; font-family: monospace; margin-bottom: 1.25rem;" id="modalProductPrice">
+        <div style="font-size: 1.2rem; font-weight: 900; color: var(--brand-primary, #84cc16); font-family: monospace; margin-bottom: 1.25rem;" id="modalProductPrice">
             Rp 385.000
         </div>
 
@@ -175,9 +175,9 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.9rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
-                <i class="fa-brands fa-whatsapp" style="font-size: 1.15rem;"></i>
-                <span>PROSES ORDERS VIA KASIR STUDIO</span>
+            <button type="submit" class="btn glow-btn" style="width: 100%; background: var(--brand-primary, #84cc16); color: #ffffff !important; border: none; padding: 0.9rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.15rem; color: #ffffff !important;"></i>
+                <span style="color: #ffffff !important;">PROSES ORDERS VIA KASIR STUDIO</span>
             </button>
         </form>
     </div>
@@ -205,14 +205,15 @@
     }
 
     function filterCategory(cat, btnEl) {
+        const activeThemeColor = getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim() || '#84cc16';
         document.querySelectorAll('.store-filter-btn').forEach(btn => {
             btn.style.background = 'rgba(255,255,255,0.05)';
             btn.style.color = '#cbd5e1';
             btn.style.borderColor = 'rgba(255,255,255,0.12)';
         });
-        btnEl.style.background = '#84cc16';
-        btnEl.style.color = '#090d0b';
-        btnEl.style.borderColor = '#84cc16';
+        btnEl.style.background = activeThemeColor;
+        btnEl.style.color = '#ffffff';
+        btnEl.style.borderColor = activeThemeColor;
 
         const cards = document.querySelectorAll('.product-card-item');
         cards.forEach(card => {

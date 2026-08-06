@@ -40,14 +40,14 @@
             </div>
 
             <!-- Lead Conversion Box -->
-            <div class="glass-card" style="margin-top: 2.5rem; padding: 2.25rem; background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; text-align: center; border-radius: 1.25rem;">
-                <h3 style="color: white; font-size: 1.6rem; font-weight: 900; margin-bottom: 0.5rem;">Ingin Konsultasi Program Fitness & Sesi PT?</h3>
-                <p style="color: #dcfce7; font-size: 0.95rem; margin-bottom: 1.5rem;">Klaim 1 Sesi Free Trial Personal Trainer & Assessment InBody 3D gratis hari ini!</p>
+            <div class="glass-card" style="margin-top: 2.5rem; padding: 2.25rem; background: linear-gradient(135deg, #0d1310 0%, #16201a 100%); border: 1.5px solid var(--brand-primary, #84cc16); color: white; text-align: center; border-radius: 1.25rem;">
+                <h3 style="color: white; font-size: 1.6rem; font-weight: 900; margin-bottom: 0.5rem;">Ingin Konsultasi Program Fitness &amp; Sesi PT?</h3>
+                <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem;">Klaim 1 Sesi Free Trial Personal Trainer &amp; Assessment InBody 3D gratis hari ini!</p>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="openRegistrationModal()" class="btn btn-accent btn-sm" style="background: white; color: #059669; font-weight: 900; border: none; padding: 0.65rem 1.25rem; border-radius: 99px;">
-                        <i class="fa-solid fa-paper-plane"></i> Daftar Now
+                    <button onclick="openRegistrationModal()" class="btn btn-accent btn-sm" style="background: var(--brand-primary, #84cc16); color: #ffffff !important; font-weight: 900; border: none; padding: 0.65rem 1.25rem; border-radius: 99px;">
+                        <i class="fa-solid fa-paper-plane" style="color: #ffffff !important;"></i> <span style="color: #ffffff !important;">Daftar Now</span>
                     </button>
-                    <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text=Halo%20Admin%20ApexFitness,%20saya%20membaca%20artikel%20{{ urlencode($post->title) }}" target="_blank" class="btn btn-whatsapp btn-sm" style="background: #25d366; color: white; font-weight: 800; border-radius: 99px; text-decoration: none; padding: 0.65rem 1.25rem;">
+                    <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text=Halo%20Admin%20FitLife,%20saya%20membaca%20artikel%20{{ urlencode($post->title) }}" target="_blank" class="btn btn-whatsapp btn-sm" style="background: #25d366; color: white; font-weight: 800; border-radius: 99px; text-decoration: none; padding: 0.65rem 1.25rem;">
                         <i class="fa-brands fa-whatsapp"></i> Chat Admin WA
                     </a>
                 </div>
