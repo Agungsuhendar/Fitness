@@ -21,7 +21,11 @@
                 </p>
             </div>
 
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <div style="display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap;">
+                <label style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(132,204,22,0.12); border: 1px solid rgba(132,204,22,0.3); padding: 0.5rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.825rem; font-weight: 800; color: #84cc16;">
+                    <input type="checkbox" id="ttsToggle" checked style="accent-color: #84cc16; width: 16px; height: 16px;">
+                    <i class="fa-solid fa-volume-high"></i> Suara Pengumuman TTS (Audio Active)
+                </label>
                 <span style="background: rgba(132,204,22,0.15); color: #84cc16; border: 1.5px solid #84cc16; padding: 0.65rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem;">
                     <i class="fa-solid fa-signal"></i> SCANNER KIOSK READY
                 </span>
@@ -186,17 +190,28 @@
             },
             body: JSON.stringify({ member_id: memberId })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                const card = document.getElementById('checkinResultCard');
-                document.getElementById('resMemberName').innerText = data.name + ' (' + data.member_id + ')';
+        .then(res => {
+            return res.json().then(data => ({ status: res.status, body: data }));
+        })
+        .then(res => {
+            const data = res.body;
+            const card = document.getElementById('checkinResultCard');
+
+            if (data.success && data.access_granted) {
+                card.style.borderColor = '#84cc16';
+                card.style.boxShadow = '0 0 35px rgba(132, 204, 22, 0.35)';
+                document.getElementById('resMemberName').innerHTML = `<span style="color:#ffffff;">${data.name}</span> <span style="font-size:0.9rem; color:#84cc16;">(${data.member_id})</span>`;
                 document.getElementById('resPtDeducted').innerText = data.pt_deducted;
                 document.getElementById('resRemainingSessions').innerText = data.remaining_sessions;
-                document.getElementById('resBranch').innerText = data.branch;
-                document.getElementById('resCoach').innerText = data.assigned_coach;
+                document.getElementById('resBranch').innerText = data.branch || 'Sleman HQ';
+                document.getElementById('resCoach').innerText = data.assigned_coach || 'Coach Hendra Wijaya';
 
                 card.style.display = 'block';
+
+                // TTS Voice Announcement
+                if (document.getElementById('ttsToggle') && document.getElementById('ttsToggle').checked) {
+                    speakAnnouncement(`Selamat Datang Kak ${data.name}! Akses pintu studio diizinkan. ${data.remaining_sessions}.`);
+                }
 
                 // Add to Log Table
                 const tbody = document.getElementById('checkinLogTbody');
@@ -213,8 +228,45 @@
                     </td>
                 </tr>`;
                 tbody.innerHTML = newRow + tbody.innerHTML;
+            } else {
+                // Access Denied / Quota 0
+                card.style.borderColor = '#ef4444';
+                card.style.boxShadow = '0 0 35px rgba(239, 68, 68, 0.4)';
+                document.getElementById('resMemberName').innerHTML = `<span style="color:#f87171;">⛔ AKSES DITOLAK: ${data.name || memberId}</span>`;
+                document.getElementById('resPtDeducted').innerText = '0 Sesi (Kuota Habis)';
+                document.getElementById('resRemainingSessions').innerText = '0 Sesi Tersisa';
+                document.getElementById('resBranch').innerText = 'Sleman HQ';
+                document.getElementById('resCoach').innerText = 'Silakan Perpanjang Paket';
+
+                card.style.display = 'block';
+
+                // TTS Voice Announcement Denied
+                if (document.getElementById('ttsToggle') && document.getElementById('ttsToggle').checked) {
+                    speakAnnouncement(`Maaf ${data.name || 'Member'}, akses ditolak. Kuota sesi personal trainer Anda telah habis. Silakan melakukan isi ulang sesi di kasir.`);
+                } else {
+                    alert(data.message || 'Check-in ditolak: Kuota sesi member sudah habis.');
+                }
             }
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan koneksi saat memproses check-in.');
         });
+    }
+
+    function speakAnnouncement(text) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
+        if (idVoice) utterance.voice = idVoice;
+
+        window.speechSynthesis.speak(utterance);
     }
 </script>
 @endsection

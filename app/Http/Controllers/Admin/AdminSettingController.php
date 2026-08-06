@@ -48,6 +48,12 @@ class AdminSettingController extends Controller
             'cta_banner_subtitle' => Setting::get('cta_banner_subtitle', 'Jangan tunda lagi! Konsultasikan kebutuhan fitness & personal trainer Anda secara gratis dengan tim admin & pelatih kami sekarang juga.'),
             'cta_popup_enabled' => Setting::get('cta_popup_enabled', '1'),
             'cta_popup_delay' => Setting::get('cta_popup_delay', '20'),
+            'midtrans_merchant_id' => Setting::get('midtrans_merchant_id', env('MIDTRANS_MERCHANT_ID', 'G123456789')),
+            'midtrans_client_key' => Setting::get('midtrans_client_key', env('MIDTRANS_CLIENT_KEY', 'SB-Mid-client-DemoFitnessKey123')),
+            'midtrans_server_key' => Setting::get('midtrans_server_key', env('MIDTRANS_SERVER_KEY', 'SB-Mid-server-DemoFitnessKey123')),
+            'midtrans_is_production' => Setting::get('midtrans_is_production', '0'),
+            'wa_api_key' => Setting::get('wa_api_key', env('WA_API_KEY', 'demo_wa_api_key_fitlife')),
+            'wa_api_endpoint' => Setting::get('wa_api_endpoint', env('WA_API_ENDPOINT', 'https://api.fonnte.com/send')),
         ];
 
         return view('admin.settings.index', compact('settings'));
@@ -129,7 +135,9 @@ class AdminSettingController extends Controller
             'stat_trainers', 'stat_trainers_label', 'stat_rating', 'stat_rating_label',
             'site_seo_title', 'site_seo_description', 'promo_text', 'site_footer_about',
             'cta_banner_title', 'cta_banner_subtitle',
-            'cta_popup_enabled', 'cta_popup_delay'
+            'cta_popup_enabled', 'cta_popup_delay',
+            'midtrans_merchant_id', 'midtrans_client_key', 'midtrans_server_key', 'midtrans_is_production',
+            'wa_api_key', 'wa_api_endpoint'
         ];
 
         foreach ($textFields as $field) {

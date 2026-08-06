@@ -141,12 +141,29 @@
         })
         .then(res => res.json())
         .then(data => {
+            speakAnnouncement('Pembayaran ' + payId + ' Berhasil Di-Approve. Kuota Sesi Member Telah Ditambahkan.');
             alert(data.message);
             const badge = document.getElementById('statusBadge-' + payId);
             if (badge) {
                 badge.innerHTML = '<span style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-weight: 900; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 99px;">✔ LUNAS (APPROVED)</span>';
             }
         });
+    }
+
+    function speakAnnouncement(text) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
+        if (idVoice) utterance.voice = idVoice;
+
+        window.speechSynthesis.speak(utterance);
     }
 </script>
 @endsection

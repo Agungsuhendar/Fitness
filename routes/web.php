@@ -11,6 +11,11 @@ use App\Http\Controllers\Admin\AdminProgramController;
 use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminLeadController;
+use App\Http\Controllers\Admin\AdminMemberController;
+use App\Http\Controllers\Admin\AdminIntegrationController;
+use App\Http\Controllers\Admin\AdminPosController;
+use App\Http\Controllers\Auth\MemberAuthController;
+use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminCoachController;
@@ -77,9 +82,16 @@ Route::get('/harga', [PageController::class, 'harga'])->name('harga');
 Route::get('/testimoni', [PageController::class, 'testimoni'])->name('testimoni');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/kontak', [PageController::class, 'kontak'])->name('kontak');
+// Member Authentication Routes
+Route::get('/login', [MemberAuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [MemberAuthController::class, 'login']);
+Route::get('/register', [MemberAuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [MemberAuthController::class, 'register']);
+Route::post('/logout', [MemberAuthController::class, 'logout'])->name('logout');
+
 Route::get('/kalkulator', [PageController::class, 'kalkulator'])->name('kalkulator');
 Route::get('/quiz', [PageController::class, 'quiz'])->name('quiz');
-Route::get('/member', [PageController::class, 'memberDashboard'])->name('member.dashboard');
+Route::get('/member', [PageController::class, 'memberDashboard'])->middleware(['auth'])->name('member.dashboard');
 Route::get('/pelatih', [PageController::class, 'pelatih'])->name('pelatih');
 Route::get('/tulis-testimoni', [PageController::class, 'tulisTestimoni'])->name('tulis-testimoni');
 Route::post('/tulis-testimoni', [PageController::class, 'storeTestimonial'])->name('testimoni.store');
@@ -168,6 +180,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/testimonials/{testimonial}/toggle-approve', [AdminTestimonialController::class, 'toggleApprove'])->name('testimonials.toggle-approve');
     Route::resource('videos', AdminVideoController::class);
     Route::resource('features', AdminFeatureController::class);
+    Route::resource('members', AdminMemberController::class);
     
     // Lead Entries
     Route::get('/registrations', [AdminLeadController::class, 'registrations'])->name('registrations');
@@ -176,7 +189,22 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Site Settings Management
     Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+
+    // API Integrations (Midtrans & Wablas WA Gateway)
+    Route::get('/integrations', [AdminIntegrationController::class, 'index'])->name('integrations.index');
+    Route::post('/integrations', [AdminIntegrationController::class, 'update'])->name('integrations.update');
+    Route::post('/integrations/test-wa', [AdminIntegrationController::class, 'testWhatsApp'])->name('integrations.test-wa');
+
+    // POS Kasir Studio & Toko Suplemen
+    Route::get('/pos', [AdminPosController::class, 'index'])->name('pos.index');
+    Route::post('/pos/checkout', [AdminPosController::class, 'checkout'])->name('pos.checkout');
+    Route::get('/pos/receipt/{id}', [AdminPosController::class, 'showReceipt'])->name('pos.receipt');
+    Route::get('/products', [AdminPosController::class, 'productsIndex'])->name('pos.products');
+    Route::post('/products', [AdminPosController::class, 'storeProduct'])->name('products.store');
+    Route::put('/products/{id}', [AdminPosController::class, 'updateProduct'])->name('products.update');
 });
+
+Route::post('/member/progress', [PageController::class, 'updateMemberProgress'])->middleware(['auth'])->name('member.progress');
 
 // Admin Leads Dashboard & CSV Export Public Access
 Route::get('/admin/leads', [LeadController::class, 'adminLeadsIndex'])->name('admin.leads.index');
@@ -192,3 +220,8 @@ Route::get('/invoice', [LeadController::class, 'showInvoice'])->name('invoice.sh
 Route::get('/admin/payments', [LeadController::class, 'adminPaymentsIndex'])->name('admin.payments.index');
 Route::post('/admin/payments/{id}/approve', [LeadController::class, 'approvePayment'])->name('admin.payments.approve');
 Route::post('/admin/payments/{id}/reject', [LeadController::class, 'rejectPayment'])->name('admin.payments.reject');
+
+// Midtrans Automated Payment Gateway & Webhook Routes
+Route::post('/payment/snap-token', [PaymentController::class, 'createSnapToken'])->name('payment.snap');
+Route::post('/api/midtrans/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+Route::post('/payment/simulate-success/{orderId}', [PaymentController::class, 'simulatePaymentSuccess'])->name('payment.simulate')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);

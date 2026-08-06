@@ -286,6 +286,14 @@
             </div>
 
             <ul class="admin-nav">
+                @php
+                    $userRole = auth()->user()->role ?? 'admin';
+                    $isAdmin = in_array($userRole, ['admin', 'superadmin']);
+                    $isReceptionist = in_array($userRole, ['receptionist', 'kasir']);
+                    $isCoach = in_array($userRole, ['coach', 'pt']);
+                @endphp
+
+                @if($isAdmin)
                 <li class="admin-nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" title="Dashboard Overview">
                         <i class="fa-solid fa-chart-line"></i>
@@ -301,7 +309,7 @@
                 <li class="admin-nav-item">
                     <a href="{{ route('admin.faqs.index') }}" class="{{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}" title="Kelola FAQ">
                         <i class="fa-solid fa-circle-question"></i>
-                        <span class="nav-text">Kelola FAQ (20+)</span>
+                        <span class="nav-text">Kelola FAQ</span>
                     </a>
                 </li>
                 <li class="admin-nav-item">
@@ -334,6 +342,45 @@
                         <span class="nav-text">Kelola Keunggulan</span>
                     </a>
                 </li>
+                @endif
+
+                @if($isAdmin || $isReceptionist || $isCoach)
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.members.index') }}" class="{{ request()->routeIs('admin.members.*') ? 'active' : '' }}" title="Manajemen Member & Top-Up">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span class="nav-text">Manajemen Member &amp; Top-Up</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($isAdmin || $isReceptionist)
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.pos.index') }}" class="{{ request()->routeIs('admin.pos.*') ? 'active' : '' }}" title="POS Kasir Studio & Toko">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="nav-text">POS Kasir &amp; Toko Studio</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($isAdmin || $isReceptionist || $isCoach)
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.checkin.index') }}" class="{{ request()->routeIs('admin.checkin.*') ? 'active' : '' }}" title="Kiosk Presensi Studio">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span class="nav-text">Kiosk Presensi Studio</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($isAdmin || $isReceptionist)
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.payments.index') }}" class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}" title="Verifikasi Pembayaran">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span class="nav-text">Verifikasi Pembayaran (Midtrans)</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($isAdmin)
                 <li class="admin-nav-item">
                     <a href="{{ route('admin.registrations') }}" class="{{ request()->routeIs('admin.registrations') ? 'active' : '' }}" title="Data Pendaftaran">
                         <i class="fa-solid fa-address-card"></i>
@@ -347,11 +394,18 @@
                     </a>
                 </li>
                 <li class="admin-nav-item">
+                    <a href="{{ route('admin.integrations.index') }}" class="{{ request()->routeIs('admin.integrations.*') ? 'active' : '' }}" title="Integrasi Midtrans & Wablas">
+                        <i class="fa-solid fa-plug"></i>
+                        <span class="nav-text">Integrasi Midtrans &amp; Wablas</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
                     <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" title="Pengaturan Website">
                         <i class="fa-solid fa-gears"></i>
                         <span class="nav-text">Pengaturan Website</span>
                     </a>
                 </li>
+                @endif
             </ul>
 
             <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">

@@ -104,13 +104,28 @@
                     </div>
                 </li>
 
-                <!-- Member Button -->
-                <li style="display: inline-flex; align-items: center; flex-shrink: 0;">
-                    <a href="{{ route('member.dashboard') }}" class="btn" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1.5px solid rgba(255,255,255,0.15); padding: 0.45rem 1.1rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap;">
-                        <i class="fa-solid fa-user-check" style="color: #84cc16;"></i>
-                        <span>Member</span>
-                    </a>
-                </li>
+                <!-- Member Auth Actions (Desktop) -->
+                @auth
+                    <li style="display: inline-flex; align-items: center; flex-shrink: 0; gap: 0.5rem;">
+                        <a href="{{ route('member.dashboard') }}" class="btn" style="background: rgba(132, 204, 22, 0.15); color: #84cc16; border: 1.5px solid #84cc16; padding: 0.45rem 1.1rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap;">
+                            <i class="fa-solid fa-user-check" style="color: #84cc16;"></i>
+                            <span>{{ Str::words(Auth::user()->name, 1, '') }}</span>
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" style="display: inline; margin: 0;">
+                            @csrf
+                            <button type="submit" class="btn" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.45rem 0.75rem; border-radius: 99px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" title="Keluar Akun">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </form>
+                    </li>
+                @else
+                    <li style="display: inline-flex; align-items: center; flex-shrink: 0;">
+                        <a href="{{ route('login') }}" class="btn" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1.5px solid rgba(255,255,255,0.15); padding: 0.45rem 1.1rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap;">
+                            <i class="fa-solid fa-right-to-bracket" style="color: #84cc16;"></i>
+                            <span>Masuk Member</span>
+                        </a>
+                    </li>
+                @endauth
 
                 <!-- CTA Button Daftar Trial -->
                 <li style="display: inline-flex; align-items: center; flex-shrink: 0;">

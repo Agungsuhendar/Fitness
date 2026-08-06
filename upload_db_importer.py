@@ -1,7 +1,7 @@
 from ftplib import FTP
 
 host = "ftpupload.net"
-user = "if0_42562646"
+user = "if0_42586885"
 password = "Arkanza0123456"
 
 print("Connecting to FTP...")
@@ -14,9 +14,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $host = 'sql103.epizy.com';
-$user = 'if0_42562646';
+$user = 'if0_42586885';
 $pass = 'Arkanza0123456';
-$dbname = 'if0_42562646_lesrenang';
+$dbname = 'if0_42586885_fitlife';
 $sqlFile = 'database_dump.sql';
 
 if (!file_exists($sqlFile)) {

@@ -5,7 +5,7 @@
 
 @section('content')
 <!-- Login Auth Gate Container -->
-<div id="memberAuthGate" style="display: block; background: linear-gradient(180deg, #060907 0%, #0d1310 100%); padding: 3.5rem 0 5rem; color: white; min-height: 80vh;">
+<div id="memberAuthGate" style="display: {{ Auth::check() ? 'none' : 'block' }}; background: linear-gradient(180deg, #060907 0%, #0d1310 100%); padding: 3.5rem 0 5rem; color: white; min-height: 80vh;">
     <div class="container" style="max-width: 520px;">
         
         <div style="background: #0d1310; border: 1.5px solid rgba(132, 204, 22, 0.4); border-radius: 1.75rem; padding: 2.5rem; box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 35px rgba(132, 204, 22, 0.15); text-align: center;">
@@ -17,30 +17,25 @@
             <h2 style="font-size: 1.8rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem;">
                 Portal Area Member VIP
             </h2>
-            <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
-                Masukkan <strong>ID Member</strong> (contoh: <code>FL-MBR-7782</code>) atau <strong>Nomor WhatsApp</strong> Anda untuk membuka fitur eksklusif Workout, Nutrisi &amp; AI CS.
+            <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6; margin-bottom: 1.5rem;">
+                Masuk dengan <strong>Email / WhatsApp</strong> Anda untuk memantau kuota sesi &amp; statistik latihan.
             </p>
 
-            <form onsubmit="handleMemberLogin(event)">
-                <div style="margin-bottom: 1.25rem; text-align: left;">
-                    <label style="font-size: 0.8rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.45rem;">
-                        ID MEMBER ATAU NO. WHATSAPP <span style="color: #ef4444;">*</span>
-                    </label>
-                    <div style="position: relative;">
-                        <input type="text" id="memberLoginInput" required placeholder="Contoh: FL-MBR-7782 atau 081234567890" value="FL-MBR-7782" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.18); padding: 0.9rem 1.15rem 0.9rem 2.8rem; border-radius: 0.85rem; color: white; font-size: 0.95rem; outline: none; font-weight: 700;" onfocus="this.style.borderColor='#84cc16'" onblur="this.style.borderColor='rgba(255,255,255,0.18)'">
-                        <i class="fa-solid fa-id-card" style="position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%); color: #84cc16;"></i>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1.25rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
+                <a href="{{ route('login') }}" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
                     <i class="fa-solid fa-right-to-bracket"></i>
-                    <span>Masuk ke Portal Member</span>
-                </button>
+                    <span>Masuk ke Akun Member</span>
+                </a>
 
-                <button type="button" onclick="doDemoLogin()" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px dashed rgba(132,204,22,0.5); color: #84cc16; padding: 0.65rem; border-radius: 0.75rem; font-weight: 800; font-size: 0.8rem; cursor: pointer; margin-bottom: 1.75rem; transition: all 0.2s;">
-                    ⚡ Klik Coba Demo Login (ID: FL-MBR-7782)
-                </button>
-            </form>
+                <a href="{{ route('register') }}" style="width: 100%; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.2); color: #ffffff; padding: 0.85rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-user-plus" style="color: #84cc16;"></i>
+                    <span>Daftar Akun Member Baru</span>
+                </a>
+            </div>
+
+            <button type="button" onclick="doDemoLogin()" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px dashed rgba(132,204,22,0.5); color: #84cc16; padding: 0.65rem; border-radius: 0.75rem; font-weight: 800; font-size: 0.8rem; cursor: pointer; margin-bottom: 1.5rem; transition: all 0.2s;">
+                ⚡ Klik Coba Preview Tampilan (Demo Mode)
+            </button>
 
             <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem; font-size: 0.85rem; color: #94a3b8;">
                 Belum menjadi member FitLife Center? <br>
@@ -55,7 +50,7 @@
 </div>
 
 <!-- Logged In VIP Member Dashboard Container -->
-<div id="memberDashboardContainer" style="display: none;">
+<div id="memberDashboardContainer" style="display: {{ Auth::check() ? 'block' : 'none' }};">
     
     <!-- Top Header Banner & Member Card -->
     <section style="background: linear-gradient(180deg, #060907 0%, #0d1310 100%); padding: 3.5rem 0 3rem; color: white; border-bottom: 1px solid rgba(255,255,255,0.08); overflow: hidden;">
@@ -69,9 +64,12 @@
                             <i class="fa-solid fa-crown"></i>
                             <span>VIP Exclusive Member Area</span>
                         </div>
-                        <button onclick="handleMemberLogout()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.8rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;">
-                            <i class="fa-solid fa-right-from-bracket"></i> Keluar Member
-                        </button>
+                        <form method="POST" action="{{ route('logout') }}" style="display: inline; margin: 0;">
+                            @csrf
+                            <button type="submit" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.8rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa-solid fa-right-from-bracket"></i> Keluar Member
+                            </button>
+                        </form>
                     </div>
 
                     <h1 style="font-size: 2.6rem; font-weight: 900; color: #ffffff; margin-bottom: 0.6rem; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em;">
@@ -719,7 +717,61 @@
                         </div>
 
                         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
-                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">LINGKAR DADA</span>
+                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">BERAT BADAN SEKARANG</span>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #38bdf8; margin-top: 0.2rem;" id="liveCurrentWeightText">
+                                {{ $member->current_weight }} kg
+                            </div>
+                            <span style="font-size: 0.7rem; color: #38bdf8; font-weight: 800;">Target: {{ $member->target_weight }} kg</span>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
+                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">ESTIMASI BODY FAT</span>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #fbbf24; margin-top: 0.2rem;" id="liveCurrentFatText">
+                                {{ $member->current_bodyfat }}%
+                            </div>
+                            <span style="font-size: 0.7rem; color: #fbbf24; font-weight: 800;">Awal: {{ $member->initial_bodyfat }}%</span>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
+                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">MASSA OTOT</span>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #a78bfa; margin-top: 0.2rem;">
+                                {{ $member->muscle_mass }}
+                            </div>
+                            <span style="font-size: 0.7rem; color: #a78bfa; font-weight: 800;">+1.8 kg Peningkatan!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Weight & Progress Form Box -->
+                <div style="background: rgba(132,204,22,0.08); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.5rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-pen-to-square" style="color: #84cc16;"></i> Update Statistik Berat Badan Harian Anda
+                    </h4>
+                    <p style="font-size: 0.825rem; color: #94a3b8; margin-bottom: 1.25rem;">
+                        Catat berat badan &amp; fat % terkini untuk memperbarui grafik progres fisik di sistem FitLife Center.
+                    </p>
+
+                    <form onsubmit="handleProgressUpdate(event)">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.25rem;" class="grid-2">
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">BERAT SEKARANG (KG)</label>
+                                <input type="number" step="0.1" id="inputCurrentWeight" value="{{ $member->current_weight }}" required style="width: 100%; background: #0d1310; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">TARGET BERAT (KG)</label>
+                                <input type="number" step="0.1" id="inputTargetWeight" value="{{ $member->target_weight }}" required style="width: 100%; background: #0d1310; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">FAT TUBUH (%)</label>
+                                <input type="number" step="0.1" id="inputCurrentFat" value="{{ $member->current_bodyfat }}" style="width: 100%; background: #0d1310; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.75rem 1.5rem; border-radius: 99px; font-weight: 900; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-floppy-disk"></i> SIMPAN PEMBARUAN PROGRES
+                        </button>
+                    </form>
+                </div>
                             <div style="font-size: 1.25rem; font-weight: 900; color: #38bdf8; margin-top: 0.2rem;">102 cm</div>
                             <span style="font-size: 0.7rem; color: #38bdf8; font-weight: 800;">-6 cm Lebih Lean</span>
                         </div>
@@ -1150,6 +1202,39 @@
     function closeQrModal() {
         const modal = document.getElementById('qrCodeModal');
         if (modal) modal.style.display = 'none';
+    }
+
+    function handleProgressUpdate(e) {
+        if (e) e.preventDefault();
+        const w = document.getElementById('inputCurrentWeight').value;
+        const tw = document.getElementById('inputTargetWeight').value;
+        const fat = document.getElementById('inputCurrentFat').value;
+
+        fetch('{{ route("member.progress") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                current_weight: w,
+                target_weight: tw,
+                current_bodyfat: fat
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                if (document.getElementById('liveCurrentWeightText')) {
+                    document.getElementById('liveCurrentWeightText').innerText = w + ' kg';
+                }
+                if (document.getElementById('liveCurrentFatText')) {
+                    document.getElementById('liveCurrentFatText').innerText = fat + '%';
+                }
+            }
+        })
+        .catch(err => alert('Gagal memperbarui statistik.'));
     }
 </script>
 @endsection

@@ -301,7 +301,69 @@
                 </div>
             </div>
 
-            <!-- Section 6: Link Sosial Media -->
+            <!-- Section 6: Integration API Midtrans Payment Gateway -->
+            <div style="margin-bottom: 2.25rem; background: rgba(2, 132, 199, 0.05); border: 1.5px solid #0284c7; padding: 1.5rem; border-radius: 1.25rem;">
+                <h4 style="font-size: 1.1rem; color: #0284c7; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 800;">
+                    <i class="fa-solid fa-credit-card" style="color: #0284c7;"></i> Integrasi Kunci API Midtrans Payment Gateway (QRIS &amp; VA)
+                </h4>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+                    <div>
+                        <label style="display: block; font-weight: 800; font-size: 0.85rem; color: #334155; margin-bottom: 0.35rem;">
+                            Midtrans Merchant ID:
+                        </label>
+                        <input type="text" name="midtrans_merchant_id" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('midtrans_merchant_id', $settings['midtrans_merchant_id'] ?? 'G123456789') }}">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-weight: 800; font-size: 0.85rem; color: #334155; margin-bottom: 0.35rem;">
+                            Midtrans Client Key:
+                        </label>
+                        <input type="text" name="midtrans_client_key" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('midtrans_client_key', $settings['midtrans_client_key'] ?? 'SB-Mid-client-DemoFitnessKey123') }}">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-weight: 800; font-size: 0.85rem; color: #334155; margin-bottom: 0.35rem;">
+                            Midtrans Server Key:
+                        </label>
+                        <input type="password" name="midtrans_server_key" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('midtrans_server_key', $settings['midtrans_server_key'] ?? 'SB-Mid-server-DemoFitnessKey123') }}">
+                    </div>
+                </div>
+
+                <div style="font-size: 0.825rem; color: #475569; background: white; padding: 0.75rem 1rem; border-radius: 0.75rem; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <span>📌 <strong>Webhook Notification URL Callback:</strong> <code style="color: #0284c7; font-weight: 800;">{{ url('/api/midtrans/webhook') }}</code></span>
+                    <span style="color: #059669; font-weight: 800;">Mode: Sandbox / Testing</span>
+                </div>
+            </div>
+
+            <!-- Section 7: Integration WhatsApp Gateway API -->
+            <div style="margin-bottom: 2.25rem; background: rgba(37, 211, 102, 0.05); border: 1.5px solid #25d366; padding: 1.5rem; border-radius: 1.25rem;">
+                <h4 style="font-size: 1.1rem; color: #15803d; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 800;">
+                    <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> Pengaturan WhatsApp Gateway Server-to-Server (Fonnte / Wablas)
+                </h4>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-weight: 800; font-size: 0.85rem; color: #334155; margin-bottom: 0.35rem;">
+                            WA Gateway API Token / Key:
+                        </label>
+                        <input type="password" name="wa_api_key" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('wa_api_key', $settings['wa_api_key'] ?? 'demo_wa_api_key_fitlife') }}">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-weight: 800; font-size: 0.85rem; color: #334155; margin-bottom: 0.35rem;">
+                            WA Gateway Endpoint API URL:
+                        </label>
+                        <input type="text" name="wa_api_endpoint" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; box-sizing: border-box;" value="{{ old('wa_api_endpoint', $settings['wa_api_endpoint'] ?? 'https://api.fonnte.com/send') }}">
+                    </div>
+                </div>
+
+                <div style="font-size: 0.8rem; color: #15803d; font-weight: 700;">
+                    ⚡ Otomatis mengirimkan ucapan Selamat Datang, E-Receipt Invoice Lunas, &amp; Notifikasi Sisa Sesi Presensi ke WA Member.
+                </div>
+            </div>
+
+            <!-- Section 8: Link Sosial Media -->
             <div style="margin-bottom: 2.25rem;">
                 <h4 style="font-size: 1.1rem; color: #03045e; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 800;">
                     <i class="fa-solid fa-share-nodes" style="color: #f59e0b;"></i> Link Akun Sosial Media Resmi

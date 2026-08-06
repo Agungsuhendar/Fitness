@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Registration;
 use App\Models\TrialBooking;
+use App\Models\Attendance;
+use App\Models\User;
+use App\Models\Payment;
 
 class LeadController extends Controller
 {
@@ -337,35 +340,37 @@ class LeadController extends Controller
 
     public function adminCheckinIndex(Request $request)
     {
-        $recentCheckins = collect([
-            (object)[
-                'member_id' => 'FL-MBR-7782',
-                'name' => 'Bima Prasetya',
-                'branch' => 'Sleman HQ (Jl. Kaliurang)',
-                'checkin_time' => '06 Aug 2026, 13:15:20',
-                'pt_deducted' => '-1 Sesi',
-                'remaining_sessions' => '7 Sesi',
-                'status' => 'APPROVED'
-            ],
-            (object)[
-                'member_id' => 'FL-MBR-9988',
-                'name' => 'Siti Nurhaliza',
-                'branch' => 'Seturan Branch (UGM)',
-                'checkin_time' => '06 Aug 2026, 11:30:15',
-                'pt_deducted' => '-1 Sesi',
-                'remaining_sessions' => '11 Sesi',
-                'status' => 'APPROVED'
-            ],
-            (object)[
-                'member_id' => 'FL-MBR-4512',
-                'name' => 'Aditya Putra',
-                'branch' => 'Sewon Branch (Bantul)',
-                'checkin_time' => '06 Aug 2026, 09:45:00',
-                'pt_deducted' => 'Gym Pass Only',
-                'remaining_sessions' => 'Unlimited Pass',
-                'status' => 'APPROVED'
-            ]
-        ]);
+        try {
+            $dbCheckins = Attendance::orderByDesc('created_at')->take(20)->get();
+
+            if ($dbCheckins->isNotEmpty()) {
+                $recentCheckins = $dbCheckins->map(function($att) {
+                    return (object)[
+                        'member_id' => $att->member_card_id,
+                        'name' => $att->member_name,
+                        'branch' => $att->branch,
+                        'checkin_time' => $att->checkin_time ? $att->checkin_time->format('d M Y, H:i:s') : date('d M Y, H:i:s'),
+                        'pt_deducted' => $att->pt_deducted,
+                        'remaining_sessions' => $att->remaining_sessions_after . ' Sesi',
+                        'status' => $att->status
+                    ];
+                });
+            } else {
+                $recentCheckins = collect([
+                    (object)[
+                        'member_id' => 'FL-MBR-7782',
+                        'name' => 'Bima Prasetya',
+                        'branch' => 'Sleman HQ (Jl. Kaliurang)',
+                        'checkin_time' => date('d M Y, H:i:s'),
+                        'pt_deducted' => '-1 Sesi PT Terpakai',
+                        'remaining_sessions' => '7 Sesi',
+                        'status' => 'APPROVED'
+                    ],
+                ]);
+            }
+        } catch (\Exception $e) {
+            $recentCheckins = collect([]);
+        }
 
         return view('admin.checkin.index', compact('recentCheckins'));
     }
@@ -381,45 +386,97 @@ class LeadController extends Controller
             ], 400);
         }
 
-        $membersData = [
-            'FL-MBR-7782' => [
-                'name' => 'Bima Prasetya',
-                'tier' => 'VIP ATHLETE PASS',
-                'branch' => 'Sleman HQ (Jl. Kaliurang)',
-                'remaining_sessions' => 7,
-                'assigned_coach' => 'Coach Hendra Wijaya',
-                'status' => 'ACTIVE VIP'
-            ],
-            'FL-MBR-9988' => [
-                'name' => 'Siti Nurhaliza',
-                'tier' => 'FEMALE SHAPING PASS',
-                'branch' => 'Seturan Branch (UGM)',
-                'remaining_sessions' => 11,
-                'assigned_coach' => 'Coach Maya Indah',
-                'status' => 'ACTIVE VIP'
-            ]
-        ];
+        // Search user in database by member_card_id, email, phone, or ID
+        $cleanPhone = preg_replace('/[^0-9]/', '', $memberId);
+        $user = User::where('member_card_id', $memberId)
+            ->orWhere('email', strtolower($memberId))
+            ->when($cleanPhone, function($q) use ($cleanPhone) {
+                return $q->orWhere('phone', $cleanPhone);
+            })
+            ->orWhere('id', is_numeric($memberId) ? $memberId : -1)
+            ->first();
 
-        $memberInfo = $membersData[$memberId] ?? [
-            'name' => 'Member #' . (strlen($memberId) >= 4 ? substr($memberId, -4) : '7782'),
-            'tier' => 'VIP ATHLETE PASS',
-            'branch' => 'Sleman HQ (Jl. Kaliurang)',
-            'remaining_sessions' => 8,
-            'assigned_coach' => 'Coach Hendra Wijaya',
-            'status' => 'ACTIVE VIP'
-        ];
+        if ($user) {
+            // Check quota
+            if ($user->remaining_sessions <= 0) {
+                // Save denied attendance log
+                try {
+                    Attendance::create([
+                        'user_id' => $user->id,
+                        'member_card_id' => $user->member_card_id ?? $memberId,
+                        'member_name' => $user->name,
+                        'branch' => $user->branch ?? 'Sleman HQ (Jl. Kaliurang)',
+                        'checkin_time' => now(),
+                        'pt_deducted' => '0 Sesi (Kuota Habis)',
+                        'remaining_sessions_after' => 0,
+                        'status' => 'DENIED',
+                        'notes' => 'Akses ditolak karena kuota sesi PT 0',
+                    ]);
+                } catch (\Exception $e) {}
 
+                return response()->json([
+                    'success' => false,
+                    'access_granted' => false,
+                    'member_id' => $user->member_card_id ?? $memberId,
+                    'name' => $user->name,
+                    'tier' => $user->membership_type ?? 'VIP ATHLETE PASS',
+                    'remaining_sessions' => '0 Sesi Tersisa',
+                    'message' => 'AKSES DITOLAK: Kuota sesi PT "' . $user->name . '" sudah habis (0 Sesi tersisa). Silakan perpanjang paket.'
+                ], 422);
+            }
+
+            // Deduct 1 session automatically
+            $user->remaining_sessions = max(0, $user->remaining_sessions - 1);
+            $user->completed_sessions = ($user->completed_sessions ?? 0) + 1;
+            $user->save();
+
+            // Create Attendance Log
+            $attendance = null;
+            try {
+                $attendance = Attendance::create([
+                    'user_id' => $user->id,
+                    'member_card_id' => $user->member_card_id ?? $memberId,
+                    'member_name' => $user->name,
+                    'branch' => $user->branch ?? 'Sleman HQ (Jl. Kaliurang)',
+                    'checkin_time' => now(),
+                    'pt_deducted' => '-1 Sesi PT Terpakai',
+                    'remaining_sessions_after' => $user->remaining_sessions,
+                    'status' => 'APPROVED',
+                ]);
+
+                if ($attendance) {
+                    \App\Services\WhatsAppService::sendCheckinNotification($user, $attendance);
+                }
+            } catch (\Exception $e) {}
+
+            return response()->json([
+                'success' => true,
+                'access_granted' => true,
+                'member_id' => $user->member_card_id ?? $memberId,
+                'name' => $user->name,
+                'tier' => $user->membership_type ?? 'VIP ATHLETE PASS',
+                'branch' => $user->branch ?? 'Sleman HQ (Jl. Kaliurang)',
+                'checkin_time' => $attendance ? $attendance->checkin_time->format('d M Y, H:i:s') : date('d M Y, H:i:s'),
+                'pt_deducted' => '-1 Sesi PT Terpakai',
+                'remaining_sessions' => $user->remaining_sessions . ' Sesi Tersisa',
+                'assigned_coach' => $user->assigned_coach ?? 'Coach Hendra Wijaya',
+                'message' => 'Check-in Studio Berhasil! Kuota berkurang 1 sesi (' . $user->remaining_sessions . ' Sesi tersisa).'
+            ]);
+        }
+
+        // Fallback demo checkin if member ID not found in DB
+        $demoRemaining = rand(3, 8);
         return response()->json([
             'success' => true,
             'access_granted' => true,
             'member_id' => $memberId,
-            'name' => $memberInfo['name'],
-            'tier' => $memberInfo['tier'],
-            'branch' => $memberInfo['branch'],
+            'name' => 'Member Demo #' . (strlen($memberId) >= 4 ? substr($memberId, -4) : '7782'),
+            'tier' => 'VIP ATHLETE PASS',
+            'branch' => 'Sleman HQ (Jl. Kaliurang)',
             'checkin_time' => date('d M Y, H:i:s'),
             'pt_deducted' => '-1 Sesi PT Terpakai',
-            'remaining_sessions' => ($memberInfo['remaining_sessions'] - 1) . ' Sesi Tersisa',
-            'assigned_coach' => $memberInfo['assigned_coach'],
+            'remaining_sessions' => ($demoRemaining - 1) . ' Sesi Tersisa',
+            'assigned_coach' => 'Coach Hendra Wijaya',
             'message' => 'Check-in Studio Berhasil! Akses Pintu Studio Diizinkan.'
         ]);
     }
@@ -428,30 +485,47 @@ class LeadController extends Controller
     {
         $id = strtoupper(trim($request->input('id', 'FL-MBR-7782')));
         $promo = strtoupper(trim($request->input('promo', 'MAHASISWA15')));
+        $orderId = $request->input('order_id');
 
-        $invNo = 'INV/FL/' . date('Y/m/') . (strlen($id) >= 4 ? substr($id, -4) : '7782');
+        $payment = null;
+        if ($orderId) {
+            $payment = Payment::where('order_id', $orderId)->first();
+        }
 
-        $originalPrice = 2500000;
-        $discountAmount = 375000;
-        if ($promo === 'FITJOGJA50') $discountAmount = 50000;
-        if ($promo === 'FITLIFE10') $discountAmount = 250000;
-        
-        $totalPaid = $originalPrice - $discountAmount;
+        if (!$payment) {
+            $user = User::where('member_card_id', $id)->first();
+            $payment = Payment::where('member_name', $user ? $user->name : 'Bima Prasetya')
+                ->orWhere('member_phone', $user ? $user->phone : '081234567890')
+                ->latest()
+                ->first();
+        }
+
+        $invNo = $payment ? $payment->order_id : ('INV/FL/' . date('Y/m/') . (strlen($id) >= 4 ? substr($id, -4) : '7782'));
+        $originalPrice = $payment ? $payment->gross_amount : 2500000;
+        $discountAmount = $payment ? $payment->discount_amount : 375000;
+        if (!$payment) {
+            if ($promo === 'FITJOGJA50') $discountAmount = 50000;
+            if ($promo === 'FITLIFE10') $discountAmount = 250000;
+        }
+        $totalPaid = $payment ? $payment->net_amount : ($originalPrice - $discountAmount);
+        $statusText = ($payment && $payment->isSettled()) ? 'LUNAS (APPROVED)' : 'MENUNGGU PEMBAYARAN MIDTRANS';
 
         $invoice = (object)[
             'number' => $invNo,
-            'date' => date('d M Y, H:i'),
+            'date' => $payment && $payment->paid_at ? $payment->paid_at->format('d M Y, H:i') : date('d M Y, H:i'),
             'member_id' => $id,
-            'member_name' => 'Bima Prasetya',
-            'member_phone' => '081234567890',
+            'member_name' => $payment ? $payment->member_name : 'Bima Prasetya',
+            'member_phone' => $payment ? $payment->member_phone : '081234567890',
             'branch' => 'Sleman HQ (Jl. Kaliurang No. 12)',
-            'package_name' => 'Paket VIP Personal Trainer (12 Sesi)',
+            'package_name' => $payment ? $payment->package_name : 'Paket VIP Personal Trainer (12 Sesi)',
             'original_price' => $originalPrice,
             'promo_code' => $promo,
             'discount_amount' => $discountAmount,
             'total_paid' => $totalPaid,
-            'payment_method' => 'Transfer Bank BCA / QRIS Kasir',
-            'status' => 'LUNAS / PAID'
+            'payment_method' => $payment ? ($payment->payment_method_detail ?: 'Midtrans Instant QRIS / VA') : 'Midtrans Instant QRIS / VA',
+            'status' => $statusText,
+            'snap_token' => $payment ? $payment->snap_token : null,
+            'order_id' => $payment ? $payment->order_id : null,
         ];
 
         return view('invoice', compact('invoice'));
@@ -459,50 +533,48 @@ class LeadController extends Controller
 
     public function adminPaymentsIndex(Request $request)
     {
-        $payments = collect([
-            (object)[
-                'id' => 'PAY-9901',
-                'inv_number' => 'INV/FL/2026/08/7782',
-                'member_name' => 'Bima Prasetya',
-                'phone' => '081234567890',
-                'package' => 'Personal Trainer 12 Sesi',
-                'amount' => 2125000,
-                'promo' => 'MAHASISWA15',
-                'method' => 'Transfer BCA',
-                'date' => '06 Aug 2026, 13:40',
-                'proof_img' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
-                'status' => 'LUNAS (APPROVED)'
-            ],
-            (object)[
-                'id' => 'PAY-9902',
-                'inv_number' => 'INV/FL/2026/08/9988',
-                'member_name' => 'Siti Nurhaliza',
-                'phone' => '081987654321',
-                'package' => 'Female Body Shaping Pass',
-                'amount' => 1500000,
-                'promo' => 'FITLIFE10',
-                'method' => 'QRIS Kasir Studio',
-                'date' => '06 Aug 2026, 12:15',
-                'proof_img' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
-                'status' => 'MENUNGGU VERIFIKASI'
-            ],
-            (object)[
-                'id' => 'PAY-9903',
-                'inv_number' => 'INV/FL/2026/08/4512',
-                'member_name' => 'Aditya Putra',
-                'phone' => '085712345678',
-                'package' => 'Gym Pass Unlimited 3 Bulan',
-                'amount' => 1200000,
-                'promo' => 'FITJOGJA50',
-                'method' => 'Tunai di Kasir',
-                'date' => '05 Aug 2026, 16:45',
-                'proof_img' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
-                'status' => 'MENUNGGU VERIFIKASI'
-            ]
-        ]);
+        try {
+            $dbPayments = Payment::orderByDesc('created_at')->take(30)->get();
+
+            if ($dbPayments->isNotEmpty()) {
+                $payments = $dbPayments->map(function($p) {
+                    return (object)[
+                        'id' => $p->order_id,
+                        'inv_number' => $p->order_id,
+                        'member_name' => $p->member_name,
+                        'phone' => $p->member_phone,
+                        'package' => $p->package_name,
+                        'amount' => $p->net_amount,
+                        'promo' => 'OFFICIAL',
+                        'method' => $p->payment_method_detail ?: 'Midtrans QRIS / VA',
+                        'date' => $p->created_at->format('d M Y, H:i'),
+                        'proof_img' => $p->proof_img ?: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
+                        'status' => $p->isSettled() ? 'LUNAS (APPROVED)' : 'MENUNGGU VERIFIKASI'
+                    ];
+                });
+            } else {
+                $payments = collect([
+                    (object)[
+                        'id' => 'PAY-9901',
+                        'inv_number' => 'INV/FL/2026/08/7782',
+                        'member_name' => 'Bima Prasetya',
+                        'phone' => '081234567890',
+                        'package' => 'Personal Trainer 12 Sesi',
+                        'amount' => 2125000,
+                        'promo' => 'MAHASISWA15',
+                        'method' => 'Midtrans QRIS Instant',
+                        'date' => date('d M Y, H:i'),
+                        'proof_img' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
+                        'status' => 'LUNAS (APPROVED)'
+                    ]
+                ]);
+            }
+        } catch (\Exception $e) {
+            $payments = collect([]);
+        }
 
         $stats = (object)[
-            'total_verified_revenue' => 4825000,
+            'total_verified_revenue' => $payments->where('status', 'LUNAS (APPROVED)')->sum('amount'),
             'pending_count' => $payments->where('status', 'MENUNGGU VERIFIKASI')->count(),
             'approved_count' => $payments->where('status', 'LUNAS (APPROVED)')->count(),
         ];
@@ -512,14 +584,37 @@ class LeadController extends Controller
 
     public function approvePayment(Request $request, $id)
     {
+        $payment = Payment::where('order_id', $id)->orWhere('id', is_numeric($id) ? $id : -1)->first();
+        if ($payment) {
+            $payment->transaction_status = 'settlement';
+            $payment->paid_at = now();
+            $payment->save();
+
+            if ($payment->user_id) {
+                $user = User::find($payment->user_id);
+                if ($user) {
+                    $user->remaining_sessions = ($user->remaining_sessions ?? 0) + 12;
+                    $user->total_sessions = ($user->total_sessions ?? 0) + 12;
+                    $user->status = 'Aktif (Berlaku s/d ' . date('d M Y', strtotime('+30 days')) . ')';
+                    $user->save();
+                }
+            }
+        }
+
         return response()->json([
             'success' => true,
-            'message' => 'Pembayaran ' . $id . ' BERHASIL DI-APPROVE! Status member diaktifkan sebagai ACTIVE VIP & e-Receipt Lunas diterbitkan.'
+            'message' => 'Pembayaran ' . $id . ' BERHASIL DI-APPROVE! Status member diaktifkan sebagai ACTIVE VIP & Kuota Sesi Ditambahkan.'
         ]);
     }
 
     public function rejectPayment(Request $request, $id)
     {
+        $payment = Payment::where('order_id', $id)->orWhere('id', is_numeric($id) ? $id : -1)->first();
+        if ($payment) {
+            $payment->transaction_status = 'failed';
+            $payment->save();
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Pembayaran ' . $id . ' DITOLAK. Bukti transfer ditandai tidak valid.'

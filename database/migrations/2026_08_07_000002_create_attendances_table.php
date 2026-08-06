@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('attendances', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('member_card_id');
+            $table->string('member_name');
+            $table->string('branch')->default('Sleman HQ (Jl. Kaliurang)');
+            $table->timestamp('checkin_time');
+            $table->string('pt_deducted')->default('-1 Sesi PT Terpakai');
+            $table->integer('remaining_sessions_after')->default(0);
+            $table->string('status')->default('APPROVED');
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('attendances');
+    }
+};

@@ -219,27 +219,99 @@ class PageController extends Controller
 
     public function memberDashboard()
     {
-        $member = (object)[
-            'name' => 'Bima Perkasa',
-            'id' => 'FL-MBR-7782',
-            'membership_type' => 'VIP Personal Trainer Pass 1-on-1',
-            'status' => 'Aktif (Berlaku s/d 15 Sep 2026)',
-            'branch' => 'FitLife HQ Kaliurang (Sleman)',
-            'total_sessions' => 12,
-            'completed_sessions' => 4,
-            'remaining_sessions' => 8,
-            'assigned_coach' => 'Coach Hendra Wijaya (APKI Certified)',
-            'next_session' => 'Jumat, 8 Agustus 2026 • 17.00 WIB',
-            'initial_weight' => 82.5,
-            'current_weight' => 74.0,
-            'target_weight' => 70.0,
-            'initial_bodyfat' => 26.5,
-            'current_bodyfat' => 19.2,
-            'muscle_mass' => '32.4 kg (+1.8 kg)',
-        ];
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        if ($user) {
+            $member = (object)[
+                'name' => $user->name,
+                'id' => $user->member_card_id ?? ('FL-MBR-' . str_pad($user->id, 4, '0', STR_PAD_LEFT)),
+                'email' => $user->email,
+                'phone' => $user->phone ?? '-',
+                'membership_type' => $user->membership_type ?? 'VIP Personal Trainer Pass 1-on-1',
+                'status' => $user->status ?? 'Aktif (Berlaku s/d 30 Des 2026)',
+                'branch' => $user->branch ?? 'FitLife Center HQ (Sleman, Jogja)',
+                'total_sessions' => $user->total_sessions ?? 12,
+                'completed_sessions' => $user->completed_sessions ?? 4,
+                'remaining_sessions' => $user->remaining_sessions ?? 8,
+                'assigned_coach' => $user->assigned_coach ?? 'Coach Hendra Wijaya (APKI Certified)',
+                'next_session' => $user->next_session ?? 'Jumat, 8 Agustus 2026 • 17:00 WIB',
+                'initial_weight' => $user->initial_weight ?? 82.5,
+                'current_weight' => $user->current_weight ?? 74.0,
+                'target_weight' => $user->target_weight ?? 70.0,
+                'initial_bodyfat' => $user->initial_bodyfat ?? 26.5,
+                'current_bodyfat' => $user->current_bodyfat ?? 19.2,
+                'muscle_mass' => $user->muscle_mass ?? '32.4 kg (+1.8 kg)',
+            ];
+        } else {
+            $member = (object)[
+                'name' => 'Bima Perkasa (Demo Member)',
+                'id' => 'FL-MBR-7782',
+                'email' => 'bima@example.com',
+                'phone' => '081234567890',
+                'membership_type' => 'VIP Personal Trainer Pass 1-on-1',
+                'status' => 'Aktif (Berlaku s/d 15 Sep 2026)',
+                'branch' => 'FitLife HQ Kaliurang (Sleman)',
+                'total_sessions' => 12,
+                'completed_sessions' => 4,
+                'remaining_sessions' => 8,
+                'assigned_coach' => 'Coach Hendra Wijaya (APKI Certified)',
+                'next_session' => 'Jumat, 8 Agustus 2026 • 17.00 WIB',
+                'initial_weight' => 82.5,
+                'current_weight' => 74.0,
+                'target_weight' => 70.0,
+                'initial_bodyfat' => 26.5,
+                'current_bodyfat' => 19.2,
+                'muscle_mass' => '32.4 kg (+1.8 kg)',
+            ];
+        }
 
         $programs = Program::orderBy('order')->get();
         return view('member', compact('member', 'programs'));
+    }
+
+    public function updateMemberProgress(Request $request)
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Anda harus login terlebih dahulu.'], 401);
+        }
+
+        $validated = $request->validate([
+            'current_weight' => 'nullable|numeric|min:20|max:300',
+            'target_weight' => 'nullable|numeric|min:20|max:300',
+            'current_bodyfat' => 'nullable|numeric|min:3|max:60',
+        ]);
+
+        if (isset($validated['current_weight'])) {
+            if (!$user->initial_weight) {
+                $user->initial_weight = $validated['current_weight'];
+            }
+            $user->current_weight = $validated['current_weight'];
+        }
+
+        if (isset($validated['target_weight'])) {
+            $user->target_weight = $validated['target_weight'];
+        }
+
+        if (isset($validated['current_bodyfat'])) {
+            if (!$user->initial_bodyfat) {
+                $user->initial_bodyfat = $validated['current_bodyfat'];
+            }
+            $user->current_bodyfat = $validated['current_bodyfat'];
+        }
+
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Statistik kebugaran & berat badan berhasil diperbarui!',
+            'user' => [
+                'current_weight' => $user->current_weight,
+                'target_weight' => $user->target_weight,
+                'current_bodyfat' => $user->current_bodyfat,
+            ]
+        ]);
     }
 
     public function pelatih()
