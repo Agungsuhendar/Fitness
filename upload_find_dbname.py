@@ -1,25 +1,25 @@
 from ftplib import FTP
 
 ftp = FTP('ftpupload.net')
-ftp.login('if0_42562646', 'Arkanza0123456')
+ftp.login('if0_42586885', 'Arkanza0123456')
 ftp.cwd('htdocs')
 
 test_db_php = """<?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$user = 'if0_42562646';
+$user = 'if0_42586885';
 $pass = 'Arkanza0123456';
 $host = 'sql103.epizy.com';
 
 $possible_dbs = [
-    'if0_42562646_lesrenang',
-    'if0_42562646_lesrenangjogja',
-    'if0_42562646_db',
-    'if0_42562646_site',
-    'if0_42562646_1',
-    'if0_42562646_laravel',
-    'if0_42562646_main',
+    'if0_42586885_lesrenang',
+    'if0_42586885_lesrenangjogja',
+    'if0_42586885_db',
+    'if0_42586885_site',
+    'if0_42586885_1',
+    'if0_42586885_laravel',
+    'if0_42586885_main',
 ];
 
 echo "<h1>TESTING EXACT DATABASE NAME</h1>";

@@ -94,10 +94,18 @@
             <div>
                 © {{ date('Y') }} <strong style="color: #ffffff;">FitLife Center</strong>. All Rights Reserved.
             </div>
-            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
-                <a href="{{ route('tentang') }}" style="color: #64748b; text-decoration: none;">Tentang Kami</a>
-                <a href="{{ route('harga') }}" style="color: #64748b; text-decoration: none;">Harga & Paket</a>
-                <a href="{{ route('faq') }}" style="color: #64748b; text-decoration: none;">FAQ Bantuan</a>
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; align-items: center;">
+                <a href="{{ route('tentang') }}" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">Tentang Kami</a>
+                <a href="{{ route('kalkulator') }}" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">Kalkulator Kalori</a>
+                <a href="{{ route('quiz') }}" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">Program Quiz</a>
+                <a href="{{ route('member.dashboard') }}" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">Area Member</a>
+                <a href="{{ route('pelatih') }}" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">Tim Pelatih</a>
+                <a href="{{ route('faq') }}" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">FAQ</a>
+                <a href="{{ route('blog.index') }}" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">Artikel</a>
+                <a href="{{ route('admin.login') }}" style="color: #64748b; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; transition: color 0.2s;" onmouseover="this.style.color='#84cc16'" onmouseout="this.style.color='#64748b'">
+                    <i class="fa-solid fa-lock" style="font-size: 0.75rem;"></i>
+                    <span>Admin Panel</span>
+                </a>
             </div>
         </div>
     </div>

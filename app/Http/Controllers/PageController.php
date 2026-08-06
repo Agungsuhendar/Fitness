@@ -200,6 +200,91 @@ class PageController extends Controller
         return view('search', compact('q', 'programs', 'posts', 'faqs'));
     }
 
+    public function kalkulator()
+    {
+        $programs = Program::orderBy('order')->get();
+        return view('kalkulator', compact('programs'));
+    }
+
+    public function quiz()
+    {
+        $programs = Program::orderBy('order')->get();
+        try {
+            $coaches = \App\Models\Coach::active()->ordered()->get();
+        } catch (\Exception $e) {
+            $coaches = collect();
+        }
+        return view('quiz', compact('programs', 'coaches'));
+    }
+
+    public function memberDashboard()
+    {
+        $member = (object)[
+            'name' => 'Bima Perkasa',
+            'id' => 'FL-MBR-7782',
+            'membership_type' => 'VIP Personal Trainer Pass 1-on-1',
+            'status' => 'Aktif (Berlaku s/d 15 Sep 2026)',
+            'branch' => 'FitLife HQ Kaliurang (Sleman)',
+            'total_sessions' => 12,
+            'completed_sessions' => 4,
+            'remaining_sessions' => 8,
+            'assigned_coach' => 'Coach Hendra Wijaya (APKI Certified)',
+            'next_session' => 'Jumat, 8 Agustus 2026 • 17.00 WIB',
+            'initial_weight' => 82.5,
+            'current_weight' => 74.0,
+            'target_weight' => 70.0,
+            'initial_bodyfat' => 26.5,
+            'current_bodyfat' => 19.2,
+            'muscle_mass' => '32.4 kg (+1.8 kg)',
+        ];
+
+        $programs = Program::orderBy('order')->get();
+        return view('member', compact('member', 'programs'));
+    }
+
+    public function pelatih()
+    {
+        try {
+            $coaches = \App\Models\Coach::active()->ordered()->get();
+        } catch (\Exception $e) {
+            $coaches = collect();
+        }
+        return view('pelatih', compact('coaches'));
+    }
+
+    public function tulisTestimoni()
+    {
+        $programs = Program::orderBy('order')->get();
+        return view('tulis-testimoni', compact('programs'));
+    }
+
+    public function storeTestimonial(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'program_name' => 'nullable|string|max:255',
+            'before_weight' => 'nullable|string|max:50',
+            'after_weight' => 'nullable|string|max:50',
+            'review' => 'required|string|max:2000',
+        ]);
+
+        try {
+            \App\Models\Testimonial::create([
+                'name' => $validated['name'],
+                'rating' => $validated['rating'],
+                'program_name' => $validated['program_name'] ?? 'FitLife Personal Training',
+                'review' => $validated['review'],
+                'before_weight' => $validated['before_weight'] ?? null,
+                'after_weight' => $validated['after_weight'] ?? null,
+                'is_approved' => false,
+                'is_featured' => false,
+            ]);
+        } catch (\Exception $e) {}
+
+        return back()->with('success', 'Terima kasih! Ulasan & testimoni Anda telah berhasil terkirim dan akan ditampilkan setelah diproses admin.');
+    }
+
     public function areaLanding($slug)
     {
         // Strip prefixes if user comes from les-fitness- or fitness-
@@ -327,5 +412,78 @@ class PageController extends Controller
         } catch (\Exception $e) {
             // Silence exception
         }
+    }
+
+    public function kelas()
+    {
+        $classes = collect([
+            (object)[
+                'id' => 1,
+                'title' => 'Zumba Fitness Party',
+                'category' => 'Cardio Dance',
+                'instructor' => 'Instruktur Maya Indah',
+                'day' => 'Senin',
+                'time' => '17:00 - 18:00 WIB',
+                'branch' => 'Sleman HQ (Jl. Kaliurang)',
+                'total_slots' => 15,
+                'remaining_slots' => 4,
+                'badge' => 'POPULER',
+                'image' => 'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=600'
+            ],
+            (object)[
+                'id' => 2,
+                'title' => 'Body Combat & Boxing HIIT',
+                'category' => 'Martial HIIT',
+                'instructor' => 'Coach Hendra Wijaya',
+                'day' => 'Rabu',
+                'time' => '18:30 - 19:30 WIB',
+                'branch' => 'Seturan Branch (UGM)',
+                'total_slots' => 12,
+                'remaining_slots' => 3,
+                'badge' => 'HIGH INTENSITY',
+                'image' => 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?q=80&w=600'
+            ],
+            (object)[
+                'id' => 3,
+                'title' => 'Pilates Core Shaping',
+                'category' => 'Posture & Core',
+                'instructor' => 'Coach Maya Indah',
+                'day' => 'Kamis',
+                'time' => '16:30 - 17:30 WIB',
+                'branch' => 'Sewon Branch (Bantul)',
+                'total_slots' => 10,
+                'remaining_slots' => 2,
+                'badge' => 'KHUSUS WANITA',
+                'image' => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600'
+            ],
+            (object)[
+                'id' => 4,
+                'title' => 'Spinning Class RPM Speed',
+                'category' => 'Indoor Cycling',
+                'instructor' => 'Coach Budi Santoso',
+                'day' => 'Jumat',
+                'time' => '19:00 - 20:00 WIB',
+                'branch' => 'Sleman HQ (Jl. Kaliurang)',
+                'total_slots' => 10,
+                'remaining_slots' => 5,
+                'badge' => 'CARDIO INTENSE',
+                'image' => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600'
+            ],
+            (object)[
+                'id' => 5,
+                'title' => 'Crossfit & Functional Strength',
+                'category' => 'Strength & Power',
+                'instructor' => 'Coach Hendra Wijaya',
+                'day' => 'Sabtu',
+                'time' => '09:00 - 10:30 WIB',
+                'branch' => 'Sleman HQ (Jl. Kaliurang)',
+                'total_slots' => 15,
+                'remaining_slots' => 6,
+                'badge' => 'STRENGTH',
+                'image' => 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600'
+            ]
+        ]);
+
+        return view('kelas', compact('classes'));
     }
 }

@@ -9,9 +9,15 @@
         <div style="text-align: center; max-width: 800px; margin: 0 auto;">
             <span class="section-subtitle" style="color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Hasil Terukur</span>
             <h1 class="hero-title" style="font-size: 3rem; font-weight: 900; margin-top: 0.5rem; font-family: 'Outfit', sans-serif;">Galeri Transformasi & <span style="color: #10b981;">Review Member</span></h1>
-            <p class="hero-description" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem;">
-                Simak kisah sukses nyata para member yang telah berhasil memangkas lemak, membentuk massa otot, dan meningkatkan stamina puncak bersama Personal Trainer ApexFitness.
+            <p class="hero-description" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.7; margin-top: 1rem; margin-bottom: 1.5rem;">
+                Simak kisah sukses nyata para member yang telah berhasil memangkas lemak, membentuk massa otot, dan meningkatkan stamina puncak bersama Personal Trainer FitLife Center.
             </p>
+            <div style="display: flex; justify-content: center; gap: 1rem;">
+                <a href="{{ route('tulis-testimoni') }}" class="btn glow-btn" style="background: #84cc16; color: #090d0b; padding: 0.85rem 1.6rem; border-radius: 99px; font-weight: 900; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Tulis Ulasan & Pengalaman Saya</span>
+                </a>
+            </div>
         </div>
     </div>
 </section>

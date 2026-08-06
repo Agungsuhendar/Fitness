@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /login
 
-Sitemap: http://lesrenangjogja.site.je/sitemap.xml
+Sitemap: https://fitlifehub.site.je/sitemap.xml

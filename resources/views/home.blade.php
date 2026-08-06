@@ -88,7 +88,7 @@
                     
                     <!-- Transparent Cutout Models Figure (Enlarged slightly for maximum impact) -->
                     <div style="position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: flex-end;">
-                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" style="height: 100%; max-width: 100%; object-fit: contain; transform: translate(-80px, 30px); filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9));" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
+                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" style="height: 100%; max-width: 100%; object-fit: contain; transform: translate(-80px, 80px); filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9));" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
                     </div>
 
                     <!-- Right Floating Trial Card (Matches Screenshot Exactly) -->

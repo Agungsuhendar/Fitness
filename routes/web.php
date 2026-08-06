@@ -77,6 +77,14 @@ Route::get('/harga', [PageController::class, 'harga'])->name('harga');
 Route::get('/testimoni', [PageController::class, 'testimoni'])->name('testimoni');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/kontak', [PageController::class, 'kontak'])->name('kontak');
+Route::get('/kalkulator', [PageController::class, 'kalkulator'])->name('kalkulator');
+Route::get('/quiz', [PageController::class, 'quiz'])->name('quiz');
+Route::get('/member', [PageController::class, 'memberDashboard'])->name('member.dashboard');
+Route::get('/pelatih', [PageController::class, 'pelatih'])->name('pelatih');
+Route::get('/tulis-testimoni', [PageController::class, 'tulisTestimoni'])->name('tulis-testimoni');
+Route::post('/tulis-testimoni', [PageController::class, 'storeTestimonial'])->name('testimoni.store');
+Route::get('/kelas', [PageController::class, 'kelas'])->name('kelas');
+Route::post('/kelas/booking', [LeadController::class, 'storeClassBooking'])->name('kelas.booking');
 
 // Search Global
 Route::get('/search', [PageController::class, 'search'])->name('search');
@@ -89,6 +97,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::post('/daftar', [LeadController::class, 'storeRegistration'])->name('lead.register');
 Route::post('/trial', [LeadController::class, 'storeTrial'])->name('lead.trial');
 Route::post('/testimoni', [TestimonialController::class, 'store'])->name('testimoni.store');
+Route::post('/check-promo', [LeadController::class, 'checkPromo'])->name('promo.check');
 
 /*
 |--------------------------------------------------------------------------
@@ -125,3 +134,18 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
 });
+
+// Admin Leads Dashboard & CSV Export Public Access
+Route::get('/admin/leads', [LeadController::class, 'adminLeadsIndex'])->name('admin.leads.index');
+Route::get('/admin/leads/export', [LeadController::class, 'exportCsv'])->name('admin.leads.export');
+Route::post('/admin/leads/{id}/status', [LeadController::class, 'updateStatus'])->name('admin.leads.status');
+
+// Admin Reception Check-in Kiosk
+Route::get('/admin/checkin', [LeadController::class, 'adminCheckinIndex'])->name('admin.checkin.index');
+Route::post('/admin/checkin/scan', [LeadController::class, 'processCheckin'])->name('admin.checkin.scan');
+
+// E-Invoice & Admin Payment Approval Gate
+Route::get('/invoice', [LeadController::class, 'showInvoice'])->name('invoice.show');
+Route::get('/admin/payments', [LeadController::class, 'adminPaymentsIndex'])->name('admin.payments.index');
+Route::post('/admin/payments/{id}/approve', [LeadController::class, 'approvePayment'])->name('admin.payments.approve');
+Route::post('/admin/payments/{id}/reject', [LeadController::class, 'rejectPayment'])->name('admin.payments.reject');

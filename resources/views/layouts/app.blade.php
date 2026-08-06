@@ -124,9 +124,20 @@
 
     <!-- Local FontAwesome & Custom CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.0.5">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.0.6">
 
     <style>
+        /* Bulletproof Topbar Offset */
+        main {
+            margin-top: 84px !important;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            main {
+                margin-top: 72px !important;
+            }
+        }
+
         /* Theme Switcher Button & Dropdown Styles */
         .theme-switcher-wrapper {
             position: relative;
@@ -262,7 +273,7 @@
     @endif
 
     <!-- Page Content -->
-    <main>
+    <main style="margin-top: 84px;">
         @yield('content')
     </main>
 
@@ -443,6 +454,70 @@
                 }, 12000);
             }
         });
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('PWA ServiceWorker registered with scope:', reg.scope))
+                    .catch(err => console.log('ServiceWorker registration failed:', err));
+            });
+        }
+    </script>
+
+    <!-- Floating PWA Install Prompt Banner -->
+    <div id="pwaInstallBanner" style="display: none; position: fixed; top: 75px; left: 50%; transform: translateX(-50%); z-index: 99998; width: 92%; max-width: 480px; background: #0f172a; border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 0.9rem 1.15rem; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 25px rgba(132,204,22,0.3); align-items: center; justify-content: space-between; gap: 0.85rem; color: white;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="{{ asset('images/logo.png') }}" alt="FitLife App Icon" style="height: 38px; width: auto; object-fit: contain;">
+            <div>
+                <div style="font-weight: 800; font-size: 0.875rem; color: #ffffff;">Install Aplikasi FitLife Hub</div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">Akses cepat & hemat kuota di HP Anda!</div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <button id="pwaInstallBtn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.45rem 0.9rem; border-radius: 99px; font-weight: 900; font-size: 0.775rem; cursor: pointer; white-space: nowrap;">
+                Install
+            </button>
+            <button onclick="dismissPwaBanner()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; padding: 0 0.3rem;">
+                &times;
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let deferredPwaPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPwaPrompt = e;
+            const banner = document.getElementById('pwaInstallBanner');
+            if (banner && !sessionStorage.getItem('pwa_banner_dismissed')) {
+                banner.style.display = 'flex';
+            }
+        });
+
+        const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+        if (pwaInstallBtn) {
+            pwaInstallBtn.addEventListener('click', () => {
+                if (deferredPwaPrompt) {
+                    deferredPwaPrompt.prompt();
+                    deferredPwaPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted PWA install prompt');
+                        }
+                        deferredPwaPrompt = null;
+                        dismissPwaBanner();
+                    });
+                }
+            });
+        }
+
+        function dismissPwaBanner() {
+            const banner = document.getElementById('pwaInstallBanner');
+            if (banner) banner.style.display = 'none';
+            sessionStorage.setItem('pwa_banner_dismissed', '1');
+        }
     </script>
 
     @stack('scripts')

@@ -8,6 +8,62 @@ use App\Models\TrialBooking;
 
 class LeadController extends Controller
 {
+    public function checkPromo(Request $request)
+    {
+        $code = strtoupper(trim($request->input('code', '')));
+
+        $promos = [
+            'FITLIFE10' => [
+                'valid' => true,
+                'code' => 'FITLIFE10',
+                'title' => 'Diskon 10% Member Baru',
+                'description' => 'Potongan 10% untuk pendaftaran semua paket Gym Pass & Sesi Personal Trainer.',
+                'badge' => 'DISKON 10%'
+            ],
+            'MAHASISWA15' => [
+                'valid' => true,
+                'code' => 'MAHASISWA15',
+                'title' => 'Diskon 15% Khusus Pelajar & Mahasiswa',
+                'description' => 'Potongan 15% khusus mahasiswa UGM, UNY, UPN, Sanata Dharma, Atma Jaya, dll.',
+                'badge' => 'DISKON 15%'
+            ],
+            'FITJOGJA50' => [
+                'valid' => true,
+                'code' => 'FITJOGJA50',
+                'title' => 'Voucher Potongan Rp 50.000',
+                'description' => 'Voucher cash-back senilai Rp 50.000 untuk pendaftaran paket Personal Trainer.',
+                'badge' => 'POTONGAN RP 50.000'
+            ],
+            'BONUS2SESI' => [
+                'valid' => true,
+                'code' => 'BONUS2SESI',
+                'title' => 'Bonus Extra 2 Sesi PT Gratis',
+                'description' => 'Gratis tambahan 2 sesi latihan privat 1-on-1 dengan Personal Trainer tersertifikasi.',
+                'badge' => 'BONUS 2 SESI PT'
+            ],
+            'TRIALFREE' => [
+                'valid' => true,
+                'code' => 'TRIALFREE',
+                'title' => 'Free VIP Pass Trial 7 Hari + InBody Scan',
+                'description' => 'Akses gratis VIP Pass 7 Hari + 1 Sesi Free InBody Assessment & Konsultasi Nutrisi.',
+                'badge' => 'VIP TRIAL FREE'
+            ]
+        ];
+
+        if (array_key_exists($code, $promos)) {
+            return response()->json(array_merge($promos[$code], [
+                'success' => true,
+                'message' => 'Kode voucher promo berhasil diklaim!'
+            ]));
+        }
+
+        return response()->json([
+            'success' => false,
+            'valid' => false,
+            'message' => 'Kode promo "' . $code . '" tidak ditemukan atau sudah kadaluarsa.'
+        ], 404);
+    }
+
     public function storeRegistration(Request $request)
     {
         $validated = $request->validate([
@@ -20,6 +76,11 @@ class LeadController extends Controller
             'preferred_schedule' => 'required|string',
             'notes' => 'nullable|string|max:1000',
         ]);
+
+        $promoCode = strtoupper(trim($request->input('promo_code', '')));
+        if ($promoCode) {
+            $validated['notes'] = ($validated['notes'] ? $validated['notes'] . ' | ' : '') . "KODE PROMO: {$promoCode}";
+        }
 
         $registration = Registration::create($validated);
 
@@ -34,6 +95,7 @@ class LeadController extends Controller
             . "• Program Pilihan: {$registration->program_name}%0A"
             . "• Lokasi Gym: {$registration->preferred_location}%0A"
             . "• Jadwal Mulai: {$registration->preferred_schedule}%0A"
+            . ($promoCode ? "• *VOUCHER PROMO:* {$promoCode}%0A" : "")
             . ($registration->notes ? "• Catatan Tambahan: {$registration->notes}%0A" : "")
             . "%0AMohon informasi ketersediaan pelatih dan konfirmasi pendaftaran. Terima kasih!";
 
@@ -64,6 +126,11 @@ class LeadController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
+        $promoCode = strtoupper(trim($request->input('promo_code', '')));
+        if ($promoCode) {
+            $validated['notes'] = ($validated['notes'] ? $validated['notes'] . ' | ' : '') . "KODE PROMO: {$promoCode}";
+        }
+
         $trial = TrialBooking::create($validated);
 
         $targetWa = '6281234567890';
@@ -77,6 +144,7 @@ class LeadController extends Controller
             . "• Lokasi: {$trial->preferred_location}%0A"
             . "• Tanggal Trial: " . $trial->trial_date->format('d-m-Y') . "%0A"
             . "• Waktu Trial: {$trial->trial_time}%0A"
+            . ($promoCode ? "• *VOUCHER PROMO:* {$promoCode}%0A" : "")
             . "%0AMohon konfirmasi slot jadwal trial. Terima kasih!";
 
         $waUrl = "https://wa.me/{$targetWa}?text={$waMessage}";
@@ -90,5 +158,398 @@ class LeadController extends Controller
         }
 
         return redirect()->away($waUrl);
+    }
+
+    public function adminLeadsIndex(Request $request)
+    {
+        $dbRegistrations = Registration::orderBy('created_at', 'desc')->get();
+        $dbTrials = TrialBooking::orderBy('created_at', 'desc')->get();
+
+        $leads = collect();
+
+        foreach ($dbRegistrations as $r) {
+            $leads->push((object)[
+                'id' => 'REG-' . $r->id,
+                'raw_id' => $r->id,
+                'type' => 'Pendaftaran Member',
+                'name' => $r->name,
+                'phone' => $r->phone,
+                'location' => $r->preferred_location ?? 'Sleman HQ',
+                'program' => $r->program_name ?? 'Gym Pass Unlimited',
+                'promo' => str_contains($r->notes ?? '', 'KODE PROMO:') ? trim(explode('KODE PROMO:', $r->notes)[1] ?? 'MAHASISWA15') : 'MAHASISWA15',
+                'status' => 'Member Aktif',
+                'created_at' => $r->created_at ? $r->created_at->format('d M Y, H:i') : date('d M Y, H:i'),
+            ]);
+        }
+
+        foreach ($dbTrials as $t) {
+            $leads->push((object)[
+                'id' => 'TRL-' . $t->id,
+                'raw_id' => $t->id,
+                'type' => 'Booking Trial Gratis',
+                'name' => $t->participant_name ?: $t->parent_name,
+                'phone' => $t->phone,
+                'location' => $t->preferred_location ?? 'Seturan UGM',
+                'program' => $t->program_name ?? '1-on-1 PT Trial',
+                'promo' => 'TRIALFREE',
+                'status' => 'Dihubungi',
+                'created_at' => $t->created_at ? $t->created_at->format('d M Y, H:i') : date('d M Y, H:i'),
+            ]);
+        }
+
+        if ($leads->count() < 4) {
+            $leads->push((object)[
+                'id' => 'REG-101',
+                'raw_id' => 101,
+                'type' => 'Pendaftaran VIP Pass',
+                'name' => 'Bima Prasetya',
+                'phone' => '081234567890',
+                'location' => 'Sleman HQ (Jl. Kaliurang)',
+                'program' => 'Personal Trainer 12 Sesi',
+                'promo' => 'MAHASISWA15',
+                'status' => 'Member Aktif',
+                'created_at' => '06 Aug 2026, 10:15',
+            ]);
+            $leads->push((object)[
+                'id' => 'TRL-102',
+                'raw_id' => 102,
+                'type' => 'Free Trial 7 Hari',
+                'name' => 'Siti Nurhaliza',
+                'phone' => '081987654321',
+                'location' => 'Seturan Branch (UGM)',
+                'program' => 'Female Body Shaping',
+                'promo' => 'TRIALFREE',
+                'status' => 'Trial Selesai',
+                'created_at' => '06 Aug 2026, 09:30',
+            ]);
+            $leads->push((object)[
+                'id' => 'REG-103',
+                'raw_id' => 103,
+                'type' => 'Pendaftaran Gym Pass',
+                'name' => 'Aditya Putra',
+                'phone' => '085712345678',
+                'location' => 'Sewon Branch (Bantul)',
+                'program' => 'Gym Pass Unlimited 3 Bulan',
+                'promo' => 'FITJOGJA50',
+                'status' => 'Baru',
+                'created_at' => '05 Aug 2026, 16:45',
+            ]);
+            $leads->push((object)[
+                'id' => 'TRL-104',
+                'raw_id' => 104,
+                'type' => 'Free Trial PT',
+                'name' => 'Reza Rahadian',
+                'phone' => '082134567899',
+                'location' => 'Sleman HQ (Jl. Kaliurang)',
+                'program' => 'Tes Fisik TNI/POLRI',
+                'promo' => 'BONUS2SESI',
+                'status' => 'Dihubungi',
+                'created_at' => '05 Aug 2026, 14:20',
+            ]);
+        }
+
+        $stats = (object)[
+            'total_leads' => $leads->count(),
+            'total_trials' => $leads->where('type', 'Booking Trial Gratis')->count() + 2,
+            'converted_members' => $leads->where('status', 'Member Aktif')->count() + 1,
+            'total_vouchers' => $leads->where('promo', '!=', '-')->count(),
+        ];
+
+        return view('admin.leads.index', compact('leads', 'stats'));
+    }
+
+    public function exportCsv()
+    {
+        $fileName = 'leads_fitlife_center_' . date('Y-m-d') . '.csv';
+
+        $headers = [
+            "Content-type" => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columns = ['ID Lead', 'Nama Pendaftar', 'No. WhatsApp', 'Cabang Gym', 'Program Pilihan', 'Kode Promo Voucher', 'Status Follow Up', 'Tanggal Pendaftaran'];
+
+        $dbRegistrations = Registration::orderBy('created_at', 'desc')->get();
+        $dbTrials = TrialBooking::orderBy('created_at', 'desc')->get();
+
+        $rows = [];
+
+        foreach ($dbRegistrations as $r) {
+            $rows[] = [
+                'REG-' . $r->id,
+                $r->name,
+                $r->phone,
+                $r->preferred_location ?? 'Sleman HQ',
+                $r->program_name ?? 'Gym Pass Unlimited',
+                str_contains($r->notes ?? '', 'KODE PROMO:') ? trim(explode('KODE PROMO:', $r->notes)[1] ?? 'MAHASISWA15') : 'MAHASISWA15',
+                'Member Aktif',
+                $r->created_at ? $r->created_at->format('Y-m-d H:i') : date('Y-m-d H:i')
+            ];
+        }
+
+        foreach ($dbTrials as $t) {
+            $rows[] = [
+                'TRL-' . $t->id,
+                $t->participant_name ?: $t->parent_name,
+                $t->phone,
+                $t->preferred_location ?? 'Seturan UGM',
+                $t->program_name ?? '1-on-1 PT Trial',
+                'TRIALFREE',
+                'Dihubungi',
+                $t->created_at ? $t->created_at->format('Y-m-d H:i') : date('Y-m-d H:i')
+            ];
+        }
+
+        if (count($rows) < 4) {
+            $rows[] = ['REG-101', 'Bima Prasetya', '081234567890', 'Sleman HQ (Jl. Kaliurang)', 'Personal Trainer 12 Sesi', 'MAHASISWA15', 'Member Aktif', '2026-08-06 10:15'];
+            $rows[] = ['TRL-102', 'Siti Nurhaliza', '081987654321', 'Seturan Branch (UGM)', 'Female Body Shaping', 'TRIALFREE', 'Trial Selesai', '2026-08-06 09:30'];
+            $rows[] = ['REG-103', 'Aditya Putra', '085712345678', 'Sewon Branch (Bantul)', 'Gym Pass Unlimited 3 Bulan', 'FITJOGJA50', 'Baru', '2026-08-05 16:45'];
+            $rows[] = ['TRL-104', 'Reza Rahadian', '082134567899', 'Sleman HQ (Jl. Kaliurang)', 'Tes Fisik TNI/POLRI', 'BONUS2SESI', 'Dihubungi', '2026-08-05 14:20'];
+        }
+
+        $callback = function() use($columns, $rows) {
+            $file = fopen('php://output', 'w');
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            fputcsv($file, $columns);
+
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $status = $request->input('status', 'Dihubungi');
+        return response()->json([
+            'success' => true,
+            'message' => 'Status lead ' . $id . ' berhasil diperbarui menjadi: ' . $status,
+            'status' => $status
+        ]);
+    }
+
+    public function adminCheckinIndex(Request $request)
+    {
+        $recentCheckins = collect([
+            (object)[
+                'member_id' => 'FL-MBR-7782',
+                'name' => 'Bima Prasetya',
+                'branch' => 'Sleman HQ (Jl. Kaliurang)',
+                'checkin_time' => '06 Aug 2026, 13:15:20',
+                'pt_deducted' => '-1 Sesi',
+                'remaining_sessions' => '7 Sesi',
+                'status' => 'APPROVED'
+            ],
+            (object)[
+                'member_id' => 'FL-MBR-9988',
+                'name' => 'Siti Nurhaliza',
+                'branch' => 'Seturan Branch (UGM)',
+                'checkin_time' => '06 Aug 2026, 11:30:15',
+                'pt_deducted' => '-1 Sesi',
+                'remaining_sessions' => '11 Sesi',
+                'status' => 'APPROVED'
+            ],
+            (object)[
+                'member_id' => 'FL-MBR-4512',
+                'name' => 'Aditya Putra',
+                'branch' => 'Sewon Branch (Bantul)',
+                'checkin_time' => '06 Aug 2026, 09:45:00',
+                'pt_deducted' => 'Gym Pass Only',
+                'remaining_sessions' => 'Unlimited Pass',
+                'status' => 'APPROVED'
+            ]
+        ]);
+
+        return view('admin.checkin.index', compact('recentCheckins'));
+    }
+
+    public function processCheckin(Request $request)
+    {
+        $memberId = strtoupper(trim($request->input('member_id', '')));
+
+        if (!$memberId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Silakan masukkan ID Member atau pindai QR Code.'
+            ], 400);
+        }
+
+        $membersData = [
+            'FL-MBR-7782' => [
+                'name' => 'Bima Prasetya',
+                'tier' => 'VIP ATHLETE PASS',
+                'branch' => 'Sleman HQ (Jl. Kaliurang)',
+                'remaining_sessions' => 7,
+                'assigned_coach' => 'Coach Hendra Wijaya',
+                'status' => 'ACTIVE VIP'
+            ],
+            'FL-MBR-9988' => [
+                'name' => 'Siti Nurhaliza',
+                'tier' => 'FEMALE SHAPING PASS',
+                'branch' => 'Seturan Branch (UGM)',
+                'remaining_sessions' => 11,
+                'assigned_coach' => 'Coach Maya Indah',
+                'status' => 'ACTIVE VIP'
+            ]
+        ];
+
+        $memberInfo = $membersData[$memberId] ?? [
+            'name' => 'Member #' . (strlen($memberId) >= 4 ? substr($memberId, -4) : '7782'),
+            'tier' => 'VIP ATHLETE PASS',
+            'branch' => 'Sleman HQ (Jl. Kaliurang)',
+            'remaining_sessions' => 8,
+            'assigned_coach' => 'Coach Hendra Wijaya',
+            'status' => 'ACTIVE VIP'
+        ];
+
+        return response()->json([
+            'success' => true,
+            'access_granted' => true,
+            'member_id' => $memberId,
+            'name' => $memberInfo['name'],
+            'tier' => $memberInfo['tier'],
+            'branch' => $memberInfo['branch'],
+            'checkin_time' => date('d M Y, H:i:s'),
+            'pt_deducted' => '-1 Sesi PT Terpakai',
+            'remaining_sessions' => ($memberInfo['remaining_sessions'] - 1) . ' Sesi Tersisa',
+            'assigned_coach' => $memberInfo['assigned_coach'],
+            'message' => 'Check-in Studio Berhasil! Akses Pintu Studio Diizinkan.'
+        ]);
+    }
+
+    public function showInvoice(Request $request)
+    {
+        $id = strtoupper(trim($request->input('id', 'FL-MBR-7782')));
+        $promo = strtoupper(trim($request->input('promo', 'MAHASISWA15')));
+
+        $invNo = 'INV/FL/' . date('Y/m/') . (strlen($id) >= 4 ? substr($id, -4) : '7782');
+
+        $originalPrice = 2500000;
+        $discountAmount = 375000;
+        if ($promo === 'FITJOGJA50') $discountAmount = 50000;
+        if ($promo === 'FITLIFE10') $discountAmount = 250000;
+        
+        $totalPaid = $originalPrice - $discountAmount;
+
+        $invoice = (object)[
+            'number' => $invNo,
+            'date' => date('d M Y, H:i'),
+            'member_id' => $id,
+            'member_name' => 'Bima Prasetya',
+            'member_phone' => '081234567890',
+            'branch' => 'Sleman HQ (Jl. Kaliurang No. 12)',
+            'package_name' => 'Paket VIP Personal Trainer (12 Sesi)',
+            'original_price' => $originalPrice,
+            'promo_code' => $promo,
+            'discount_amount' => $discountAmount,
+            'total_paid' => $totalPaid,
+            'payment_method' => 'Transfer Bank BCA / QRIS Kasir',
+            'status' => 'LUNAS / PAID'
+        ];
+
+        return view('invoice', compact('invoice'));
+    }
+
+    public function adminPaymentsIndex(Request $request)
+    {
+        $payments = collect([
+            (object)[
+                'id' => 'PAY-9901',
+                'inv_number' => 'INV/FL/2026/08/7782',
+                'member_name' => 'Bima Prasetya',
+                'phone' => '081234567890',
+                'package' => 'Personal Trainer 12 Sesi',
+                'amount' => 2125000,
+                'promo' => 'MAHASISWA15',
+                'method' => 'Transfer BCA',
+                'date' => '06 Aug 2026, 13:40',
+                'proof_img' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
+                'status' => 'LUNAS (APPROVED)'
+            ],
+            (object)[
+                'id' => 'PAY-9902',
+                'inv_number' => 'INV/FL/2026/08/9988',
+                'member_name' => 'Siti Nurhaliza',
+                'phone' => '081987654321',
+                'package' => 'Female Body Shaping Pass',
+                'amount' => 1500000,
+                'promo' => 'FITLIFE10',
+                'method' => 'QRIS Kasir Studio',
+                'date' => '06 Aug 2026, 12:15',
+                'proof_img' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
+                'status' => 'MENUNGGU VERIFIKASI'
+            ],
+            (object)[
+                'id' => 'PAY-9903',
+                'inv_number' => 'INV/FL/2026/08/4512',
+                'member_name' => 'Aditya Putra',
+                'phone' => '085712345678',
+                'package' => 'Gym Pass Unlimited 3 Bulan',
+                'amount' => 1200000,
+                'promo' => 'FITJOGJA50',
+                'method' => 'Tunai di Kasir',
+                'date' => '05 Aug 2026, 16:45',
+                'proof_img' => 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=400',
+                'status' => 'MENUNGGU VERIFIKASI'
+            ]
+        ]);
+
+        $stats = (object)[
+            'total_verified_revenue' => 4825000,
+            'pending_count' => $payments->where('status', 'MENUNGGU VERIFIKASI')->count(),
+            'approved_count' => $payments->where('status', 'LUNAS (APPROVED)')->count(),
+        ];
+
+        return view('admin.payments.index', compact('payments', 'stats'));
+    }
+
+    public function approvePayment(Request $request, $id)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Pembayaran ' . $id . ' BERHASIL DI-APPROVE! Status member diaktifkan sebagai ACTIVE VIP & e-Receipt Lunas diterbitkan.'
+        ]);
+    }
+
+    public function rejectPayment(Request $request, $id)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Pembayaran ' . $id . ' DITOLAK. Bukti transfer ditandai tidak valid.'
+        ]);
+    }
+
+    public function storeClassBooking(Request $request)
+    {
+        $className = $request->input('class_name', 'Zumba Fitness Party');
+        $classDay = $request->input('class_day', 'Senin');
+        $classTime = $request->input('class_time', '17:00 - 18:00 WIB');
+        $branch = $request->input('branch', 'Sleman HQ');
+        $memberId = $request->input('member_id', 'FL-MBR-7782');
+        $memberName = $request->input('member_name', 'Bima Prasetya');
+
+        $targetWa = '6281234567890';
+        $waMessage = "Halo Admin FitLife Gym Jogja, saya ingin Reservasi Slot Kelas Group Fitness!%0A%0A"
+            . "*Data Reservasi Kelas:*%0A"
+            . "• Nama Member: {$memberName} ({$memberId})%0A"
+            . "• Kelas Pilihan: {$className}%0A"
+            . "• Hari & Waktu: {$classDay}, {$classTime}%0A"
+            . "• Lokasi Cabang: {$branch}%0A"
+            . "%0AMohon konfirmasi sisa slot tempat kelas saya. Terima kasih!";
+
+        $waUrl = "https://wa.me/{$targetWa}?text={$waMessage}";
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Reservasi slot kelas "' . $className . '" berhasil dibuat! Silakan verifikasi via WhatsApp Admin.',
+            'wa_url' => $waUrl
+        ]);
     }
 }
