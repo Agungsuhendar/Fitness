@@ -486,4 +486,176 @@ class PageController extends Controller
 
         return view('kelas', compact('classes'));
     }
+
+    public function toko()
+    {
+        $products = collect([
+            (object)[
+                'id' => 1,
+                'name' => 'FitLife Whey Isolate Protein 2 Lbs (900g)',
+                'category' => 'Whey & Protein',
+                'original_price' => 450000,
+                'promo_price' => 385000,
+                'rating' => '4.9 ★★★★★',
+                'reviews_count' => 84,
+                'stock' => 'TERSEDIA',
+                'badge' => 'BEST SELLER',
+                'description' => '25g Whey Isolate Murni per serving, 0g Gula, & rendah kalori. Ideal untuk pembentukan otot tanpa lemak.',
+                'image' => 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'
+            ],
+            (object)[
+                'id' => 2,
+                'name' => 'FitLife Pure Micronized Creatine 300g (60 Servings)',
+                'category' => 'Creatine & Energy',
+                'original_price' => 250000,
+                'promo_price' => 195000,
+                'rating' => '5.0 ★★★★★',
+                'reviews_count' => 112,
+                'stock' => 'TERSEDIA',
+                'badge' => 'POWER BOOST',
+                'description' => '100% Creatine Monohydrate murni mencerahkan tenaga angkatan & ledakan tenaga otot saat latihan beban.',
+                'image' => 'https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?q=80&w=600'
+            ],
+            (object)[
+                'id' => 3,
+                'name' => 'FitLife Pre-Workout Energy Matrix (30 Servings)',
+                'category' => 'Creatine & Energy',
+                'original_price' => 320000,
+                'promo_price' => 265000,
+                'rating' => '4.8 ★★★★★',
+                'reviews_count' => 45,
+                'stock' => 'TERSEDIA',
+                'badge' => 'HIGH STAMINA',
+                'description' => 'Formula Citrulline Malate, Beta-Alanine, & Caffeine untuk fokus tajam & stamina latihan melimpah.',
+                'image' => 'https://images.unsplash.com/photo-1546483875-ad9014c88eba?q=80&w=600'
+            ],
+            (object)[
+                'id' => 4,
+                'name' => 'FitLife Heavy Duty Padded Lifting Straps',
+                'category' => 'Aksesori & Gear',
+                'original_price' => 120000,
+                'promo_price' => 85000,
+                'rating' => '4.9 ★★★★★',
+                'reviews_count' => 67,
+                'stock' => 'TERSEDIA',
+                'badge' => 'GEAR FAVOURITE',
+                'description' => 'Strap genggaman Neoprene tebal untuk angkatan Deadlift & Row maksimal tanpa pergelangan tangan sakit.',
+                'image' => 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600'
+            ],
+            (object)[
+                'id' => 5,
+                'name' => 'FitLife Shaker Bottle Stainless Leak-Proof 750ml',
+                'category' => 'Aksesori & Gear',
+                'original_price' => 150000,
+                'promo_price' => 110000,
+                'rating' => '4.9 ★★★★★',
+                'reviews_count' => 93,
+                'stock' => 'TERSEDIA',
+                'badge' => 'PREMIUM SHAKER',
+                'description' => 'Botol shaker stainless anti-bocor dengan bola pengocok stainless & penjaga suhu dingin hingga 12 jam.',
+                'image' => 'https://images.unsplash.com/photo-1526401485004-46910ecc8e51?q=80&w=600'
+            ],
+            (object)[
+                'id' => 6,
+                'name' => 'FitLife Official Performance Jersey (Dry-Fit)',
+                'category' => 'Apparel / Jersey',
+                'original_price' => 220000,
+                'promo_price' => 165000,
+                'rating' => '5.0 ★★★★★',
+                'reviews_count' => 38,
+                'stock' => 'TERSEDIA',
+                'badge' => 'OFFICIAL MERCH',
+                'description' => 'Jersey olahraga berbahan breathable Dry-Fit elastis nyaman untuk latihan gym & aktivitas outdoor.',
+                'image' => 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600'
+            ]
+        ]);
+
+        return view('toko', compact('products'));
+    }
+
+    public function virtualTour()
+    {
+        $zones = collect([
+            (object)[
+                'id' => 'freeweight',
+                'name' => 'Free Weight & Power Rack Zone',
+                'badge' => 'HEAVY LIFTING',
+                'subtitle' => 'Area angkatan beban lengkap dengan Hammer Strength Power Rack, Dumbbell Eleiko s/d 50KG, & Rubber Flooring 25mm',
+                'bg_image' => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200',
+                'hotspots' => [
+                    (object)[
+                        'top' => '45%',
+                        'left' => '32%',
+                        'title' => 'Hammer Strength Power Rack & Olympic Barbell',
+                        'desc' => 'Dua set Power Rack komersial Eleiko dengan safety bar kokoh & plat beban besi murni berstandar kompetisi.'
+                    ],
+                    (object)[
+                        'top' => '60%',
+                        'left' => '68%',
+                        'title' => 'Dumbbell Set Pro 2.5KG - 50KG',
+                        'desc' => 'Dumbbell Karet Ergononomis anti-slip dengan rak susun 3 tingkat yang rapi & higienis.'
+                    ]
+                ]
+            ],
+            (object)[
+                'id' => 'cardio',
+                'name' => 'Cardio & Running Zone',
+                'badge' => 'FAT BURNING',
+                'subtitle' => 'Area treadmill canggih dengan layar HD interaktif, Assault Air Bike, & Rowing Machine',
+                'bg_image' => 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1200',
+                'hotspots' => [
+                    (object)[
+                        'top' => '50%',
+                        'left' => '40%',
+                        'title' => 'Commercial Treadmill Touchscreen HD',
+                        'desc' => 'Treadmill komersial berperedam kejut dengan fitur Bluetooth audio & sensor denyut jantung real-time.'
+                    ],
+                    (object)[
+                        'top' => '55%',
+                        'left' => '75%',
+                        'title' => 'Assault Air Bike HIIT Edition',
+                        'desc' => 'Sepeda statis resistensi udara untuk pembakaran kalori ekstrem dalam waktu singkat.'
+                    ]
+                ]
+            ],
+            (object)[
+                'id' => 'vipstudio',
+                'name' => 'VIP Studio Privat PT 1-on-1',
+                'badge' => 'PRIVAT 100%',
+                'subtitle' => 'Studio privat khusus member Personal Trainer 1-on-1 tanpa antri alat & bebas privasi',
+                'bg_image' => 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1200',
+                'hotspots' => [
+                    (object)[
+                        'top' => '42%',
+                        'left' => '50%',
+                        'title' => 'InBody 570 Composition Analyzer',
+                        'desc' => 'Alat pemindai analisis komposisi tubuh medis untuk mengukur % lemak, massa otot, & lemak viseral akurat.'
+                    ]
+                ]
+            ],
+            (object)[
+                'id' => 'sauna',
+                'name' => 'Area Sauna Kayu Cedar & Locker Digital',
+                'badge' => 'RECOVERY & RELAX',
+                'subtitle' => 'Ruang sauna relaksasi otot suhu 75°C & locker digital RFID pintar yang terenkripsi',
+                'bg_image' => 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=1200',
+                'hotspots' => [
+                    (object)[
+                        'top' => '48%',
+                        'left' => '35%',
+                        'title' => 'Ruang Sauna Kayu Cedar Alami',
+                        'desc' => 'Sauna bersuhu 75°C untuk melancarkan sirkulasi darah & mempercepat pemulihan asam laktat setelah latihan.'
+                    ],
+                    (object)[
+                        'top' => '55%',
+                        'left' => '65%',
+                        'title' => 'Locker Digital RFID Smart Lock',
+                        'desc' => '24 unit locker digital yang dapat dikunci aman menggunakan gelang RFID member.'
+                    ]
+                ]
+            ]
+        ]);
+
+        return view('virtual-tour', compact('zones'));
+    }
 }

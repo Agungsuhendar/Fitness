@@ -85,6 +85,49 @@ Route::get('/tulis-testimoni', [PageController::class, 'tulisTestimoni'])->name(
 Route::post('/tulis-testimoni', [PageController::class, 'storeTestimonial'])->name('testimoni.store');
 Route::get('/kelas', [PageController::class, 'kelas'])->name('kelas');
 Route::post('/kelas/booking', [LeadController::class, 'storeClassBooking'])->name('kelas.booking');
+Route::get('/toko', [PageController::class, 'toko'])->name('toko');
+Route::post('/toko/order', [LeadController::class, 'storeOrder'])->name('toko.order');
+Route::get('/virtual-tour', [PageController::class, 'virtualTour'])->name('virtual-tour');
+
+// PWA Web Manifest Route
+Route::get('/manifest.json', function () {
+    $siteLogo = site_setting('site_logo', 'images/logo.png');
+    $logoUrl = \Illuminate\Support\Str::startsWith($siteLogo, 'http') ? $siteLogo : url('/') . '/' . ltrim($siteLogo, '/');
+    $title = site_setting('site_seo_title', 'FitLife Center Jogja - Gym & Personal Trainer');
+    $shortName = site_setting('hero_title', 'FitLife Hub');
+    $desc = site_setting('site_seo_description', 'Pusat fitness gym & Personal Trainer privat 1-on-1 terpercaya di Yogyakarta.');
+
+    return response()->json([
+        'id' => '/',
+        'name' => $title,
+        'short_name' => $shortName,
+        'description' => $desc,
+        'start_url' => '/',
+        'scope' => '/',
+        'display' => 'standalone',
+        'orientation' => 'portrait',
+        'background_color' => '#060907',
+        'theme_color' => '#0a0f0d',
+        'icons' => [
+            [
+                'src' => $logoUrl,
+                'sizes' => '192x192',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ],
+            [
+                'src' => $logoUrl,
+                'sizes' => '512x512',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ]
+        ]
+    ], 200, [
+        'Content-Type' => 'application/manifest+json; charset=utf-8',
+        'Access-Control-Allow-Origin' => '*',
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+    ]);
+});
 
 // Search Global
 Route::get('/search', [PageController::class, 'search'])->name('search');

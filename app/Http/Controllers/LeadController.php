@@ -552,4 +552,31 @@ class LeadController extends Controller
             'wa_url' => $waUrl
         ]);
     }
+
+    public function storeOrder(Request $request)
+    {
+        $productName = $request->input('product_name', 'FitLife Whey Isolate Protein');
+        $price = $request->input('price', 'Rp 385.000');
+        $quantity = $request->input('quantity', 1);
+        $customerName = $request->input('customer_name', 'Bima Prasetya');
+        $delivery = $request->input('delivery_method', 'Ambil di Studio Sleman HQ');
+
+        $targetWa = '6281234567890';
+        $waMessage = "Halo Kasir FitLife Store Jogja, saya ingin memesan Produk Fitness!%0A%0A"
+            . "*Detail Pesanan Produk:*%0A"
+            . "• Nama Pembeli: {$customerName}%0A"
+            . "• Produk: {$productName}%0A"
+            . "• Jumlah: {$quantity} Pcs%0A"
+            . "• Harga Satuan: {$price}%0A"
+            . "• Pengambilan/Pengiriman: {$delivery}%0A"
+            . "%0AMohon proses pesanan dan instruksi pembayaran QRIS/Transfer. Terima kasih!";
+
+        $waUrl = "https://wa.me/{$targetWa}?text={$waMessage}";
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan produk "' . $productName . '" berhasil disiapkan! Mengarahkan ke WhatsApp Kasir Studio...',
+            'wa_url' => $waUrl
+        ]);
+    }
 }

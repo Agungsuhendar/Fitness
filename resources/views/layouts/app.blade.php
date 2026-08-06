@@ -1,11 +1,10 @@
 @php
-    $defaultSeoTitle = site_setting('site_seo_title', 'ApexFitness Center - Gym, Personal Trainer Privat & Body Transformation Studio');
-    $defaultSeoDesc = site_setting('site_seo_description', 'ApexFitness Center Yogyakarta. Pusat fitness gym & Personal Trainer privat 1-on-1 tersertifikasi APKI. Program Weight Loss, Muscle Building, Female Body Shaping & Persiapan TNI POLRI. InBody Scan & Garansi Hasil!');
-    $rawShareLogo = site_setting('site_share_image', 'images/logo.png');
-    if (Str::endsWith($rawShareLogo, '.webp') && file_exists(public_path('images/logo.png'))) {
-        $rawShareLogo = 'images/logo.png';
-    }
-    $shareImageUrl = Str::startsWith($rawShareLogo, 'http') ? $rawShareLogo : url('/') . '/' . ltrim($rawShareLogo, '/');
+    $defaultSeoTitle = site_setting('site_seo_title', 'FitLife Gym Jogja - Privat Anak, Dewasa, Wanita & Persiapan TNI POLRI');
+    $defaultSeoDesc = site_setting('site_seo_description', 'FitLife Gym Jogja profesional & privat di Yogyakarta. Melayani fitness & personal trainer anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI.');
+    $siteLogoPath = site_setting('site_logo', 'images/logo.png');
+    $siteLogoUrl = Str::startsWith($siteLogoPath, 'http') ? $siteLogoPath : asset($siteLogoPath);
+    $rawShareLogo = site_setting('site_share_image', $siteLogoPath);
+    $shareImageUrl = Str::startsWith($rawShareLogo, 'http') ? $rawShareLogo : asset($rawShareLogo);
 
     // Build Dynamic Live Toast Notifications from Database
     $liveToasts = [];
@@ -76,14 +75,17 @@
     <meta name="twitter:description" content="@yield('meta_description', $defaultSeoDesc)">
     <meta name="twitter:image" content="{{ $shareImageUrl }}">
 
-    <link rel="icon" type="image/webp" href="{{ asset('images/logo-icon.webp?v=2') }}">
+    <!-- Dynamic Favicon & Touch Icons from Site Settings -->
+    <link rel="icon" type="image/png" href="{{ $siteLogoUrl }}">
+    <link rel="shortcut icon" type="image/png" href="{{ $siteLogoUrl }}">
+    <link rel="apple-touch-icon" href="{{ $siteLogoUrl }}">
 
     <!-- PWA Web Manifest & App Meta Tags -->
-    <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="{{ url('/manifest.json') }}">
+    <meta name="theme-color" content="#0a0f0d">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ApexFitness">
+    <meta name="apple-mobile-web-app-title" content="{{ site_setting('hero_title', 'FitLife Gym') }}">
 
     <!-- Geo Meta Tags for Google Local Search -->
     <meta name="geo.region" content="ID-YO">
@@ -124,9 +126,82 @@
 
     <!-- Local FontAwesome & Custom CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.0.6">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.1.6">
+
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('fitlife_theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        })();
+    </script>
 
     <style>
+        /* Dynamic Theme Engine CSS Variables & Universal Color Overrides */
+        :root {
+            --brand-primary: #84cc16;
+            --brand-primary-dark: #65a30d;
+            --brand-glow: rgba(132, 204, 22, 0.4);
+            --brand-glow-subtle: rgba(132, 204, 22, 0.12);
+            --brand-bg: #060907;
+            --brand-card-bg: #0d1310;
+        }
+
+        :root[data-theme="cyberpunk"] {
+            --brand-primary: #f43f5e;
+            --brand-primary-dark: #e11d48;
+            --brand-glow: rgba(244, 63, 94, 0.5);
+            --brand-glow-subtle: rgba(244, 63, 94, 0.15);
+            --brand-bg: #090507;
+            --brand-card-bg: #130a0d;
+        }
+
+        :root[data-theme="cyan"] {
+            --brand-primary: #06b6d4;
+            --brand-primary-dark: #0891b2;
+            --brand-glow: rgba(6, 182, 212, 0.5);
+            --brand-glow-subtle: rgba(6, 182, 212, 0.15);
+            --brand-bg: #05080b;
+            --brand-card-bg: #091016;
+        }
+
+        :root[data-theme="gold"] {
+            --brand-primary: #eab308;
+            --brand-primary-dark: #ca8a04;
+            --brand-glow: rgba(234, 179, 8, 0.5);
+            --brand-glow-subtle: rgba(234, 179, 8, 0.15);
+            --brand-bg: #0a0904;
+            --brand-card-bg: #14120a;
+        }
+
+        /* Dynamic Theme Class Overrides */
+        .text-primary, .active-indicator, .nav-link.active, .nav-dropdown-link:hover {
+            color: var(--brand-primary) !important;
+        }
+        .btn-primary, button[type="submit"] {
+            background-color: var(--brand-primary) !important;
+            color: #090d0b !important;
+        }
+        .glow-btn {
+            background-color: var(--brand-primary) !important;
+            box-shadow: 0 0 20px var(--brand-glow) !important;
+        }
+        
+        /* Auto Theme Adaptor for Hardcoded Color Elements */
+        [style*="#84cc16"] {
+            color: var(--brand-primary) !important;
+        }
+        [style*="background: #84cc16"], [style*="background:#84cc16"], [style*="background: rgb(132, 204, 22)"] {
+            background-color: var(--brand-primary) !important;
+        }
+        [style*="border: 1.5px solid #84cc16"], [style*="border: 2px solid #84cc16"], [style*="border: 1px solid #84cc16"] {
+            border-color: var(--brand-primary) !important;
+        }
+        [style*="rgba(132, 204, 22, 0.15)"], [style*="rgba(132, 204, 22, 0.12)"], [style*="rgba(132, 204, 22, 0.1)"], [style*="rgba(132, 204, 22, 0.2)"] {
+            background-color: var(--brand-glow-subtle) !important;
+        }
+
         /* Bulletproof Topbar Offset */
         main {
             margin-top: 84px !important;
@@ -136,6 +211,196 @@
             main {
                 margin-top: 72px !important;
             }
+        }
+
+        /* Mobile Topbar Action Bar Styling */
+        @media (max-width: 991px) {
+            .nav-actions {
+                display: flex !important;
+                align-items: center !important;
+                gap: 0.65rem !important;
+            }
+            .mobile-toggle {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+            .nav-links.active {
+                display: flex !important;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(13, 19, 16, 0.98);
+                backdrop-filter: blur(20px);
+                border-bottom: 2px solid var(--brand-primary, #84cc16);
+                padding: 1.25rem 1.5rem;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+                z-index: 9999;
+            }
+        /* ========================================================= */
+        /* BULLETPROOF TOPBAR NAVIGATION SYSTEM                      */
+        /* ========================================================= */
+        .navbar {
+            background: rgba(10, 15, 13, 0.95) !important;
+            backdrop-filter: blur(16px) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            z-index: 100000 !important;
+            padding: 0.8rem 0 !important;
+            margin: 0 !important;
+        }
+
+        .navbar-inner {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            position: relative !important;
+            width: 100% !important;
+        }
+
+        /* Global Default: Dropdown Menu Hidden */
+        .nav-dropdown-menu {
+            display: none !important;
+        }
+
+        /* 1. Desktop Mode (Screens >= 992px) */
+        @media (min-width: 992px) {
+            .hidden-mobile { display: flex !important; }
+            .mobile-only,
+            .mobile-hero-wrapper { display: none !important; }
+            .mobile-toggle { display: none !important; }
+
+            .desktop-nav-links.hidden-mobile,
+            .desktop-nav-links {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 1.35rem !important;
+                list-style: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .desktop-nav-links > li {
+                display: inline-flex !important;
+                align-items: center !important;
+                position: relative !important;
+                list-style: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .desktop-nav-links > li > .nav-link {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 0.4rem !important;
+                color: #cbd5e1 !important;
+                font-weight: 700 !important;
+                font-size: 0.9rem !important;
+                text-decoration: none !important;
+                padding: 0.45rem 0.25rem !important;
+                white-space: nowrap !important;
+            }
+
+            .desktop-nav-links > li > .nav-link:hover,
+            .desktop-nav-links > li > .nav-link.active {
+                color: var(--brand-primary, #84cc16) !important;
+            }
+
+            .nav-dropdown-item {
+                position: relative !important;
+            }
+
+            .desktop-nav-links .nav-dropdown-menu {
+                display: none !important;
+                position: absolute !important;
+                top: 100% !important;
+                left: 0 !important;
+                background: #0d1310 !important;
+                border: 1.5px solid rgba(132, 204, 22, 0.4) !important;
+                border-radius: 1.15rem !important;
+                padding: 0.75rem 0.5rem !important;
+                min-width: 230px !important;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.9), 0 0 25px rgba(132,204,22,0.2) !important;
+                flex-direction: column !important;
+                gap: 0.25rem !important;
+                z-index: 100005 !important;
+            }
+
+            /* Show Dropdown on Hover or Click */
+            .nav-dropdown-item:hover > .nav-dropdown-menu,
+            .nav-dropdown-item.show > .nav-dropdown-menu {
+                display: flex !important;
+            }
+        }
+
+        /* 2. Mobile Mode (Screens < 992px) */
+        @media (max-width: 991px) {
+            .hidden-mobile { display: none !important; }
+            .mobile-only { display: block !important; }
+            .mobile-toggle { display: flex !important; }
+
+            #mobileNavDrawer {
+                display: none !important;
+            }
+
+            #mobileNavDrawer.active {
+                display: flex !important;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column !important;
+                position: absolute !important;
+                top: 100% !important;
+                left: 0 !important;
+                width: 100% !important;
+                background: rgba(13, 19, 16, 0.98) !important;
+                backdrop-filter: blur(20px) !important;
+                border-bottom: 2px solid var(--brand-primary, #84cc16) !important;
+                padding: 1.25rem 1.5rem !important;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.9) !important;
+                z-index: 9999 !important;
+                gap: 0.85rem !important;
+            }
+
+            .nav-links.active {
+                display: flex !important;
+            }
+
+            .nav-dropdown-menu {
+                display: flex !important;
+                position: static !important;
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0.25rem 0 0.5rem 1rem !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                transform: none !important;
+            }
+        }
+        .nav-dropdown-link {
+            display: flex !important;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.65rem 1rem !important;
+            border-radius: 0.75rem;
+            color: #cbd5e1 !important;
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease;
+        }
+        .nav-dropdown-link:hover {
+            background: rgba(132, 204, 22, 0.12) !important;
+            color: #84cc16 !important;
+            padding-left: 1.25rem !important;
         }
 
         /* Theme Switcher Button & Dropdown Styles */
@@ -467,50 +732,106 @@
         }
     </script>
 
-    <!-- Floating PWA Install Prompt Banner -->
-    <div id="pwaInstallBanner" style="display: none; position: fixed; top: 75px; left: 50%; transform: translateX(-50%); z-index: 99998; width: 92%; max-width: 480px; background: #0f172a; border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 0.9rem 1.15rem; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 25px rgba(132,204,22,0.3); align-items: center; justify-content: space-between; gap: 0.85rem; color: white;">
+    <!-- Floating PWA Install Prompt Banner (Top Right Corner - Slightly Lower) -->
+    <div id="pwaInstallBanner" style="display: none; position: fixed; top: 105px; right: 20px; left: auto; transform: none; z-index: 99998; width: calc(100% - 40px); max-width: 420px; background: #0d1310; border: 2px solid var(--brand-primary, #84cc16); border-radius: 1.25rem; padding: 0.85rem 1.1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.9), 0 0 25px var(--brand-glow, rgba(132,204,22,0.35)); align-items: center; justify-content: space-between; gap: 0.85rem; color: white;">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <img src="{{ asset('images/logo.png') }}" alt="FitLife App Icon" style="height: 38px; width: auto; object-fit: contain;">
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 0.85rem; padding: 0.4rem; display: flex; align-items: center; justify-content: center;">
+                <img src="{{ asset('images/logo.png') }}" alt="FitLife App Icon" style="height: 34px; width: auto; object-fit: contain;">
+            </div>
             <div>
-                <div style="font-weight: 800; font-size: 0.875rem; color: #ffffff;">Install Aplikasi FitLife Hub</div>
-                <div style="font-size: 0.75rem; color: #94a3b8;">Akses cepat & hemat kuota di HP Anda!</div>
+                <div style="font-weight: 900; font-size: 0.9rem; color: #ffffff;">FitLife Hub App</div>
+                <div style="font-size: 0.75rem; color: #cbd5e1;">Akses cepat &amp; hemat kuota di HP Anda</div>
             </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 0.4rem;">
-            <button id="pwaInstallBtn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.45rem 0.9rem; border-radius: 99px; font-weight: 900; font-size: 0.775rem; cursor: pointer; white-space: nowrap;">
-                Install
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <button onclick="triggerPwaInstall()" style="background: var(--brand-primary, #84cc16); color: #ffffff !important; border: none; padding: 0.5rem 1.1rem; border-radius: 99px; font-weight: 900; font-size: 0.825rem; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 0 15px var(--brand-glow, rgba(132,204,22,0.4));">
+                <i class="fa-solid fa-mobile-screen-button" style="color: #ffffff !important;"></i>
+                <span style="color: #ffffff !important;">Install App</span>
             </button>
-            <button onclick="dismissPwaBanner()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; padding: 0 0.3rem;">
+            <button onclick="dismissPwaBanner()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer; padding: 0 0.3rem;" title="Tutup">
                 &times;
+            </button>
+        </div>
+    </div>
+
+    <!-- Universal PWA Instruction Modal (iOS & Fallback) -->
+    <div id="pwaInstructionModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 100005; align-items: center; justify-content: center; padding: 1.25rem;">
+        <div style="background: #0d1310; border: 2px solid var(--brand-primary, #84cc16); border-radius: 1.5rem; max-width: 440px; width: 100%; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.9); position: relative; color: white; text-align: center;">
+            <button onclick="closePwaModal()" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(132, 204, 22, 0.15); border: 2px solid var(--brand-primary, #84cc16); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.8rem; color: var(--brand-primary, #84cc16);">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+
+            <h3 style="font-size: 1.35rem; font-weight: 900; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">Cara Install FitLife Hub App</h3>
+            <p style="color: #cbd5e1; font-size: 0.875rem; margin-bottom: 1.5rem; line-line: 1.6;">
+                Nikmati akses cepat tanpa buka browser setiap saat langsung dari layar utama HP Anda!
+            </p>
+
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; text-align: left; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">1</span>
+                    <span>Di iPhone/iOS: Ketuk ikon <b>Bagikan <i class="fa-solid fa-share-nodes"></i></b> di bawah Safari.</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">2</span>
+                    <span>Pilih menu <b>"Tambahkan ke Layar Utama" / "Add to Home Screen"</b>.</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">3</span>
+                    <span>Di Android/Chrome: Ketuk **Titik 3 ➔ Install Aplikasi**.</span>
+                </div>
+            </div>
+
+            <button onclick="closePwaModal()" style="width: 100%; background: var(--brand-primary, #84cc16); color: #090d0b; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.9rem; cursor: pointer;">
+                Saya Mengerti
             </button>
         </div>
     </div>
 
     <script>
         let deferredPwaPrompt;
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPwaPrompt = e;
-            const banner = document.getElementById('pwaInstallBanner');
-            if (banner && !sessionStorage.getItem('pwa_banner_dismissed')) {
-                banner.style.display = 'flex';
-            }
+            showPwaBanner();
         });
 
-        const pwaInstallBtn = document.getElementById('pwaInstallBtn');
-        if (pwaInstallBtn) {
-            pwaInstallBtn.addEventListener('click', () => {
-                if (deferredPwaPrompt) {
-                    deferredPwaPrompt.prompt();
-                    deferredPwaPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted PWA install prompt');
-                        }
-                        deferredPwaPrompt = null;
-                        dismissPwaBanner();
-                    });
+        // Show banner after 1.5 seconds if not dismissed
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (!sessionStorage.getItem('pwa_banner_dismissed')) {
+                    showPwaBanner();
                 }
-            });
+            }, 1500);
+        });
+
+        function showPwaBanner() {
+            const banner = document.getElementById('pwaInstallBanner');
+            if (banner) banner.style.display = 'flex';
+        }
+
+        function triggerPwaInstall() {
+            if (deferredPwaPrompt) {
+                deferredPwaPrompt.prompt();
+                deferredPwaPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted PWA install prompt');
+                    }
+                    deferredPwaPrompt = null;
+                    dismissPwaBanner();
+                });
+            } else {
+                // Show universal instruction modal for iOS / Manual fallback
+                const modal = document.getElementById('pwaInstructionModal');
+                if (modal) modal.style.display = 'flex';
+            }
+        }
+
+        function closePwaModal() {
+            const modal = document.getElementById('pwaInstructionModal');
+            if (modal) modal.style.display = 'none';
         }
 
         function dismissPwaBanner() {

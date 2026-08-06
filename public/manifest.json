@@ -1,8 +1,10 @@
 {
+  "id": "/",
   "name": "FitLife Center Jogja - Gym & Personal Trainer",
   "short_name": "FitLife Hub",
   "description": "Pusat fitness gym & Personal Trainer privat 1-on-1 terpercaya di Yogyakarta.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#060907",

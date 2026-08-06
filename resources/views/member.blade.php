@@ -154,6 +154,9 @@
                 <button type="button" class="member-tab-btn" onclick="switchMemberTab('classes', this)" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.65rem 1.35rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
                     🧘‍♀️ Jadwal Kelas Group
                 </button>
+                <button type="button" class="member-tab-btn" onclick="switchMemberTab('progress', this)" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.65rem 1.35rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
+                    📸 Foto Progress &amp; Body Stats
+                </button>
             </div>
         </div>
     </section>
@@ -657,6 +660,86 @@
         </div>
     </div>
 
+    <!-- TAB 8: FOTO PROGRESS & BODY STATS -->
+    <div id="memberTabProgress" class="member-tab-content" style="display: none; background: #060907; padding: 3rem 0 6rem; color: white;">
+        <div class="container" style="max-width: 950px;">
+            
+            <div style="background: #0d1310; border: 1.5px solid rgba(56, 189, 248, 0.4); border-radius: 1.5rem; padding: 2.25rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6); margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 44px; height: 44px; background: rgba(56, 189, 248, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #38bdf8; font-size: 1.25rem;">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.6rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0;">
+                                Transformasi Fisik &amp; Komparasi Foto Progress
+                            </h3>
+                            <span style="font-size: 0.85rem; color: #38bdf8; font-weight: 700;">Perkembangan Bentuk Tubuh: Bulan 1 vs Bulan 3 (Loss 8.5 kg)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Before / After Photo Comparison Slider Container -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 1.5rem; margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 900;">
+                        <span style="color: #ef4444; background: rgba(239,68,68,0.15); padding: 0.35rem 0.85rem; border-radius: 99px;">🔴 BEFORE: BULAN 1 (82.5 KG)</span>
+                        <span style="color: #38bdf8; font-size: 0.8rem; font-style: italic;">Geser slider di bawah untuk komparasi ➔</span>
+                        <span style="color: #84cc16; background: rgba(132,204,22,0.15); padding: 0.35rem 0.85rem; border-radius: 99px;">🟢 AFTER: BULAN 3 (74.0 KG)</span>
+                    </div>
+
+                    <!-- Photo Slider Box -->
+                    <div id="beforeAfterSliderBox" style="position: relative; width: 100%; height: 380px; border-radius: 1rem; overflow: hidden; border: 2px solid rgba(132,204,22,0.4); user-select: none;">
+                        <!-- After Image (Background Full) -->
+                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800" alt="After Progress" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+                        
+                        <!-- Before Image (Clipped Overlay) -->
+                        <div id="beforeImageWrapper" style="position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; border-right: 3px solid #84cc16;">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800" alt="Before Progress" style="width: 850px; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                        </div>
+
+                        <!-- Range Slider Input overlay -->
+                        <input type="range" min="0" max="100" value="50" oninput="updateBeforeAfterSlider(this.value)" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; z-index: 10;">
+                    </div>
+                </div>
+
+                <!-- Body Measurements Grid (Lingkar Tubuh) -->
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.15rem; font-weight: 800; color: white; font-family: 'Outfit', sans-serif; margin-bottom: 1rem;">
+                        📐 Riwayat Perkembangan Ukuran Lingkar Tubuh
+                    </h4>
+
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;" class="grid-2">
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
+                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">LINGKAR PINGGANG</span>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #84cc16; margin-top: 0.2rem;">81 cm</div>
+                            <span style="font-size: 0.7rem; color: #4ade80; font-weight: 800;">-11 cm Pemangkasan!</span>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
+                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">LINGKAR DADA</span>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #38bdf8; margin-top: 0.2rem;">102 cm</div>
+                            <span style="font-size: 0.7rem; color: #38bdf8; font-weight: 800;">-6 cm Lebih Lean</span>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
+                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">LINGKAR BICEPS</span>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #fbbf24; margin-top: 0.2rem;">38 cm</div>
+                            <span style="font-size: 0.7rem; color: #fbbf24; font-weight: 800;">+4 cm Otot Bertumbuh 💪</span>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
+                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">LINGKAR PAHA</span>
+                            <div style="font-size: 1.25rem; font-weight: 900; color: #a78bfa; margin-top: 0.2rem;">57 cm</div>
+                            <span style="font-size: 0.7rem; color: #a78bfa; font-weight: 800;">-5 cm Kencang Terbentuk</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <!-- FLOATING MEMBER AI FITBOT CS ASSISTANT WIDGET -->
@@ -741,6 +824,16 @@
         }
         if (tabName === 'classes') {
             document.getElementById('memberTabClasses').style.display = 'block';
+        }
+        if (tabName === 'progress') {
+            document.getElementById('memberTabProgress').style.display = 'block';
+        }
+    }
+
+    function updateBeforeAfterSlider(val) {
+        const wrapper = document.getElementById('beforeImageWrapper');
+        if (wrapper) {
+            wrapper.style.width = val + '%';
         }
     }
 

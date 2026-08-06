@@ -4,6 +4,28 @@
 @section('meta_description', 'Raih versi terbaik dirimu bersama program latihan dan bimbingan profesional dari trainer berpengalaman di FitLife Yogyakarta. Trial Gratis 7 Hari tanpa komitmen!')
 
 @section('content')
+<style>
+    @media (min-width: 992px) {
+        .mobile-hero-wrapper,
+        .mobile-only {
+            display: none !important;
+        }
+        .hero-grid.hidden-mobile {
+            display: grid !important;
+        }
+    }
+    @media (max-width: 991px) {
+        .mobile-hero-wrapper,
+        .mobile-only {
+            display: block !important;
+            padding: 1rem 0 2rem;
+        }
+        .hero-grid.hidden-mobile {
+            display: none !important;
+        }
+    }
+</style>
+
 <!-- Hero Section with Full-Width Gym Background & Overhead Neon Lights -->
 <section class="hero-section" style="background: linear-gradient(90deg, rgba(7, 10, 8, 0.96) 0%, rgba(7, 10, 8, 0.82) 42%, rgba(7, 10, 8, 0.35) 75%, rgba(7, 10, 8, 0.88) 100%), url('{{ asset('images/assets/fitlife_hero_gym_bg.png') }}') center/cover no-repeat; color: #ffffff; padding: 7rem 0 6.5rem; position: relative; overflow: hidden; min-height: 640px;">
     
@@ -11,7 +33,8 @@
     <div style="position: absolute; top: 0; right: 20%; width: 450px; height: 450px; background: radial-gradient(circle, rgba(132, 204, 22, 0.15) 0%, transparent 70%); pointer-events: none; filter: blur(50px);"></div>
 
     <div class="container">
-        <div class="hero-grid" style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 2rem; align-items: center;">
+        <!-- DESKTOP HERO LAYOUT (Visible only on Desktop >= 992px) -->
+        <div class="hero-grid hidden-mobile" style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 2rem; align-items: center;">
             
             <!-- Left Text Column -->
             <div class="hero-text-col" style="z-index: 5; padding-right: 1rem;">
@@ -70,9 +93,9 @@
 
                 <!-- CTA Action Buttons -->
                 <div class="hero-cta-group" style="display: flex; gap: 1.15rem; align-items: center; flex-wrap: wrap;">
-                    <button onclick="openRegistrationModal()" class="btn btn-lg glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.95rem 2.2rem; font-weight: 900; border-radius: 99px; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; box-shadow: 0 0 25px rgba(132, 204, 22, 0.5); cursor: pointer;">
-                        <span>Daftar Sekarang</span>
-                        <i class="fa-solid fa-arrow-right"></i>
+                    <button onclick="openRegistrationModal()" class="btn btn-lg glow-btn" style="background: var(--brand-primary, #84cc16); color: #ffffff !important; border: none; padding: 0.95rem 2.2rem; font-weight: 900; border-radius: 99px; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; box-shadow: 0 0 25px var(--brand-glow, rgba(132, 204, 22, 0.5)); cursor: pointer;">
+                        <span style="color: #ffffff !important;">Daftar Sekarang</span>
+                        <i class="fa-solid fa-arrow-right" style="color: #ffffff !important;"></i>
                     </button>
 
                     <button onclick="openTrialModal()" class="btn btn-lg" style="background: rgba(255, 255, 255, 0.06); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.22); padding: 0.95rem 2rem; font-weight: 700; border-radius: 99px; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; backdrop-filter: blur(10px); cursor: pointer;">
@@ -84,11 +107,11 @@
 
             <!-- Right Column - Transparent Cutout Models Standing Seamlessly on Gym Background -->
             <div class="hero-image-col" style="position: relative; z-index: 5;">
-                <div style="position: relative; width: 100%; height: 580px; display: flex; justify-content: center; align-items: flex-end;">
+                <div class="hero-image-container" style="position: relative; width: 100%; height: 580px; display: flex; justify-content: center; align-items: flex-end;">
                     
                     <!-- Transparent Cutout Models Figure (Enlarged slightly for maximum impact) -->
                     <div style="position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: flex-end;">
-                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" style="height: 100%; max-width: 100%; object-fit: contain; transform: translate(-80px, 80px); filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9));" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
+                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" class="hero-model-img" style="height: 100%; max-width: 100%; object-fit: contain; transform: translate(-80px, 80px); filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9));" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
                     </div>
 
                     <!-- Right Floating Trial Card (Matches Screenshot Exactly) -->
@@ -100,6 +123,61 @@
                         <div style="font-weight: 900; font-size: 1.4rem; color: #84cc16; margin: 0.15rem 0;">7 Hari</div>
                         <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Tanpa komitmen</div>
                     </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MOBILE HERO LAYOUT (Visible only on Mobile < 992px) -->
+        <div class="mobile-hero-wrapper mobile-only" style="position: relative; padding: 3.5rem 0 2rem;">
+            
+            <!-- 1. Background Cutout Models Image (Raised Up & Placed Behind Text) -->
+            <div style="position: relative; width: 100%; height: 350px; margin-bottom: -110px; display: flex; justify-content: center; align-items: flex-end; z-index: 1;">
+                <div style="position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: flex-end;">
+                    <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Couple Cutout Mobile" style="height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.18) translateY(-35px); filter: drop-shadow(0 15px 30px rgba(0,0,0,0.9)); opacity: 0.85;" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
+                </div>
+
+                <!-- Floating Trial Card Mobile (Lowered Down) -->
+                <div class="pulse-badge" style="position: absolute; right: 10px; top: 40%; transform: translateY(20px); background: rgba(10, 15, 12, 0.92); backdrop-filter: blur(16px); border: 1.5px solid #84cc16; border-radius: 1rem; padding: 0.85rem 1.1rem; text-align: center; color: #ffffff; box-shadow: 0 15px 30px rgba(0,0,0,0.8); z-index: 10;">
+                    <div style="width: 36px; height: 36px; background: rgba(132, 204, 22, 0.15); border-radius: 0.65rem; display: flex; align-items: center; justify-content: center; color: #84cc16; font-size: 1.1rem; margin: 0 auto 0.4rem;">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+                    <div style="font-weight: 800; font-size: 0.8rem; color: #ffffff; line-height: 1.2;">Trial Gratis</div>
+                    <div style="font-weight: 900; font-size: 1.2rem; color: #84cc16; margin: 0.1rem 0;">7 Hari</div>
+                    <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Tanpa komitmen</div>
+                </div>
+            </div>
+
+            <!-- 2. Foreground Text Content & CTAs (Lowered Further Down) -->
+            <div style="position: relative; z-index: 5; text-align: center; margin-top: 5.5rem;">
+                <!-- Hero Badge -->
+                <div class="hero-badge pulse-badge" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(10, 15, 12, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(132, 204, 22, 0.4); color: #ffffff; padding: 0.4rem 1rem; border-radius: 99px; font-weight: 700; font-size: 0.8rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-trophy" style="color: #84cc16;"></i>
+                    <span>#1 Fitness Center Terpercaya di Yogyakarta</span>
+                </div>
+
+                <!-- Hero Title -->
+                <h1 style="font-size: 2.5rem; font-weight: 900; line-height: 1.12; margin-bottom: 1rem; font-family: 'Outfit', sans-serif; text-shadow: 0 4px 20px rgba(0,0,0,0.95);">
+                    <span style="color: #ffffff;">Stronger Body</span><br>
+                    <span style="color: #84cc16; text-shadow: 0 0 20px rgba(132, 204, 22, 0.5);">Better Life</span>
+                </h1>
+
+                <!-- Hero Description -->
+                <p style="font-size: 1rem; color: #e2e8f0; line-height: 1.6; margin: 0 auto 1.75rem; max-width: 480px; text-shadow: 0 2px 10px rgba(0,0,0,0.9); font-weight: 600;">
+                    Raih versi terbaik dirimu bersama program latihan dan bimbingan profesional dari trainer berpengalaman.
+                </p>
+
+                <!-- CTA Action Buttons Mobile -->
+                <div style="display: flex; gap: 0.85rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+                    <button onclick="openRegistrationModal()" class="btn glow-btn" style="background: var(--brand-primary, #84cc16); color: #ffffff !important; border: none; padding: 0.85rem 1.75rem; font-weight: 900; border-radius: 99px; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; box-shadow: 0 0 20px var(--brand-glow, rgba(132, 204, 22, 0.5)); cursor: pointer;">
+                        <span style="color: #ffffff !important;">Daftar</span>
+                        <i class="fa-solid fa-arrow-right" style="color: #ffffff !important;"></i>
+                    </button>
+
+                    <button onclick="openTrialModal()" class="btn" style="background: rgba(10, 15, 12, 0.85); backdrop-filter: blur(12px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.22); padding: 0.85rem 1.5rem; font-weight: 700; border-radius: 99px; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; cursor: pointer;">
+                        <i class="fa-solid fa-circle-play" style="color: #cbd5e1;"></i>
+                        <span>Video</span>
+                    </button>
                 </div>
             </div>
 
