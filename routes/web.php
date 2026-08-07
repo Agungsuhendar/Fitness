@@ -14,6 +14,12 @@ use App\Http\Controllers\Admin\AdminLeadController;
 use App\Http\Controllers\Admin\AdminMemberController;
 use App\Http\Controllers\Admin\AdminIntegrationController;
 use App\Http\Controllers\Admin\AdminPosController;
+use App\Http\Controllers\Admin\AdminReportController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminPromoController;
+use App\Http\Controllers\Admin\AdminWaBroadcastController;
+use App\Http\Controllers\Admin\AdminClassController;
+use App\Http\Controllers\Admin\AdminInventoryLogController;
 use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\PaymentController;
 
@@ -87,11 +93,11 @@ Route::get('/login', [MemberAuthController::class, 'showLoginForm'])->name('logi
 Route::post('/login', [MemberAuthController::class, 'login']);
 Route::get('/register', [MemberAuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [MemberAuthController::class, 'register']);
-Route::post('/logout', [MemberAuthController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], '/logout', [MemberAuthController::class, 'logout'])->name('logout');
 
 Route::get('/kalkulator', [PageController::class, 'kalkulator'])->name('kalkulator');
 Route::get('/quiz', [PageController::class, 'quiz'])->name('quiz');
-Route::get('/member', [PageController::class, 'memberDashboard'])->middleware(['auth'])->name('member.dashboard');
+Route::get('/member', [PageController::class, 'memberDashboard'])->name('member.dashboard');
 Route::get('/pelatih', [PageController::class, 'pelatih'])->name('pelatih');
 Route::get('/tulis-testimoni', [PageController::class, 'tulisTestimoni'])->name('tulis-testimoni');
 Route::post('/tulis-testimoni', [PageController::class, 'storeTestimonial'])->name('testimoni.store');
@@ -166,62 +172,100 @@ Route::get('/admin', function () {
 
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
-Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+Route::match(['get', 'post'], '/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     
-    // CRUD Management
-    Route::resource('programs', AdminProgramController::class);
-    Route::resource('faqs', AdminFaqController::class);
-    Route::resource('posts', AdminPostController::class);
-    Route::resource('coaches', AdminCoachController::class);
-    Route::resource('testimonials', AdminTestimonialController::class);
-    Route::post('/testimonials/{testimonial}/toggle-approve', [AdminTestimonialController::class, 'toggleApprove'])->name('testimonials.toggle-approve');
-    Route::resource('videos', AdminVideoController::class);
-    Route::resource('features', AdminFeatureController::class);
-    Route::resource('members', AdminMemberController::class);
-    
-    // Lead Entries
-    Route::get('/registrations', [AdminLeadController::class, 'registrations'])->name('registrations');
-    Route::get('/trials', [AdminLeadController::class, 'trials'])->name('trials');
+    // 1. Superadmin & Admin Only Routes
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        
+        // CRUD Management
+        Route::resource('programs', AdminProgramController::class);
+        Route::resource('faqs', AdminFaqController::class);
+        Route::resource('posts', AdminPostController::class);
+        Route::resource('coaches', AdminCoachController::class);
+        Route::resource('testimonials', AdminTestimonialController::class);
+        Route::post('/testimonials/{testimonial}/toggle-approve', [AdminTestimonialController::class, 'toggleApprove'])->name('testimonials.toggle-approve');
+        Route::resource('videos', AdminVideoController::class);
+        Route::resource('features', AdminFeatureController::class);
+        
+        // Lead Entries
+        Route::get('/registrations', [AdminLeadController::class, 'registrations'])->name('registrations');
+        Route::get('/trials', [AdminLeadController::class, 'trials'])->name('trials');
+        Route::get('/leads', [LeadController::class, 'adminLeadsIndex'])->name('leads.index');
+        Route::get('/leads/export', [LeadController::class, 'exportCsv'])->name('leads.export');
+        Route::post('/leads/{id}/status', [LeadController::class, 'updateStatus'])->name('leads.status');
 
-    // Site Settings Management
-    Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+        // Site Settings Management
+        Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
 
-    // API Integrations (Midtrans & Wablas WA Gateway)
-    Route::get('/integrations', [AdminIntegrationController::class, 'index'])->name('integrations.index');
-    Route::post('/integrations', [AdminIntegrationController::class, 'update'])->name('integrations.update');
-    Route::post('/integrations/test-wa', [AdminIntegrationController::class, 'testWhatsApp'])->name('integrations.test-wa');
+        // API Integrations (Midtrans & Wablas WA Gateway)
+        Route::get('/integrations', [AdminIntegrationController::class, 'index'])->name('integrations.index');
+        Route::post('/integrations', [AdminIntegrationController::class, 'update'])->name('integrations.update');
+        Route::post('/integrations/test-wa', [AdminIntegrationController::class, 'testWhatsApp'])->name('integrations.test-wa');
 
-    // POS Kasir Studio & Toko Suplemen
-    Route::get('/pos', [AdminPosController::class, 'index'])->name('pos.index');
-    Route::post('/pos/checkout', [AdminPosController::class, 'checkout'])->name('pos.checkout');
-    Route::get('/pos/receipt/{id}', [AdminPosController::class, 'showReceipt'])->name('pos.receipt');
-    Route::get('/products', [AdminPosController::class, 'productsIndex'])->name('pos.products');
-    Route::post('/products', [AdminPosController::class, 'storeProduct'])->name('products.store');
-    Route::put('/products/{id}', [AdminPosController::class, 'updateProduct'])->name('products.update');
+        // Financial Reports & CSV Export
+        Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export', [AdminReportController::class, 'exportCsv'])->name('reports.export');
+
+        // User & Role RBAC Management
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::post('/users/staff', [AdminUserController::class, 'storeStaff'])->name('users.store-staff');
+        Route::post('/users/permissions', [AdminUserController::class, 'updateMenuPermissions'])->name('users.update-permissions');
+        Route::put('/users/{id}/role', [AdminUserController::class, 'updateRole'])->name('users.update-role');
+        Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+        // Promo Codes & Voucher Management
+        Route::get('/promos', [AdminPromoController::class, 'index'])->name('promos.index');
+        Route::post('/promos', [AdminPromoController::class, 'store'])->name('promos.store');
+        Route::delete('/promos/{id}', [AdminPromoController::class, 'destroy'])->name('promos.destroy');
+
+        // Mass WhatsApp Broadcast Engine
+        Route::get('/wa-broadcast', [AdminWaBroadcastController::class, 'index'])->name('wa-broadcast.index');
+        Route::post('/wa-broadcast/send', [AdminWaBroadcastController::class, 'sendBroadcast'])->name('wa-broadcast.send');
+
+        // Studio Group Fitness Classes Schedule
+        Route::get('/classes', [AdminClassController::class, 'index'])->name('classes.index');
+        Route::post('/classes', [AdminClassController::class, 'store'])->name('classes.store');
+        Route::delete('/classes/{id}', [AdminClassController::class, 'destroy'])->name('classes.destroy');
+
+        // Inventory Stock Mutation Log
+        Route::get('/inventory-log', [AdminInventoryLogController::class, 'index'])->name('inventory-log.index');
+        Route::post('/inventory-log/restock', [AdminInventoryLogController::class, 'storeRestock'])->name('inventory-log.restock');
+    });
+
+    // 2. Member Management & Presensi Kiosk (Admin, Receptionist, Coach)
+    Route::middleware(['role:admin,receptionist,coach'])->group(function () {
+        Route::resource('members', AdminMemberController::class);
+        Route::get('/checkin', [LeadController::class, 'adminCheckinIndex'])->name('checkin.index');
+        Route::post('/checkin/scan', [LeadController::class, 'processCheckin'])->name('checkin.scan');
+    });
+
+    // 3. POS Kasir & Payments Verification (Admin, Receptionist)
+    Route::middleware(['role:admin,receptionist'])->group(function () {
+        Route::get('/pos', [AdminPosController::class, 'index'])->name('pos.index');
+        Route::get('/pos/search-members', [AdminPosController::class, 'searchMembers'])->name('pos.search-members');
+        Route::post('/pos/checkout', [AdminPosController::class, 'checkout'])->name('pos.checkout');
+        Route::get('/pos/receipt/{id}', [AdminPosController::class, 'showReceipt'])->name('pos.receipt');
+        Route::get('/products', [AdminPosController::class, 'productsIndex'])->name('pos.products');
+        Route::post('/products', [AdminPosController::class, 'storeProduct'])->name('products.store');
+        Route::put('/products/{id}', [AdminPosController::class, 'updateProduct'])->name('products.update');
+
+        Route::get('/payments', [LeadController::class, 'adminPaymentsIndex'])->name('payments.index');
+        Route::post('/payments/{id}/approve', [LeadController::class, 'approvePayment'])->name('payments.approve');
+        Route::post('/payments/{id}/reject', [LeadController::class, 'rejectPayment'])->name('payments.reject');
+    });
+
 });
 
+// Member Protected Routes
 Route::post('/member/progress', [PageController::class, 'updateMemberProgress'])->middleware(['auth'])->name('member.progress');
+Route::post('/member/book-trainer', [PageController::class, 'bookTrainerSlot'])->middleware(['auth'])->name('member.book-trainer');
 
-// Admin Leads Dashboard & CSV Export Public Access
-Route::get('/admin/leads', [LeadController::class, 'adminLeadsIndex'])->name('admin.leads.index');
-Route::get('/admin/leads/export', [LeadController::class, 'exportCsv'])->name('admin.leads.export');
-Route::post('/admin/leads/{id}/status', [LeadController::class, 'updateStatus'])->name('admin.leads.status');
-
-// Admin Reception Check-in Kiosk
-Route::get('/admin/checkin', [LeadController::class, 'adminCheckinIndex'])->name('admin.checkin.index');
-Route::post('/admin/checkin/scan', [LeadController::class, 'processCheckin'])->name('admin.checkin.scan');
-
-// E-Invoice & Admin Payment Approval Gate
+// Public E-Invoice & Payment Gateway Routes
 Route::get('/invoice', [LeadController::class, 'showInvoice'])->name('invoice.show');
-Route::get('/admin/payments', [LeadController::class, 'adminPaymentsIndex'])->name('admin.payments.index');
-Route::post('/admin/payments/{id}/approve', [LeadController::class, 'approvePayment'])->name('admin.payments.approve');
-Route::post('/admin/payments/{id}/reject', [LeadController::class, 'rejectPayment'])->name('admin.payments.reject');
-
-// Midtrans Automated Payment Gateway & Webhook Routes
 Route::post('/payment/snap-token', [PaymentController::class, 'createSnapToken'])->name('payment.snap');
 Route::post('/api/midtrans/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 Route::post('/payment/simulate-success/{orderId}', [PaymentController::class, 'simulatePaymentSuccess'])->name('payment.simulate')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);

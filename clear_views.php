@@ -1,26 +1,37 @@
 <?php
 
-$dir = __DIR__ . '/storage/framework/views';
-if (is_dir($dir)) {
-    $files = glob($dir . '/*');
-    $count = 0;
-    foreach ($files as $file) {
-        if (is_file($file) && basename($file) !== '.gitignore') {
-            @unlink($file);
-            $count++;
+$dirs = [
+    __DIR__ . '/storage/framework/views',
+    dirname(__DIR__) . '/storage/framework/views',
+    __DIR__ . '/storage/framework/cache/data',
+    dirname(__DIR__) . '/storage/framework/cache/data',
+];
+
+$count = 0;
+foreach ($dirs as $dir) {
+    if (is_dir($dir)) {
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($files as $fileinfo) {
+            if ($fileinfo->isFile() && $fileinfo->getFilename() !== '.gitignore') {
+                @unlink($fileinfo->getRealPath());
+                $count++;
+            }
         }
     }
-    echo "View cache cleared successfully! (" . $count . " compiled view files removed)\n";
-} else {
-    echo "Framework views directory not found!\n";
 }
 
-// Also clear bootstrap cache
-$cache_file = __DIR__ . '/bootstrap/cache/services.php';
-if (file_exists($cache_file)) @unlink($cache_file);
-$config_file = __DIR__ . '/bootstrap/cache/config.php';
-if (file_exists($config_file)) @unlink($config_file);
-$routes_file = __DIR__ . '/bootstrap/cache/routes.php';
-if (file_exists($routes_file)) @unlink($routes_file);
+// Clear bootstrap cache files
+$bootstrap_dirs = [__DIR__ . '/bootstrap/cache', dirname(__DIR__) . '/bootstrap/cache'];
+foreach ($bootstrap_dirs as $bdir) {
+    if (is_dir($bdir)) {
+        foreach (glob($bdir . '/*.php') as $bf) {
+            @unlink($bf);
+        }
+    }
+}
 
-echo "All caches cleared successfully!";
+echo "View cache cleared successfully! (" . $count . " compiled view/cache files removed) All caches cleared successfully!";
+?>

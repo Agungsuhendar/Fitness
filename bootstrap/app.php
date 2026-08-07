@@ -20,9 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
             '/daftar',
             '/trial',
             '/admin/login',
+            '/logout',
+            '/admin/logout',
         ]);
         $middleware->redirectGuestsTo(function (Request $request) {
-            return route('admin.login');
+            if ($request->is('admin*')) {
+                return route('admin.login');
+            }
+            return route('login');
         });
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,

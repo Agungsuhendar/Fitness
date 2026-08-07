@@ -6,7 +6,7 @@ from ftplib import FTP, error_perm
 FTP_HOST = "ftpupload.net"
 FTP_USER = "if0_42586885"
 FTP_PASS = "Arkanza0123456"
-REMOTE_ROOT = "htdocs"
+REMOTE_ROOT = "fitlifehub.site.je/htdocs"
 
 DIRS_TO_SYNC = [
     'app',
@@ -19,7 +19,6 @@ DIRS_TO_SYNC = [
 ]
 
 FILES_TO_SYNC = [
-    '.env',
     '.htaccess',
     'index.php',
     'artisan',
@@ -27,6 +26,27 @@ FILES_TO_SYNC = [
     'composer.lock',
     'database_dump.sql'
 ]
+
+PROD_ENV_CONTENT = """APP_NAME="FitLife Hub"
+APP_ENV=production
+APP_KEY=base64:CdXXYLtLXrZrkwLjcF2ua4j5q9pkoiX9FCN2xY3WTqM=
+APP_DEBUG=true
+APP_URL=https://fitlifehub.site.je
+
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
+
+DB_CONNECTION=sqlite
+DB_DATABASE=/home/vol1_4/infinityfree.com/if0_42586885/fitlifehub.site.je/htdocs/database/database.sqlite
+
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+"""
 
 def connect_ftp():
     ftp = FTP()
@@ -70,6 +90,7 @@ def push():
     print("=" * 50)
     print("      PUSHING PROJECT TO INFINITYFREE FTP      ")
     print(f"      Host: {FTP_HOST} | User: {FTP_USER}")
+    print(f"      Target: {REMOTE_ROOT}")
     print("=" * 50)
 
     print(f"Connecting to {FTP_HOST} as {FTP_USER}...")
@@ -78,6 +99,14 @@ def push():
 
     uploaded_files = 0
     failed_files = []
+
+    # Upload production .env file
+    with open("/tmp/prod_env", "w") as f:
+        f.write(PROD_ENV_CONTENT)
+    remote_env = f"{REMOTE_ROOT}/.env"
+    print("Uploading production .env (DB_CONNECTION=mysql)...")
+    if upload_file(ftp, "/tmp/prod_env", remote_env):
+        uploaded_files += 1
 
     # Upload single files
     for file_name in FILES_TO_SYNC:

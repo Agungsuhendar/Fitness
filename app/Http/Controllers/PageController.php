@@ -314,6 +314,40 @@ class PageController extends Controller
         ]);
     }
 
+    public function bookTrainerSlot(Request $request)
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Silakan login terlebih dahulu.'], 401);
+        }
+
+        $validated = $request->validate([
+            'coach_name' => 'required|string',
+            'booking_date' => 'required|date|after_or_equal:today',
+            'booking_time' => 'required|string',
+            'branch' => 'nullable|string',
+        ]);
+
+        $booking = \App\Models\TrainerBooking::create([
+            'user_id' => $user->id,
+            'member_name' => $user->name,
+            'coach_name' => $validated['coach_name'],
+            'booking_date' => $validated['booking_date'],
+            'booking_time' => $validated['booking_time'],
+            'branch' => $validated['branch'] ?: ($user->branch ?: 'Sleman HQ'),
+            'status' => 'CONFIRMED',
+        ]);
+
+        $user->next_session = \Carbon\Carbon::parse($validated['booking_date'])->translatedFormat('l, d F Y') . ' • ' . $validated['booking_time'];
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Reservasi Sesi Trainer BERHASIL! Jadwal latihan Anda bersama ' . $validated['coach_name'] . ' telah dikonfirmasi.',
+            'booking' => $booking
+        ]);
+    }
+
     public function pelatih()
     {
         try {

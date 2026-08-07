@@ -13,7 +13,7 @@ $pass = 'Arkanza0123456';
 $dbname = 'if0_42562646_lesrenang';
 
 $hosts = [
-    'sql103.epizy.com',
+    'sql103.infinityfree.com',
     'sql103.infinityfree.com',
     'sql103.byetcluster.com',
     '185.27.134.113',

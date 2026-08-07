@@ -38,6 +38,21 @@ class AdminPosController extends Controller
         return view('admin.pos.index', compact('products', 'categories', 'category', 'q', 'recentTransactions'));
     }
 
+    public function searchMembers(Request $request)
+    {
+        $q = trim($request->input('q'));
+        if (!$q) return response()->json([]);
+
+        $members = User::where(function($b) use ($q) {
+            $b->where('name', 'like', "%{$q}%")
+              ->orWhere('email', 'like', "%{$q}%")
+              ->orWhere('phone', 'like', "%{$q}%")
+              ->orWhere('member_card_id', 'like', "%{$q}%");
+        })->take(8)->get(['id', 'name', 'phone', 'email', 'member_card_id', 'remaining_sessions']);
+
+        return response()->json($members);
+    }
+
     public function checkout(Request $request)
     {
         $validated = $request->validate([
@@ -63,9 +78,21 @@ class AdminPosController extends Controller
                 $itemSubtotal = $product->price * $qty;
                 $subtotal += $itemSubtotal;
 
-                // Deduct stock
-                $product->stock = max(0, $product->stock - $qty);
+                // Deduct stock & Record Inventory Log
+                $prevStock = $product->stock;
+                $product->stock = max(0, $prevStock - $qty);
                 $product->save();
+
+                \App\Models\InventoryLog::create([
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'type' => 'out',
+                    'qty' => $qty,
+                    'previous_stock' => $prevStock,
+                    'current_stock' => $product->stock,
+                    'notes' => 'Penjualan POS Kasir Invoice ' . $invNo,
+                    'created_by' => auth()->user()->name ?? 'Kasir Studio',
+                ]);
 
                 $itemsData[] = [
                     'product_id' => $product->id,

@@ -10,7 +10,7 @@ ini_set('display_errors', 1);
 
 $user = 'if0_42586885';
 $pass = 'Arkanza0123456';
-$host = 'sql103.epizy.com';
+$host = 'sql103.infinityfree.com';
 
 $possible_dbs = [
     'if0_42586885_lesrenang',
@@ -45,9 +45,9 @@ if ($working_db) {
     $env_path = __DIR__ . '/.env';
     $env = file_get_contents($env_path);
     $env = preg_replace('/DB_DATABASE=.*/', 'DB_DATABASE=' . $working_db, $env);
-    $env = preg_replace('/DB_HOST=.*/', 'DB_HOST=sql103.epizy.com', $env);
+    $env = preg_replace('/DB_HOST=.*/', 'DB_HOST=sql103.infinityfree.com', $env);
     file_put_contents($env_path, $env);
-    echo "<b style='color:green'>Updated .env with DB_DATABASE=$working_db and DB_HOST=sql103.epizy.com!</b>";
+    echo "<b style='color:green'>Updated .env with DB_DATABASE=$working_db and DB_HOST=sql103.infinityfree.com!</b>";
 } else {
     echo "<h3 style='color:orange'>None of the common database names matched. Please check database name created in cPanel -> MySQL Databases.</h3>";
 }

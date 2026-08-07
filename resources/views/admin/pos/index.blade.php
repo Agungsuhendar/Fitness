@@ -20,9 +20,13 @@
                 </p>
             </div>
 
-            <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap;">
+                <button type="button" onclick="togglePosFullscreen()" id="fullscreenPosBtn" style="background: rgba(132, 204, 22, 0.15); border: 1.5px solid #84cc16; color: #84cc16; padding: 0.65rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.25s ease;" title="Tampilkan Layar Penuh POS Kasir">
+                    <i class="fa-solid fa-expand" id="posFsIcon"></i> <span id="posFsText">Mode Fullscreen Kasir</span>
+                </button>
+
                 <a href="{{ route('admin.pos.products') }}" style="background: rgba(56,189,248,0.15); border: 1.5px solid #38bdf8; color: #38bdf8; padding: 0.65rem 1.25rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-                    <i class="fa-solid fa-boxes-stacked"></i> Kelola Stok &amp; Harga Produk
+                    <i class="fa-solid fa-boxes-stacked"></i> Kelola Stok Produk
                 </a>
                 <div style="background: rgba(132,204,22,0.12); border: 1.5px solid #84cc16; padding: 0.65rem 1.25rem; border-radius: 99px; color: #84cc16; font-weight: 900; font-size: 0.85rem;">
                     🟢 KASIR ONLINE
@@ -97,14 +101,20 @@
                     </button>
                 </div>
 
-                <!-- Customer Details Input -->
-                <div style="margin-bottom: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                    <div>
-                        <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">NAMA MEMBER / PELANGGAN</label>
-                        <input type="text" id="posMemberName" placeholder="Guest (Pelanggan Umum)" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 0.65rem; padding: 0.55rem; color: white; outline: none; font-size: 0.85rem;">
+                <!-- Customer Details Input with Autocomplete & Scan Barcode -->
+                <div style="margin-bottom: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; position: relative;">
+                    <div style="position: relative;">
+                        <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">
+                            🔍 CARI MEMBER / SCAN KARTU <span style="color: #84cc16;">(Auto-Fill)</span>
+                        </label>
+                        <input type="text" id="posMemberName" oninput="searchMemberPos(this.value)" placeholder="Ketik Nama / WA / Scan FL-MEM-004..." style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid #84cc16; border-radius: 0.65rem; padding: 0.55rem; color: white; outline: none; font-size: 0.85rem; font-weight: 800;">
+                        
+                        <!-- Autocomplete Suggestions List -->
+                        <div id="memberSearchDropdown" style="display: none; position: absolute; left: 0; right: 0; top: 100%; z-index: 100; background: #0d1310; border: 1.5px solid #84cc16; border-radius: 0.75rem; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.8); margin-top: 0.25rem;">
+                        </div>
                     </div>
                     <div>
-                        <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">NOMOR WHATSAPP</label>
+                        <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">NOMOR WHATSAPP MEMBER</label>
                         <input type="text" id="posMemberPhone" placeholder="e.g. 081234567890" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 0.65rem; padding: 0.55rem; color: white; outline: none; font-size: 0.85rem;">
                     </div>
                 </div>
@@ -150,6 +160,15 @@
                             <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">UANG DITERIMA (RP)</label>
                             <input type="number" id="posPayAmount" placeholder="e.g. 50000" oninput="renderCartSummary()" style="width: 100%; background: #060907; border: 1.5px solid #84cc16; border-radius: 0.65rem; padding: 0.65rem; color: #84cc16; font-weight: 900; outline: none;">
                         </div>
+                    </div>
+
+                    <!-- Fast-Cash Quick Nominal Buttons -->
+                    <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                        <button type="button" onclick="setQuickCash('exact')" style="background: rgba(132,204,22,0.15); border: 1px solid #84cc16; color: #84cc16; padding: 0.3rem 0.6rem; border-radius: 0.4rem; font-size: 0.725rem; font-weight: 900; cursor: pointer;">⚡ Uang Pas</button>
+                        <button type="button" onclick="setQuickCash(10000)" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 0.4rem; font-size: 0.725rem; font-weight: 800; cursor: pointer;">10rb</button>
+                        <button type="button" onclick="setQuickCash(20000)" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 0.4rem; font-size: 0.725rem; font-weight: 800; cursor: pointer;">20rb</button>
+                        <button type="button" onclick="setQuickCash(50000)" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 0.4rem; font-size: 0.725rem; font-weight: 800; cursor: pointer;">50rb</button>
+                        <button type="button" onclick="setQuickCash(100000)" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 0.4rem; font-size: 0.725rem; font-weight: 800; cursor: pointer;">100rb</button>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #38bdf8; font-weight: 800; padding: 0 0.25rem;">
@@ -259,6 +278,19 @@
         document.getElementById('cartChangeText').innerText = 'Rp ' + changeAmount.toLocaleString('id-ID');
     }
 
+    function setQuickCash(val) {
+        const subtotal = cart.reduce((acc, item) => acc + item.subtotal, 0);
+        const discount = parseFloat(document.getElementById('cartDiscountInput').value) || 0;
+        const total = Math.max(0, subtotal - discount);
+
+        if (val === 'exact') {
+            document.getElementById('posPayAmount').value = total;
+        } else {
+            document.getElementById('posPayAmount').value = val;
+        }
+        renderCartSummary();
+    }
+
     function processPosCheckout() {
         if (cart.length === 0) {
             alert('Keranjang kasir masih kosong!');
@@ -321,5 +353,77 @@
         if (idVoice) utterance.voice = idVoice;
         window.speechSynthesis.speak(utterance);
     }
+
+    let searchTimer = null;
+    function searchMemberPos(val) {
+        clearTimeout(searchTimer);
+        const dropdown = document.getElementById('memberSearchDropdown');
+        if (!val || val.length < 2) {
+            dropdown.style.display = 'none';
+            return;
+        }
+
+        searchTimer = setTimeout(() => {
+            fetch(`{{ route('admin.pos.search-members') }}?q=` + encodeURIComponent(val))
+                .then(res => res.json())
+                .then(members => {
+                    if (members.length === 0) {
+                        dropdown.style.display = 'none';
+                        return;
+                    }
+
+                    let html = '';
+                    members.forEach(m => {
+                        html += `<div onclick="selectMemberPos('${m.name.replace(/'/g, "\\'")}', '${m.phone || ''}')" style="padding: 0.65rem 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(132,204,22,0.15)'" onmouseout="this.style.background='transparent'">
+                            <div style="font-weight: 900; color: white; font-size: 0.85rem;">${m.name} <span style="font-size: 0.725rem; color: #84cc16; font-family: monospace;">[${m.member_card_id || 'MEMBER'}]</span></div>
+                            <div style="font-size: 0.75rem; color: #94a3b8;">WA: ${m.phone || '-'} • Sisa Sesi: ${m.remaining_sessions || 0} Sesi</div>
+                        </div>`;
+                    });
+
+                    dropdown.innerHTML = html;
+                    dropdown.style.display = 'block';
+                })
+                .catch(err => dropdown.style.display = 'none');
+        }, 200);
+    }
+
+    function selectMemberPos(name, phone) {
+        document.getElementById('posMemberName').value = name;
+        document.getElementById('posMemberPhone').value = phone;
+        document.getElementById('memberSearchDropdown').style.display = 'none';
+        speakAnnouncement('Data member ' + name + ' terpilih.');
+    }
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('memberSearchDropdown');
+        const input = document.getElementById('posMemberName');
+        if (dropdown && input && !dropdown.contains(e.target) && e.target !== input) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    function togglePosFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log("Fullscreen Error:", err);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    document.addEventListener('fullscreenchange', function() {
+        const icon = document.getElementById('posFsIcon');
+        const text = document.getElementById('posFsText');
+        if (document.fullscreenElement) {
+            if (icon) icon.className = 'fa-solid fa-compress';
+            if (text) text.innerText = 'Keluar Fullscreen';
+        } else {
+            if (icon) icon.className = 'fa-solid fa-expand';
+            if (text) text.innerText = 'Mode Fullscreen Kasir';
+        }
+    });
 </script>
 @endsection

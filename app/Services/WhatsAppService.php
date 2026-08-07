@@ -87,4 +87,17 @@ class WhatsAppService
 
         return self::sendMessage($user->phone, urldecode($msg));
     }
+
+    /**
+     * Send Low Session Warning Notification via WhatsApp
+     */
+    public static function sendLowSessionNotification(User $user): bool
+    {
+        $msg = "⚠️ *PERINGATAN SISA KUOTA PT HAMPIR HABIS*%0A%0A"
+            . "Halo Kak *{$user->name}*, sisa kuota sesi Personal Trainer Anda saat ini tinggal *{$user->remaining_sessions} Sesi lagi*!%0A%0A"
+            . "Agar progres latihan fisik Anda tidak terputus, yuk lakukan Top-Up paket sesi Anda secara instan di: " . url('/harga') . "%0A%0A"
+            . "Salam Sehat, FitLife Center Jogja 💪";
+
+        return self::sendMessage($user->phone, urldecode($msg));
+    }
 }

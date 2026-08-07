@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
 @php
     $defaultSeoTitle = site_setting('site_seo_title', 'FitLife Gym Jogja - Privat Anak, Dewasa, Wanita & Persiapan TNI POLRI');
     $defaultSeoDesc = site_setting('site_seo_description', 'FitLife Gym Jogja profesional & privat di Yogyakarta. Melayani fitness & personal trainer anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI.');
@@ -43,9 +46,6 @@
         ];
     }
 @endphp
-<!DOCTYPE html>
-<html lang="id">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', $defaultSeoTitle)</title>
@@ -138,6 +138,14 @@
     </script>
 
     <style>
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #060907 !important;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
         /* Dynamic Theme Engine CSS Variables & Universal Color Overrides */
         :root {
             --brand-primary: #84cc16;
@@ -204,12 +212,14 @@
 
         /* Bulletproof Topbar Offset */
         main {
-            margin-top: 84px !important;
+            margin-top: 72px !important;
+            padding-top: 0 !important;
             display: block;
+            background-color: #060907 !important;
         }
         @media (max-width: 768px) {
             main {
-                margin-top: 72px !important;
+                margin-top: 64px !important;
             }
         }
 
@@ -523,7 +533,7 @@
 
     @stack('styles')
 </head>
-<body>
+<body style="background-color: #060907 !important; margin: 0 !important; padding: 0 !important; color: #ffffff !important;">
 
     <!-- Navbar Component -->
     @include('components.navbar')

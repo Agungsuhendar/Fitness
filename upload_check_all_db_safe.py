@@ -12,7 +12,7 @@ $user = 'if0_42562646';
 $pass = 'Arkanza0123456';
 
 $hosts = [
-    'sql103.epizy.com',
+    'sql103.infinityfree.com',
     'sql103.infinityfree.com',
     'sql103.byetcluster.com',
 ];

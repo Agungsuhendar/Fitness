@@ -34,24 +34,18 @@ class MemberAuthController extends Controller
 
         // Sanitize phone number if logging in with phone
         if ($loginType === 'phone') {
-            // Convert e.g. 08123456789 to standard format or search directly
             $user = User::where('phone', $loginInput)
                 ->orWhere('phone', preg_replace('/[^0-9]/', '', $loginInput))
                 ->first();
-
-            if ($user && Hash::check($password, $user->password)) {
-                Auth::login($user, $request->boolean('remember'));
-                $request->session()->regenerate();
-                return redirect()->intended(route('member.dashboard'))
-                    ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
-            }
         } else {
-            // Attempt login via email
-            if (Auth::attempt(['email' => $loginInput, 'password' => $password], $request->boolean('remember'))) {
-                $request->session()->regenerate();
-                return redirect()->intended(route('member.dashboard'))
-                    ->with('success', 'Selamat datang kembali, ' . Auth::user()->name . '!');
-            }
+            $user = User::where('email', $loginInput)->first();
+        }
+
+        if ($user && Hash::check($password, $user->password)) {
+            Auth::login($user, $request->boolean('remember'));
+            $request->session()->regenerate();
+            return redirect()->route('member.dashboard')
+                ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
 
         return back()->withErrors([

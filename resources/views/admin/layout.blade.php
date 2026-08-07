@@ -3,43 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Dashboard - FitLife Gym Jogja')</title>
+    <title>@yield('title', 'Admin Dashboard & Studio Operations - FitLife Gym Jogja')</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script>
+        (function() {
+            const savedAdminTheme = localStorage.getItem('fitlife_admin_theme') || 'lime';
+            document.documentElement.setAttribute('data-admin-theme', savedAdminTheme);
+        })();
+    </script>
     <style>
-        body.admin-body {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            background-color: #f1f5f9;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        :root, :root[data-admin-theme="lime"] {
+            --admin-bg: #060907;
+            --admin-card-bg: #0d1410;
+            --admin-card-hover: #121c17;
+            --admin-border: rgba(255, 255, 255, 0.08);
+            --brand-lime: #84cc16;
+            --brand-lime-dark: #65a30d;
+            --brand-glow: rgba(132, 204, 22, 0.4);
+            --brand-glow-subtle: rgba(132, 204, 22, 0.12);
         }
+
+        :root[data-admin-theme="cyberpunk"] {
+            --brand-lime: #f43f5e;
+            --brand-lime-dark: #e11d48;
+            --brand-glow: rgba(244, 63, 94, 0.4);
+            --brand-glow-subtle: rgba(244, 63, 94, 0.12);
+        }
+
+        :root[data-admin-theme="cyan"] {
+            --brand-lime: #06b6d4;
+            --brand-lime-dark: #0891b2;
+            --brand-glow: rgba(6, 182, 212, 0.4);
+            --brand-glow-subtle: rgba(6, 182, 212, 0.12);
+        }
+
+        :root[data-admin-theme="gold"] {
+            --brand-lime: #eab308;
+            --brand-lime-dark: #ca8a04;
+            --brand-glow: rgba(234, 179, 8, 0.4);
+            --brand-glow-subtle: rgba(234, 179, 8, 0.12);
+        }
+
+        :root[data-admin-theme="violet"] {
+            --brand-lime: #8b5cf6;
+            --brand-lime-dark: #7c3aed;
+            --brand-glow: rgba(139, 92, 246, 0.4);
+            --brand-glow-subtle: rgba(139, 92, 246, 0.12);
+        }
+
+        /* Universal Admin Auto Theme Adaptor Rules */
+        .text-primary, [style*="color: #84cc16"], [style*="color:#84cc16"] {
+            color: var(--brand-lime) !important;
+        }
+        .btn-primary, [style*="background: #84cc16"], [style*="background:#84cc16"], [style*="background: rgb(132, 204, 22)"] {
+            background-color: var(--brand-lime) !important;
+            color: #060907 !important;
+        }
+        [style*="border: 1.5px solid #84cc16"], [style*="border: 2px solid #84cc16"], [style*="border: 1px solid #84cc16"], [style*="border-top: 4px solid #84cc16"] {
+            border-color: var(--brand-lime) !important;
+        }
+        [style*="rgba(132, 204, 22, 0.15)"], [style*="rgba(132, 204, 22, 0.12)"], [style*="rgba(132, 204, 22, 0.1)"], [style*="rgba(132, 204, 22, 0.2)"], [style*="rgba(132, 204, 22, 0.3)"], [style*="rgba(132, 204, 22, 0.08)"] {
+            background-color: var(--brand-glow-subtle) !important;
+        }
+        [style*="linear-gradient(135deg, #84cc16 0%, #10b981 100%)"], [style*="linear-gradient(135deg,#84cc16 0%,#10b981 100%)"] {
+            background: linear-gradient(135deg, var(--brand-lime) 0%, var(--brand-lime-dark) 100%) !important;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body.admin-body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: var(--admin-bg) !important;
+            color: #f8fafc !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
         .admin-wrapper {
             display: flex;
             min-height: 100vh;
-            background: #f1f5f9;
+            background: radial-gradient(circle at 10% 20%, var(--brand-glow-subtle) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 40%),
+                        #060907;
         }
+
+        /* ---------------------------------------------------- */
+        /* GLASSMORPHIC ADMIN SIDEBAR                           */
+        /* ---------------------------------------------------- */
         .admin-sidebar {
-            width: 270px;
-            background: linear-gradient(180deg, #03045e 0%, #0077b6 100%);
-            color: #e0f2fe;
+            width: 280px;
+            background: rgba(13, 20, 16, 0.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            color: #cbd5e1;
             padding: 1.5rem 1.15rem;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-right: 1px solid rgba(255, 255, 255, 0.12);
+            border-right: 1px solid var(--admin-border);
+            z-index: 100;
         }
 
-        /* Collapsed Sidebar Mode (Mini Icon-Only) */
-        .admin-wrapper.collapsed .admin-sidebar {
-            width: 82px;
-            padding: 1.5rem 0.65rem;
+        .nav-text {
+            display: inline-block !important;
+            font-weight: 700 !important;
+            margin-left: 0.6rem;
+            font-size: 0.9rem;
         }
-        .admin-wrapper.collapsed .nav-text {
+
+        .admin-wrapper.collapsed .admin-sidebar {
+            width: 88px;
+        }
+        .admin-wrapper.collapsed .nav-text,
+        .admin-wrapper.collapsed .nav-section-title,
+        .admin-wrapper.collapsed .sidebar-bottom-text {
             display: none !important;
         }
+        .admin-wrapper.collapsed .admin-brand {
+            justify-content: center;
+        }
         .admin-wrapper.collapsed .admin-brand img {
-            height: 36px !important;
+            height: 38px !important;
         }
         .admin-wrapper.collapsed .admin-nav-item a {
             justify-content: center;
@@ -49,174 +142,242 @@
             font-size: 1.25rem;
             margin: 0;
         }
-        .admin-wrapper.collapsed .sidebar-bottom-link {
-            text-align: center;
-            display: flex;
-            justify-content: center;
-        }
+        .admin-wrapper.collapsed .sidebar-bottom-link,
         .admin-wrapper.collapsed .sidebar-logout-btn {
-            padding: 0.75rem 0;
-            display: flex;
             justify-content: center;
+            padding: 0.75rem 0;
         }
 
         .admin-brand {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: flex-start;
             color: white;
-            font-weight: 800;
+            font-weight: 900;
             font-size: 1.15rem;
-            margin-bottom: 1.75rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 1.15rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid var(--admin-border);
             text-decoration: none;
+            font-family: 'Outfit', sans-serif;
         }
+
         .admin-nav {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.45rem;
+            gap: 0.35rem;
             flex: 1;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.1) transparent;
         }
+
+        .nav-section-title {
+            font-size: 0.675rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 1.15rem 0.75rem 0.35rem;
+        }
+
         .admin-nav-item a {
             display: flex;
             align-items: center;
-            gap: 0.85rem;
-            padding: 0.85rem 1.15rem;
-            color: #ffffff !important;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: #94a3b8 !important;
             text-decoration: none;
             font-weight: 700;
-            font-size: 0.925rem;
+            font-size: 0.9rem;
             border-radius: 0.85rem;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
+            border: 1px solid transparent;
         }
         .admin-nav-item a i {
-            color: #ffffff !important;
+            color: #64748b;
             font-size: 1.1rem;
+            transition: all 0.25s ease;
+            width: 20px;
+            text-align: center;
         }
         .admin-nav-item a:hover {
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.05);
             color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.08);
             transform: translateX(4px);
         }
+        .admin-nav-item a:hover i {
+            color: var(--brand-lime);
+        }
         .admin-nav-item a.active {
-            background: linear-gradient(135deg, #00b4d8 0%, #00f2fe 100%);
-            color: #03045e !important;
-            font-weight: 800;
-            box-shadow: 0 4px 18px rgba(0, 180, 216, 0.4);
+            background: linear-gradient(135deg, var(--brand-lime) 0%, #10b981 100%) !important;
+            color: #060907 !important;
+            font-weight: 900 !important;
+            box-shadow: 0 0 25px var(--brand-glow) !important;
+            border-color: transparent !important;
         }
-        .admin-nav-item a.active i {
-            color: #03045e !important;
+        .admin-nav-item a.active i,
+        .admin-nav-item a.active .nav-text {
+            color: #060907 !important;
         }
+
+        /* ---------------------------------------------------- */
+        /* MAIN CONTENT AREA & FLOATING GLASS HEADER            */
+        /* ---------------------------------------------------- */
         .admin-main {
             flex: 1;
-            padding: 1.75rem 2.5rem;
+            padding: 1.75rem 2.25rem;
             overflow-y: auto;
+            min-width: 0;
         }
+
         .admin-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 2rem;
-            padding-bottom: 1.15rem;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 1.15rem 1.75rem;
+            background: rgba(13, 20, 16, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--admin-border);
+            border-radius: 1.25rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
-        
-        /* Toggle Sidebar Button */
+
+        .admin-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 1.65rem;
+            margin: 0;
+            color: #ffffff !important;
+            letter-spacing: -0.02em;
+        }
+
         .sidebar-toggle-btn {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            color: #475569;
-            width: 42px;
-            height: 42px;
-            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--admin-border);
+            color: #94a3b8;
+            width: 44px;
+            height: 44px;
+            border-radius: 0.85rem;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 1.1rem;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+            font-size: 1.15rem;
         }
         .sidebar-toggle-btn:hover {
-            background: #0284c7;
-            border-color: #0284c7;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+            background: var(--brand-lime);
+            border-color: var(--brand-lime);
+            color: #060907;
+            box-shadow: 0 0 20px var(--brand-glow);
         }
 
-        /* Glass Cards & Tables */
+        /* ---------------------------------------------------- */
+        /* UNIVERSAL DARK GLASS CARDS & TABLES                  */
+        /* ---------------------------------------------------- */
         .admin-card {
-            background: #ffffff;
-            border-radius: 1.25rem;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            background: var(--admin-card-bg) !important;
+            border-radius: 1.25rem !important;
+            border: 1px solid var(--admin-border) !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ffffff !important;
         }
         .admin-card-hover:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border-color: var(--brand-lime) !important;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 25px var(--brand-glow-subtle) !important;
         }
 
-        /* High Contrast Admin Inputs & Form Controls */
+        /* Text Contrast Overrides inside Cards */
+        .admin-card h1, .admin-card h2, .admin-card h3, .admin-card h4, .admin-card h5, .admin-card h6 {
+            color: #ffffff !important;
+        }
+        .admin-card p, .admin-card span, .admin-card label {
+            color: #cbd5e1;
+        }
+        .admin-card .text-muted, .admin-card small {
+            color: #94a3b8 !important;
+        }
+
+        /* Universal Form Control Styling for Dark Theme */
         input[type="text"],
         input[type="number"],
         input[type="email"],
         input[type="url"],
         input[type="password"],
+        input[type="date"],
+        input[type="time"],
         select,
-        textarea,
-        .search-input {
-            color: #0f172a !important;
-            background-color: #ffffff !important;
+        textarea {
+            color: #ffffff !important;
+            background-color: #090e0b !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 0.75rem !important;
+            padding: 0.75rem 1rem !important;
             font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            transition: all 0.25s ease !important;
         }
-        input::placeholder,
-        textarea::placeholder {
-            color: #94a3b8 !important;
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--brand-lime) !important;
+            box-shadow: 0 0 15px var(--brand-glow-subtle) !important;
+            outline: none !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #64748b !important;
         }
 
+        /* Universal Tables Dark Glass Styling */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
-            background: white;
+            background: var(--admin-card-bg);
             border-radius: 1.25rem;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--admin-border);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             -webkit-overflow-scrolling: touch;
         }
-        table.admin-table {
+        table.admin-table, table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 600px;
+            color: #f8fafc !important;
         }
-        table.admin-table th, table.admin-table td {
-            padding: 1.1rem 1.35rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        table.admin-table tr:hover td {
-            background-color: #f8fafc;
-        }
-        table.admin-table th {
-            background: #f8fafc;
-            font-weight: 800;
-            font-size: 0.8rem;
-            color: #475569;
+        table.admin-table th, table th {
+            background: rgba(255, 255, 255, 0.03) !important;
+            font-weight: 800 !important;
+            font-size: 0.8rem !important;
+            color: #94a3b8 !important;
             letter-spacing: 0.05em;
             text-transform: uppercase;
+            padding: 1.1rem 1.25rem !important;
+            border-bottom: 1px solid var(--admin-border) !important;
+        }
+        table.admin-table td, table td {
+            padding: 1.1rem 1.25rem !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+            color: #e2e8f0 !important;
+        }
+        table.admin-table tr:hover td, table tr:hover td {
+            background-color: var(--brand-glow-subtle) !important;
         }
 
-        /* Mobile Overlay Backdrop */
+        /* Mobile Backdrop Overlay */
         .sidebar-backdrop {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
+            background: rgba(6, 9, 7, 0.85);
+            backdrop-filter: blur(8px);
             z-index: 1040;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -232,13 +393,13 @@
                 position: fixed;
                 top: 0;
                 bottom: 0;
-                left: -290px; /* FULL HIDE off-screen */
+                left: -290px;
                 width: 280px !important;
                 z-index: 1050;
-                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+                box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8);
             }
             .admin-wrapper.mobile-open .admin-sidebar {
-                left: 0; /* SLIDE IN DRAWER */
+                left: 0;
             }
             .admin-main {
                 padding: 1.25rem 1rem !important;
@@ -252,19 +413,8 @@
             .admin-header > div:last-child {
                 align-self: stretch;
                 display: flex;
-                justify-content: flex-end;
-            }
-        }
-
-        @media (max-width: 767.98px) {
-            div[style*="grid-template-columns"] {
-                grid-template-columns: 1fr !important;
-            }
-            .admin-header h1 {
-                font-size: 1.35rem !important;
-            }
-            .admin-card {
-                padding: 1.25rem 1rem !important;
+                justify-content: space-between;
+                width: 100%;
             }
         }
     </style>
@@ -275,132 +425,195 @@
 
     <div class="admin-wrapper" id="adminWrapper">
         <aside class="admin-sidebar" id="adminSidebar">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                <a href="{{ route('admin.dashboard') }}" class="admin-brand" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                <!-- CLEAN LOGO WITHOUT LABELS -->
+                <a href="{{ route('admin.dashboard') }}" class="admin-brand" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0; gap: 0;">
                     @php $adminLogoUrl = site_setting('site_logo_footer', 'images/logo-footer.webp'); @endphp
-                    <img src="{{ Str::startsWith($adminLogoUrl, 'http') ? $adminLogoUrl : asset($adminLogoUrl) }}" alt="Admin Logo" style="height: 52px; width: auto; object-fit: contain; border-radius: 8px;">
+                    <img src="{{ Str::startsWith($adminLogoUrl, 'http') ? $adminLogoUrl : asset($adminLogoUrl) }}" alt="FitLife Logo" style="height: 52px; width: auto; object-fit: contain; filter: drop-shadow(0 0 12px var(--brand-glow));">
                 </a>
-                <button type="button" id="mobileCloseSidebar" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; display: none;" title="Tutup Menu">
+                <button type="button" id="mobileCloseSidebar" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; display: none;" title="Tutup Menu">
                     &times;
                 </button>
             </div>
 
             <ul class="admin-nav">
                 @php
-                    $userRole = auth()->user()->role ?? 'admin';
-                    $isAdmin = in_array($userRole, ['admin', 'superadmin']);
-                    $isReceptionist = in_array($userRole, ['receptionist', 'kasir']);
-                    $isCoach = in_array($userRole, ['coach', 'pt']);
+                    $uRole = auth()->user()->role ?? 'member';
+                    $isAdminRole = in_array($uRole, ['admin', 'superadmin']);
+                    
+                    $defaultPerms = [
+                        'receptionist' => ['pos', 'checkin', 'members', 'payments'],
+                        'coach' => ['checkin', 'members'],
+                        'member' => [],
+                    ];
+                    $rawPerms = \App\Models\Setting::get('rbac_menu_permissions');
+                    $matrixPerms = $rawPerms ? json_decode($rawPerms, true) : $defaultPerms;
+                    $userPerms = $matrixPerms[$uRole] ?? [];
+
+                    $canAccess = function($key) use ($isAdminRole, $userPerms) {
+                        return $isAdminRole || in_array($key, $userPerms);
+                    };
                 @endphp
 
-                @if($isAdmin)
+                <!-- 1. OPERASIONAL STUDIO -->
+                <div class="nav-section-title">📊 OPERASIONAL STUDIO</div>
+
+                @if($isAdminRole)
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" title="Dashboard Overview">
+                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" title="Dashboard">
                         <i class="fa-solid fa-chart-line"></i>
-                        <span class="nav-text">Dashboard Overview</span>
-                    </a>
-                </li>
-                <li class="admin-nav-item">
-                    <a href="{{ route('admin.programs.index') }}" class="{{ request()->routeIs('admin.programs.*') ? 'active' : '' }}" title="Kelola Program">
-                        <i class="fa-solid fa-swatchbook"></i>
-                        <span class="nav-text">Kelola Program</span>
-                    </a>
-                </li>
-                <li class="admin-nav-item">
-                    <a href="{{ route('admin.faqs.index') }}" class="{{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}" title="Kelola FAQ">
-                        <i class="fa-solid fa-circle-question"></i>
-                        <span class="nav-text">Kelola FAQ</span>
-                    </a>
-                </li>
-                <li class="admin-nav-item">
-                    <a href="{{ route('admin.posts.index') }}" class="{{ request()->routeIs('admin.posts.*') ? 'active' : '' }}" title="Kelola Artikel Blog">
-                        <i class="fa-solid fa-newspaper"></i>
-                        <span class="nav-text">Kelola Artikel Blog</span>
-                    </a>
-                </li>
-                <li class="admin-nav-item">
-                    <a href="{{ route('admin.coaches.index') }}" class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}" title="Kelola Tim Pelatih">
-                        <i class="fa-solid fa-user-tie"></i>
-                        <span class="nav-text">Kelola Tim Pelatih</span>
-                    </a>
-                </li>
-                <li class="admin-nav-item">
-                    <a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}" title="Kelola Testimoni">
-                        <i class="fa-solid fa-comments"></i>
-                        <span class="nav-text">Kelola Testimoni</span>
-                    </a>
-                </li>
-                <li class="admin-nav-item">
-                    <a href="{{ route('admin.videos.index') }}" class="{{ request()->routeIs('admin.videos.*') ? 'active' : '' }}" title="Kelola Galeri Video">
-                        <i class="fa-solid fa-clapperboard"></i>
-                        <span class="nav-text">Kelola Galeri Video</span>
-                    </a>
-                </li>
-                <li class="admin-nav-item">
-                    <a href="{{ route('admin.features.index') }}" class="{{ request()->routeIs('admin.features.*') ? 'active' : '' }}" title="Kelola Keunggulan">
-                        <i class="fa-solid fa-star-half-stroke"></i>
-                        <span class="nav-text">Kelola Keunggulan</span>
+                        <span class="nav-text">Dashboard</span>
                     </a>
                 </li>
                 @endif
 
-                @if($isAdmin || $isReceptionist || $isCoach)
+                @if($canAccess('members'))
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.members.index') }}" class="{{ request()->routeIs('admin.members.*') ? 'active' : '' }}" title="Manajemen Member & Top-Up">
+                    <a href="{{ route('admin.members.index') }}" class="{{ request()->routeIs('admin.members.*') ? 'active' : '' }}" title="Member">
                         <i class="fa-solid fa-users-gear"></i>
-                        <span class="nav-text">Manajemen Member &amp; Top-Up</span>
+                        <span class="nav-text">Member VIP</span>
                     </a>
                 </li>
                 @endif
 
-                @if($isAdmin || $isReceptionist)
+                @if($canAccess('pos'))
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.pos.index') }}" class="{{ request()->routeIs('admin.pos.*') ? 'active' : '' }}" title="POS Kasir Studio & Toko">
+                    <a href="{{ route('admin.pos.index') }}" class="{{ request()->routeIs('admin.pos.*') ? 'active' : '' }}" title="Kasir (POS)">
                         <i class="fa-solid fa-cart-shopping"></i>
-                        <span class="nav-text">POS Kasir &amp; Toko Studio</span>
+                        <span class="nav-text">Kasir (POS)</span>
                     </a>
                 </li>
                 @endif
 
-                @if($isAdmin || $isReceptionist || $isCoach)
+                @if($canAccess('checkin'))
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.checkin.index') }}" class="{{ request()->routeIs('admin.checkin.*') ? 'active' : '' }}" title="Kiosk Presensi Studio">
+                    <a href="{{ route('admin.checkin.index') }}" class="{{ request()->routeIs('admin.checkin.*') ? 'active' : '' }}" title="Presensi">
                         <i class="fa-solid fa-qrcode"></i>
-                        <span class="nav-text">Kiosk Presensi Studio</span>
+                        <span class="nav-text">Presensi Kiosk</span>
                     </a>
                 </li>
                 @endif
 
-                @if($isAdmin || $isReceptionist)
+                @if($canAccess('payments'))
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.payments.index') }}" class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}" title="Verifikasi Pembayaran">
+                    <a href="{{ route('admin.payments.index') }}" class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}" title="Pembayaran">
                         <i class="fa-solid fa-receipt"></i>
-                        <span class="nav-text">Verifikasi Pembayaran (Midtrans)</span>
+                        <span class="nav-text">Pembayaran</span>
                     </a>
                 </li>
                 @endif
 
-                @if($isAdmin)
+                @if($canAccess('reports'))
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.registrations') }}" class="{{ request()->routeIs('admin.registrations') ? 'active' : '' }}" title="Data Pendaftaran">
+                    <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}" title="Laporan">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span class="nav-text">Laporan Keuangan</span>
+                    </a>
+                </li>
+                @endif
+
+                <!-- 2. PENDAFTARAN & KELAS -->
+                @if($isAdminRole)
+                <div class="nav-section-title">👥 PELANGGAN &amp; KELAS</div>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.registrations') }}" class="{{ request()->routeIs('admin.registrations') ? 'active' : '' }}" title="Pendaftaran">
                         <i class="fa-solid fa-address-card"></i>
-                        <span class="nav-text">Data Pendaftaran</span>
+                        <span class="nav-text">Pendaftaran Lead</span>
                     </a>
                 </li>
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.trials') }}" class="{{ request()->routeIs('admin.trials') ? 'active' : '' }}" title="Data Booking Trial">
+                    <a href="{{ route('admin.trials') }}" class="{{ request()->routeIs('admin.trials') ? 'active' : '' }}" title="Booking Trial">
                         <i class="fa-solid fa-calendar-check"></i>
-                        <span class="nav-text">Data Booking Trial</span>
+                        <span class="nav-text">Booking Trial</span>
                     </a>
                 </li>
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.integrations.index') }}" class="{{ request()->routeIs('admin.integrations.*') ? 'active' : '' }}" title="Integrasi Midtrans & Wablas">
+                    <a href="{{ route('admin.promos.index') }}" class="{{ request()->routeIs('admin.promos.*') ? 'active' : '' }}" title="Voucher Promo">
+                        <i class="fa-solid fa-ticket"></i>
+                        <span class="nav-text">Voucher Promo</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.programs.index') }}" class="{{ request()->routeIs('admin.programs.*') ? 'active' : '' }}" title="Program">
+                        <i class="fa-solid fa-swatchbook"></i>
+                        <span class="nav-text">Program Fitness</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.coaches.index') }}" class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}" title="Pelatih">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span class="nav-text">Personal Trainer</span>
+                    </a>
+                </li>
+                @endif
+
+                <!-- 3. KONTEN & MEDIA -->
+                @if($isAdminRole)
+                <div class="nav-section-title">📝 KONTEN &amp; MEDIA</div>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.posts.index') }}" class="{{ request()->routeIs('admin.posts.*') ? 'active' : '' }}" title="Blog">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <span class="nav-text">Blog &amp; Artikel</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}" title="Testimoni">
+                        <i class="fa-solid fa-comments"></i>
+                        <span class="nav-text">Testimoni Member</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.faqs.index') }}" class="{{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}" title="FAQ">
+                        <i class="fa-solid fa-circle-question"></i>
+                        <span class="nav-text">FAQ Pertanyaan</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.videos.index') }}" class="{{ request()->routeIs('admin.videos.*') ? 'active' : '' }}" title="Video">
+                        <i class="fa-solid fa-video"></i>
+                        <span class="nav-text">Video Transformasi</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.features.index') }}" class="{{ request()->routeIs('admin.features.*') ? 'active' : '' }}" title="Keunggulan">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="nav-text">Keunggulan Studio</span>
+                    </a>
+                </li>
+                @endif
+
+                <!-- 4. INTEGRASI & SISTEM -->
+                <div class="nav-section-title">⚙️ INTEGRASI &amp; RBAC</div>
+
+                @if($canAccess('integrations'))
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.integrations.index') }}" class="{{ request()->routeIs('admin.integrations.*') ? 'active' : '' }}" title="Integrasi">
                         <i class="fa-solid fa-plug"></i>
-                        <span class="nav-text">Integrasi Midtrans &amp; Wablas</span>
+                        <span class="nav-text">Integrasi API</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($isAdminRole)
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.wa-broadcast.index') }}" class="{{ request()->routeIs('admin.wa-broadcast.*') ? 'active' : '' }}" title="WA Broadcast">
+                        <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
+                        <span class="nav-text">WA Broadcast</span>
                     </a>
                 </li>
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" title="Pengaturan Website">
+                    <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}" title="Pengguna & Role RBAC">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span class="nav-text">Pengguna &amp; Matriks RBAC</span>
+                    </a>
+                </li>
+                @endif
+
+                @if($canAccess('settings'))
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" title="Pengaturan">
                         <i class="fa-solid fa-gears"></i>
                         <span class="nav-text">Pengaturan Website</span>
                     </a>
@@ -408,42 +621,118 @@
                 @endif
             </ul>
 
-            <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                <a href="{{ route('home') }}" target="_blank" class="sidebar-bottom-link" style="color: #ffffff; font-weight: 700; text-decoration: none; font-size: 0.875rem; display: block; margin-bottom: 1rem;" title="Lihat Website Utama">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    <span class="nav-text" style="margin-left: 0.5rem;">Lihat Website Utama</span>
+            <div style="padding-top: 1.25rem; border-top: 1px solid var(--admin-border); margin-top: 0.75rem;">
+                <a href="{{ route('home') }}" target="_blank" class="sidebar-bottom-link" style="color: #cbd5e1; font-weight: 700; text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.85rem; padding: 0.6rem 0.85rem; border-radius: 0.75rem; background: rgba(255,255,255,0.03);" title="Lihat Website Utama">
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--brand-lime);"></i>
+                    <span class="sidebar-bottom-text">Website Utama</span>
                 </a>
                 <form action="{{ route('admin.logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn sidebar-logout-btn" style="width: 100%; border: 1px solid #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.05); font-weight: 700;" title="Logout">
+                    <button type="submit" class="sidebar-logout-btn" style="width: 100%; border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; background: rgba(239, 68, 68, 0.08); font-weight: 800; padding: 0.65rem 1rem; border-radius: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.25s ease;" title="Logout">
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        <span class="nav-text" style="margin-left: 0.4rem;">Logout</span>
+                        <span class="sidebar-bottom-text">Keluar (Logout)</span>
                     </button>
                 </form>
             </div>
         </aside>
 
         <main class="admin-main">
+            <!-- FLOATING GLASS HEADER BAR -->
             <header class="admin-header">
                 <div style="display: flex; align-items: center; gap: 1.25rem;">
                     <button type="button" class="sidebar-toggle-btn" id="sidebarToggle" title="Sembunyikan / Tampilkan Menu Sidebar">
                         <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div>
-                        <h1 style="font-size: 1.75rem; margin: 0; line-height: 1.2; color: #0f172a;">@yield('header_title', 'Dashboard Overview')</h1>
-                        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.2rem;">Selamat datang di Panel Admin FitLife Gym Jogja</p>
+                        <h1>@yield('header_title', 'Dashboard Overview')</h1>
+                        <div style="display: flex; align-items: center; gap: 0.65rem; margin-top: 0.25rem;">
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; font-weight: 800; color: var(--brand-lime); background: var(--brand-glow-subtle); padding: 0.2rem 0.65rem; border-radius: 99px; border: 1px solid var(--brand-glow);">
+                                <span style="width: 7px; height: 7px; background: var(--brand-lime); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--brand-lime);"></span>
+                                STUDIO ONLINE
+                            </span>
+                            <span style="color: #64748b; font-size: 0.8rem; font-weight: 600;">
+                                <i class="fa-regular fa-clock" style="margin-right: 0.25rem;"></i> {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <span style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); color: #0369a1; padding: 0.6rem 1.2rem; border-radius: 99px; font-weight: 800; font-size: 0.875rem; box-shadow: 0 2px 8px rgba(3, 105, 161, 0.1);">
-                        <i class="fa-solid fa-user-circle" style="margin-right: 0.35rem;"></i> {{ Auth::user()->name ?? 'Admin' }}
-                    </span>
+
+                <div style="display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap;">
+                    <!-- INTERACTIVE THEME SELECTOR UI -->
+                    <div style="position: relative;" id="adminThemeDropdownContainer">
+                        <button type="button" id="adminThemeBtn" style="background: rgba(255,255,255,0.05); border: 1px solid var(--admin-border); color: #ffffff; padding: 0.55rem 0.9rem; border-radius: 0.85rem; font-weight: 800; font-size: 0.825rem; cursor: pointer; display: flex; align-items: center; gap: 0.45rem; transition: all 0.25s ease;" title="Ganti Tema Warna Admin">
+                            <span id="themeDotIndicator" style="width: 10px; height: 10px; border-radius: 50%; background: var(--brand-lime); display: inline-block; box-shadow: 0 0 8px var(--brand-lime);"></span>
+                            <span style="font-size: 0.825rem;">Tema Admin</span>
+                            <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; color: #94a3b8; margin-left: 0.2rem;"></i>
+                        </button>
+                        
+                        <div id="adminThemeMenu" style="display: none; position: absolute; top: 125%; right: 0; background: #0d1410; border: 1px solid rgba(255,255,255,0.15); border-radius: 1.15rem; padding: 0.6rem; min-width: 200px; box-shadow: 0 25px 50px rgba(0,0,0,0.9); z-index: 10005;">
+                            <div style="font-size: 0.675rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.35rem 0.75rem 0.5rem;">PILIHAN TEMA ADAPTIF</div>
+                            
+                            <div onclick="switchAdminTheme('lime')" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.6rem 0.85rem; border-radius: 0.75rem; color: #ffffff; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(132,204,22,0.15)'" onmouseout="this.style.background='transparent'">
+                                <span style="width: 12px; height: 12px; border-radius: 50%; background: #84cc16; box-shadow: 0 0 8px #84cc16;"></span>
+                                <span>🌿 Emerald Lime</span>
+                            </div>
+                            <div onclick="switchAdminTheme('cyberpunk')" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.6rem 0.85rem; border-radius: 0.75rem; color: #ffffff; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(244,63,94,0.15)'" onmouseout="this.style.background='transparent'">
+                                <span style="width: 12px; height: 12px; border-radius: 50%; background: #f43f5e; box-shadow: 0 0 8px #f43f5e;"></span>
+                                <span>⚡ Neon Red</span>
+                            </div>
+                            <div onclick="switchAdminTheme('cyan')" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.6rem 0.85rem; border-radius: 0.75rem; color: #ffffff; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(6,182,212,0.15)'" onmouseout="this.style.background='transparent'">
+                                <span style="width: 12px; height: 12px; border-radius: 50%; background: #06b6d4; box-shadow: 0 0 8px #06b6d4;"></span>
+                                <span>💎 Electric Cyan</span>
+                            </div>
+                            <div onclick="switchAdminTheme('gold')" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.6rem 0.85rem; border-radius: 0.75rem; color: #ffffff; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(234,179,8,0.15)'" onmouseout="this.style.background='transparent'">
+                                <span style="width: 12px; height: 12px; border-radius: 50%; background: #eab308; box-shadow: 0 0 8px #eab308;"></span>
+                                <span>👑 Royal Gold</span>
+                            </div>
+                            <div onclick="switchAdminTheme('violet')" style="display: flex; align-items: center; gap: 0.65rem; padding: 0.6rem 0.85rem; border-radius: 0.75rem; color: #ffffff; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(139,92,246,0.15)'" onmouseout="this.style.background='transparent'">
+                                <span style="width: 12px; height: 12px; border-radius: 50%; background: #8b5cf6; box-shadow: 0 0 8px #8b5cf6;"></span>
+                                <span>🔮 Deep Violet</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Direct Action Buttons -->
+                    <a href="{{ route('admin.pos.index') }}" class="btn" style="background: var(--brand-glow-subtle); border: 1.5px solid var(--brand-lime); color: var(--brand-lime); border-radius: 0.85rem; font-weight: 800; font-size: 0.825rem; padding: 0.55rem 0.95rem; display: inline-flex; align-items: center; gap: 0.45rem; text-decoration: none;" title="Buka POS Kasir">
+                        <i class="fa-solid fa-cart-shopping"></i> Kasir POS
+                    </a>
+                    
+                    <a href="{{ route('admin.checkin.index') }}" class="btn" style="background: rgba(6, 182, 212, 0.15); border: 1.5px solid #06b6d4; color: #06b6d4; border-radius: 0.85rem; font-weight: 800; font-size: 0.825rem; padding: 0.55rem 0.95rem; display: inline-flex; align-items: center; gap: 0.45rem; text-decoration: none;" title="Presensi Kiosk">
+                        <i class="fa-solid fa-qrcode"></i> Kiosk Presensi
+                    </a>
+
+                    <!-- User Profile Badge -->
+                    <div style="display: flex; align-items: center; gap: 0.65rem; background: rgba(255,255,255,0.04); border: 1px solid var(--admin-border); padding: 0.45rem 0.95rem; border-radius: 99px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-lime) 0%, #10b981 100%); color: #060907; font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 0.85rem;">
+                            {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-size: 0.825rem; font-weight: 800; color: #ffffff;">{{ Auth::user()->name ?? 'Admin Studio' }}</span>
+                            <span style="font-size: 0.675rem; font-weight: 800; color: var(--brand-lime); text-transform: uppercase;">
+                                @php
+                                    $roleLabels = [
+                                        'admin' => '👑 Admin Owner',
+                                        'receptionist' => '🧾 Kasir / Resepsionis',
+                                        'coach' => '🏋️ Personal Trainer',
+                                        'member' => '👤 Member Studio',
+                                    ];
+                                @endphp
+                                {{ $roleLabels[Auth::user()->role ?? 'admin'] ?? '👑 Admin' }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </header>
 
             @if(session('success'))
-                <div style="background: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 1rem 1.25rem; border-radius: 0.85rem; font-weight: 700; margin-bottom: 1.75rem;">
-                    <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+                <div style="background: var(--brand-glow-subtle); border: 1.5px solid var(--brand-lime); color: var(--brand-lime); padding: 1rem 1.25rem; border-radius: 0.85rem; font-weight: 700; margin-bottom: 1.75rem; display: flex; align-items: center; gap: 0.65rem; box-shadow: 0 0 20px var(--brand-glow-subtle);">
+                    <i class="fa-solid fa-circle-check" style="font-size: 1.2rem;"></i> {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div style="background: rgba(244, 63, 94, 0.15); border: 1.5px solid #f43f5e; color: #f43f5e; padding: 1rem 1.25rem; border-radius: 0.85rem; font-weight: 700; margin-bottom: 1.75rem; display: flex; align-items: center; gap: 0.65rem; box-shadow: 0 0 20px rgba(244, 63, 94, 0.15);">
+                    <i class="fa-solid fa-circle-xmark" style="font-size: 1.2rem;"></i> {{ session('error') }}
                 </div>
             @endif
 
@@ -458,26 +747,60 @@
             min-height: 240px;
             border-radius: 0 0 0.85rem 0.85rem !important;
             font-size: 0.95rem;
-            color: #1e293b;
+            color: #0f172a;
+            background: #ffffff !important;
         }
         .ck-toolbar {
             border-radius: 0.85rem 0.85rem 0 0 !important;
             background: #f8fafc !important;
             border-color: #cbd5e1 !important;
         }
-        .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
-            border-color: #cbd5e1 !important;
-        }
     </style>
 
     <script>
+        // Admin Theme Switcher Helper
+        function switchAdminTheme(themeName) {
+            document.documentElement.setAttribute('data-admin-theme', themeName);
+            localStorage.setItem('fitlife_admin_theme', themeName);
+            
+            const dot = document.getElementById('themeDotIndicator');
+            const colors = {
+                'lime': '#84cc16',
+                'cyberpunk': '#f43f5e',
+                'cyan': '#06b6d4',
+                'gold': '#eab308',
+                'violet': '#8b5cf6'
+            };
+            if (dot && colors[themeName]) {
+                dot.style.background = colors[themeName];
+                dot.style.boxShadow = '0 0 8px ' + colors[themeName];
+            }
+
+            const menu = document.getElementById('adminThemeMenu');
+            if (menu) menu.style.display = 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const wrapper = document.getElementById('adminWrapper');
             const toggleBtn = document.getElementById('sidebarToggle');
             const backdrop = document.getElementById('sidebarBackdrop');
             const closeBtn = document.getElementById('mobileCloseSidebar');
 
-            // Load saved sidebar state for Desktop
+            // Theme Dropdown Toggle
+            const themeBtn = document.getElementById('adminThemeBtn');
+            const themeMenu = document.getElementById('adminThemeMenu');
+
+            themeBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (themeMenu) {
+                    themeMenu.style.display = themeMenu.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+
+            document.addEventListener('click', function() {
+                if (themeMenu) themeMenu.style.display = 'none';
+            });
+
             if (window.innerWidth >= 992 && localStorage.getItem('admin_sidebar_collapsed') === 'true') {
                 wrapper.classList.add('collapsed');
             }
@@ -509,14 +832,12 @@
             backdrop?.addEventListener('click', closeMobileSidebar);
             closeBtn?.addEventListener('click', closeMobileSidebar);
 
-            // Auto-close mobile sidebar when clicking a nav link
             document.querySelectorAll('.admin-nav-item a').forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth < 992) closeMobileSidebar();
                 });
             });
 
-            // Initialize CKEditor on all .rich-editor elements
             document.querySelectorAll('.rich-editor').forEach(textarea => {
                 ClassicEditor
                     .create(textarea, {

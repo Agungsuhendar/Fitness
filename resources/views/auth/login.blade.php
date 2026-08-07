@@ -45,7 +45,7 @@
             @endif
 
             <!-- Login Form -->
-            <form method="POST" action="{{ route('login') }}" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <form method="POST" action="{{ route('login') }}" onsubmit="sessionStorage.setItem('fitlife_member_session', '1'); sessionStorage.setItem('fitlife_member_name', document.getElementById('login').value);" style="display: flex; flex-direction: column; gap: 1.25rem;">
                 @csrf
 
                 <!-- Input Login (Email or Phone) -->

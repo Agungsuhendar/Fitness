@@ -22,7 +22,7 @@ LOG_CHANNEL=single
 LOG_LEVEL=debug
 
 DB_CONNECTION=mysql
-DB_HOST=sql103.epizy.com
+DB_HOST=sql103.infinityfree.com
 DB_PORT=3306
 DB_DATABASE=if0_42562646_lesrenang
 DB_USERNAME=if0_42562646

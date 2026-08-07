@@ -22,12 +22,16 @@
             </div>
 
             <div style="display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap;">
+                <button type="button" onclick="toggleKioskFullscreen()" id="fullscreenKioskBtn" style="background: rgba(132, 204, 22, 0.15); border: 1.5px solid #84cc16; color: #84cc16; padding: 0.65rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.25s ease;" title="Tampilkan Layar Penuh Kiosk Presensi">
+                    <i class="fa-solid fa-expand" id="kioskFsIcon"></i> <span id="kioskFsText">Mode Fullscreen Kiosk</span>
+                </button>
+
                 <label style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(132,204,22,0.12); border: 1px solid rgba(132,204,22,0.3); padding: 0.5rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.825rem; font-weight: 800; color: #84cc16;">
                     <input type="checkbox" id="ttsToggle" checked style="accent-color: #84cc16; width: 16px; height: 16px;">
-                    <i class="fa-solid fa-volume-high"></i> Suara Pengumuman TTS (Audio Active)
+                    <i class="fa-solid fa-volume-high"></i> Suara TTS
                 </label>
                 <span style="background: rgba(132,204,22,0.15); color: #84cc16; border: 1.5px solid #84cc16; padding: 0.65rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem;">
-                    <i class="fa-solid fa-signal"></i> SCANNER KIOSK READY
+                    <i class="fa-solid fa-signal"></i> KIOSK READY
                 </span>
             </div>
         </div>
@@ -67,6 +71,21 @@
                                 <input type="text" id="checkinMemberInput" required placeholder="Arahkan scanner ke QR Code atau ketik FL-MBR-7782..." value="FL-MBR-7782" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid #84cc16; padding: 1rem 1.15rem 1rem 2.9rem; border-radius: 0.85rem; color: white; font-size: 1.05rem; outline: none; font-weight: 800; font-family: monospace; letter-spacing: 1px; box-shadow: 0 0 15px rgba(132,204,22,0.2);">
                                 <i class="fa-solid fa-qrcode" style="position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%); color: #84cc16; font-size: 1.2rem;"></i>
                             </div>
+                        </div>
+
+                        <!-- Dual Scanning Mode Switcher: Physical Scanner vs Kamera HP/Webcam -->
+                        <div style="margin-bottom: 1.25rem; display: flex; gap: 0.75rem;">
+                            <button type="button" onclick="startCameraScanner()" class="btn" style="flex: 1; background: rgba(56,189,248,0.15); border: 1.5px solid #38bdf8; color: #38bdf8; padding: 0.65rem; border-radius: 0.75rem; font-weight: 800; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-camera"></i> Aktifkan Kamera HP / Webcam
+                            </button>
+                            <button type="button" onclick="stopCameraScanner()" id="stopCamBtn" style="display: none; background: rgba(239,68,68,0.15); border: 1.5px solid #ef4444; color: #ef4444; padding: 0.65rem; border-radius: 0.75rem; font-weight: 800; font-size: 0.85rem; cursor: pointer;">
+                                Matikan Cam
+                            </button>
+                        </div>
+
+                        <!-- Live Camera Reader Viewport -->
+                        <div id="cameraReaderBox" style="display: none; width: 100%; height: 260px; background: #000; border: 2px dashed #38bdf8; border-radius: 1rem; margin-bottom: 1.25rem; overflow: hidden; position: relative;">
+                            <div id="reader" style="width: 100%; height: 100%;"></div>
                         </div>
 
                         <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 1rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
@@ -268,5 +287,70 @@
 
         window.speechSynthesis.speak(utterance);
     }
+
+    let html5QrCodeScanner = null;
+
+    function startCameraScanner() {
+        document.getElementById('cameraReaderBox').style.display = 'block';
+        document.getElementById('stopCamBtn').style.display = 'inline-block';
+
+        if (!html5QrCodeScanner) {
+            html5QrCodeScanner = new Html5Qrcode("reader");
+        }
+
+        html5QrCodeScanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 220, height: 220 } },
+            (decodedText, decodedResult) => {
+                // On QR decoded successfully
+                document.getElementById('checkinMemberInput').value = decodedText;
+                stopCameraScanner();
+                speakAnnouncement('QR Code berhasil terdeteksi dari kamera.');
+                handleCheckinSubmit();
+            },
+            (errorMessage) => {
+                // scan errors, ignore
+            }
+        ).catch(err => {
+            alert('Tidak dapat mengaktifkan kamera: ' + err);
+        });
+    }
+
+    function stopCameraScanner() {
+        if (html5QrCodeScanner) {
+            html5QrCodeScanner.stop().then(() => {
+                document.getElementById('cameraReaderBox').style.display = 'none';
+                document.getElementById('stopCamBtn').style.display = 'none';
+            }).catch(err => {
+                document.getElementById('cameraReaderBox').style.display = 'none';
+                document.getElementById('stopCamBtn').style.display = 'none';
+            });
+        }
+    }
+
+    function toggleKioskFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log("Fullscreen Error:", err);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    document.addEventListener('fullscreenchange', function() {
+        const icon = document.getElementById('kioskFsIcon');
+        const text = document.getElementById('kioskFsText');
+        if (document.fullscreenElement) {
+            if (icon) icon.className = 'fa-solid fa-compress';
+            if (text) text.innerText = 'Keluar Fullscreen';
+        } else {
+            if (icon) icon.className = 'fa-solid fa-expand';
+            if (text) text.innerText = 'Mode Fullscreen Kiosk';
+        }
+    });
 </script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 @endsection

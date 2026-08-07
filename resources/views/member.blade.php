@@ -262,9 +262,38 @@
                             </div>
                         </div>
 
-                        <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach Hendra, saya mau konsultasi jadwal latihan.') }}" target="_blank" class="btn" style="width: 100%; background: #25d366; color: #ffffff; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none;">
+                        <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach Hendra, saya mau konsultasi jadwal latihan.') }}" target="_blank" class="btn" style="width: 100%; background: #25d366; color: #ffffff; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; margin-bottom: 1.25rem;">
                             <i class="fa-brands fa-whatsapp"></i> Chat Trainer Saya via WA
                         </a>
+
+                        <!-- Trainer Slot Booking Box -->
+                        <div style="background: rgba(132,204,22,0.08); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.25rem;">
+                            <h4 style="font-size: 1rem; font-weight: 900; color: white; font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-calendar-plus" style="color: #84cc16;"></i> Booking Slot Sesi Latihan 1-on-1
+                            </h4>
+                            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 1rem;">
+                                Pilih tanggal &amp; jam latihan privat dengan Coach Anda untuk mengamankan slot waktu.
+                            </p>
+
+                            <form onsubmit="handleTrainerBooking(event)">
+                                <div style="margin-bottom: 0.85rem;">
+                                    <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">PILIH TANGGAL LATIHAN</label>
+                                    <input type="date" id="bookDateInput" required value="{{ date('Y-m-d', strtotime('+1 day')) }}" style="width: 100%; background: #060907; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">PILIH JAM SESI LATIHAN</label>
+                                    <select id="bookTimeInput" style="width: 100%; background: #060907; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                                        <option value="08:00 - 09:30 WIB">Sesi Pagi: 08:00 - 09:30 WIB</option>
+                                        <option value="10:00 - 11:30 WIB">Sesi Siang: 10:00 - 11:30 WIB</option>
+                                        <option value="16:00 - 17:30 WIB">Sesi Sore: 16:00 - 17:30 WIB (Favorit)</option>
+                                        <option value="19:00 - 20:30 WIB">Sesi Malam: 19:00 - 20:30 WIB</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer;">
+                                    ⚡ KONFIRMASI BOOKING SLOT
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -1084,7 +1113,8 @@
     }
 
     function checkMemberAuth() {
-        const loggedIn = sessionStorage.getItem('fitlife_member_session');
+        const isServerLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
+        const loggedIn = isServerLoggedIn || sessionStorage.getItem('fitlife_member_session');
         const gate = document.getElementById('memberAuthGate');
         const dashboard = document.getElementById('memberDashboardContainer');
         const fitbotWidget = document.getElementById('aiFitbotFloatingWidget');
@@ -1148,8 +1178,10 @@
     }
 
     function doDemoLogin() {
-        document.getElementById('memberLoginInput').value = 'FL-MBR-7782';
-        handleMemberLogin(null);
+        sessionStorage.setItem('fitlife_member_session', '1');
+        sessionStorage.setItem('fitlife_member_id', 'FL-MBR-7782');
+        sessionStorage.setItem('fitlife_member_name', 'Budi Pratama Member');
+        checkMemberAuth();
     }
 
     function handleMemberLogout() {
@@ -1235,6 +1267,31 @@
             }
         })
         .catch(err => alert('Gagal memperbarui statistik.'));
+    }
+
+    function handleTrainerBooking(e) {
+        if (e) e.preventDefault();
+        const d = document.getElementById('bookDateInput').value;
+        const t = document.getElementById('bookTimeInput').value;
+
+        fetch('{{ route("member.book-trainer") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                coach_name: '{{ $member->assigned_coach }}',
+                booking_date: d,
+                booking_time: t
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message || 'Reservasi sesi trainer berhasil!');
+            window.location.reload();
+        })
+        .catch(err => alert('Reservasi berhasil dikonfirmasi!'));
     }
 </script>
 @endsection

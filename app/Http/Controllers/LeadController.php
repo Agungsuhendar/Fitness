@@ -446,6 +446,9 @@ class LeadController extends Controller
 
                 if ($attendance) {
                     \App\Services\WhatsAppService::sendCheckinNotification($user, $attendance);
+                    if ($user->remaining_sessions <= 2) {
+                        \App\Services\WhatsAppService::sendLowSessionNotification($user);
+                    }
                 }
             } catch (\Exception $e) {}
 

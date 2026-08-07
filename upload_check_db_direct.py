@@ -8,7 +8,7 @@ check_db_php = """<?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$host = 'sql103.epizy.com';
+$host = 'sql103.infinityfree.com';
 $user = 'if0_42562646';
 $pass = 'Arkanza0123456';
 $db = 'if0_42562646_lesrenang';

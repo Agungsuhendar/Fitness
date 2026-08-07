@@ -16,19 +16,33 @@ use App\Models\TrialBooking;
 use App\Models\Setting;
 use App\Models\User;
 
-class LesFitnessSeeder extends Seeder
+class LesRenangSeeder extends Seeder
 {
     public function run(): void
     {
-        // 0. ADMIN USER
-        User::updateOrCreate(
-            ['email' => 'admin@apexfitness.id'],
-            [
-                'name' => 'Admin ApexFitness',
-                'email' => 'admin@apexfitness.id',
-                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
-            ]
-        );
+        // 0. SYSTEM USERS (Admin, Kasir, Coach, Member)
+        $systemAccounts = [
+            ['email' => 'admin@lesrenangjogja.com', 'name' => 'Admin LesRenang Utama', 'role' => 'admin'],
+            ['email' => 'admin@apexfitness.id', 'name' => 'Admin ApexFitness', 'role' => 'admin'],
+            ['email' => 'admin@fitlife.id', 'name' => 'Admin FitLife Owner', 'role' => 'admin'],
+            ['email' => 'admin@fitlifecenter.id', 'name' => 'Admin FitLife Center', 'role' => 'admin'],
+            ['email' => 'kasir@fitlife.id', 'name' => 'Maya Resepsionis Kasir', 'role' => 'receptionist'],
+            ['email' => 'coach@fitlife.id', 'name' => 'Coach Hendra APKI', 'role' => 'coach'],
+            ['email' => 'member@fitlife.id', 'name' => 'Budi Pratama Member', 'role' => 'member'],
+        ];
+
+        foreach ($systemAccounts as $acc) {
+            User::updateOrCreate(
+                ['email' => $acc['email']],
+                [
+                    'name' => $acc['name'],
+                    'email' => $acc['email'],
+                    'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+                    'role' => $acc['role'],
+                    'status' => 'active',
+                ]
+            );
+        }
 
         // 0.1 DEFAULT SITE SETTINGS
         $defaultSettings = [
