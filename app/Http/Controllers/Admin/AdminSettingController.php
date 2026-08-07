@@ -42,6 +42,8 @@ class AdminSettingController extends Controller
             'site_seo_title' => Setting::get('site_seo_title', 'FitLife Gym Jogja - Privat Anak, Dewasa, Wanita & Persiapan TNI POLRI'),
             'site_seo_description' => Setting::get('site_seo_description', 'FitLife Gym Jogja profesional & privat di Yogyakarta. Melayani fitness & personal trainer anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI.'),
             'site_share_image' => Setting::get('site_share_image', 'images/logo.png'),
+            'site_favicon' => Setting::get('site_favicon', 'images/favicon.png'),
+            'site_pwa_icon' => Setting::get('site_pwa_icon', 'images/icon-512.png'),
             'site_footer_about' => Setting::get('site_footer_about', 'Pusat kebugaran fitness gym & Personal Trainer privat 1-on-1 terpercaya di Yogyakarta. Menyediakan program Weight Loss & Fat Burning, Muscle Building, Female Body Shaping, serta Persiapan Fisik TNI POLRI & Rehabilitasi Postur.'),
             'promo_text' => Setting::get('promo_text', '🔥 PROMO SPESIAL BULAN INI: Diskon Rp 50.000 + Gratis Shaker & Handuk Gym untuk Pendaftaran Paket Privat 2 Orang!'),
             'cta_banner_title' => Setting::get('cta_banner_title', 'Siap Memulai Perjalanan Fitness Dalam Waktu Singkat?'),
@@ -54,6 +56,7 @@ class AdminSettingController extends Controller
             'midtrans_is_production' => Setting::get('midtrans_is_production', '0'),
             'wa_api_key' => Setting::get('wa_api_key', env('WA_API_KEY', 'demo_wa_api_key_fitlife')),
             'wa_api_endpoint' => Setting::get('wa_api_endpoint', env('WA_API_ENDPOINT', 'https://api.fonnte.com/send')),
+            'subscription_tier' => Setting::get('subscription_tier', 'enterprise'),
         ];
 
         return view('admin.settings.index', compact('settings'));
@@ -99,6 +102,8 @@ class AdminSettingController extends Controller
             'site_logo_footer_file' => ['setting_key' => 'site_logo_footer', 'prefix' => 'logo_footer_'],
             'hero_image_file' => ['setting_key' => 'hero_image', 'prefix' => 'hero_'],
             'site_share_image_file' => ['setting_key' => 'site_share_image', 'prefix' => 'share_'],
+            'site_favicon_file' => ['setting_key' => 'site_favicon', 'prefix' => 'favicon_'],
+            'site_pwa_icon_file' => ['setting_key' => 'site_pwa_icon', 'prefix' => 'pwa_icon_'],
         ];
 
         $uploadErrors = [];
@@ -110,7 +115,20 @@ class AdminSettingController extends Controller
                     $ext = strtolower($file->getClientOriginalExtension() ?: 'png');
                     $filename = $info['prefix'] . time() . '_' . rand(100, 999) . '.' . $ext;
                     $file->move($uploadDir, $filename);
-                    Setting::set($info['setting_key'], 'uploads/' . $filename);
+                    $relPath = 'uploads/' . $filename;
+                    Setting::set($info['setting_key'], $relPath);
+
+                    // Sync Favicon & PWA Icons directly to public folder
+                    $fullPath = public_path($relPath);
+                    if ($fileInput === 'site_favicon_file' && file_exists($fullPath)) {
+                        @copy($fullPath, public_path('images/favicon.png'));
+                        @copy($fullPath, public_path('favicon.ico'));
+                    }
+                    if ($fileInput === 'site_pwa_icon_file' && file_exists($fullPath)) {
+                        @copy($fullPath, public_path('images/icon-192.png'));
+                        @copy($fullPath, public_path('images/icon-512.png'));
+                        @copy($fullPath, public_path('images/apple-touch-icon.png'));
+                    }
                 } else {
                     $errorCode = $file ? $file->getError() : UPLOAD_ERR_NO_FILE;
                     if ($errorCode === UPLOAD_ERR_INI_SIZE || $errorCode === UPLOAD_ERR_FORM_SIZE) {
@@ -144,6 +162,11 @@ class AdminSettingController extends Controller
             if ($request->has($field)) {
                 Setting::set($field, $request->input($field));
             }
+        }
+
+        // Subscription Tier setting update is strictly restricted to Superadmin / Master Vendor
+        if ($request->has('subscription_tier') && (auth()->user()->role === 'superadmin' || auth()->user()->email === 'admin@fitlife.id')) {
+            Setting::set('subscription_tier', $request->input('subscription_tier'));
         }
 
         return redirect()->route('admin.settings.index')->with('success', 'Pengaturan logo, hero & informasi website berhasil diperbarui!');

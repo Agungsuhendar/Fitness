@@ -6,6 +6,10 @@
     $defaultSeoDesc = site_setting('site_seo_description', 'FitLife Gym Jogja profesional & privat di Yogyakarta. Melayani fitness & personal trainer anak, dewasa pemula, khusus wanita/muslimah, & persiapan tes TNI/POLRI.');
     $siteLogoPath = site_setting('site_logo', 'images/logo.png');
     $siteLogoUrl = Str::startsWith($siteLogoPath, 'http') ? $siteLogoPath : asset($siteLogoPath);
+    $siteFaviconPath = site_setting('site_favicon', 'images/favicon.png');
+    $siteFaviconUrl = Str::startsWith($siteFaviconPath, 'http') ? $siteFaviconPath : asset($siteFaviconPath);
+    $sitePwaIconPath = site_setting('site_pwa_icon', 'images/icon-512.png');
+    $sitePwaIconUrl = Str::startsWith($sitePwaIconPath, 'http') ? $sitePwaIconPath : asset($sitePwaIconPath);
     $rawShareLogo = site_setting('site_share_image', $siteLogoPath);
     $shareImageUrl = Str::startsWith($rawShareLogo, 'http') ? $rawShareLogo : asset($rawShareLogo);
 
@@ -45,6 +49,34 @@
             ['title' => '⭐ Transformasi Bintang 5!', 'msg' => 'Rian A.: "Pull-up dari 3x jadi 18x & lulus tes TNI POLRI"'],
         ];
     }
+
+    $pwaManifestJson = json_encode([
+        'id' => '/',
+        'name' => site_setting('site_seo_title', 'FitLife Center Jogja - Gym & Personal Trainer'),
+        'short_name' => site_setting('hero_title', 'FitLife Hub'),
+        'description' => site_setting('site_seo_description', 'Pusat fitness gym & Personal Trainer privat 1-on-1 terpercaya di Yogyakarta.'),
+        'start_url' => '/',
+        'scope' => '/',
+        'display' => 'standalone',
+        'orientation' => 'portrait',
+        'background_color' => '#060907',
+        'theme_color' => '#0a0f0d',
+        'icons' => [
+            [
+                'src' => asset('images/icon-192.png'),
+                'sizes' => '192x192',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ],
+            [
+                'src' => asset('images/icon-512.png'),
+                'sizes' => '512x512',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ]
+        ]
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    $pwaManifestDataUri = 'data:application/manifest+json;base64,' . base64_encode($pwaManifestJson);
 @endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,12 +108,12 @@
     <meta name="twitter:image" content="{{ $shareImageUrl }}">
 
     <!-- Dynamic Favicon & Touch Icons from Site Settings -->
-    <link rel="icon" type="image/png" href="{{ $siteLogoUrl }}">
-    <link rel="shortcut icon" type="image/png" href="{{ $siteLogoUrl }}">
-    <link rel="apple-touch-icon" href="{{ $siteLogoUrl }}">
+    <link rel="icon" type="image/png" href="{{ $siteFaviconUrl }}">
+    <link rel="shortcut icon" type="image/png" href="{{ $siteFaviconUrl }}">
+    <link rel="apple-touch-icon" href="{{ $sitePwaIconUrl }}">
 
     <!-- PWA Web Manifest & App Meta Tags -->
-    <link rel="manifest" href="{{ url('/manifest.json') }}">
+    <link rel="manifest" href="{{ $pwaManifestDataUri }}">
     <meta name="theme-color" content="#0a0f0d">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -764,38 +796,43 @@
         </div>
     </div>
 
-    <!-- Universal PWA Instruction Modal (iOS & Fallback) -->
+    <!-- Universal PWA Instruction Modal (macOS, iOS, Android & Desktop) -->
     <div id="pwaInstructionModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 100005; align-items: center; justify-content: center; padding: 1.25rem;">
-        <div style="background: #0d1310; border: 2px solid var(--brand-primary, #84cc16); border-radius: 1.5rem; max-width: 440px; width: 100%; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.9); position: relative; color: white; text-align: center;">
-            <button onclick="closePwaModal()" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <div style="background: #0d1310; border: 2px solid var(--brand-primary, #84cc16); border-radius: 1.5rem; max-width: 480px; width: 100%; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.9); position: relative; color: white; text-align: center;">
+            <button onclick="closePwaModal()" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;" title="Tutup">&times;</button>
 
             <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(132, 204, 22, 0.15); border: 2px solid var(--brand-primary, #84cc16); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.8rem; color: var(--brand-primary, #84cc16);">
-                <i class="fa-solid fa-mobile-screen-button"></i>
+                <i class="fa-solid fa-desktop" id="pwaOsIcon"></i>
             </div>
 
             <h3 style="font-size: 1.35rem; font-weight: 900; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">Cara Install FitLife Hub App</h3>
-            <p style="color: #cbd5e1; font-size: 0.875rem; margin-bottom: 1.5rem; line-line: 1.6;">
-                Nikmati akses cepat tanpa buka browser setiap saat langsung dari layar utama HP Anda!
+            <p style="color: #cbd5e1; font-size: 0.875rem; margin-bottom: 1.5rem; line-height: 1.6;">
+                Nikmati akses cepat 1-Klik langsung dari Launchpad / Dock Mac, Desktop Windows, atau Layar Utama HP Anda!
             </p>
 
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; text-align: left; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">1</span>
-                    <span>Di iPhone/iOS: Ketuk ikon <b>Bagikan <i class="fa-solid fa-share-nodes"></i></b> di bawah Safari.</span>
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.15rem; text-align: left; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; margin-top: 2px;">1</span>
+                    <span><b>Di Mac / Desktop (Chrome/Edge):</b> Klik ikon <b>Install <i class="fa-solid fa-download"></i></b> di sebelah kanan bilah URL browser atau menu <b>Titik 3 ➔ Install FitLife Hub</b>.</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">2</span>
-                    <span>Pilih menu <b>"Tambahkan ke Layar Utama" / "Add to Home Screen"</b>.</span>
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; margin-top: 2px;">2</span>
+                    <span><b>Di Mac (Safari):</b> Pilih menu <b>File ➔ Tambahkan ke Dock</b> untuk membuat ikon aplikasi instan di Dock Mac OS.</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">3</span>
-                    <span>Di Android/Chrome: Ketuk **Titik 3 ➔ Install Aplikasi**.</span>
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span style="background: var(--brand-primary, #84cc16); color: #090d0b; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; margin-top: 2px;">3</span>
+                    <span><b>Di iPhone / Android:</b> Ketuk tombol <b>Bagikan <i class="fa-solid fa-share-nodes"></i> ➔ Tambahkan ke Layar Utama</b>.</span>
                 </div>
             </div>
 
-            <button onclick="closePwaModal()" style="width: 100%; background: var(--brand-primary, #84cc16); color: #090d0b; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.9rem; cursor: pointer;">
-                Saya Mengerti
-            </button>
+            <div style="display: flex; gap: 0.75rem; width: 100%;">
+                <button onclick="triggerPwaInstall(); closePwaModal();" style="flex: 1; background: var(--brand-primary, #84cc16); color: #090d0b; border: none; padding: 0.75rem 1rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <i class="fa-solid fa-download"></i> Install Sekarang
+                </button>
+                <button onclick="closePwaModal()" style="background: transparent; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2); padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; cursor: pointer;">
+                    Tutup
+                </button>
+            </div>
         </div>
     </div>
 
@@ -833,7 +870,18 @@
                     dismissPwaBanner();
                 });
             } else {
-                // Show universal instruction modal for iOS / Manual fallback
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.userAgent.includes('Macintosh');
+                const icon = document.getElementById('pwaOsIcon');
+                if (icon) {
+                    if (isMac) {
+                        icon.className = 'fa-solid fa-laptop';
+                    } else if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                        icon.className = 'fa-solid fa-mobile-screen-button';
+                    } else {
+                        icon.className = 'fa-solid fa-desktop';
+                    }
+                }
+
                 const modal = document.getElementById('pwaInstructionModal');
                 if (modal) modal.style.display = 'flex';
             }
@@ -850,6 +898,8 @@
             sessionStorage.setItem('pwa_banner_dismissed', '1');
         }
     </script>
+
+    @include('components.ai_chatbot')
 
     @stack('scripts')
 </body>

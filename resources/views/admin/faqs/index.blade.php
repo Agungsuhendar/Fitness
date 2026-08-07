@@ -4,14 +4,14 @@
 @section('header_title', 'Kelola 20+ Pertanyaan & Jawaban FAQ')
 
 @section('admin_content')
-<div style="background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); padding: 1.75rem 2rem; margin-bottom: 2rem;">
+<div class="admin-card" style="padding: 1.75rem 2rem; margin-bottom: 2rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
         <div>
-            <h2 style="font-size: 1.35rem; color: #0f172a; margin: 0;">
-                <i class="fa-solid fa-circle-question" style="color: #10b981; margin-right: 0.5rem;"></i>
+            <h2 style="font-size: 1.35rem; color: #ffffff; margin: 0; font-weight: 900; font-family: 'Outfit', sans-serif;">
+                <i class="fa-solid fa-circle-question" style="color: var(--brand-lime, #84cc16); margin-right: 0.5rem;"></i>
                 Daftar FAQ (Total {{ $faqs->count() }} Pertanyaan)
             </h2>
-            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Kelola daftar pertanyaan umum dan jawaban resmi yang tampil pada website.</p>
+            <p style="color: #cbd5e1; font-size: 0.875rem; margin-top: 0.35rem;">Kelola daftar pertanyaan umum dan jawaban resmi yang tampil pada website.</p>
         </div>
         <a href="{{ route('admin.faqs.create') }}" class="btn btn-primary btn-sm" style="border-radius: 0.75rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 0.65rem 1.35rem; font-weight: 700; border: none;">
             <i class="fa-solid fa-plus"></i> Tambah FAQ Baru
@@ -40,7 +40,7 @@
                         {{ $faq->category }}
                     </span>
                 </td>
-                <td style="font-weight: 800; color: #0f172a; max-width: 250px;">{{ $faq->question }}</td>
+                <td style="font-weight: 800; color: #ffffff; max-width: 250px;">{{ $faq->question }}</td>
                 <td style="font-size: 0.875rem; color: #64748b; max-width: 340px;">{{ Str::limit(strip_tags($faq->answer), 85) }}</td>
                 <td>
                     @if($faq->is_popular)

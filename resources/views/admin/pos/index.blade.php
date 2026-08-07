@@ -41,29 +41,31 @@
             <div>
                 <!-- Category Filter & Search Bar -->
                 <div style="background: #0d1310; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 1.25rem; padding: 1.25rem; margin-bottom: 1.5rem;">
-                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
-                        <a href="{{ route('admin.pos.index', ['category' => 'all', 'q' => $q]) }}" class="btn" style="background: {{ $category === 'all' ? '#84cc16' : 'rgba(255,255,255,0.05)' }}; color: {{ $category === 'all' ? '#090d0b' : '#cbd5e1' }}; border: 1px solid rgba(255,255,255,0.12); padding: 0.55rem 1.15rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-decoration: none;">
+                    <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                        <button type="button" onclick="filterPosCategory('all', this)" class="btn pos-cat-btn active-cat" data-cat="all" style="background: #84cc16; color: #090d0b; border: 1px solid rgba(255,255,255,0.12); padding: 0.55rem 1.15rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; cursor: pointer;">
                             Semua Produk
-                        </a>
+                        </button>
                         @foreach($categories as $cat)
-                            <a href="{{ route('admin.pos.index', ['category' => $cat, 'q' => $q]) }}" class="btn" style="background: {{ $category === $cat ? '#84cc16' : 'rgba(255,255,255,0.05)' }}; color: {{ $category === $cat ? '#090d0b' : '#cbd5e1' }}; border: 1px solid rgba(255,255,255,0.12); padding: 0.55rem 1.15rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-decoration: none;">
+                            <button type="button" onclick="filterPosCategory('{{ $cat }}', this)" class="btn pos-cat-btn" data-cat="{{ $cat }}" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 0.55rem 1.15rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; cursor: pointer;">
                                 {{ $cat }}
-                            </a>
+                            </button>
                         @endforeach
                     </div>
 
-                    <!-- Search Input -->
-                    <form method="GET" action="{{ route('admin.pos.index') }}" style="position: relative;">
-                        <input type="hidden" name="category" value="{{ $category }}">
-                        <input type="text" name="q" value="{{ $q }}" placeholder="Ketik kode atau nama produk (e.g. Aqua, Whey Protein, Tiket)..." style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 0.85rem; padding: 0.75rem 1rem 0.75rem 2.6rem; color: white; outline: none;">
+                    <!-- Instant Search Input -->
+                    <div style="position: relative;">
+                        <input type="text" id="posSearchInput" oninput="filterPosSearch(this.value)" placeholder="Ketik kode atau nama produk (e.g. Aqua, Whey Protein, Tiket)..." style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 0.85rem; padding: 0.75rem 1rem 0.75rem 2.6rem; color: white; outline: none; font-size: 0.9rem;">
                         <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #84cc16;"></i>
-                    </form>
+                    </div>
                 </div>
 
                 <!-- Product Grid -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem;">
                     @forelse($products as $p)
-                    <div onclick="addToCart({{ json_encode($p) }})" style="background: #0d1310; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 1.25rem; padding: 1.25rem; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;" class="pos-item-card">
+                    <div onclick="addToCart({{ json_encode($p) }})" 
+                         data-category="{{ $p->category }}" 
+                         data-search="{{ strtolower($p->code . ' ' . $p->name . ' ' . $p->category) }}"
+                         style="background: #0d1310; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 1.25rem; padding: 1.25rem; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;" class="pos-item-card">
                         <div style="font-size: 0.725rem; font-family: monospace; color: #84cc16; font-weight: 800; margin-bottom: 0.35rem;">
                             {{ $p->code }}
                         </div>
@@ -83,9 +85,13 @@
                     </div>
                     @empty
                     <div style="grid-column: 1 / -1; padding: 3rem; text-align: center; color: #94a3b8; background: #0d1310; border-radius: 1.25rem;">
-                        Tidak ada produk yang cocok dengan pencarian.
+                        Tidak ada produk yang tersedia.
                     </div>
                     @endforelse
+
+                    <div id="posEmptyProducts" style="display: none; grid-column: 1 / -1; padding: 3rem; text-align: center; color: #94a3b8; background: #0d1310; border-radius: 1.25rem;">
+                        Tidak ada produk yang cocok dengan pencarian atau kategori ini.
+                    </div>
                 </div>
             </div>
 
@@ -402,14 +408,71 @@
         }
     });
 
+    function filterPosCategory(catName, btnEl) {
+        document.querySelectorAll('.pos-cat-btn').forEach(b => {
+            b.style.background = 'rgba(255,255,255,0.05)';
+            b.style.color = '#cbd5e1';
+            b.classList.remove('active-cat');
+        });
+        
+        if (btnEl) {
+            btnEl.style.background = '#84cc16';
+            btnEl.style.color = '#090d0b';
+            btnEl.classList.add('active-cat');
+        }
+
+        const query = (document.getElementById('posSearchInput')?.value || '').toLowerCase().trim();
+        let visibleCount = 0;
+
+        document.querySelectorAll('.pos-item-card').forEach(card => {
+            const itemCat = card.dataset.category || '';
+            const itemSearch = card.dataset.search || '';
+
+            const catMatch = (catName === 'all' || itemCat === catName);
+            const searchMatch = (!query || itemSearch.includes(query));
+
+            if (catMatch && searchMatch) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        const emptyBox = document.getElementById('posEmptyProducts');
+        if (emptyBox) {
+            emptyBox.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+    }
+
+    function filterPosSearch(query) {
+        const activeBtn = document.querySelector('.pos-cat-btn.active-cat');
+        const activeCat = activeBtn ? activeBtn.dataset.cat : 'all';
+        filterPosCategory(activeCat, activeBtn);
+    }
+
     function togglePosFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                console.log("Fullscreen Error:", err);
-            });
+        const isFs = document.body.classList.contains('is-fullscreen-mode') || !!document.fullscreenElement;
+        const icon = document.getElementById('posFsIcon');
+        const text = document.getElementById('posFsText');
+
+        if (!isFs) {
+            document.body.classList.add('is-fullscreen-mode');
+            if (icon) icon.className = 'fa-solid fa-compress';
+            if (text) text.innerText = 'Keluar Fullscreen';
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log("Native Fullscreen Error:", err);
+                });
+            }
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
+            document.body.classList.remove('is-fullscreen-mode');
+            if (icon) icon.className = 'fa-solid fa-expand';
+            if (text) text.innerText = 'Mode Fullscreen Kasir';
+            if (document.fullscreenElement && document.exitFullscreen) {
+                document.exitFullscreen().catch(err => {
+                    console.log("Exit Fullscreen Error:", err);
+                });
             }
         }
     }
@@ -417,13 +480,56 @@
     document.addEventListener('fullscreenchange', function() {
         const icon = document.getElementById('posFsIcon');
         const text = document.getElementById('posFsText');
-        if (document.fullscreenElement) {
+        const isFs = !!document.fullscreenElement;
+
+        if (isFs) {
+            document.body.classList.add('is-fullscreen-mode');
             if (icon) icon.className = 'fa-solid fa-compress';
             if (text) text.innerText = 'Keluar Fullscreen';
         } else {
+            document.body.classList.remove('is-fullscreen-mode');
             if (icon) icon.className = 'fa-solid fa-expand';
             if (text) text.innerText = 'Mode Fullscreen Kasir';
         }
     });
 </script>
+
+<style>
+/* Fullscreen Standalone POS Kasir Terminal Mode */
+body.is-fullscreen-mode {
+    background-color: #060907 !important;
+    overflow-x: hidden !important;
+}
+
+body.is-fullscreen-mode .admin-sidebar,
+body.is-fullscreen-mode .admin-header,
+body.is-fullscreen-mode footer,
+body.is-fullscreen-mode header,
+body.is-fullscreen-mode nav,
+body.is-fullscreen-mode .sidebar-backdrop,
+body.is-fullscreen-mode .floating-action-stack,
+body.is-fullscreen-mode #aiChatbotModal,
+body.is-fullscreen-mode #pwaInstallBanner,
+body.is-fullscreen-mode #pwaInstructionModal {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+body.is-fullscreen-mode .admin-wrapper {
+    grid-template-columns: 1fr !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+body.is-fullscreen-mode .admin-main {
+    padding: 0.75rem 1rem !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+</style>
 @endsection

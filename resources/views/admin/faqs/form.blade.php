@@ -4,8 +4,8 @@
 @section('header_title', ($faq->exists ? 'Edit' : 'Tambah') . ' Pertanyaan FAQ')
 
 @section('admin_content')
-<div style="background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); padding: 2rem 2.5rem; width: 100%;">
-    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.25rem; margin-bottom: 2rem; border-bottom: 1px solid #f1f5f9;">
+<div style="background: var(--admin-card-bg, #0d1410); border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); padding: 2rem 2.5rem; width: 100%;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.25rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <div>
             <h2 style="font-size: 1.35rem; margin: 0; color: var(--dark);">
                 <i class="fa-solid fa-circle-question" style="color: var(--emerald); margin-right: 0.5rem;"></i>
@@ -54,7 +54,7 @@
         </div>
 
         <div class="form-group" style="margin-bottom: 1.75rem;">
-            <label style="display: inline-flex; align-items: center; gap: 0.75rem; font-weight: 800; cursor: pointer; background: #f8fafc; padding: 0.85rem 1.25rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+            <label style="display: inline-flex; align-items: center; gap: 0.75rem; font-weight: 800; cursor: pointer; background: rgba(255, 255, 255, 0.04); padding: 0.85rem 1.25rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
                 <input type="checkbox" name="is_popular" value="1" {{ old('is_popular', $faq->is_popular) ? 'checked' : '' }} style="width: 20px; height: 20px; accent-color: var(--primary);">
                 Tampilkan di Halaman Beranda (Populer FAQ)
             </label>

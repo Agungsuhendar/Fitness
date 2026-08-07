@@ -40,7 +40,7 @@
                     </div>
                 </td>
                 <td>
-                    <div style="font-weight: 800; color: #0f172a;">{{ $feat->title }}</div>
+                    <div style="font-weight: 800; color: #ffffff;">{{ $feat->title }}</div>
                 </td>
                 <td style="max-width: 300px;">
                     <div style="font-size: 0.85rem; color: #64748b;">{{ $feat->description }}</div>

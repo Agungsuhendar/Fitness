@@ -20,8 +20,9 @@ class LesRenangSeeder extends Seeder
 {
     public function run(): void
     {
-        // 0. SYSTEM USERS (Admin, Kasir, Coach, Member)
+        // 0. SYSTEM USERS (Super Admin, Admin, Kasir, Coach, Member)
         $systemAccounts = [
+            ['email' => 'superadmin@fitlife.id', 'name' => 'Super Admin Studio Owner', 'role' => 'superadmin'],
             ['email' => 'admin@lesrenangjogja.com', 'name' => 'Admin LesRenang Utama', 'role' => 'admin'],
             ['email' => 'admin@apexfitness.id', 'name' => 'Admin ApexFitness', 'role' => 'admin'],
             ['email' => 'admin@fitlife.id', 'name' => 'Admin FitLife Owner', 'role' => 'admin'],

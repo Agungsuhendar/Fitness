@@ -47,7 +47,7 @@
                     </div>
                 </td>
                 <td>
-                    <div style="font-weight: 800; color: #0f172a;">{{ $vid->title }}</div>
+                    <div style="font-weight: 800; color: #ffffff;">{{ $vid->title }}</div>
                     <div style="font-size: 0.8rem; color: #64748b;">{{ $vid->subtitle }}</div>
                 </td>
                 <td>

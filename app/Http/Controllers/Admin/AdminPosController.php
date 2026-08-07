@@ -19,19 +19,9 @@ class AdminPosController extends Controller
         $category = $request->input('category', 'all');
         $q = trim($request->input('q'));
 
-        $query = Product::where('is_active', true);
-        if ($category !== 'all') {
-            $query->where('category', $category);
-        }
-        if ($q) {
-            $query->where(function($b) use ($q) {
-                $b->where('name', 'like', "%{$q}%")
-                  ->orWhere('code', 'like', "%{$q}%");
-            });
-        }
-
-        $products = $query->orderBy('name')->get();
-        $categories = Product::select('category')->distinct()->pluck('category');
+        // Fetch all active products for instant client-side filtering (prevents page reloads in Fullscreen mode)
+        $products = Product::where('is_active', true)->orderBy('name')->get();
+        $categories = Product::where('is_active', true)->select('category')->distinct()->pluck('category');
 
         $recentTransactions = PosTransaction::with('items')->latest()->take(10)->get();
 

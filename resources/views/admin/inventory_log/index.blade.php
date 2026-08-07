@@ -14,7 +14,7 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <div>
-            <h3 style="font-size: 1.35rem; color: #0f172a; margin: 0 0 0.2rem; font-weight: 900; font-family: 'Outfit', sans-serif;">
+            <h3 style="font-size: 1.35rem; color: #ffffff; margin: 0 0 0.2rem; font-weight: 900; font-family: 'Outfit', sans-serif;">
                 📦 Kartu Stok &amp; Log Mutasi Barang POS Kasir
             </h3>
             <p style="color: #64748b; font-size: 0.875rem; margin: 0;">
@@ -24,15 +24,15 @@
     </div>
 
     <!-- Restock Form Box -->
-    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: #ffffff; border: 1px solid #e2e8f0; margin-bottom: 2rem;">
-        <h4 style="font-size: 1.05rem; color: #03045e; margin-bottom: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: var(--admin-card-bg, #0d1410); border: 1px solid #e2e8f0; margin-bottom: 2rem;">
+        <h4 style="font-size: 1.05rem; color: #ffffff; margin-bottom: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
             <i class="fa-solid fa-boxes-packing" style="color: #0284c7;"></i> + Form Input Restok Barang Masuk (Supplier)
         </h4>
 
         <form action="{{ route('admin.inventory-log.restock') }}" method="POST" style="display: grid; grid-template-columns: 2fr 1fr 3fr auto; gap: 1rem; align-items: end;">
             @csrf
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">PILIH PRODUK / BARANG *</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">PILIH PRODUK / BARANG *</label>
                 <select name="product_id" required style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 700; outline: none;">
                     @foreach($products as $prod)
                         <option value="{{ $prod->id }}">{{ $prod->name }} (Stok Saat Ini: {{ $prod->stock }} unit)</option>
@@ -40,11 +40,11 @@
                 </select>
             </div>
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">JUMLAH RESTOK (+QTY) *</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">JUMLAH RESTOK (+QTY) *</label>
                 <input type="number" name="qty" placeholder="e.g. 24" required min="1" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 800; outline: none;">
             </div>
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">CATATAN / SUPPLIER / NO. SURAT JALAN</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">CATATAN / SUPPLIER / NO. SURAT JALAN</label>
                 <input type="text" name="notes" placeholder="e.g. Pembelian Restok Whey Protein dari PT Optimum Nutrition" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 700; outline: none;">
             </div>
             <div>
@@ -56,11 +56,11 @@
     </div>
 
     <!-- Inventory Logs Table -->
-    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: #ffffff; border: 1px solid #e2e8f0;">
+    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: var(--admin-card-bg, #0d1410); border: 1px solid #e2e8f0;">
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
                 <thead>
-                    <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #475569;">
+                    <tr style="background: rgba(255, 255, 255, 0.04); border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8;">
                         <th style="padding: 0.85rem 1rem;">WAKTU &amp; DIBUAT OLEH</th>
                         <th style="padding: 0.85rem 1rem;">NAMA PRODUK</th>
                         <th style="padding: 0.85rem 1rem;">JENIS MUTASI</th>
@@ -71,9 +71,9 @@
                 </thead>
                 <tbody>
                     @foreach($logs as $log)
-                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
                         <td style="padding: 0.85rem 1rem;">
-                            <div style="font-weight: 800; color: #0f172a;">{{ $log->created_at->format('d M Y, H:i') }}</div>
+                            <div style="font-weight: 800; color: #ffffff;">{{ $log->created_at->format('d M Y, H:i') }}</div>
                             <div style="font-size: 0.75rem; color: #64748b;">Oleh: {{ $log->created_by }}</div>
                         </td>
                         <td style="padding: 0.85rem 1rem; font-weight: 900; color: #0284c7;">
@@ -100,7 +100,7 @@
                         <td style="padding: 0.85rem 1rem; font-weight: 800; font-family: monospace;">
                             {{ $log->previous_stock }} → <span style="color: #0284c7; font-weight: 900;">{{ $log->current_stock }}</span>
                         </td>
-                        <td style="padding: 0.85rem 1rem; font-size: 0.8rem; color: #475569;">
+                        <td style="padding: 0.85rem 1rem; font-size: 0.8rem; color: #94a3b8;">
                             {{ $log->notes }}
                         </td>
                     </tr>

@@ -1,10 +1,8 @@
-const CACHE_NAME = 'fitlife-hub-cache-v1';
+const CACHE_NAME = 'fitlife-hub-cache-v2';
 const urlsToCache = [
   '/',
-  '/css/app.css',
-  '/images/logo.png',
-  '/images/logo-footer.png',
-  '/manifest.json'
+  '/images/icon-192.png',
+  '/images/icon-512.png'
 ];
 
 // Install Service Worker
@@ -15,6 +13,7 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
       .then(() => self.skipWaiting())
+      .catch(err => console.log('SW cache install soft error handled:', err))
   );
 });
 
@@ -35,13 +34,11 @@ self.addEventListener('activate', event => {
 
 // Fetch Assets with Cache Fallback
 self.addEventListener('fetch', event => {
-  // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        // Clone response to cache
         if (response && response.status === 200 && response.type === 'basic') {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then(cache => {

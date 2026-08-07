@@ -20,13 +20,13 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Nama Peserta: <span style="color: #ef4444;">*</span>
                     </label>
                     <input type="text" name="name" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('name', $testimonial->name ?? '') }}" required placeholder="Ibu Dewi Sari">
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Role / Keterangan: <span style="color: #ef4444;">*</span>
                     </label>
                     <input type="text" name="role" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('role', $testimonial->role ?? '') }}" required placeholder="Ibu dari Kenzo (7th)">
@@ -35,13 +35,13 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Program yang Diikuti: <span style="color: #ef4444;">*</span>
                     </label>
                     <input type="text" name="program" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('program', $testimonial->program ?? '') }}" required placeholder="FitLife Fitness & PT Anak">
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Rating (1-5): <span style="color: #ef4444;">*</span>
                     </label>
                     <select name="rating" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;">
@@ -55,7 +55,7 @@
             </div>
 
             <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                     Isi Testimoni / Review: <span style="color: #ef4444;">*</span>
                 </label>
                 <textarea name="review" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; height: 100px;" required placeholder="Ceritakan pengalaman Anda...">{{ old('review', $testimonial->review ?? '') }}</textarea>
@@ -63,7 +63,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Upload Foto Peserta (opsional):
                     </label>
                     <div style="display: flex; align-items: center; gap: 1rem;">

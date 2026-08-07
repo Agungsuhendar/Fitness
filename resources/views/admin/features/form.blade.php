@@ -20,13 +20,13 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Judul Keunggulan: <span style="color: #ef4444;">*</span>
                     </label>
                     <input type="text" name="title" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('title', $feature->title ?? '') }}" required placeholder="Pelatih Sabar & Pro">
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Icon (FontAwesome Class): <span style="color: #ef4444;">*</span>
                     </label>
                     <input type="text" name="icon" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('icon', $feature->icon ?? 'fa-solid fa-star') }}" required placeholder="fa-solid fa-user-graduate">
@@ -35,7 +35,7 @@
             </div>
 
             <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                     Deskripsi / Penjelasan Singkat: <span style="color: #ef4444;">*</span>
                 </label>
                 <textarea name="description" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; height: 90px;" required placeholder="Jelaskan detail keunggulan ini...">{{ old('description', $feature->description ?? '') }}</textarea>
@@ -43,13 +43,13 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Warna Akses Icon (HEX Code):
                     </label>
                     <input type="color" name="color" value="{{ old('color', $feature->color ?? '#0077b6') }}" style="height: 42px; width: 100%; border: 1px solid #cbd5e1; border-radius: 0.5rem; cursor: pointer;">
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Urutan Tampil:
                     </label>
                     <input type="number" name="order" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('order', $feature->order ?? 0) }}">

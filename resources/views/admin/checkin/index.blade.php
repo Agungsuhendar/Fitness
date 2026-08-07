@@ -329,13 +329,27 @@
     }
 
     function toggleKioskFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                console.log("Fullscreen Error:", err);
-            });
+        const isFs = document.body.classList.contains('is-fullscreen-mode') || !!document.fullscreenElement;
+        const icon = document.getElementById('kioskFsIcon');
+        const text = document.getElementById('kioskFsText');
+        
+        if (!isFs) {
+            document.body.classList.add('is-fullscreen-mode');
+            if (icon) icon.className = 'fa-solid fa-compress';
+            if (text) text.innerText = 'Keluar Fullscreen';
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log("Native Fullscreen Error:", err);
+                });
+            }
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
+            document.body.classList.remove('is-fullscreen-mode');
+            if (icon) icon.className = 'fa-solid fa-expand';
+            if (text) text.innerText = 'Mode Fullscreen Kiosk';
+            if (document.fullscreenElement && document.exitFullscreen) {
+                document.exitFullscreen().catch(err => {
+                    console.log("Exit Fullscreen Error:", err);
+                });
             }
         }
     }
@@ -343,14 +357,57 @@
     document.addEventListener('fullscreenchange', function() {
         const icon = document.getElementById('kioskFsIcon');
         const text = document.getElementById('kioskFsText');
-        if (document.fullscreenElement) {
+        const isFs = !!document.fullscreenElement;
+        
+        if (isFs) {
+            document.body.classList.add('is-fullscreen-mode');
             if (icon) icon.className = 'fa-solid fa-compress';
             if (text) text.innerText = 'Keluar Fullscreen';
         } else {
+            document.body.classList.remove('is-fullscreen-mode');
             if (icon) icon.className = 'fa-solid fa-expand';
             if (text) text.innerText = 'Mode Fullscreen Kiosk';
         }
     });
 </script>
+
+<style>
+/* Fullscreen Standalone Kiosk Terminal Mode */
+body.is-fullscreen-mode {
+    background-color: #060907 !important;
+    overflow-x: hidden !important;
+}
+
+body.is-fullscreen-mode .admin-sidebar,
+body.is-fullscreen-mode .admin-header,
+body.is-fullscreen-mode footer,
+body.is-fullscreen-mode header,
+body.is-fullscreen-mode nav,
+body.is-fullscreen-mode .sidebar-backdrop,
+body.is-fullscreen-mode .floating-action-stack,
+body.is-fullscreen-mode #aiChatbotModal,
+body.is-fullscreen-mode #pwaInstallBanner,
+body.is-fullscreen-mode #pwaInstructionModal {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+body.is-fullscreen-mode .admin-wrapper {
+    grid-template-columns: 1fr !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+body.is-fullscreen-mode .admin-main {
+    padding: 0.75rem 1rem !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+</style>
 <script src="https://unpkg.com/html5-qrcode"></script>
 @endsection

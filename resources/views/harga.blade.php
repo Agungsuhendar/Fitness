@@ -66,6 +66,97 @@
     </div>
 </section>
 
+<!-- AI Features Tier Comparison Section -->
+<section style="background: linear-gradient(180deg, #0f172a 0%, #060907 100%); padding: 4rem 0 5rem; color: white;">
+    <div class="container">
+        <div style="text-align: center; max-width: 750px; margin: 0 auto 3rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(168, 85, 247, 0.15); border: 1.5px solid #a855f7; color: #c084fc; padding: 0.4rem 1.15rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; margin-bottom: 0.75rem;">
+                <i class="fa-solid fa-brain"></i>
+                <span>MATRIKS FITUR KECERDASAN BUATAN (AI SMART TOOLS)</span>
+            </div>
+            <h2 style="font-size: 2.2rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;">
+                Rekomendasi Paket Fitur AI Cerdas
+            </h2>
+            <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6;">
+                Tabel transparansi distribusi fitur AI untuk Member Studio &amp; Manajemen Admin Gym berdasarkan tingkatan paket investasi.
+            </p>
+        </div>
+
+        <div style="background: #0d1310; border: 1.5px solid rgba(168, 85, 247, 0.3); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; color: #cbd5e1; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="background: rgba(168, 85, 247, 0.12); border-bottom: 1.5px solid rgba(168, 85, 247, 0.3);">
+                            <th style="padding: 1.25rem 1.5rem; color: #ffffff; font-weight: 800; font-size: 1rem;">Modul Fitur AI</th>
+                            <th style="padding: 1.25rem 1.5rem; color: #94a3b8; font-weight: 800; text-align: center;">Paket STARTER</th>
+                            <th style="padding: 1.25rem 1.5rem; color: #84cc16; font-weight: 900; text-align: center; background: rgba(132,204,22,0.1);">Paket PRO VIP ⭐</th>
+                            <th style="padding: 1.25rem 1.5rem; color: #38bdf8; font-weight: 900; text-align: center;">Paket ENTERPRISE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 1.1rem 1.5rem; font-weight: 700; color: white;">
+                                <i class="fa-solid fa-robot" style="color: #84cc16; margin-right: 0.5rem;"></i> AI Chatbot Assistant CS (Public 24/7)
+                            </td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-circle-check" style="color: #84cc16; font-size: 1.2rem;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; background: rgba(132,204,22,0.04);"><i class="fa-solid fa-circle-check" style="color: #84cc16; font-size: 1.2rem;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 1.2rem;"></i></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 1.1rem 1.5rem; font-weight: 700; color: white;">
+                                <i class="fa-solid fa-wand-magic-sparkles" style="color: #a855f7; margin-right: 0.5rem;"></i> AI Workout &amp; Nutrition Planner (Member)
+                            </td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; color: #94a3b8;">Basic (1x/bln)</td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; background: rgba(132,204,22,0.04); font-weight: 900; color: #84cc16;"><i class="fa-solid fa-circle-check" style="color: #84cc16; font-size: 1.2rem;"></i> Unlimited</td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; font-weight: 900; color: #38bdf8;"><i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 1.2rem;"></i> Unlimited</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 1.1rem 1.5rem; font-weight: 700; color: white;">
+                                <i class="fa-solid fa-user-astronaut" style="color: #6366f1; margin-right: 0.5rem;"></i> AI Smart Coach Matchmaker (Member)
+                            </td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-minus" style="color: #64748b;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; background: rgba(132,204,22,0.04);"><i class="fa-solid fa-circle-check" style="color: #84cc16; font-size: 1.2rem;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 1.2rem;"></i></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 1.1rem 1.5rem; font-weight: 700; color: white;">
+                                <i class="fa-solid fa-camera-retro" style="color: #38bdf8; margin-right: 0.5rem;"></i> AI Vision Calorie &amp; Meal Scanner (Member)
+                            </td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-minus" style="color: #64748b;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; background: rgba(132,204,22,0.04); color: #94a3b8;">Add-on Optional</td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 1.2rem;"></i> Full Access</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 1.1rem 1.5rem; font-weight: 700; color: white;">
+                                <i class="fa-solid fa-pen-nib" style="color: #f59e0b; margin-right: 0.5rem;"></i> Admin AI Marketing Copywriter
+                            </td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-minus" style="color: #64748b;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; background: rgba(132,204,22,0.04);"><i class="fa-solid fa-circle-check" style="color: #84cc16; font-size: 1.2rem;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 1.2rem;"></i></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <td style="padding: 1.1rem 1.5rem; font-weight: 700; color: white;">
+                                <i class="fa-solid fa-chart-pie" style="color: #10b981; margin-right: 0.5rem;"></i> Admin AI Revenue &amp; Traffic Forecasting
+                            </td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-minus" style="color: #64748b;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; background: rgba(132,204,22,0.04);"><i class="fa-solid fa-minus" style="color: #64748b;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 1.2rem;"></i> Enterprise Only</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1.1rem 1.5rem; font-weight: 700; color: white;">
+                                <i class="fa-solid fa-user-slash" style="color: #ef4444; margin-right: 0.5rem;"></i> Admin AI Churn Risk &amp; Retention Predictor
+                            </td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-minus" style="color: #64748b;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center; background: rgba(132,204,22,0.04);"><i class="fa-solid fa-minus" style="color: #64748b;"></i></td>
+                            <td style="padding: 1.1rem 1.5rem; text-align: center;"><i class="fa-solid fa-circle-check" style="color: #38bdf8; font-size: 1.2rem;"></i> Enterprise Only</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Price Calculator Section -->
 <section class="section" style="background: #070a12; padding: 5rem 0; color: white;">
     <div class="container">

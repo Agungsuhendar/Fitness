@@ -78,6 +78,18 @@
                     <p style="font-size: 1.05rem; color: #94a3b8; line-height: 1.6; margin-bottom: 1.5rem;">
                         Gunakan tab di bawah untuk mengakses fitur eksklusif <strong>Workout Generator</strong>, <strong>Panduan Nutrisi</strong>, dan <strong>AI FitBot CS</strong>.
                     </p>
+
+                    <div style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                        <a href="{{ route('member.ai-planner') }}" class="btn glow-btn" style="background: linear-gradient(135deg, #84cc16 0%, #22c55e 100%); color: #090d0b !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(132,204,22,0.4);">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 🤖 AI Workout &amp; Nutrition Planner
+                        </a>
+                        <a href="{{ route('member.ai-coach-match') }}" class="btn" style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); color: white !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(99,102,241,0.3);">
+                            <i class="fa-solid fa-user-astronaut"></i> 🎯 AI PT Matchmaker
+                        </a>
+                        <a href="{{ route('member.ai-vision') }}" class="btn" style="background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); color: #090d0b !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(56,189,248,0.3);">
+                            <i class="fa-solid fa-camera-retro"></i> 📷 AI Posture Vision Scanner
+                        </a>
+                    </div>
                 </div>
 
                 <!-- 3D VIP Card -->

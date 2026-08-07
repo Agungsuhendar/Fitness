@@ -14,7 +14,7 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <div>
-            <h3 style="font-size: 1.35rem; color: #0f172a; margin: 0 0 0.2rem; font-weight: 900; font-family: 'Outfit', sans-serif;">
+            <h3 style="font-size: 1.35rem; color: #ffffff; margin: 0 0 0.2rem; font-weight: 900; font-family: 'Outfit', sans-serif;">
                 Inventaris Produk POS Kasir Studio
             </h3>
             <p style="color: #64748b; font-size: 0.875rem; margin: 0;">
@@ -30,23 +30,23 @@
     </div>
 
     <!-- Add Product Form Box -->
-    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: #ffffff; border: 1px solid #e2e8f0; margin-bottom: 2rem;">
-        <h4 style="font-size: 1.05rem; color: #03045e; margin-bottom: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: var(--admin-card-bg, #0d1410); border: 1px solid #e2e8f0; margin-bottom: 2rem;">
+        <h4 style="font-size: 1.05rem; color: #ffffff; margin-bottom: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
             <i class="fa-solid fa-square-plus" style="color: #0284c7;"></i> Tambah Produk / Tiket Baru
         </h4>
 
         <form action="{{ route('admin.products.store') }}" method="POST" style="display: grid; grid-template-columns: 1fr 2fr 1.5fr 1fr 1fr auto; gap: 1rem; align-items: end;">
             @csrf
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">KODE *</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">KODE *</label>
                 <input type="text" name="code" placeholder="e.g. SUP-05" required style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 700; outline: none;">
             </div>
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">NAMA PRODUK *</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">NAMA PRODUK *</label>
                 <input type="text" name="name" placeholder="e.g. Air Mineral Cleo 600ml" required style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 700; outline: none;">
             </div>
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">KATEGORI *</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">KATEGORI *</label>
                 <select name="category" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 700; outline: none;">
                     <option value="Suplemen & Minuman">Suplemen &amp; Minuman</option>
                     <option value="Tiket Harian">Tiket Harian</option>
@@ -55,11 +55,11 @@
                 </select>
             </div>
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">HARGA (RP) *</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">HARGA (RP) *</label>
                 <input type="number" name="price" placeholder="e.g. 15000" required style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 700; outline: none;">
             </div>
             <div>
-                <label style="font-size: 0.775rem; font-weight: 800; color: #334155; display: block; margin-bottom: 0.35rem;">STOK *</label>
+                <label style="font-size: 0.775rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">STOK *</label>
                 <input type="number" name="stock" placeholder="100" required style="width: 100%; border: 1px solid #cbd5e1; border-radius: 0.65rem; padding: 0.65rem; font-weight: 700; outline: none;">
             </div>
             <div>
@@ -71,11 +71,11 @@
     </div>
 
     <!-- Products Table -->
-    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: #ffffff; border: 1px solid #e2e8f0;">
+    <div class="admin-card" style="padding: 1.5rem; border-radius: 1.25rem; background: var(--admin-card-bg, #0d1410); border: 1px solid #e2e8f0;">
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
                 <thead>
-                    <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #475569;">
+                    <tr style="background: rgba(255, 255, 255, 0.04); border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8;">
                         <th style="padding: 0.85rem 1rem;">KODE</th>
                         <th style="padding: 0.85rem 1rem;">NAMA PRODUK</th>
                         <th style="padding: 0.85rem 1rem;">KATEGORI</th>
@@ -86,11 +86,11 @@
                 </thead>
                 <tbody>
                     @foreach($products as $p)
-                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
                         <td style="padding: 0.85rem 1rem; font-weight: 800; font-family: monospace; color: #0284c7;">
                             {{ $p->code }}
                         </td>
-                        <td style="padding: 0.85rem 1rem; font-weight: 800; color: #0f172a;">
+                        <td style="padding: 0.85rem 1rem; font-weight: 800; color: #ffffff;">
                             {{ $p->name }}
                         </td>
                         <td style="padding: 0.85rem 1rem;">
@@ -114,7 +114,7 @@
                                 <input type="hidden" name="category" value="{{ $p->category }}">
                                 <input type="number" name="price" value="{{ (int)$p->price }}" style="width: 90px; border: 1px solid #cbd5e1; border-radius: 0.4rem; padding: 0.25rem 0.4rem; font-size: 0.8rem; font-weight: 700;">
                                 <input type="number" name="stock" value="{{ $p->stock }}" style="width: 70px; border: 1px solid #cbd5e1; border-radius: 0.4rem; padding: 0.25rem 0.4rem; font-size: 0.8rem; font-weight: 700;">
-                                <button type="submit" class="btn" style="background: #e2e8f0; color: #0f172a; border: none; padding: 0.3rem 0.65rem; border-radius: 0.4rem; font-weight: 800; font-size: 0.75rem; cursor: pointer;">
+                                <button type="submit" class="btn" style="background: #e2e8f0; color: #ffffff; border: none; padding: 0.3rem 0.65rem; border-radius: 0.4rem; font-weight: 800; font-size: 0.75rem; cursor: pointer;">
                                     Update
                                 </button>
                             </form>

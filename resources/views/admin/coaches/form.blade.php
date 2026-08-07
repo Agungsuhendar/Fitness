@@ -20,13 +20,13 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Nama Lengkap Pelatih: <span style="color: #ef4444;">*</span>
                     </label>
                     <input type="text" name="name" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('name', $coach->name ?? '') }}" required placeholder="Contoh: Coach Hendra">
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Gelar / Jabatan (opsional):
                     </label>
                     <input type="text" name="title" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('title', $coach->title ?? '') }}" placeholder="Contoh: S.Pd., S.Or.">
@@ -34,14 +34,14 @@
             </div>
 
             <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                     Spesialisasi / Role: <span style="color: #ef4444;">*</span>
                 </label>
                 <input type="text" name="specialty" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('specialty', $coach->specialty ?? '') }}" required placeholder="Contoh: Head Coach & Spesialis Anak">
             </div>
 
             <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                     Deskripsi / Bio Singkat:
                 </label>
                 <textarea name="description" class="search-input" style="width: 100%; border: 1px solid #cbd5e1; height: 85px;" placeholder="Lulusan FIK UNY, Pemegang Sertifikat Pelatih PRSI...">{{ old('description', $coach->description ?? '') }}</textarea>
@@ -49,7 +49,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Upload Foto Pelatih:
                     </label>
                     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -67,7 +67,7 @@
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Warna Border Ring Foto (Hex):
                     </label>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -79,7 +79,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
                 <div>
-                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #334155; margin-bottom: 0.45rem;">
+                    <label style="display: block; font-weight: 800; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.45rem;">
                         Urutan Tampil (0 = paling atas):
                     </label>
                     <input type="number" name="order" class="search-input" style="width: 100%; border: 1px solid #cbd5e1;" value="{{ old('order', $coach->order ?? 0) }}">

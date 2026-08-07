@@ -4,8 +4,8 @@
 @section('header_title', ($program->exists ? 'Edit' : 'Tambah') . ' Program Fitness')
 
 @section('admin_content')
-<div style="background: #ffffff; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); padding: 2rem 2.5rem; width: 100%;">
-    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.25rem; margin-bottom: 2rem; border-bottom: 1px solid #f1f5f9;">
+<div style="background: var(--admin-card-bg, #0d1410); border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); padding: 2rem 2.5rem; width: 100%;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.25rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <div>
             <h2 style="font-size: 1.35rem; margin: 0; color: var(--dark);">
                 <i class="fa-solid fa-swatchbook" style="color: var(--primary); margin-right: 0.5rem;"></i>
@@ -52,15 +52,15 @@
         </div>
 
         <!-- Section Upload Gambar dengan Feature Browse File -->
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem;">
-            <label class="form-label" style="font-size: 1rem; color: #0f172a; margin-bottom: 0.75rem;">
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+            <label class="form-label" style="font-size: 1rem; color: #ffffff; margin-bottom: 0.75rem;">
                 <i class="fa-solid fa-image" style="color: #0284c7; margin-right: 0.35rem;"></i> Gambar Program
             </label>
             
             <div class="grid-2" style="gap: 1.5rem; align-items: start;">
                 <div>
                     <div class="form-group" style="margin-bottom: 1rem;">
-                        <label class="form-label" style="font-size: 0.85rem; color: #475569;">
+                        <label class="form-label" style="font-size: 0.85rem; color: #94a3b8;">
                             <i class="fa-solid fa-folder-open"></i> Option A: Browse & Upload File Gambar (Dari Komputer)
                         </label>
                         <input type="file" name="image_file" class="form-control" accept="image/*" onchange="previewSelectedImage(this)" style="background: white; padding: 0.65rem 1rem;">
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label" style="font-size: 0.85rem; color: #475569;">
+                        <label class="form-label" style="font-size: 0.85rem; color: #94a3b8;">
                             <i class="fa-solid fa-link"></i> Option B: Atau Gunakan URL Gambar Web (Opsional)
                         </label>
                         <input type="text" name="image" id="imageUrlInput" class="form-control" value="{{ old('image', $program->image) }}" placeholder="https://images.unsplash.com/..." style="background: white;">
@@ -76,7 +76,7 @@
                 </div>
 
                 <div>
-                    <label class="form-label" style="font-size: 0.85rem; color: #475569;">Preview Gambar Saat Ini:</label>
+                    <label class="form-label" style="font-size: 0.85rem; color: #94a3b8;">Preview Gambar Saat Ini:</label>
                     <div style="width: 100%; height: 140px; background: #e2e8f0; border-radius: 0.75rem; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px dashed #cbd5e1;">
                         @php
                             $imgSrc = old('image', $program->image);

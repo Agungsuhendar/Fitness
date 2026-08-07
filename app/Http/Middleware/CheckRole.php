@@ -27,53 +27,79 @@ class CheckRole
 
         $user = Auth::user();
         $userRole = $user->role ?? 'member';
+        $routeName = $request->route() ? $request->route()->getName() : '';
 
-        // Superadmin or admin bypasses all role checks
+        // 1. Check Subscription Tier Feature Gate
+        $activeTier = Setting::get('subscription_tier', 'enterprise');
+        $tierAllowed = [
+            'starter' => ['members', 'checkin', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'settings'],
+            'pro' => ['members', 'checkin', 'pos', 'payments', 'reports', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'settings'],
+            'enterprise' => ['members', 'checkin', 'pos', 'payments', 'reports', 'promos', 'classes', 'inventory-log', 'wa-broadcast', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'integrations', 'users', 'settings'],
+        ];
+        $allowedModules = $tierAllowed[$activeTier] ?? $tierAllowed['enterprise'];
+
+        // Map route names to module keys
+        $moduleKeyMap = [
+            'admin.pos.' => 'pos',
+            'admin.products.' => 'pos',
+            'admin.checkin.' => 'checkin',
+            'admin.members.' => 'members',
+            'admin.payments.' => 'payments',
+            'admin.reports.' => 'reports',
+            'admin.promos.' => 'promos',
+            'admin.classes.' => 'classes',
+            'admin.inventory-log.' => 'inventory-log',
+            'admin.wa-broadcast.' => 'wa-broadcast',
+            'admin.registrations' => 'registrations',
+            'admin.trials' => 'trials',
+            'admin.programs.' => 'programs',
+            'admin.coaches.' => 'coaches',
+            'admin.posts.' => 'posts',
+            'admin.testimonials.' => 'testimonials',
+            'admin.faqs.' => 'faqs',
+            'admin.videos.' => 'videos',
+            'admin.features.' => 'features',
+            'admin.integrations.' => 'integrations',
+            'admin.users.' => 'users',
+            'admin.settings.' => 'settings',
+        ];
+
+        // Determine current module key
+        $currentModKey = null;
+        foreach ($moduleKeyMap as $prefix => $modKey) {
+            if (str_starts_with($routeName, $prefix) || $routeName === $prefix) {
+                $currentModKey = $modKey;
+                break;
+            }
+        }
+
+        // Block if module is not allowed by active Subscription Tier (except settings so admin can upgrade)
+        if ($currentModKey && $currentModKey !== 'settings' && !in_array($currentModKey, $allowedModules)) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Module locked under current subscription tier.'], 403);
+            }
+            return redirect()->route('admin.members.index')
+                ->with('error', '🔒 Akses Modul Dikunci: Halaman ini memerlukan Upgrade ke Paket Pro / Enterprise.');
+        }
+
+        // 2. Superadmin or Admin Role Bypass
         if ($userRole === 'admin' || $userRole === 'superadmin') {
             return $next($request);
         }
 
-        // Check if role is in explicit allowed list
+        // 3. Role Check
         if (in_array($userRole, $roles)) {
             return $next($request);
         }
 
-        // Check dynamic saved menu permissions matrix for 17 modules
+        // 4. Check dynamic saved RBAC permission matrix
         $savedPermissionsRaw = Setting::get('rbac_menu_permissions');
         if ($savedPermissionsRaw) {
             $matrix = json_decode($savedPermissionsRaw, true);
             $rolePerms = $matrix[$userRole] ?? [];
 
-            $routeName = $request->route() ? $request->route()->getName() : '';
-            
-            // Map route names to all 17 module keys
-            $moduleKeyMap = [
-                'admin.pos.' => 'pos',
-                'admin.products.' => 'pos',
-                'admin.checkin.' => 'checkin',
-                'admin.members.' => 'members',
-                'admin.payments.' => 'payments',
-                'admin.reports.' => 'reports',
-                'admin.promos.' => 'promos',
-                'admin.registrations' => 'registrations',
-                'admin.trials' => 'trials',
-                'admin.programs.' => 'programs',
-                'admin.coaches.' => 'coaches',
-                'admin.posts.' => 'posts',
-                'admin.testimonials.' => 'testimonials',
-                'admin.faqs.' => 'faqs',
-                'admin.videos.' => 'videos',
-                'admin.features.' => 'features',
-                'admin.integrations.' => 'integrations',
-                'admin.settings.' => 'settings',
-            ];
-
-            foreach ($moduleKeyMap as $prefix => $modKey) {
-                if (str_starts_with($routeName, $prefix) || $routeName === $prefix) {
-                    if (in_array($modKey, $rolePerms)) {
-                        return $next($request);
-                    }
-                }
+            if ($currentModKey && in_array($currentModKey, $rolePerms)) {
+                return $next($request);
             }
         }
 

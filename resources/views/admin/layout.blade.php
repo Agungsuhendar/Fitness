@@ -415,7 +415,95 @@
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
-            }
+        }
+
+        /* Fullscreen Standalone Kiosk & POS Mode - Separate Rules to Prevent Parser Invalidation */
+        body.is-fullscreen-mode .admin-sidebar,
+        body.is-fullscreen-mode .admin-header,
+        body.is-fullscreen-mode .sidebar-backdrop,
+        body.is-fullscreen-mode footer,
+        body.is-fullscreen-mode header,
+        body.is-fullscreen-mode nav,
+        body.is-fullscreen-mode .floating-action-stack,
+        body.is-fullscreen-mode #aiChatbotModal,
+        body.is-fullscreen-mode #pwaInstallBanner,
+        body.is-fullscreen-mode #pwaInstructionModal {
+            display: none !important;
+            height: 0 !important;
+            width: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+        }
+
+        body.is-fullscreen-mode .admin-wrapper {
+            grid-template-columns: 1fr !important;
+            display: block !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            min-height: 100vh !important;
+        }
+
+        body.is-fullscreen-mode .admin-main {
+            padding: 0.75rem 1rem !important;
+            margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        :fullscreen .admin-sidebar,
+        :fullscreen .admin-header,
+        :fullscreen .sidebar-backdrop,
+        :fullscreen footer,
+        :fullscreen header,
+        :fullscreen nav,
+        :fullscreen .floating-action-stack,
+        :fullscreen #aiChatbotModal,
+        :fullscreen #pwaInstallBanner,
+        :fullscreen #pwaInstructionModal {
+            display: none !important;
+        }
+
+        :fullscreen .admin-wrapper {
+            grid-template-columns: 1fr !important;
+            display: block !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        :fullscreen .admin-main {
+            padding: 0.75rem 1rem !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        :-webkit-full-screen .admin-sidebar,
+        :-webkit-full-screen .admin-header,
+        :-webkit-full-screen .sidebar-backdrop,
+        :-webkit-full-screen footer,
+        :-webkit-full-screen header,
+        :-webkit-full-screen nav,
+        :-webkit-full-screen .floating-action-stack,
+        :-webkit-full-screen #aiChatbotModal,
+        :-webkit-full-screen #pwaInstallBanner,
+        :-webkit-full-screen #pwaInstructionModal {
+            display: none !important;
+        }
+
+        :-webkit-full-screen .admin-wrapper {
+            grid-template-columns: 1fr !important;
+            display: block !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        :-webkit-full-screen .admin-main {
+            padding: 0.75rem 1rem !important;
+            margin: 0 !important;
+            width: 100% !important;
         }
     </style>
 </head>
@@ -450,7 +538,16 @@
                     $matrixPerms = $rawPerms ? json_decode($rawPerms, true) : $defaultPerms;
                     $userPerms = $matrixPerms[$uRole] ?? [];
 
-                    $canAccess = function($key) use ($isAdminRole, $userPerms) {
+                    $activeTier = \App\Models\Setting::get('subscription_tier', 'enterprise');
+                    $tierAllowed = [
+                        'starter' => ['members', 'checkin', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'settings'],
+                        'pro' => ['members', 'checkin', 'pos', 'payments', 'reports', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'ai-copywriter', 'settings'],
+                        'enterprise' => ['members', 'checkin', 'pos', 'payments', 'reports', 'promos', 'classes', 'inventory-log', 'wa-broadcast', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'integrations', 'users', 'ai-churn', 'ai-copywriter', 'ai-forecasting', 'settings'],
+                    ];
+                    $allowedModules = $tierAllowed[$activeTier] ?? $tierAllowed['enterprise'];
+
+                    $canAccess = function($key) use ($isAdminRole, $userPerms, $allowedModules) {
+                        if (!in_array($key, $allowedModules)) return false;
                         return $isAdminRole || in_array($key, $userPerms);
                     };
                 @endphp
@@ -603,6 +700,28 @@
                         <span class="nav-text">WA Broadcast</span>
                     </a>
                 </li>
+                <!-- 5. FITUR AI SMART TOOLS -->
+                <div class="nav-section-title" style="color: #a855f7 !important;">🤖 FITUR AI SMART TOOLS</div>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.ai-copywriter.index') }}" class="{{ request()->routeIs('admin.ai-copywriter.*') ? 'active' : '' }}" title="AI Copywriter">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="color: #a855f7;"></i>
+                        <span class="nav-text">AI Copywriter</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.ai-forecasting.index') }}" class="{{ request()->routeIs('admin.ai-forecasting.*') ? 'active' : '' }}" title="AI Financial Forecaster">
+                        <i class="fa-solid fa-chart-pie" style="color: #38bdf8;"></i>
+                        <span class="nav-text">AI Financial Forecaster</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.ai-churn.index') }}" class="{{ request()->routeIs('admin.ai-churn.*') ? 'active' : '' }}" title="AI Churn Predictor">
+                        <i class="fa-solid fa-user-slash" style="color: #f43f5e;"></i>
+                        <span class="nav-text">AI Churn Predictor</span>
+                    </a>
+                </li>
+
                 <li class="admin-nav-item">
                     <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}" title="Pengguna & Role RBAC">
                         <i class="fa-solid fa-user-shield"></i>
@@ -747,8 +866,8 @@
             min-height: 240px;
             border-radius: 0 0 0.85rem 0.85rem !important;
             font-size: 0.95rem;
-            color: #0f172a;
-            background: #ffffff !important;
+            color: #ffffff;
+            background: var(--admin-card-bg, #0d1410) !important;
         }
         .ck-toolbar {
             border-radius: 0.85rem 0.85rem 0 0 !important;

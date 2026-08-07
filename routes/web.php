@@ -20,7 +20,11 @@ use App\Http\Controllers\Admin\AdminPromoController;
 use App\Http\Controllers\Admin\AdminWaBroadcastController;
 use App\Http\Controllers\Admin\AdminClassController;
 use App\Http\Controllers\Admin\AdminInventoryLogController;
+use App\Http\Controllers\Admin\AdminAiToolsController;
+use App\Http\Controllers\Admin\AdminAiForecastingController;
 use App\Http\Controllers\Auth\MemberAuthController;
+use App\Http\Controllers\AiPlannerController;
+use App\Http\Controllers\AiChatbotController;
 use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\Admin\AdminSettingController;
@@ -98,6 +102,13 @@ Route::match(['get', 'post'], '/logout', [MemberAuthController::class, 'logout']
 Route::get('/kalkulator', [PageController::class, 'kalkulator'])->name('kalkulator');
 Route::get('/quiz', [PageController::class, 'quiz'])->name('quiz');
 Route::get('/member', [PageController::class, 'memberDashboard'])->name('member.dashboard');
+Route::get('/member/ai-planner', [AiPlannerController::class, 'index'])->name('member.ai-planner');
+Route::post('/member/ai-planner/generate', [AiPlannerController::class, 'generate'])->name('member.ai-planner.generate');
+Route::get('/member/ai-coach-match', [AiPlannerController::class, 'coachMatchIndex'])->name('member.ai-coach-match');
+Route::post('/member/ai-coach-match/process', [AiPlannerController::class, 'processCoachMatch'])->name('member.ai-coach-match.process');
+Route::get('/member/ai-vision', [AiPlannerController::class, 'visionIndex'])->name('member.ai-vision');
+Route::post('/member/ai-vision/process', [AiPlannerController::class, 'processVision'])->name('member.ai-vision.process');
+Route::post('/api/ai-chatbot/ask', [AiChatbotController::class, 'ask'])->name('ai-chatbot.ask');
 Route::get('/pelatih', [PageController::class, 'pelatih'])->name('pelatih');
 Route::get('/tulis-testimoni', [PageController::class, 'tulisTestimoni'])->name('tulis-testimoni');
 Route::post('/tulis-testimoni', [PageController::class, 'storeTestimonial'])->name('testimoni.store');
@@ -234,6 +245,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         // Inventory Stock Mutation Log
         Route::get('/inventory-log', [AdminInventoryLogController::class, 'index'])->name('inventory-log.index');
         Route::post('/inventory-log/restock', [AdminInventoryLogController::class, 'storeRestock'])->name('inventory-log.restock');
+
+        // AI Member Churn Risk Predictor, AI Copywriter & AI Forecasting
+        Route::get('/ai-churn', [AdminAiToolsController::class, 'churnIndex'])->name('ai-churn.index');
+        Route::get('/ai-copywriter', [AdminAiToolsController::class, 'copywriterIndex'])->name('ai-copywriter.index');
+        Route::post('/ai-copywriter/generate', [AdminAiToolsController::class, 'generateCopy'])->name('ai-copywriter.generate');
+        Route::get('/ai-forecasting', [AdminAiForecastingController::class, 'index'])->name('ai-forecasting.index');
     });
 
     // 2. Member Management & Presensi Kiosk (Admin, Receptionist, Coach)
