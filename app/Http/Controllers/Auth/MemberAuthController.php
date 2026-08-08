@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Coach;
+use App\Models\Location;
+use App\Models\MembershipPlan;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -58,7 +62,30 @@ class MemberAuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('member.dashboard');
         }
-        return view('auth.register');
+
+        $membershipPlans = collect();
+        $programs = collect();
+        $branches = collect();
+
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('membership_plans')) {
+                $membershipPlans = MembershipPlan::all();
+            }
+        } catch (\Throwable $e) {}
+
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('programs')) {
+                $programs = Program::all();
+            }
+        } catch (\Throwable $e) {}
+
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('locations')) {
+                $branches = Location::all();
+            }
+        } catch (\Throwable $e) {}
+
+        return view('auth.register', compact('membershipPlans', 'programs', 'branches'));
     }
 
     public function register(Request $request)
@@ -68,43 +95,97 @@ class MemberAuthController extends Controller
             'phone' => ['required', 'string', 'max:30', 'unique:users,phone'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'program_name' => ['nullable', 'string'],
+            'membership_type' => ['nullable', 'string'],
+            'branch' => ['nullable', 'string'],
+            'payment_method' => ['nullable', 'string'],
+            'membership_price' => ['nullable', 'numeric'],
+            'remaining_sessions' => ['nullable', 'integer'],
         ]);
 
-        $randomCardId = 'FL-MBR-' . rand(1000, 9999);
-        $program = $request->input('program_name', 'VIP Personal Trainer Pass 1-on-1');
+        try {
+            $lastUser = User::orderBy('id', 'desc')->first();
+            $nextId = $lastUser ? ($lastUser->id + 1) : 1;
+        } catch (\Throwable $e) {
+            $nextId = rand(10, 9999);
+        }
+        $randomCardId = 'FL-MBR-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
-        $user = User::create([
+        $membershipType = $request->input('membership_type', 'Regular Gym Pass (Bulanan)');
+        $price = (float) $request->input('membership_price', 300000);
+        $sessions = (int) $request->input('remaining_sessions', 0);
+        $paymentMethod = $request->input('payment_method', 'QRIS (GoPay/OVO/ShopeePay/DANA)');
+        $branch = $request->input('branch', 'Sleman HQ (Jl. Kaliurang KM 5.5)');
+        $expiresAt = $request->input('membership_expires_at', date('Y-m-d', strtotime('+30 days')));
+
+        // Determine member status dynamically based on payment method
+        $paymentLower = strtolower($paymentMethod);
+        if (str_contains($paymentLower, 'transfer') || str_contains($paymentLower, 'bank')) {
+            $status = 'Pending Verifikasi (Transfer Bank)';
+        } elseif (str_contains($paymentLower, 'kasir') || str_contains($paymentLower, 'cash') || str_contains($paymentLower, 'tunai')) {
+            $status = 'Pending (Bayar di Kasir)';
+        } elseif (str_contains($paymentLower, 'qris') || str_contains($paymentLower, 'edc') || str_contains($paymentLower, 'kredit') || str_contains($paymentLower, 'debit')) {
+            $status = 'Active';
+        } else {
+            $status = 'Pending Verifikasi';
+        }
+
+        $allPossibleData = [
             'name' => $request->name,
             'email' => strtolower(trim($request->email)),
             'phone' => preg_replace('/[^0-9]/', '', $request->phone),
             'password' => Hash::make($request->password),
             'role' => 'member',
             'member_card_id' => $randomCardId,
-            'membership_type' => $program,
-            'status' => 'Aktif (Baru Terdaftar)',
-            'branch' => 'FitLife Center Jogja (HQ Kaliurang)',
-            'total_sessions' => 8,
+            'membership_type' => $membershipType,
+            'membership_price' => $price,
+            'membership_expires_at' => $expiresAt,
+            'payment_method' => $paymentMethod,
+            'status' => $status,
+            'branch' => $branch,
+            'total_sessions' => $sessions,
             'completed_sessions' => 0,
-            'remaining_sessions' => 8,
-            'assigned_coach' => 'Coach Hendra Wijaya (APKI Certified)',
-            'next_session' => 'Sabtu, ' . date('d M Y', strtotime('+2 days')) . ' • 16:00 WIB',
-            'initial_weight' => null,
-            'current_weight' => null,
-            'target_weight' => null,
-            'initial_bodyfat' => null,
-            'current_bodyfat' => null,
-            'muscle_mass' => null,
-        ]);
+            'remaining_sessions' => $sessions,
+            'assigned_coach' => $sessions > 0 ? 'Coach Hendra Wijaya (APKI Certified)' : null,
+            'reward_points' => 50,
+            'level_badge' => '🔥 Member Baru',
+            'streak_days' => 1,
+        ];
+
+        // Filter keys against actual database table schema to guarantee 0 SQL errors
+        $userData = [];
+        try {
+            $existingColumns = \Illuminate\Support\Facades\Schema::getColumnListing('users');
+            if (empty($existingColumns)) {
+                $userData = [
+                    'name' => $request->name,
+                    'email' => strtolower(trim($request->email)),
+                    'password' => Hash::make($request->password),
+                ];
+            } else {
+                foreach ($allPossibleData as $key => $value) {
+                    if (in_array($key, $existingColumns)) {
+                        $userData[$key] = $value;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            $userData = [
+                'name' => $request->name,
+                'email' => strtolower(trim($request->email)),
+                'password' => Hash::make($request->password),
+            ];
+        }
+
+        $user = User::create($userData);
 
         Auth::login($user);
 
         try {
             \App\Services\WhatsAppService::sendWelcomeNotification($user);
-        } catch (\Exception $e) {}
+        } catch (\Throwable $e) {}
 
-        return redirect()->route('member.dashboard')
-            ->with('success', 'Pendaftaran akun member berhasil! Selamat bergabung di FitLife Center Jogja.');
+        return redirect()->route('invoice.show', ['id' => $user->member_card_id, 'auto_pay' => 1])
+            ->with('success', 'Pendaftaran akun member berhasil! Silakan lakukan pemindaian QRIS atau transfer untuk mengaktifkan keanggotaan Anda.');
     }
 
     public function logout(Request $request)

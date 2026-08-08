@@ -147,7 +147,7 @@
         <div class="container">
             <div style="display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap;" id="memberTabNav">
                 <button type="button" class="member-tab-btn active" onclick="switchMemberTab('status', this)" style="background: rgba(132, 204, 22, 0.15); border: 1.5px solid #84cc16; color: #84cc16; padding: 0.65rem 1.35rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
-                    💳 Kartu &amp; Sisa Sesi PT
+                    💳 Kartu {{ (($member->remaining_sessions ?? 0) > 0) ? '& Sisa Sesi PT' : '& Status VIP Pass' }}
                 </button>
                 <button type="button" class="member-tab-btn" onclick="switchMemberTab('workout', this)" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.65rem 1.35rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
                     ⚡ Generator Workout Harian
@@ -156,7 +156,7 @@
                     🥗 Panduan Nutrisi &amp; Kalori
                 </button>
                 <button type="button" class="member-tab-btn" onclick="switchMemberTab('referral', this)" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.65rem 1.35rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
-                    🎁 Referral &amp; Bonus PT
+                    🎁 Referral &amp; Bonus FitPoints
                 </button>
                 <button type="button" class="member-tab-btn" onclick="switchMemberTab('hydration', this)" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.65rem 1.35rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
                     💧 Tracker Hidrasi
@@ -180,46 +180,70 @@
             <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: start;" class="grid-2">
                 
                 <div style="display: flex; flex-direction: column; gap: 2rem;">
-                    <!-- PT Session Counter -->
+                    <!-- PT Session Counter / Regular Pass Info -->
                     <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                            <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0;">
-                                <i class="fa-solid fa-stopwatch" style="color: #84cc16;"></i> Sisa Sesi Personal Trainer
-                            </h3>
-                            <span style="background: rgba(132, 204, 22, 0.15); color: #84cc16; font-weight: 900; font-size: 0.85rem; padding: 0.35rem 0.85rem; border-radius: 99px;">
-                                {{ $member->remaining_sessions }} Sesi Tersisa
-                            </span>
-                        </div>
+                        @if(($member->remaining_sessions ?? 0) > 0)
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                                <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0;">
+                                    <i class="fa-solid fa-stopwatch" style="color: #84cc16;"></i> Sisa Sesi Personal Trainer
+                                </h3>
+                                <span style="background: rgba(132, 204, 22, 0.15); color: #84cc16; font-weight: 900; font-size: 0.85rem; padding: 0.35rem 0.85rem; border-radius: 99px;">
+                                    {{ $member->remaining_sessions }} Sesi Tersisa
+                                </span>
+                            </div>
 
-                        <div style="margin-bottom: 1.5rem;">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #94a3b8; font-weight: 700; margin-bottom: 0.5rem;">
-                                <span>Progress Sesi Latihan</span>
-                                <span>{{ $member->completed_sessions }} dari {{ $member->total_sessions }} Sesi Terpakai (33%)</span>
+                            <div style="margin-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #94a3b8; font-weight: 700; margin-bottom: 0.5rem;">
+                                    <span>Progress Sesi Latihan</span>
+                                    <span>{{ $member->completed_sessions ?? 0 }} dari {{ $member->total_sessions ?? $member->remaining_sessions }} Sesi Terpakai</span>
+                                </div>
+                                <div style="width: 100%; height: 14px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                                    <div style="width: {{ (($member->total_sessions ?? 0) > 0) ? min(100, round((($member->completed_sessions ?? 0) / $member->total_sessions) * 100)) : 100 }}%; height: 100%; background: linear-gradient(90deg, #84cc16 0%, #a3e635 100%); border-radius: 99px;"></div>
+                                </div>
                             </div>
-                            <div style="width: 100%; height: 14px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
-                                <div style="width: 33%; height: 100%; background: linear-gradient(90deg, #84cc16 0%, #a3e635 100%); border-radius: 99px;"></div>
-                            </div>
-                        </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; text-align: center;">
-                            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem;">
-                                <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700;">TOTAL PAKET</span>
-                                <div style="font-size: 1.5rem; font-weight: 900; color: #ffffff; margin-top: 0.2rem;">{{ $member->total_sessions }} Sesi</div>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; text-align: center;">
+                                <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem;">
+                                    <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700;">TOTAL PAKET</span>
+                                    <div style="font-size: 1.5rem; font-weight: 900; color: #ffffff; margin-top: 0.2rem;">{{ $member->total_sessions ?? $member->remaining_sessions }} Sesi</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem;">
+                                    <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700;">SUDAH SELESAI</span>
+                                    <div style="font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin-top: 0.2rem;">{{ $member->completed_sessions ?? 0 }} Sesi</div>
+                                </div>
+                                <div style="background: rgba(132,204,22,0.1); border: 1.5px solid #84cc16; border-radius: 1rem; padding: 1rem;">
+                                    <span style="font-size: 0.75rem; color: #84cc16; font-weight: 800;">SISA TERSISA</span>
+                                    <div style="font-size: 1.5rem; font-weight: 900; color: #84cc16; margin-top: 0.2rem;">{{ $member->remaining_sessions }} Sesi</div>
+                                </div>
                             </div>
-                            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem;">
-                                <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700;">SUDAH SELESAI</span>
-                                <div style="font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin-top: 0.2rem;">{{ $member->completed_sessions }} Sesi</div>
-                            </div>
-                            <div style="background: rgba(132,204,22,0.1); border: 1.5px solid #84cc16; border-radius: 1rem; padding: 1rem;">
-                                <span style="font-size: 0.75rem; color: #84cc16; font-weight: 800;">SISA TERSISA</span>
-                                <div style="font-size: 1.5rem; font-weight: 900; color: #84cc16; margin-top: 0.2rem;">{{ $member->remaining_sessions }} Sesi</div>
-                            </div>
-                        </div>
 
-                        <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach Hendra, saya mau reservasi jadwal sesi PT berikutnya untuk ID ' . $member->id) }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
-                            <i class="fa-solid fa-calendar-plus"></i>
-                            <span>Jadwalkan Sesi PT Berikutnya</span>
-                        </a>
+                            <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach, saya mau reservasi jadwal sesi PT berikutnya untuk ID ' . $member->id) }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                                <i class="fa-solid fa-calendar-plus"></i>
+                                <span>Jadwalkan Sesi PT Berikutnya</span>
+                            </a>
+                        @else
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h3 style="font-size: 1.25rem; font-weight: 800; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0;">
+                                    <i class="fa-solid fa-dumbbell" style="color: #38bdf8;"></i> Status Membership Anda
+                                </h3>
+                                <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); font-weight: 900; font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 99px;">
+                                    ● Regular Gym Pass (Latihan Mandiri)
+                                </span>
+                            </div>
+
+                            <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+                                Anda terdaftar sebagai member <strong>Regular Gym Pass</strong>. Anda memiliki akses penuh ke area studio gym, alat fitness, kartu digital QR Code, serta fitur AI Workout &amp; Nutrition Planner.
+                            </p>
+
+                            <div style="background: rgba(132, 204, 22, 0.08); border: 1px dashed rgba(132, 204, 22, 0.35); border-radius: 1rem; padding: 1rem; margin-bottom: 1.25rem; font-size: 0.85rem; color: #94a3b8;">
+                                <span style="color: #84cc16; font-weight: 800;">💡 Ingin hasil 3x lebih cepat?</span> Tambahkan bimbingan Personal Trainer 1-on-1 untuk panduan gerakan &amp; program terstruktur dari Coach profesional.
+                            </div>
+
+                            <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo CS FitLife Center, saya member ' . $member->name . ' tertarik untuk menambah / konsul Personal Trainer PT.') }}" target="_blank" class="btn glow-btn" style="width: 100%; background: linear-gradient(135deg, #84cc16 0%, #10b981 100%); color: #060907 !important; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.3);">
+                                <i class="fa-solid fa-user-ninja"></i>
+                                <span>Konsultasi &amp; Tambah Sesi Personal Trainer</span>
+                            </a>
+                        @endif
                     </div>
 
                     <!-- InBody Progress -->
@@ -267,54 +291,97 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 2rem;">
-                    <!-- Assigned Coach -->
-                    <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem;">
-                        <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
-                            <i class="fa-solid fa-user-check" style="color: #84cc16;"></i> Personal Trainer Anda
-                        </h3>
+                    @php
+                        $hasActivePt = ($member->remaining_sessions ?? 0) > 0 && !empty($member->assigned_coach) && !str_contains(strtolower($member->assigned_coach), 'unassigned') && !str_contains(strtolower($member->assigned_coach), 'belum');
+                    @endphp
 
-                        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 1.25rem; margin-bottom: 1.35rem;">
-                            <div style="font-weight: 900; font-size: 1.15rem; color: #ffffff; margin-bottom: 0.25rem;">
-                                {{ $member->assigned_coach }}
+                    @if($hasActivePt)
+                        <!-- Assigned Coach -->
+                        <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem;">
+                            <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
+                                <i class="fa-solid fa-user-check" style="color: #84cc16;"></i> Personal Trainer Anda
+                            </h3>
+
+                            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 1.25rem; margin-bottom: 1.35rem;">
+                                <div style="font-weight: 900; font-size: 1.15rem; color: #ffffff; margin-bottom: 0.25rem;">
+                                    {{ $member->assigned_coach }}
+                                </div>
+                                <div style="font-size: 0.85rem; color: #84cc16; font-weight: 700;">
+                                    Specialist Weight Loss &amp; Posture Correction
+                                </div>
                             </div>
-                            <div style="font-size: 0.85rem; color: #84cc16; font-weight: 700;">
-                                Specialist Weight Loss &amp; Posture Correction
+
+                            <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach, saya member ' . $member->name . ' mau konsultasi jadwal latihan.') }}" target="_blank" class="btn" style="width: 100%; background: #25d366; color: #ffffff; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; margin-bottom: 1.25rem;">
+                                <i class="fa-brands fa-whatsapp"></i> Chat Trainer Saya via WA
+                            </a>
+
+                            <!-- Trainer Slot Booking Box -->
+                            <div style="background: rgba(132,204,22,0.08); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.25rem;">
+                                <h4 style="font-size: 1rem; font-weight: 900; color: white; font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fa-solid fa-calendar-plus" style="color: #84cc16;"></i> Booking Slot Sesi Latihan 1-on-1
+                                </h4>
+                                <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 1rem;">
+                                    Pilih tanggal &amp; jam latihan privat dengan Coach Anda untuk mengamankan slot waktu.
+                                </p>
+
+                                <form onsubmit="handleTrainerBooking(event)">
+                                    <div style="margin-bottom: 0.85rem;">
+                                        <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">PILIH TANGGAL LATIHAN</label>
+                                        <input type="date" id="bookDateInput" required value="{{ date('Y-m-d', strtotime('+1 day')) }}" style="width: 100%; background: #060907; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">PILIH JAM SESI LATIHAN</label>
+                                        <select id="bookTimeInput" style="width: 100%; background: #060907; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                                            <option value="08:00 - 09:30 WIB">Sesi Pagi: 08:00 - 09:30 WIB</option>
+                                            <option value="10:00 - 11:30 WIB">Sesi Siang: 10:00 - 11:30 WIB</option>
+                                            <option value="16:00 - 17:30 WIB">Sesi Sore: 16:00 - 17:30 WIB (Favorit)</option>
+                                            <option value="19:00 - 20:30 WIB">Sesi Malam: 19:00 - 20:30 WIB</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer;">
+                                        ⚡ KONFIRMASI BOOKING SLOT
+                                    </button>
+                                </form>
                             </div>
                         </div>
+                    @else
+                        <!-- VIP Member Facilities & Guidance (For Regular Members) -->
+                        <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem;">
+                            <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem;">
+                                <i class="fa-solid fa-crown" style="color: #84cc16;"></i> Benefit VIP Gym Pass Anda
+                            </h3>
 
-                        <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach Hendra, saya mau konsultasi jadwal latihan.') }}" target="_blank" class="btn" style="width: 100%; background: #25d366; color: #ffffff; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; margin-bottom: 1.25rem;">
-                            <i class="fa-brands fa-whatsapp"></i> Chat Trainer Saya via WA
-                        </a>
-
-                        <!-- Trainer Slot Booking Box -->
-                        <div style="background: rgba(132,204,22,0.08); border: 1.5px solid #84cc16; border-radius: 1.25rem; padding: 1.25rem;">
-                            <h4 style="font-size: 1rem; font-weight: 900; color: white; font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fa-solid fa-calendar-plus" style="color: #84cc16;"></i> Booking Slot Sesi Latihan 1-on-1
-                            </h4>
-                            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 1rem;">
-                                Pilih tanggal &amp; jam latihan privat dengan Coach Anda untuk mengamankan slot waktu.
-                            </p>
-
-                            <form onsubmit="handleTrainerBooking(event)">
-                                <div style="margin-bottom: 0.85rem;">
-                                    <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">PILIH TANGGAL LATIHAN</label>
-                                    <input type="date" id="bookDateInput" required value="{{ date('Y-m-d', strtotime('+1 day')) }}" style="width: 100%; background: #060907; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
+                            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="display: flex; align-items: flex-start; gap: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1rem; border-radius: 1.15rem;">
+                                    <i class="fa-solid fa-dumbbell" style="color: #84cc16; font-size: 1.25rem; margin-top: 0.15rem;"></i>
+                                    <div>
+                                        <div style="font-weight: 800; font-size: 0.95rem; color: white;">Akses Bebas Fasilitas Studio Gym</div>
+                                        <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.2rem;">Free weights, cardio zone, locker room, &amp; shower room di seluruh cabang.</div>
+                                    </div>
                                 </div>
-                                <div style="margin-bottom: 1rem;">
-                                    <label style="font-size: 0.75rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.35rem;">PILIH JAM SESI LATIHAN</label>
-                                    <select id="bookTimeInput" style="width: 100%; background: #060907; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.65rem; color: white; font-weight: 800; outline: none;">
-                                        <option value="08:00 - 09:30 WIB">Sesi Pagi: 08:00 - 09:30 WIB</option>
-                                        <option value="10:00 - 11:30 WIB">Sesi Siang: 10:00 - 11:30 WIB</option>
-                                        <option value="16:00 - 17:30 WIB">Sesi Sore: 16:00 - 17:30 WIB (Favorit)</option>
-                                        <option value="19:00 - 20:30 WIB">Sesi Malam: 19:00 - 20:30 WIB</option>
-                                    </select>
+
+                                <div style="display: flex; align-items: flex-start; gap: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1rem; border-radius: 1.15rem;">
+                                    <i class="fa-solid fa-wand-magic-sparkles" style="color: #38bdf8; font-size: 1.25rem; margin-top: 0.15rem;"></i>
+                                    <div>
+                                        <div style="font-weight: 800; font-size: 0.95rem; color: white;">AI Workout &amp; Nutrisi Automatic</div>
+                                        <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.2rem;">Gunakan tab <strong>Generator Workout</strong> di atas untuk membuat jadwal &amp; rekomendasi gerakan harian.</div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer;">
-                                    ⚡ KONFIRMASI BOOKING SLOT
-                                </button>
-                            </form>
+
+                                <div style="display: flex; align-items: flex-start; gap: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1rem; border-radius: 1.15rem;">
+                                    <i class="fa-solid fa-qrcode" style="color: #fbbf24; font-size: 1.25rem; margin-top: 0.15rem;"></i>
+                                    <div>
+                                        <div style="font-weight: 800; font-size: 0.95rem; color: white;">Presensi Mandiri QR Code</div>
+                                        <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.2rem;">Tunjukkan QR Code di kartu digital untuk scan masuk pintu studio gym.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo CS FitLife Center, saya member ' . $member->name . ' mau tanya seputar fasilitas studio.') }}" target="_blank" class="btn" style="width: 100%; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.15); color: #ffffff; padding: 0.85rem; border-radius: 99px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none;">
+                                <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> Hubungi Customer Service Studio
+                            </a>
                         </div>
-                    </div>
+                    @endif
                 </div>
 
             </div>

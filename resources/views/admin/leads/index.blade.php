@@ -1,40 +1,28 @@
-@extends('layouts.app')
+@extends('admin.layout')
 
 @section('title', 'Dashboard Ringkasan Leads & Pendaftaran Admin | FitLife Center Yogyakarta')
-@section('meta_description', 'Manajemen operasional pendaftaran calon member, booking free trial, & ekspor data leads CSV FitLife Center Yogyakarta.')
+@section('header_title', 'Dashboard Leads & Pendaftaran Member')
 
-@section('content')
-<!-- Admin Dashboard Header Banner -->
-<section style="padding: 3.5rem 0 2.5rem; background: linear-gradient(180deg, #060907 0%, #0d1310 100%); color: white; border-bottom: 1px solid rgba(255,255,255,0.08);">
-    <div class="container">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-            <div>
-                <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(132, 204, 22, 0.12); border: 1px solid rgba(132, 204, 22, 0.4); color: #84cc16; padding: 0.35rem 1rem; border-radius: 99px; font-weight: 800; font-size: 0.8rem; margin-bottom: 0.75rem;">
-                    <i class="fa-solid fa-user-gear"></i>
-                    <span>ADMIN OPERATIONAL PORTAL</span>
-                </div>
-                <h1 style="font-size: 2.2rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0 0 0.35rem;">
-                    Dashboard Leads &amp; Pendaftaran Member
-                </h1>
-                <p style="color: #94a3b8; font-size: 0.95rem; margin: 0;">
-                    Kelola calon member baru, reservasi free trial, klaim voucher promo, dan ekspor data rekap ke CSV.
-                </p>
-            </div>
-
-            <!-- Export CSV Action Button -->
-            <div>
-                <a href="{{ route('admin.leads.export') }}" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.85rem 1.6rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.6rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
-                    <i class="fa-solid fa-file-csv" style="font-size: 1.2rem;"></i>
-                    <span>Ekspor Data Leads (CSV)</span>
-                </a>
-            </div>
+@section('admin_content')
+<div style="width: 100%;">
+    
+    <!-- Top Action Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 style="font-size: 2rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0;">
+                Dashboard Leads &amp; Pendaftaran Member
+            </h1>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin: 0.25rem 0 0;">
+                Kelola calon member baru, reservasi free trial, klaim voucher promo, dan ekspor data rekap ke CSV.
+            </p>
+        </div>
+        <div>
+            <a href="{{ route('admin.leads.export') }}" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.75rem 1.4rem; border-radius: 99px; font-weight: 900; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                <i class="fa-solid fa-file-csv" style="font-size: 1.1rem;"></i>
+                <span>Ekspor Data Leads (CSV)</span>
+            </a>
         </div>
     </div>
-</section>
-
-<!-- Main Admin Section -->
-<section style="background: #060907; padding: 3rem 0 6rem; color: white;">
-    <div class="container">
 
         <!-- Summary Metric Cards Grid -->
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2.5rem;" class="grid-2">
@@ -152,7 +140,7 @@
         </div>
 
     </div>
-</section>
+</div>
 
 <script>
     function filterAdminLeadsLive() {

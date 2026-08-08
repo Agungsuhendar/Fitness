@@ -25,6 +25,9 @@ class User extends Authenticatable
         'role',
         'member_card_id',
         'membership_type',
+        'membership_expires_at',
+        'membership_price',
+        'payment_method',
         'status',
         'branch',
         'total_sessions',
@@ -38,6 +41,15 @@ class User extends Authenticatable
         'initial_bodyfat',
         'current_bodyfat',
         'muscle_mass',
+        'reward_points',
+        'level_badge',
+        'streak_days',
+    ];
+
+    protected $casts = [
+        'membership_expires_at' => 'date',
+        'reward_points' => 'integer',
+        'streak_days' => 'integer',
     ];
 
     /**
@@ -68,6 +80,8 @@ class User extends Authenticatable
             'total_sessions' => 'integer',
             'completed_sessions' => 'integer',
             'remaining_sessions' => 'integer',
+            'reward_points' => 'integer',
+            'streak_days' => 'integer',
         ];
     }
 

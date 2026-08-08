@@ -200,4 +200,34 @@ class PaymentController extends Controller
             'message' => 'SIMULASI PEMBAYARAN SUKSES! Webhook berhasil memverifikasi pembayaran instan via Midtrans (Auto-Approved).'
         ]);
     }
+
+    public function handleIpaymuWebhook(Request $request)
+    {
+        $trxId = $request->input('trx_id') ?: $request->input('sid');
+        $status = $request->input('status') ?: $request->input('status_code');
+        $referenceId = $request->input('reference_id');
+
+        Log::info('iPaymu Webhook Received:', $request->all());
+
+        if (strtolower((string) $status) === 'berhasil' || $status == '1' || $status == '200') {
+            $user = null;
+            if ($referenceId) {
+                $user = User::where('member_card_id', $referenceId)
+                    ->orWhere('id', $referenceId)
+                    ->first();
+            }
+
+            if ($user) {
+                $user->status = 'Active';
+                $user->save();
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'iPaymu payment verified & member activated!'
+            ]);
+        }
+
+        return response()->json(['status' => 'pending', 'message' => 'iPaymu status received']);
+    }
 }

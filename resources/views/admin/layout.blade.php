@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script>
@@ -71,6 +72,40 @@
         }
         [style*="linear-gradient(135deg, #84cc16 0%, #10b981 100%)"], [style*="linear-gradient(135deg,#84cc16 0%,#10b981 100%)"] {
             background: linear-gradient(135deg, var(--brand-lime) 0%, var(--brand-lime-dark) 100%) !important;
+        }
+
+        .text-lime {
+            color: var(--brand-lime, #84cc16) !important;
+        }
+        .btn-lime {
+            background: linear-gradient(135deg, var(--brand-lime, #84cc16) 0%, var(--brand-lime-dark, #65a30d) 100%) !important;
+            color: #060907 !important;
+            border: none !important;
+            font-weight: 800 !important;
+        }
+        .btn-lime:hover {
+            opacity: 0.95;
+            color: #060907 !important;
+        }
+        .border-lime {
+            border-color: var(--brand-lime, #84cc16) !important;
+        }
+        .form-control.bg-dark, .form-select.bg-dark {
+            background-color: #0d1410 !important;
+            color: #ffffff !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+            border-radius: 0.85rem !important;
+            padding: 0.65rem 0.95rem !important;
+        }
+        .form-control.bg-dark:focus, .form-select.bg-dark:focus {
+            background-color: #121c17 !important;
+            color: #ffffff !important;
+            border-color: var(--brand-lime, #84cc16) !important;
+            box-shadow: 0 0 0 0.25rem var(--brand-glow-subtle, rgba(132, 204, 22, 0.25)) !important;
+        }
+        .form-select.bg-dark option {
+            background-color: #0d1410 !important;
+            color: #ffffff !important;
         }
 
         * {
@@ -609,6 +644,55 @@
                 </li>
                 @endif
 
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.workout_logs.index') }}" class="{{ request()->routeIs('admin.workout_logs.*') ? 'active' : '' }}" title="Workout Logs">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        <span class="nav-text">Workout Logs</span>
+                    </a>
+                </li>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.nutrition_logs.index') }}" class="{{ request()->routeIs('admin.nutrition_logs.*') ? 'active' : '' }}" title="Nutrition Logs">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="nav-text">Nutrition Logs</span>
+                    </a>
+                </li>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.leaderboard.index') }}" class="{{ request()->routeIs('admin.leaderboard.*') ? 'active' : '' }}" title="Leaderboard XP">
+                        <i class="fa-solid fa-trophy"></i>
+                        <span class="nav-text">Leaderboard XP</span>
+                    </a>
+                </li>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.branches.index') }}" class="{{ request()->routeIs('admin.branches.*') ? 'active' : '' }}" title="Cabang & Crowd">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span class="nav-text">Cabang &amp; Crowd</span>
+                    </a>
+                </li>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.notifications.index') }}" class="{{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}" title="Broadcast Notif">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="nav-text">Broadcast Notif</span>
+                    </a>
+                </li>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.membership_plans.index') }}" class="{{ request()->routeIs('admin.membership_plans.*') ? 'active' : '' }}" title="Paket Keanggotaan">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span class="nav-text">Paket Keanggotaan</span>
+                    </a>
+                </li>
+
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.training_programs.index') }}" class="{{ request()->routeIs('admin.training_programs.*') ? 'active' : '' }}" title="Training Programs">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        <span class="nav-text">Training Programs</span>
+                    </a>
+                </li>
+
                 <!-- 2. PENDAFTARAN & KELAS -->
                 @if($isAdminRole)
                 <div class="nav-section-title">👥 PELANGGAN &amp; KELAS</div>
@@ -855,11 +939,13 @@
                 </div>
             @endif
 
+            @yield('content')
             @yield('admin_content')
         </main>
     </div>
 
-    <!-- CKEditor 5 Rich Text Editor CDN -->
+    <!-- Bootstrap 5 JS Bundle & CKEditor -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <style>
         .ck-editor__editable_inline {

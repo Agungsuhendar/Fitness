@@ -265,5 +265,15 @@
 
         window.speechSynthesis.speak(utterance);
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(request('auto_pay'))
+            setTimeout(function() {
+                if (typeof payWithMidtrans === 'function') {
+                    payWithMidtrans();
+                }
+            }, 600);
+        @endif
+    });
 </script>
 @endsection

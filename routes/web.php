@@ -32,6 +32,13 @@ use App\Http\Controllers\Admin\AdminCoachController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminVideoController;
 use App\Http\Controllers\Admin\AdminFeatureController;
+use App\Http\Controllers\Admin\AdminWorkoutLogController;
+use App\Http\Controllers\Admin\AdminNutritionLogController;
+use App\Http\Controllers\Admin\AdminLeaderboardController;
+use App\Http\Controllers\Admin\AdminBranchController;
+use App\Http\Controllers\Admin\AdminNotificationController;
+use App\Http\Controllers\Admin\AdminMembershipPlanController;
+use App\Http\Controllers\Admin\AdminTrainingProgramController;
 use App\Http\Controllers\TestimonialController;
 
 /*
@@ -246,6 +253,35 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('/inventory-log', [AdminInventoryLogController::class, 'index'])->name('inventory-log.index');
         Route::post('/inventory-log/restock', [AdminInventoryLogController::class, 'storeRestock'])->name('inventory-log.restock');
 
+        // Workout Tracker Logs & Rest Timer Activity
+        Route::get('/workout-logs', [AdminWorkoutLogController::class, 'index'])->name('workout_logs.index');
+        Route::delete('/workout-logs/{id}', [AdminWorkoutLogController::class, 'destroy'])->name('workout_logs.destroy');
+
+        // Nutrition & AI Meal Scanner Logs
+        Route::get('/nutrition-logs', [AdminNutritionLogController::class, 'index'])->name('nutrition_logs.index');
+        Route::delete('/nutrition-logs/{id}', [AdminNutritionLogController::class, 'destroy'])->name('nutrition_logs.destroy');
+
+        // Leaderboard XP & Rewards Admin Panel
+        Route::get('/leaderboard', [AdminLeaderboardController::class, 'index'])->name('leaderboard.index');
+        Route::post('/leaderboard/{id}/add-xp', [AdminLeaderboardController::class, 'addBonusXp'])->name('leaderboard.add-xp');
+
+        // Branch Locator & Crowd Meter Management
+        Route::get('/branches', [AdminBranchController::class, 'index'])->name('branches.index');
+        Route::post('/branches', [AdminBranchController::class, 'store'])->name('branches.store');
+        Route::post('/branches/{id}/update-crowd', [AdminBranchController::class, 'updateCrowd'])->name('branches.update-crowd');
+
+        // Pusat Notifikasi & Push Broadcast Member
+        Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/send', [AdminNotificationController::class, 'sendBroadcast'])->name('notifications.send');
+        Route::delete('/notifications/{id}', [AdminNotificationController::class, 'destroy'])->name('notifications.destroy');
+
+        // Kelola Paket Keanggotaan Gym Fleksibel
+        Route::get('/membership-plans', [AdminMembershipPlanController::class, 'index'])->name('membership_plans.index');
+        Route::post('/membership-plans', [AdminMembershipPlanController::class, 'store'])->name('membership_plans.store');
+        Route::put('/membership-plans/{id}', [AdminMembershipPlanController::class, 'update'])->name('membership_plans.update');
+        Route::post('/membership-plans/{id}/toggle-active', [AdminMembershipPlanController::class, 'toggleActive'])->name('membership_plans.toggle-active');
+        Route::delete('/membership-plans/{id}', [AdminMembershipPlanController::class, 'destroy'])->name('membership_plans.destroy');
+
         // AI Member Churn Risk Predictor, AI Copywriter & AI Forecasting
         Route::get('/ai-churn', [AdminAiToolsController::class, 'churnIndex'])->name('ai-churn.index');
         Route::get('/ai-copywriter', [AdminAiToolsController::class, 'copywriterIndex'])->name('ai-copywriter.index');
@@ -254,10 +290,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 
     // 2. Member Management & Presensi Kiosk (Admin, Receptionist, Coach)
-    Route::middleware(['role:admin,receptionist,coach'])->group(function () {
+    Route::middleware(['role:admin,receptionist,coach,staff,trainer'])->group(function () {
         Route::resource('members', AdminMemberController::class);
         Route::get('/checkin', [LeadController::class, 'adminCheckinIndex'])->name('checkin.index');
         Route::post('/checkin/scan', [LeadController::class, 'processCheckin'])->name('checkin.scan');
+
+        // Modul Training Programs & Kurikulum Latihan
+        Route::get('/training-programs', [AdminTrainingProgramController::class, 'index'])->name('training_programs.index');
+        Route::post('/training-programs/templates', [AdminTrainingProgramController::class, 'storeTemplate'])->name('training_programs.templates.store');
+        Route::post('/training-programs/assign', [AdminTrainingProgramController::class, 'assignProgram'])->name('training_programs.assign');
+        Route::delete('/training-programs/templates/{id}', [AdminTrainingProgramController::class, 'destroyTemplate'])->name('training_programs.templates.destroy');
     });
 
     // 3. POS Kasir & Payments Verification (Admin, Receptionist)
@@ -285,4 +327,5 @@ Route::post('/member/book-trainer', [PageController::class, 'bookTrainerSlot'])-
 Route::get('/invoice', [LeadController::class, 'showInvoice'])->name('invoice.show');
 Route::post('/payment/snap-token', [PaymentController::class, 'createSnapToken'])->name('payment.snap');
 Route::post('/api/midtrans/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+Route::post('/api/ipaymu/webhook', [PaymentController::class, 'handleIpaymuWebhook'])->name('payment.ipaymu.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 Route::post('/payment/simulate-success/{orderId}', [PaymentController::class, 'simulatePaymentSuccess'])->name('payment.simulate')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);

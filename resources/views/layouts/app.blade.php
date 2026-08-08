@@ -39,7 +39,7 @@
                 'msg' => $rev->name . ': "' . Str::limit($rev->review, 45) . '"',
             ];
         }
-    } catch (\Exception $e) {}
+    } catch (\Throwable $e) {}
 
     if (empty($liveToasts)) {
         $liveToasts = [

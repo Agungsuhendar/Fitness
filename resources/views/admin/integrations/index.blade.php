@@ -64,6 +64,32 @@
     <form action="{{ route('admin.integrations.update') }}" method="POST">
         @csrf
 
+        <!-- CARD 0: SELECT ACTIVE PAYMENT GATEWAY -->
+        <div class="admin-card" style="padding: 1.5rem 2rem; border-radius: 1.5rem; background: rgba(132, 204, 22, 0.08); border: 1.5px solid var(--brand-lime, #84cc16); margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.85rem;">
+                    <div style="width: 44px; height: 44px; background: #84cc16; border-radius: 0.85rem; display: flex; align-items: center; justify-content: center; color: #060907; font-size: 1.25rem;">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1.15rem; color: #ffffff; margin: 0 0 0.15rem; font-weight: 900; font-family: 'Outfit', sans-serif;">
+                            Pilihan Payment Gateway Utama Website
+                        </h4>
+                        <p style="color: #cbd5e1; font-size: 0.825rem; margin: 0;">
+                            Pilih provider gerbang pembayaran yang aktif digunakan untuk checkout transaksi member.
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <select name="active_gateway" style="background: #090d0b; border: 2px solid #84cc16; border-radius: 0.75rem; padding: 0.6rem 1rem; font-weight: 900; font-size: 0.95rem; color: #84cc16; cursor: pointer;">
+                        <option value="midtrans" {{ ($integrations->active_gateway ?? 'midtrans') === 'midtrans' ? 'selected' : '' }}>💳 Midtrans Payment Gateway (Aktif)</option>
+                        <option value="ipaymu" {{ ($integrations->active_gateway ?? 'midtrans') === 'ipaymu' ? 'selected' : '' }}>🏦 iPaymu Payment Gateway (Aktif)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <!-- CARD 1: MIDTRANS PAYMENT GATEWAY -->
         <div class="admin-card" style="padding: 2rem; border-radius: 1.5rem; background: var(--admin-card-bg, #0d1410); border: 1px solid var(--admin-border, rgba(255, 255, 255, 0.08)); margin-bottom: 2rem;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1.25rem; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
@@ -121,7 +147,57 @@
                         {{ $integrations->midtrans_webhook_url }}
                     </div>
                 </div>
-                <button type="button" onclick="navigator.clipboard.writeText('{{ $integrations->midtrans_webhook_url }}'); alert('URL Webhook berhasil disalin!');" class="btn" style="background: #06b6d4; color: #060907; border: none; padding: 0.5rem 1rem; border-radius: 0.65rem; font-weight: 900; font-size: 0.8rem; cursor: pointer;">
+        <!-- CARD 2: IPAYMU PAYMENT GATEWAY -->
+        <div class="admin-card" style="padding: 2rem; border-radius: 1.5rem; background: var(--admin-card-bg, #0d1410); border: 1px solid var(--admin-border, rgba(255, 255, 255, 0.08)); margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1.25rem; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.85rem;">
+                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: #060907; font-size: 1.35rem;">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.35rem; color: #ffffff; margin: 0 0 0.2rem; font-weight: 900; font-family: 'Outfit', sans-serif;">
+                            2. Pengaturan iPaymu Payment Gateway
+                        </h3>
+                        <p style="color: #cbd5e1; font-size: 0.875rem; margin: 0;">
+                            Mendukung Pembayaran QRIS, Virtual Account (BCA/Mandiri/BRI/CIMB), &amp; Retail Outlet (Alfamart/Indomaret).
+                        </p>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 0.75rem; background: rgba(255, 255, 255, 0.04); padding: 0.4rem 0.85rem; border-radius: 0.75rem; border: 1px solid rgba(255, 255, 255, 0.12);">
+                    <label style="font-size: 0.8rem; font-weight: 800; color: #cbd5e1; margin: 0;">Mode Lingkungan:</label>
+                    <select name="ipaymu_mode" style="background: #121c17; border: 1px solid rgba(255,255,255,0.15); border-radius: 0.5rem; padding: 0.35rem 0.65rem; font-weight: 800; font-size: 0.85rem; color: #ffffff; color-scheme: dark;">
+                        <option value="sandbox" {{ $integrations->ipaymu_mode === 'sandbox' ? 'selected' : '' }}>🟡 Sandbox (Testing / Simulasi)</option>
+                        <option value="production" {{ $integrations->ipaymu_mode === 'production' ? 'selected' : '' }}>🟢 Production (Live Transaksi Asli)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 1.5rem;" class="grid-2">
+                <div>
+                    <label style="display: block; font-weight: 800; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.4rem; letter-spacing: 0.05em;">
+                        IPAYMU VA ACCOUNT NUMBER *
+                    </label>
+                    <input type="text" name="ipaymu_va" style="width: 100%; background: #121c17; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 0.75rem; padding: 0.75rem 1rem; box-sizing: border-box; font-weight: 700;" value="{{ old('ipaymu_va', $integrations->ipaymu_va) }}" placeholder="e.g. 0000002447990145">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 800; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.4rem; letter-spacing: 0.05em;">
+                        IPAYMU API KEY (SECRET KEY) *
+                    </label>
+                    <input type="password" name="ipaymu_api_key" style="width: 100%; background: #121c17; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 0.75rem; padding: 0.75rem 1rem; box-sizing: border-box; font-weight: 700;" value="{{ old('ipaymu_api_key', $integrations->ipaymu_api_key) }}" placeholder="e.g. SANDBOX67650-XXXXXXXX-XXXX">
+                </div>
+            </div>
+
+            <!-- Webhook URL Info Box -->
+            <div style="background: rgba(245, 158, 11, 0.1); border: 1px dashed #f59e0b; border-radius: 1rem; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <span style="font-size: 0.75rem; color: #f59e0b; font-weight: 800; text-transform: uppercase;">URL WEBHOOK CALLBACK IPAYMU (NOTIFY URL)</span>
+                    <div style="font-family: monospace; font-size: 0.95rem; color: #fbbf24; font-weight: 900; margin-top: 0.2rem;">
+                        {{ $integrations->ipaymu_webhook_url }}
+                    </div>
+                </div>
+                <button type="button" onclick="navigator.clipboard.writeText('{{ $integrations->ipaymu_webhook_url }}'); alert('URL Webhook iPaymu berhasil disalin!');" class="btn" style="background: #f59e0b; color: #060907; border: none; padding: 0.5rem 1rem; border-radius: 0.65rem; font-weight: 900; font-size: 0.8rem; cursor: pointer;">
                     <i class="fa-solid fa-copy"></i> Salin URL Webhook
                 </button>
             </div>

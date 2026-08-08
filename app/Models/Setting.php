@@ -30,7 +30,7 @@ class Setting extends Model
                     $table->string('group')->default('general')->after('value');
                 });
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Log or ignore schema check error
         }
     }
@@ -46,7 +46,7 @@ class Setting extends Model
                 $setting = static::where('key', $key)->first();
                 return $setting && $setting->value !== null ? $setting->value : $default;
             });
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $default;
         }
     }
@@ -65,7 +65,7 @@ class Setting extends Model
 
         try {
             Cache::forget('setting_' . $key);
-        } catch (\Exception $e) {}
+        } catch (\Throwable $e) {}
 
         return $setting;
     }

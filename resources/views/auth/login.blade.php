@@ -23,7 +23,7 @@
             </div>
 
             <!-- Error Alerts -->
-            @if ($errors->any())
+            @if (isset($errors) && method_exists($errors, 'any') && $errors->any())
                 <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 0.85rem; padding: 0.85rem 1rem; margin-bottom: 1.5rem; color: #fca5a5; font-size: 0.875rem;">
                     <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700; margin-bottom: 0.25rem;">
                         <i class="fa-solid fa-triangle-exclamation"></i>
