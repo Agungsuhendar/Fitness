@@ -30,7 +30,7 @@ FILES_TO_SYNC = [
 PROD_ENV_CONTENT = """APP_NAME="FitLife Hub"
 APP_ENV=production
 APP_KEY=base64:CdXXYLtLXrZrkwLjcF2ua4j5q9pkoiX9FCN2xY3WTqM=
-APP_DEBUG=true
+APP_DEBUG=false
 APP_URL=https://fitlifehub.site.je
 
 LOG_CHANNEL=stack
