@@ -124,7 +124,7 @@ class MemberAuthController extends Controller
         } elseif (str_contains($paymentLower, 'kasir') || str_contains($paymentLower, 'cash') || str_contains($paymentLower, 'tunai')) {
             $status = 'Pending (Bayar di Kasir)';
         } elseif (str_contains($paymentLower, 'qris') || str_contains($paymentLower, 'edc') || str_contains($paymentLower, 'kredit') || str_contains($paymentLower, 'debit')) {
-            $status = 'Active';
+            $status = 'Pending Verifikasi (Menunggu Scan QRIS)';
         } else {
             $status = 'Pending Verifikasi';
         }

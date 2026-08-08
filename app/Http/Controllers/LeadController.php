@@ -486,52 +486,237 @@ class LeadController extends Controller
 
     public function showInvoice(Request $request)
     {
-        $id = strtoupper(trim($request->input('id', 'FL-MBR-7782')));
-        $promo = strtoupper(trim($request->input('promo', 'MAHASISWA15')));
+        $id = strtoupper(trim($request->input('id', 'FL-MBR-0015')));
+        $promo = strtoupper(trim($request->input('promo', '')));
         $orderId = $request->input('order_id');
+        $activeGateway = \App\Models\Setting::get('active_payment_gateway', 'midtrans');
+
+        $user = User::where('member_card_id', $id)
+            ->orWhere('id', $id)
+            ->orWhere('email', $id)
+            ->first();
 
         $payment = null;
         if ($orderId) {
             $payment = Payment::where('order_id', $orderId)->first();
         }
 
-        if (!$payment) {
-            $user = User::where('member_card_id', $id)->first();
-            $payment = Payment::where('member_name', $user ? $user->name : 'Bima Prasetya')
-                ->orWhere('member_phone', $user ? $user->phone : '081234567890')
+        if (!$payment && $user) {
+            $payment = Payment::where('user_id', $user->id)
+                ->orWhere('member_name', $user->name)
+                ->orWhere('member_phone', $user->phone)
                 ->latest()
                 ->first();
         }
 
-        $invNo = $payment ? $payment->order_id : ('INV/FL/' . date('Y/m/') . (strlen($id) >= 4 ? substr($id, -4) : '7782'));
-        $originalPrice = $payment ? $payment->gross_amount : 2500000;
-        $discountAmount = $payment ? $payment->discount_amount : 375000;
-        if (!$payment) {
-            if ($promo === 'FITJOGJA50') $discountAmount = 50000;
-            if ($promo === 'FITLIFE10') $discountAmount = 250000;
+        $invNo = $payment ? $payment->order_id : ('INV/FL/' . date('Y/m/') . (strlen($id) >= 4 ? substr($id, -4) : rand(1000, 9999)));
+        $memberName = $user ? $user->name : ($payment ? $payment->member_name : 'Member FitLife');
+        $memberPhone = $user ? ($user->phone ?: '-') : ($payment ? $payment->member_phone : '-');
+        $packageName = $user ? ($user->membership_type ?: 'Regular Gym Pass (Bulanan)') : ($payment ? $payment->package_name : 'Regular Gym Pass (Bulanan)');
+        $originalPrice = $user ? ($user->membership_price ?: 300000) : ($payment ? $payment->gross_amount : 300000);
+        $discountAmount = $payment ? $payment->discount_amount : 0;
+        $totalPaid = max(0, $originalPrice - $discountAmount);
+        $paymentMethodDetail = $user ? ($user->payment_method ?: 'QRIS Instant') : ($payment ? $payment->payment_method_detail : 'QRIS Instant');
+        $branchName = $user ? ($user->branch ?: 'Sleman HQ (Jl. Kaliurang KM 5.5)') : 'Sleman HQ (Jl. Kaliurang KM 5.5)';
+        // Fetch Real QRIS API Data dynamically from iPaymu / Gateway
+        $va = \App\Models\Setting::get('ipaymu_va', '0000002447990145');
+        $apiKey = \App\Models\Setting::get('ipaymu_api_key', 'SANDBOX67650-XXXXXXXX-XXXX');
+        $isProduction = \App\Models\Setting::get('ipaymu_is_production', '0') === '1';
+
+        $baseUrl = $isProduction ? 'https://my.ipaymu.com' : 'https://sandbox.ipaymu.com';
+
+        // Auto-Check Real-Time Payment Status from iPaymu API
+        $userStatusStr = strtolower((string) ($user ? $user->status : ''));
+        if ($user && (!str_contains($userStatusStr, 'lunas') && !str_contains($userStatusStr, 'approved') && !str_contains($userStatusStr, 'active'))) {
+            try {
+                $checkEndpoint = $baseUrl . '/api/v2/transaction';
+                $userOrderIds = [];
+                if ($user) {
+                    $userOrderIds = Payment::where('user_id', $user->id)->pluck('order_id')->toArray();
+                }
+                $checkIds = array_unique(array_filter(array_merge([
+                    $id,
+                    $user ? $user->member_card_id : null,
+                    $payment ? $payment->order_id : null,
+                ], $userOrderIds)));
+                
+                foreach ($checkIds as $cId) {
+                    $checkBody = ['referenceId' => $cId];
+                    $jsonCheck = json_encode($checkBody, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                    $hashCheck = strtolower(hash('sha256', $jsonCheck));
+                    $sigCheck = hash_hmac('sha256', "POST:" . $va . ":" . $hashCheck . ":" . $apiKey, $apiKey);
+
+                    $checkRes = \Illuminate\Support\Facades\Http::timeout(4)->withHeaders([
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'va' => $va,
+                        'signature' => $sigCheck,
+                        'timestamp' => date('YmdHis'),
+                    ])->post($checkEndpoint, $checkBody);
+
+                    if (!$checkRes->successful()) {
+                        $altSig = hash_hmac('sha256', "POST:" . $va . ":" . $jsonCheck . ":" . $apiKey, $apiKey);
+                        $checkRes = \Illuminate\Support\Facades\Http::timeout(4)->withHeaders([
+                            'Accept' => 'application/json',
+                            'Content-Type' => 'application/json',
+                            'va' => $va,
+                            'signature' => $altSig,
+                            'timestamp' => date('YmdHis'),
+                        ])->post($checkEndpoint, $checkBody);
+                    }
+
+                    if ($checkRes->successful()) {
+                        $cData = $checkRes->json();
+                        $item = isset($cData['Data'][0]) ? $cData['Data'][0] : ($cData['Data'] ?? []);
+                        $tStatus = $item['Status'] ?? ($item['StatusCode'] ?? ($item['status'] ?? ($item['status_code'] ?? null)));
+                        $tDesc = strtolower((string)($item['StatusDesc'] ?? ($item['Message'] ?? ($item['status_desc'] ?? ''))));
+                        $jsonStr = strtolower(json_encode($cData));
+
+                        $isPaidInIpaymu = in_array((string)$tStatus, ['1', '200'])
+                            || str_contains($tDesc, 'berhasil')
+                            || str_contains($tDesc, 'success')
+                            || str_contains($tDesc, 'lunas')
+                            || str_contains($tDesc, 'settled')
+                            || str_contains($jsonStr, 'berhasil')
+                            || str_contains($jsonStr, 'settled')
+                            || str_contains($jsonStr, '"status":1')
+                            || str_contains($jsonStr, '"status_code":1')
+                            || str_contains($jsonStr, '"transaction_status_code":1');
+
+                        if ($isPaidInIpaymu) {
+                            $user->status = 'Active (LUNAS Auto-Approved)';
+                            $user->remaining_sessions = max(12, ($user->remaining_sessions ?? 0) + 12);
+                            $user->total_sessions = max(12, ($user->total_sessions ?? 0) + 12);
+                            try {
+                                $user->save();
+                            } catch (\Throwable $t) {
+                                unset($user->membership_expires_at);
+                                $user->save();
+                            }
+
+                            if ($payment) {
+                                $payment->transaction_status = 'settlement';
+                                $payment->paid_at = now();
+                                $payment->save();
+                            }
+                            break;
+                        }
+                    }
+                }
+            } catch (\Throwable $t) {}
         }
-        $totalPaid = $payment ? $payment->net_amount : ($originalPrice - $discountAmount);
-        $statusText = ($payment && $payment->isSettled()) ? 'LUNAS (APPROVED)' : 'MENUNGGU PEMBAYARAN MIDTRANS';
+
+        $userStatus = $user ? ($user->status ?: 'Pending') : 'Pending';
+        $userStatusLower = strtolower((string)$userStatus);
+        $statusText = ($payment && $payment->isSettled()) || str_contains($userStatusLower, 'lunas') || str_contains($userStatusLower, 'approved') || str_contains($userStatusLower, 'active')
+            ? 'LUNAS (APPROVED)'
+            : 'MENUNGGU PEMBAYARAN (SCAN QRIS)';
+
+        $invStamp = 'INV' . date('YmdHis');
+        $refIdToSend = ($payment && $payment->order_id) ? $payment->order_id : (($user && $user->member_card_id) ? ($user->member_card_id . '-' . $invStamp) : ('FL-MBR-0000-' . $invStamp));
 
         $invoice = (object)[
             'number' => $invNo,
             'date' => $payment && $payment->paid_at ? $payment->paid_at->format('d M Y, H:i') : date('d M Y, H:i'),
-            'member_id' => $id,
-            'member_name' => $payment ? $payment->member_name : 'Bima Prasetya',
-            'member_phone' => $payment ? $payment->member_phone : '081234567890',
-            'branch' => 'Sleman HQ (Jl. Kaliurang No. 12)',
-            'package_name' => $payment ? $payment->package_name : 'Paket VIP Personal Trainer (12 Sesi)',
+            'member_id' => $user ? $user->member_card_id : $id,
+            'member_name' => $memberName,
+            'member_phone' => $memberPhone,
+            'branch' => $branchName,
+            'package_name' => $packageName,
             'original_price' => $originalPrice,
-            'promo_code' => $promo,
+            'promo_code' => $promo ?: '-',
             'discount_amount' => $discountAmount,
             'total_paid' => $totalPaid,
-            'payment_method' => $payment ? ($payment->payment_method_detail ?: 'Midtrans Instant QRIS / VA') : 'Midtrans Instant QRIS / VA',
+            'payment_method' => $paymentMethodDetail,
             'status' => $statusText,
             'snap_token' => $payment ? $payment->snap_token : null,
-            'order_id' => $payment ? $payment->order_id : null,
+            'order_id' => $refIdToSend,
         ];
 
-        return view('invoice', compact('invoice'));
+        $directEndpoint = $baseUrl . '/api/v2/payment/direct';
+
+        $body = [
+            'name' => $memberName,
+            'phone' => preg_replace('/[^0-9]/', '', $memberPhone),
+            'email' => $user ? ($user->email ?: 'member@fitlife.id') : 'member@fitlife.id',
+            'amount' => (int) $totalPaid,
+            'notifyUrl' => url('/api/ipaymu/webhook'),
+            'paymentMethod' => 'qris',
+            'paymentChannel' => 'qris',
+            'feeDirection' => 'MERCHANT',
+            'fee_direction' => 'MERCHANT',
+            'referenceId' => $refIdToSend,
+            'product' => [$packageName],
+            'qty' => [1],
+            'price' => [(int) $totalPaid],
+        ];
+
+        $jsonBody = json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $bodyHash = strtolower(hash('sha256', $jsonBody));
+        $timestamp = date('YmdHis');
+        $stringToSign = "POST:" . $va . ":" . $bodyHash . ":" . $apiKey;
+        $signature = hash_hmac('sha256', $stringToSign, $apiKey);
+
+        $qrisImage = null;
+        $qrisString = null;
+        $paymentUrl = null;
+        $ipaymuError = null;
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'va' => $va,
+                'signature' => $signature,
+                'timestamp' => $timestamp,
+            ])->post($directEndpoint, $body);
+
+            if (!$response->successful() && str_contains(strtolower($response->body()), 'signature')) {
+                $altSign = hash_hmac('sha256', "POST:" . $va . ":" . $jsonBody . ":" . $apiKey, $apiKey);
+                $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'va' => $va,
+                    'signature' => $altSign,
+                    'timestamp' => $timestamp,
+                ])->post($directEndpoint, $body);
+            }
+
+            if ($response->successful()) {
+                $resData = $response->json();
+                if (isset($resData['Data']['QrImage'])) {
+                    $qrisImage = $resData['Data']['QrImage'];
+                }
+                if (isset($resData['Data']['QrString'])) {
+                    $qrisString = $resData['Data']['QrString'];
+                }
+                if (isset($resData['Data']['Url'])) {
+                    $paymentUrl = $resData['Data']['Url'];
+                }
+
+                // If qris-basic URL is returned, extract direct PNG QR image if possible
+                if ($qrisImage && str_contains($qrisImage, 'qris-basic')) {
+                    $rawPageUrl = $qrisImage;
+                    try {
+                        $htmlPage = \Illuminate\Support\Facades\Http::timeout(3)->get($rawPageUrl)->body();
+                        if (preg_match('/src=["\']([^"\']+\.(png|svg|jpg)[^"\']*)["\']/i', $htmlPage, $m)) {
+                            $qrisPngUrl = $m[1];
+                            if (!str_starts_with($qrisPngUrl, 'http')) {
+                                $qrisPngUrl = (str_contains($rawPageUrl, 'sandbox') ? 'https://sandbox.ipaymu.com' : 'https://my.ipaymu.com') . $qrisPngUrl;
+                            }
+                            $qrisImage = $qrisPngUrl;
+                        }
+                    } catch (\Throwable $t) {}
+                }
+            } else {
+                $resData = $response->json();
+                $ipaymuError = is_array($resData) ? ($resData['Message'] ?? ($resData['message'] ?? 'iPaymu HTTP ' . $response->status())) : 'iPaymu HTTP ' . $response->status();
+            }
+        } catch (\Throwable $e) {
+            $ipaymuError = $e->getMessage();
+        }
+
+        return view('invoice', compact('invoice', 'activeGateway', 'qrisImage', 'qrisString', 'paymentUrl', 'ipaymuError'));
     }
 
     public function adminPaymentsIndex(Request $request)

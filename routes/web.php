@@ -27,6 +27,69 @@ use App\Http\Controllers\AiPlannerController;
 use App\Http\Controllers\AiChatbotController;
 use App\Http\Controllers\PaymentController;
 
+Route::get('/test-qris-api', [PaymentController::class, 'testQrisApi']);
+Route::get('/debug-ipaymu-check', function(\Illuminate\Http\Request $request) {
+    $va = \App\Models\Setting::get('ipaymu_va', '0000002447990145');
+    $apiKey = \App\Models\Setting::get('ipaymu_api_key', 'SANDBOX67650-XXXXXXXX-XXXX');
+    $isProduction = \App\Models\Setting::get('ipaymu_is_production', '0') === '1';
+    $baseUrl = $isProduction ? 'https://my.ipaymu.com' : 'https://sandbox.ipaymu.com';
+
+    $id = strtoupper(trim($request->input('id', 'FL-MBR-0020')));
+    $user = \App\Models\User::where('member_card_id', $id)->orWhere('id', $id)->first();
+    $payment = \App\Models\Payment::where('order_id', $id)->orWhere('order_id', 'like', '%'.$id.'%')->first();
+
+    $results = [];
+
+    // Test 1: POST /api/v2/transaction with id / referenceId / transactionId
+    $payloads = [
+        ['referenceId' => 'FL-MBR-0020'],
+        ['transactionId' => 223514],
+        ['id' => 223514],
+        ['id' => 'FL-MBR-0020'],
+    ];
+
+    foreach ($payloads as $idx => $p) {
+        $json = json_encode($p);
+        $hash = strtolower(hash('sha256', $json));
+        
+        // Method A: sha256 hash body
+        $sigA = hash_hmac('sha256', "POST:" . $va . ":" . $hash . ":" . $apiKey, $apiKey);
+        $resA = \Illuminate\Support\Facades\Http::timeout(4)->withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'va' => $va,
+            'signature' => $sigA,
+            'timestamp' => date('YmdHis'),
+        ])->post($baseUrl . '/api/v2/transaction', $p);
+
+        // Method B: unhashed body string
+        $sigB = hash_hmac('sha256', "POST:" . $va . ":" . $json . ":" . $apiKey, $apiKey);
+        $resB = \Illuminate\Support\Facades\Http::timeout(4)->withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'va' => $va,
+            'signature' => $sigB,
+            'timestamp' => date('YmdHis'),
+        ])->post($baseUrl . '/api/v2/transaction', $p);
+
+        $results['payload_' . $idx] = [
+            'payload' => $p,
+            'sigA_status' => $resA->status(),
+            'sigA_body' => $resA->json() ?: $resA->body(),
+            'sigB_status' => $resB->status(),
+            'sigB_body' => $resB->json() ?: $resB->body(),
+        ];
+    }
+
+    return response()->json([
+        'va_used' => $va,
+        'is_production' => $isProduction,
+        'user' => $user,
+        'payment' => $payment,
+        'results' => $results
+    ]);
+});
+
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminCoachController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
@@ -329,3 +392,5 @@ Route::post('/payment/snap-token', [PaymentController::class, 'createSnapToken']
 Route::post('/api/midtrans/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 Route::post('/api/ipaymu/webhook', [PaymentController::class, 'handleIpaymuWebhook'])->name('payment.ipaymu.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 Route::post('/payment/simulate-success/{orderId}', [PaymentController::class, 'simulatePaymentSuccess'])->name('payment.simulate')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+Route::post('/payment/simulate-pending/{orderId}', [PaymentController::class, 'simulatePaymentPending'])->name('payment.simulate-pending')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+Route::get('/api/payment-status', [PaymentController::class, 'checkStatus'])->name('payment.check-status');
