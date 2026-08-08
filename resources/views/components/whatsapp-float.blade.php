@@ -51,8 +51,24 @@
         <i class="fa-solid fa-chevron-up"></i>
     </button>
 
-    <!-- 2. Middle Button: FitBot AI CS Floating Widget -->
-    <div class="ai-float-container" style="position: relative; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;">
+    <!-- 2. Middle Button: Member AI Chatbot Floating Widget (48px x 48px) -->
+    <div id="memberAiFloatContainer" class="ai-float-container" style="display: {{ request()->routeIs('member*') || Auth::check() ? 'flex' : 'none' }}; position: relative; width: 48px; height: 48px; align-items: center; justify-content: center; margin: 0; padding: 0;">
+        <div class="ai-smart-tooltip" style="position: absolute; right: 58px; top: 50%; transform: translateY(-50%) translateX(12px); background: #0d1310; color: #ffffff; padding: 0.5rem 0.85rem; border-radius: 99px; font-size: 0.8rem; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 1.5px solid #84cc16; display: flex; align-items: center; gap: 0.45rem; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; pointer-events: none; z-index: 100000;">
+            <span style="width: 8px; height: 8px; background: #84cc16; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #84cc16;"></span>
+            <span style="color: #ffffff; font-weight: 800;">🤖 FitBot Member • Tanya 24/7</span>
+        </div>
+        <button type="button" 
+                onclick="toggleAiFitbotModal()" 
+                class="ai-float-btn" 
+                style="background: linear-gradient(135deg, #84cc16 0%, #4d7c0f 100%) !important; color: #ffffff !important; border: 2px solid #ffffff !important; width: 48px !important; height: 48px !important; border-radius: 50% !important; font-size: 1.3rem !important; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(132, 204, 22, 0.5) !important;"
+                title="FitBot CS AI Member">
+            <i class="fa-solid fa-robot"></i>
+        </button>
+    </div>
+
+    <!-- 3. Middle Button: FitBot AI CS Floating Widget (Hidden on Member Area when logged in) -->
+    @if(!request()->routeIs('member*') && !Auth::check())
+    <div class="ai-float-container cs-ai-float-container" style="position: relative; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;">
         <div class="ai-smart-tooltip" style="position: absolute; right: 58px; top: 50%; transform: translateY(-50%) translateX(12px); background: #0d1310; color: #ffffff; padding: 0.5rem 0.85rem; border-radius: 99px; font-size: 0.8rem; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 1.5px solid #a855f7; display: flex; align-items: center; gap: 0.45rem; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; pointer-events: none; z-index: 100000;">
             <span style="width: 8px; height: 8px; background: #a855f7; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #a855f7;"></span>
             <span style="color: #ffffff; font-weight: 800;">🤖 FitBot AI CS • Tanya 24/7</span>
@@ -66,6 +82,7 @@
             <span class="ai-live-pulse-badge"></span>
         </button>
     </div>
+    @endif
 
     <!-- 3. Bottom Button: WhatsApp Floating -->
     <div class="wa-float-container" style="position: relative; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0;">

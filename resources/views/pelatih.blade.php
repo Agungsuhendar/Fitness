@@ -86,7 +86,7 @@
                             <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Admin FitLife, saya berminat konsultasi privat 1-on-1 bersama Coach Hendra Wijaya.') }}" target="_blank" class="btn" style="background: #25d366; color: white; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
                                 <i class="fa-brands fa-whatsapp"></i> Chat WA
                             </a>
-                            <button type="button" onclick="openTrialModal('Weight Loss & Fat Burn')" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(132,204,22,0.3);">
+                            <button type="button" onclick="openTrialModal('Weight Loss & Fat Burn')" class="btn glow-btn" style="background: #84cc16; color: #ffffff !important; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(132,204,22,0.3);">
                                 Booking Trial
                             </button>
                         </div>
@@ -176,7 +176,7 @@
                             <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Admin FitLife, saya mau konsultasi persiapan tes fisik TNI POLRI bersama Coach Bima Prasetyo.') }}" target="_blank" class="btn" style="background: #25d366; color: white; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
                                 <i class="fa-brands fa-whatsapp"></i> Chat WA
                             </a>
-                            <button type="button" onclick="openTrialModal('Strength & Persiapan TNI-POLRI')" class="btn" style="background: #fbbf24; color: #090d0b; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(251,191,36,0.3);">
+                            <button type="button" onclick="openTrialModal('Strength & Persiapan TNI-POLRI')" class="btn" style="background: #fbbf24; color: #ffffff !important; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(251,191,36,0.3);">
                                 Booking Trial
                             </button>
                         </div>
@@ -221,7 +221,7 @@
                             <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Admin FitLife, saya mau konsultasi posture correction & rehab dengan Coach Aris Subagyo.') }}" target="_blank" class="btn" style="background: #25d366; color: white; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
                                 <i class="fa-brands fa-whatsapp"></i> Chat WA
                             </a>
-                            <button type="button" onclick="openTrialModal('Posture Correction & Rehab')" class="btn" style="background: #38bdf8; color: #090d0b; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(56,189,248,0.3);">
+                            <button type="button" onclick="openTrialModal('Posture Correction & Rehab')" class="btn" style="background: #38bdf8; color: #ffffff !important; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(56,189,248,0.3);">
                                 Booking Trial
                             </button>
                         </div>

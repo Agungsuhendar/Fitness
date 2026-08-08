@@ -23,15 +23,15 @@
 <!-- Calculator & Results Section -->
 <section style="background: #060907; padding: 4rem 0 6rem; color: white; min-height: 600px;">
     <div class="container">
-        <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: start;" class="grid-2">
+        <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: stretch;" class="grid-2">
             
-            <!-- Left: Form Inputs -->
-            <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
+            <!-- Left: Form Inputs Card -->
+            <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; height: 100%;">
                 <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.6rem;">
                     <i class="fa-solid fa-sliders" style="color: #84cc16;"></i> Masukkan Data Fisikmu
                 </h3>
 
-                <form id="fitnessCalcForm" onsubmit="calculateFitness(event)">
+                <form id="fitnessCalcForm" onsubmit="calculateFitness(event)" style="display: flex; flex-direction: column; flex: 1;">
                     <!-- 1. Gender -->
                     <div style="margin-bottom: 1.35rem;">
                         <label style="display: block; font-weight: 700; font-size: 0.875rem; color: #cbd5e1; margin-bottom: 0.6rem;">Jenis Kelamin</label>
@@ -88,7 +88,7 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 0 25px rgba(132,204,22,0.4);">
+                    <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 0 25px rgba(132,204,22,0.4); margin-top: auto;">
                         <i class="fa-solid fa-calculator"></i>
                         <span>Hitung Target Kalori Saya</span>
                     </button>
@@ -96,7 +96,7 @@
             </div>
 
             <!-- Right: Results Card -->
-            <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);" id="resultsCard">
+            <div style="background: #0d1310; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; height: 100%;" id="resultsCard">
                 <h3 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.6rem;">
                     <i class="fa-solid fa-chart-pie" style="color: #84cc16;"></i> Hasil Analisis Tubuhmu
                 </h3>
@@ -142,7 +142,7 @@
                 </div>
 
                 <!-- WA Action Button -->
-                <a href="#" id="waConsultBtn" target="_blank" class="btn" style="width: 100%; background: #25d366; color: #ffffff; border: none; padding: 0.9rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(37,211,102,0.4);">
+                <a href="#" id="waConsultBtn" target="_blank" class="btn" style="width: 100%; background: #25d366; color: #ffffff; border: none; padding: 0.9rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(37,211,102,0.4); margin-top: auto;">
                     <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i>
                     <span>Konsultasi Hasil Ini via WA</span>
                 </a>

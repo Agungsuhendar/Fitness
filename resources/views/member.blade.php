@@ -22,7 +22,7 @@
             </p>
 
             <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
-                <a href="{{ route('login') }}" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                <a href="{{ route('login') }}" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
                     <i class="fa-solid fa-right-to-bracket"></i>
                     <span>Masuk ke Akun Member</span>
                 </a>
@@ -80,13 +80,13 @@
                     </p>
 
                     <div style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem;">
-                        <a href="{{ route('member.ai-planner') }}" class="btn glow-btn" style="background: linear-gradient(135deg, #84cc16 0%, #22c55e 100%); color: #090d0b !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(132,204,22,0.4);">
+                        <a href="{{ route('member.ai-planner') }}" class="btn glow-btn" style="background: linear-gradient(135deg, #84cc16 0%, #22c55e 100%); color: #ffffff !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(132,204,22,0.4);">
                             <i class="fa-solid fa-wand-magic-sparkles"></i> 🤖 AI Workout &amp; Nutrition Planner
                         </a>
                         <a href="{{ route('member.ai-coach-match') }}" class="btn" style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); color: white !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(99,102,241,0.3);">
                             <i class="fa-solid fa-user-astronaut"></i> 🎯 AI PT Matchmaker
                         </a>
-                        <a href="{{ route('member.ai-vision') }}" class="btn" style="background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); color: #090d0b !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(56,189,248,0.3);">
+                        <a href="{{ route('member.ai-vision') }}" class="btn" style="background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); color: #ffffff !important; border: none; padding: 0.75rem 1.25rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 25px rgba(56,189,248,0.3);">
                             <i class="fa-solid fa-camera-retro"></i> 📷 AI Posture Vision Scanner
                         </a>
                     </div>
@@ -100,17 +100,17 @@
                         
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; position: relative; z-index: 2;">
                             <img src="{{ asset('images/logo.png') }}" alt="FitLife VIP Logo" style="height: 36px; width: auto; filter: drop-shadow(0 0 8px rgba(132, 204, 22, 0.5));">
-                            <div style="background: linear-gradient(135deg, #84cc16 0%, #a3e635 100%); color: #090d0b; font-weight: 900; font-size: 0.7rem; padding: 0.3rem 0.75rem; border-radius: 99px; letter-spacing: 1px;">
-                                <i class="fa-solid fa-crown"></i> VIP ATHLETE PASS
+                            <div style="background: #060907; border: 1.5px solid #84cc16; color: #ffffff !important; font-weight: 900; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 99px; letter-spacing: 1px; box-shadow: 0 0 15px rgba(132, 204, 22, 0.4);">
+                                <i class="fa-solid fa-crown" style="color: #84cc16;"></i> VIP ATHLETE PASS
                             </div>
                         </div>
 
                         <div style="margin-bottom: 1.25rem; position: relative; z-index: 2; display: flex; align-items: center; gap: 1rem;">
-                            <img src="{{ asset('images/assets/member_bima_avatar.png') }}" onerror="this.onerror=null; this.src='{{ asset('public/images/assets/member_bima_avatar.png') }}';" alt="Bima Perkasa (28 th)" style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2.5px solid #84cc16; box-shadow: 0 0 15px rgba(132, 204, 22, 0.45); flex-shrink: 0;">
+                            <img src="{{ asset('images/assets/member_bima_avatar.png') }}" onerror="this.onerror=null; this.src='{{ asset('public/images/assets/member_bima_avatar.png') }}';" alt="{{ $member->name }}" style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2.5px solid #84cc16; box-shadow: 0 0 15px rgba(132, 204, 22, 0.45); flex-shrink: 0;">
                             <div>
                                 <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: block;">MEMBER ATHLETE NAME</span>
                                 <div style="font-size: 1.35rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif;" id="cardMemberName">
-                                    {{ $member->name }} <span style="font-size: 0.9rem; color: #94a3b8; font-weight: 700;">(28 th)</span>
+                                    {{ $member->name }} <span style="font-size: 0.9rem; color: #94a3b8; font-weight: 700;">({{ $member->age ?? 28 }} th)</span>
                                 </div>
                                 <div style="font-family: monospace; font-size: 0.9rem; color: #84cc16; font-weight: 800; margin-top: 0.15rem;" id="cardMemberId">
                                     8840 •••• •••• {{ substr($member->id, -4) }}
@@ -216,7 +216,7 @@
                             </div>
                         </div>
 
-                        <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach Hendra, saya mau reservasi jadwal sesi PT berikutnya untuk ID ' . $member->id) }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                        <a href="https://wa.me/{{ site_setting('whatsapp_number', '6281234567890') }}?text={{ urlencode('Halo Coach Hendra, saya mau reservasi jadwal sesi PT berikutnya untuk ID ' . $member->id) }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
                             <i class="fa-solid fa-calendar-plus"></i>
                             <span>Jadwalkan Sesi PT Berikutnya</span>
                         </a>
@@ -232,7 +232,13 @@
                             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.15rem; padding: 1.25rem;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                                     <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 700;">BERAT BADAN</span>
-                                    <span style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 0.75rem; font-weight: 900; padding: 0.15rem 0.5rem; border-radius: 99px;">TURUN 8.5 KG</span>
+                                    @php
+                                        $wDiff = round($member->initial_weight - $member->current_weight, 1);
+                                        $fDiff = round($member->initial_bodyfat - $member->current_bodyfat, 1);
+                                    @endphp
+                                    <span style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 0.75rem; font-weight: 900; padding: 0.15rem 0.5rem; border-radius: 99px;">
+                                        {{ $wDiff >= 0 ? 'TURUN ' . $wDiff . ' KG' : 'NAIK ' . abs($wDiff) . ' KG' }}
+                                    </span>
                                 </div>
                                 <div style="font-size: 1.8rem; font-weight: 900; color: #ffffff; margin-bottom: 0.35rem;">
                                     {{ $member->current_weight }} <span style="font-size: 1rem; color: #94a3b8;">kg</span>
@@ -245,7 +251,9 @@
                             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.15rem; padding: 1.25rem;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                                     <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 700;">BODY FAT (%)</span>
-                                    <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 0.75rem; font-weight: 900; padding: 0.15rem 0.5rem; border-radius: 99px;">TURUN 7.3%</span>
+                                    <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 0.75rem; font-weight: 900; padding: 0.15rem 0.5rem; border-radius: 99px;">
+                                        {{ $fDiff >= 0 ? 'TURUN ' . $fDiff . '%' : 'NAIK ' . abs($fDiff) . '%' }}
+                                    </span>
                                 </div>
                                 <div style="font-size: 1.8rem; font-weight: 900; color: #38bdf8; margin-bottom: 0.35rem;">
                                     {{ $member->current_bodyfat }}%
@@ -301,7 +309,7 @@
                                         <option value="19:00 - 20:30 WIB">Sesi Malam: 19:00 - 20:30 WIB</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer;">
+                                <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.75rem; border-radius: 99px; font-weight: 900; font-size: 0.875rem; cursor: pointer;">
                                     ⚡ KONFIRMASI BOOKING SLOT
                                 </button>
                             </form>
@@ -356,7 +364,7 @@
                     </div>
                 </div>
 
-                <button type="button" onclick="generateWorkoutRoutine()" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                <button type="button" onclick="generateWorkoutRoutine()" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                     <span>Generate Program Latihan Hari Ini</span>
                 </button>
@@ -622,7 +630,7 @@
                         <textarea id="evalCommentInput" rows="3" placeholder="Tuliskan umpan balik mengenai penjelasan teknik, keramahan, atau ketepatan waktu pelatih..." style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); padding: 0.85rem; border-radius: 0.85rem; color: white; font-size: 0.9rem; outline: none; font-family: inherit; resize: vertical;"></textarea>
                     </div>
 
-                    <button type="submit" class="btn glow-btn" style="width: 100%; background: #fbbf24; color: #090d0b; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 0 20px rgba(251,191,36,0.4);">
+                    <button type="submit" class="btn glow-btn" style="width: 100%; background: #fbbf24; color: #ffffff !important; border: none; padding: 0.95rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 0 20px rgba(251,191,36,0.4);">
                         <i class="fa-solid fa-paper-plane"></i>
                         <span>KIRIM EVALUASI SESI TRAINER</span>
                     </button>
@@ -681,7 +689,7 @@
                         <div style="font-size: 0.75rem; color: #84cc16; font-weight: 800; margin-bottom: 0.35rem;">📅 SENIN • 17:00 WIB</div>
                         <h5 style="font-size: 1.1rem; font-weight: 900; color: white; margin: 0 0 0.35rem;">Zumba Fitness Party</h5>
                         <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.85rem;">Instruktur Maya Indah • Sleman HQ</div>
-                        <a href="{{ route('kelas') }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.55rem; border-radius: 99px; font-weight: 900; font-size: 0.8rem; text-decoration: none; text-align: center; display: block;">
+                        <a href="{{ route('kelas') }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.55rem; border-radius: 99px; font-weight: 900; font-size: 0.8rem; text-decoration: none; text-align: center; display: block;">
                             ⚡ Amankan Slot Tempat
                         </a>
                     </div>
@@ -691,7 +699,7 @@
                         <div style="font-size: 0.75rem; color: #38bdf8; font-weight: 800; margin-bottom: 0.35rem;">📅 RABU • 18:30 WIB</div>
                         <h5 style="font-size: 1.1rem; font-weight: 900; color: white; margin: 0 0 0.35rem;">Body Combat HIIT</h5>
                         <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.85rem;">Coach Hendra Wijaya • Seturan UGM</div>
-                        <a href="{{ route('kelas') }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #38bdf8; color: #090d0b; border: none; padding: 0.55rem; border-radius: 99px; font-weight: 900; font-size: 0.8rem; text-decoration: none; text-align: center; display: block;">
+                        <a href="{{ route('kelas') }}" target="_blank" class="btn glow-btn" style="width: 100%; background: #38bdf8; color: #ffffff !important; border: none; padding: 0.55rem; border-radius: 99px; font-weight: 900; font-size: 0.8rem; text-decoration: none; text-align: center; display: block;">
                             ⚡ Amankan Slot Tempat
                         </a>
                     </div>
@@ -716,7 +724,7 @@
                             <h3 style="font-size: 1.6rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0;">
                                 Transformasi Fisik &amp; Komparasi Foto Progress
                             </h3>
-                            <span style="font-size: 0.85rem; color: #38bdf8; font-weight: 700;">Perkembangan Bentuk Tubuh: Bulan 1 vs Bulan 3 (Loss 8.5 kg)</span>
+                            <span style="font-size: 0.85rem; color: #38bdf8; font-weight: 700;">Perkembangan Bentuk Tubuh: AWAL vs SEKARANG ({{ $wDiff >= 0 ? 'Loss ' . $wDiff . ' kg' : 'Gain ' . abs($wDiff) . ' kg' }})</span>
                         </div>
                     </div>
                 </div>
@@ -724,9 +732,9 @@
                 <!-- Interactive Before / After Photo Comparison Slider Container -->
                 <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 1.5rem; margin-bottom: 2rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 900;">
-                        <span style="color: #ef4444; background: rgba(239,68,68,0.15); padding: 0.35rem 0.85rem; border-radius: 99px;">🔴 BEFORE: BULAN 1 (82.5 KG)</span>
+                        <span style="color: #ef4444; background: rgba(239,68,68,0.15); padding: 0.35rem 0.85rem; border-radius: 99px;">🔴 BEFORE: AWAL ({{ $member->initial_weight }} KG)</span>
                         <span style="color: #38bdf8; font-size: 0.8rem; font-style: italic;">Geser slider di bawah untuk komparasi ➔</span>
-                        <span style="color: #84cc16; background: rgba(132,204,22,0.15); padding: 0.35rem 0.85rem; border-radius: 99px;">🟢 AFTER: BULAN 3 (74.0 KG)</span>
+                        <span style="color: #84cc16; background: rgba(132,204,22,0.15); padding: 0.35rem 0.85rem; border-radius: 99px;">🟢 AFTER: TERKINI ({{ $member->current_weight }} KG)</span>
                     </div>
 
                     <!-- Photo Slider Box -->
@@ -808,28 +816,12 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.75rem 1.5rem; border-radius: 99px; font-weight: 900; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <button type="submit" class="btn glow-btn" style="background: #84cc16; color: #ffffff !important; border: none; padding: 0.75rem 1.5rem; border-radius: 99px; font-weight: 900; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;">
                             <i class="fa-solid fa-floppy-disk"></i> SIMPAN PEMBARUAN PROGRES
                         </button>
                     </form>
                 </div>
-                            <div style="font-size: 1.25rem; font-weight: 900; color: #38bdf8; margin-top: 0.2rem;">102 cm</div>
-                            <span style="font-size: 0.7rem; color: #38bdf8; font-weight: 800;">-6 cm Lebih Lean</span>
-                        </div>
-
-                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
-                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">LINGKAR BICEPS</span>
-                            <div style="font-size: 1.25rem; font-weight: 900; color: #fbbf24; margin-top: 0.2rem;">38 cm</div>
-                            <span style="font-size: 0.7rem; color: #fbbf24; font-weight: 800;">+4 cm Otot Bertumbuh 💪</span>
-                        </div>
-
-                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem; text-align: center;">
-                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">LINGKAR PAHA</span>
-                            <div style="font-size: 1.25rem; font-weight: 900; color: #a78bfa; margin-top: 0.2rem;">57 cm</div>
-                            <span style="font-size: 0.7rem; color: #a78bfa; font-weight: 800;">-5 cm Kencang Terbentuk</span>
-                        </div>
-                    </div>
-                </div>
+            </div>
 
             </div>
 
@@ -838,20 +830,13 @@
 
 </div>
 
-<!-- FLOATING MEMBER AI FITBOT CS ASSISTANT WIDGET -->
-<div id="aiFitbotFloatingWidget" style="display: none; position: fixed; bottom: 85px; right: 25px; z-index: 99990;">
-    <button onclick="toggleAiFitbotModal()" style="background: linear-gradient(135deg, #84cc16 0%, #4d7c0f 100%); color: #090d0b; border: 2px solid #ffffff; width: 60px; height: 60px; border-radius: 50%; font-size: 1.6rem; cursor: pointer; box-shadow: 0 10px 25px rgba(132,204,22,0.5); display: flex; align-items: center; justify-content: center; transition: transform 0.25s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" title="FitBot CS AI Member">
-        <i class="fa-solid fa-robot"></i>
-    </button>
-</div>
-
 <!-- AI FITBOT CHATBOX MODAL -->
-<div id="aiFitbotChatModal" style="display: none; position: fixed; bottom: 155px; right: 25px; width: 360px; max-width: 90vw; background: #0d1310; border: 2px solid #84cc16; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 35px rgba(132, 204, 22, 0.3); z-index: 99991; flex-direction: column;">
+<div id="aiFitbotChatModal" style="display: none; position: fixed; bottom: 90px; right: 24px; width: 360px; max-width: 90vw; background: #0d1310; border: 2px solid #84cc16; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 35px rgba(132, 204, 22, 0.3); z-index: 100000; flex-direction: column;">
     
     <!-- Chat Header -->
     <div style="background: linear-gradient(135deg, #18261c 0%, #0d1310 100%); padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 0.65rem;">
-            <div style="width: 36px; height: 36px; background: #84cc16; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #090d0b; font-weight: 900; font-size: 1.1rem;">
+            <div style="width: 36px; height: 36px; background: #84cc16; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff !important; font-weight: 900; font-size: 1.1rem;">
                 <i class="fa-solid fa-robot"></i>
             </div>
             <div>
@@ -882,7 +867,7 @@
     <!-- Chat Input Form -->
     <form onsubmit="handleFitbotSend(event)" style="padding: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 0.5rem; background: #060907;">
         <input type="text" id="fitbotInput" placeholder="Tulis pertanyaan Anda..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); padding: 0.6rem 0.85rem; border-radius: 99px; color: white; font-size: 0.825rem; outline: none;">
-        <button type="submit" style="background: #84cc16; color: #090d0b; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+        <button type="submit" style="background: #84cc16; color: #ffffff !important; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
             <i class="fa-solid fa-paper-plane"></i>
         </button>
     </form>
@@ -1118,7 +1103,7 @@
 
     function copyReferralLink() {
         const code = document.getElementById('memberReferralCodeDisplay').innerText;
-        const link = `http://fitlifehub.site.je/?ref=${code}`;
+        const link = `{{ url('/') }}/?ref=${code}`;
         navigator.clipboard.writeText(link).then(() => {
             alert('Tautan referral berhasil disalin ke clipboard! Bagikan ke teman Anda untuk mendapatkan bonus 2 sesi PT gratis.');
         });
@@ -1129,15 +1114,20 @@
         const loggedIn = isServerLoggedIn || sessionStorage.getItem('fitlife_member_session');
         const gate = document.getElementById('memberAuthGate');
         const dashboard = document.getElementById('memberDashboardContainer');
-        const fitbotWidget = document.getElementById('aiFitbotFloatingWidget');
+        const csAiBtnContainer = document.querySelector('.cs-ai-float-container');
+        const memberAiContainer = document.getElementById('memberAiFloatContainer');
+        const csAiModal = document.getElementById('aiChatbotModal');
 
         if (loggedIn) {
             if (gate) gate.style.display = 'none';
             if (dashboard) dashboard.style.display = 'block';
-            if (fitbotWidget) fitbotWidget.style.display = 'block';
+            if (memberAiContainer) memberAiContainer.style.display = 'flex';
+            if (csAiBtnContainer) csAiBtnContainer.style.display = 'none';
+            if (csAiModal) csAiModal.style.display = 'none';
 
-            const storedId = sessionStorage.getItem('fitlife_member_id') || 'FL-MBR-7782';
-            const storedName = sessionStorage.getItem('fitlife_member_name');
+            const serverMemberId = '{{ $member->id ?? "FL-MBR-7782" }}';
+            const storedId = sessionStorage.getItem('fitlife_member_id') || serverMemberId;
+            const storedName = sessionStorage.getItem('fitlife_member_name') || '{{ $member->name ?? "Member VIP" }}';
             
             if (storedName) {
                 const el1 = document.getElementById('displayMemberName');
@@ -1156,23 +1146,29 @@
                 const refCodeEl = document.getElementById('memberReferralCodeDisplay');
                 const refLinkEl = document.getElementById('memberReferralLinkDisplay');
                 const shareWaBtn = document.getElementById('shareWaBtn');
+                const appBaseUrl = '{{ url('/') }}';
                 
                 if (refCodeEl) refCodeEl.innerText = refCode;
-                if (refLinkEl) refLinkEl.innerText = 'http://fitlifehub.site.je/?ref=' + refCode;
+                if (refLinkEl) refLinkEl.innerText = appBaseUrl + '/?ref=' + refCode;
                 if (shareWaBtn) {
-                    const msg = 'Halo! Yuk gabung gym privat di FitLife Center Jogja dengan kode referral saya ' + refCode + ' & dapatkan diskon 15% + Extra 2 Sesi PT Gratis! Daftar di sini: http://fitlifehub.site.je/?ref=' + refCode;
+                    const msg = 'Halo! Yuk gabung gym privat di FitLife Center Jogja dengan kode referral saya ' + refCode + ' & dapatkan diskon 15% + Extra 2 Sesi PT Gratis! Daftar di sini: ' + appBaseUrl + '/?ref=' + refCode;
                     shareWaBtn.href = 'https://wa.me/?text=' + encodeURIComponent(msg);
                 }
             }
 
-            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent('http://fitlifehub.site.je/member?id=' + storedId) + '&color=090d0b&bgcolor=ffffff';
+            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent('{{ url('/') }}/member?id=' + storedId) + '&color=090d0b&bgcolor=ffffff';
             const cardQrImg = document.getElementById('cardQrImg');
             if (cardQrImg) cardQrImg.src = qrUrl;
+            const modalQrImg = document.getElementById('modalQrImg');
+            if (modalQrImg) modalQrImg.src = qrUrl;
+            const modalQrCodeText = document.getElementById('modalQrCodeText');
+            if (modalQrCodeText) modalQrCodeText.innerText = storedId + '-VIP';
 
         } else {
             if (gate) gate.style.display = 'block';
             if (dashboard) dashboard.style.display = 'none';
-            if (fitbotWidget) fitbotWidget.style.display = 'none';
+            if (memberAiContainer) memberAiContainer.style.display = 'none';
+            if (csAiBtnContainer) csAiBtnContainer.style.display = 'flex';
         }
     }
 
@@ -1226,11 +1222,11 @@
         </h3>
 
         <div style="background: #ffffff; padding: 1.25rem; border-radius: 1.25rem; display: inline-block; box-shadow: 0 0 25px rgba(132,204,22,0.4); margin-bottom: 1.25rem;">
-            <img id="modalQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=http%3A%2F%2Ffitlifehub.site.je%2Fmember%3Fid%3DFL-MBR-7782&color=090d0b&bgcolor=ffffff" alt="Member VIP QR Code Big" style="width: 200px; height: 200px; display: block;">
+            <img id="modalQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data={{ urlencode(url('/member?id=' . ($member->id ?? 'FL-MBR-7782'))) }}&color=090d0b&bgcolor=ffffff" alt="Member VIP QR Code Big" style="width: 200px; height: 200px; display: block;">
         </div>
 
         <div style="font-family: monospace; font-size: 1.1rem; color: #84cc16; font-weight: 900; letter-spacing: 2px; margin-bottom: 0.5rem;" id="modalQrCodeText">
-            FL-MBR-7782-VIP
+            {{ $member->id ?? 'FL-MBR-7782' }}-VIP
         </div>
         <p style="font-size: 0.825rem; color: #94a3b8; margin: 0;">
             Tunjukkan QR Code ini ke scanner di meja resepsionis studio FitLife Center untuk konfirmasi kehadiran &amp; pembuka pintu studio.

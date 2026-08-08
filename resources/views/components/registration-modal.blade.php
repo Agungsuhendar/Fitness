@@ -116,8 +116,8 @@
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
-                <button type="submit" class="btn glow-btn" style="width: 100%; padding: 0.85rem; font-weight: 900; border-radius: 99px; background: #84cc16; border: none; color: #090d0b; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
-                    <i class="fa-solid fa-paper-plane"></i> Submit Pendaftaran
+                <button type="submit" class="btn glow-btn" style="width: 100%; padding: 0.85rem; font-weight: 900; border-radius: 99px; background: #84cc16; border: none; color: #ffffff !important; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                    <i class="fa-solid fa-paper-plane"></i> KORFIRMASI PENDAFTARAN & DOKUMEN
                 </button>
                 <button type="button" onclick="submitRegistrationToWA()" class="btn" style="width: 100%; padding: 0.85rem; font-weight: 900; border-radius: 99px; background: #25d366; border: none; color: white; box-shadow: 0 0 20px rgba(37,211,102,0.4);">
                     <i class="fa-brands fa-whatsapp"></i> Chat Admin WA

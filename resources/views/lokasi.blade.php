@@ -79,7 +79,7 @@
 
                         <!-- Action Buttons -->
                         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.65rem;">
-                            <button type="button" onclick="openTrialModal('FitLife HQ Kaliurang (Sleman)')" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(132,204,22,0.3);">
+                            <button type="button" onclick="openTrialModal('FitLife HQ Kaliurang (Sleman)')" class="btn glow-btn" style="background: #84cc16; color: #ffffff !important; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(132,204,22,0.3);">
                                 <i class="fa-solid fa-bolt"></i> Booking Trial Here
                             </button>
                             <a href="https://maps.google.com/?q=FitLife+Center+Kaliurang+Sleman" target="_blank" class="btn" style="background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.8rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-align: center; text-decoration: none;">
@@ -121,7 +121,7 @@
 
                         <!-- Action Buttons -->
                         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.65rem;">
-                            <button type="button" onclick="openTrialModal('FitLife Studio Seturan (UGM/Depok)')" class="btn" style="background: #38bdf8; color: #090d0b; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(56,189,248,0.3);">
+                            <button type="button" onclick="openTrialModal('FitLife Studio Seturan (UGM/Depok)')" class="btn" style="background: #38bdf8; color: #ffffff !important; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(56,189,248,0.3);">
                                 <i class="fa-solid fa-bolt"></i> Booking Trial Here
                             </button>
                             <a href="https://maps.google.com/?q=FitLife+Studio+Seturan+Depok" target="_blank" class="btn" style="background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.8rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-align: center; text-decoration: none;">
@@ -163,7 +163,7 @@
 
                         <!-- Action Buttons -->
                         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.65rem;">
-                            <button type="button" onclick="openTrialModal('FitLife Studio Sewon (Bantul)')" class="btn" style="background: #fbbf24; color: #090d0b; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(251,191,36,0.3);">
+                            <button type="button" onclick="openTrialModal('FitLife Studio Sewon (Bantul)')" class="btn" style="background: #fbbf24; color: #ffffff !important; border: none; padding: 0.8rem; border-radius: 99px; font-weight: 900; font-size: 0.85rem; cursor: pointer; box-shadow: 0 0 15px rgba(251,191,36,0.3);">
                                 <i class="fa-solid fa-bolt"></i> Booking Trial Here
                             </button>
                             <a href="https://maps.google.com/?q=FitLife+Studio+Sewon+Bantul" target="_blank" class="btn" style="background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.8rem; border-radius: 99px; font-weight: 800; font-size: 0.85rem; text-align: center; text-decoration: none;">

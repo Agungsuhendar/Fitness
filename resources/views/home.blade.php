@@ -24,6 +24,16 @@
             display: none !important;
         }
     }
+    @media (max-width: 576px) {
+        .mobile-hero-img {
+            transform: scale(1.76) translateY(52px) !important;
+        }
+    }
+    @media (max-width: 420px) {
+        .mobile-hero-img {
+            transform: scale(1.80) translateY(50px) !important;
+        }
+    }
 </style>
 
 <!-- Hero Section with Full-Width Gym Background & Overhead Neon Lights -->
@@ -109,9 +119,9 @@
             <div class="hero-image-col" style="position: relative; z-index: 5;">
                 <div class="hero-image-container" style="position: relative; width: 100%; height: 580px; display: flex; justify-content: center; align-items: flex-end;">
                     
-                    <!-- Transparent Cutout Models Figure (Enlarged slightly for maximum impact) -->
+                    <!-- Transparent Cutout Models Figure (Enlarged +5% and lowered ~10% for desktop) -->
                     <div style="position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: flex-end;">
-                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" class="hero-model-img" style="height: 100%; max-width: 100%; object-fit: contain; transform: translate(-80px, 80px); filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9));" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
+                        <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Muscular Couple Cutout" class="hero-model-img" style="height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.52) translate(-45px, 115px); transform-origin: bottom center; filter: drop-shadow(0 25px 40px rgba(0,0,0,0.9));">
                     </div>
 
                     <!-- Right Floating Trial Card (Matches Screenshot Exactly) -->
@@ -134,7 +144,7 @@
             <!-- 1. Background Cutout Models Image (Raised Up & Placed Behind Text) -->
             <div style="position: relative; width: 100%; height: 350px; margin-bottom: -110px; display: flex; justify-content: center; align-items: flex-end; z-index: 1;">
                 <div style="position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: flex-end;">
-                    <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Couple Cutout Mobile" style="height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.18) translateY(-35px); filter: drop-shadow(0 15px 30px rgba(0,0,0,0.9)); opacity: 0.85;" onerror="this.onerror=null; this.src='{{ asset('images/assets/fitlife_hero_couple.png') }}';">
+                    <img src="{{ asset('images/assets/fitlife_models_cutout.png') }}" alt="FitLife Couple Cutout Mobile" class="mobile-hero-img" style="height: 100%; max-width: 100%; object-fit: contain; transform: scale(1.76) translateY(52px); transform-origin: bottom center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.9)); opacity: 0.92;">
                 </div>
 
                 <!-- Floating Trial Card Mobile (Lowered Down) -->

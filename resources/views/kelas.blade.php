@@ -83,7 +83,7 @@
                             Sisa {{ $c->remaining_slots }} Slot Tempat
                         </span>
 
-                        <button type="button" onclick="openClassBookingModal('{{ $c->title }}', '{{ $c->day }}', '{{ $c->time }}', '{{ $c->branch }}')" class="btn glow-btn" style="background: #84cc16; color: #090d0b; border: none; padding: 0.55rem 1.15rem; border-radius: 99px; font-weight: 900; font-size: 0.825rem; cursor: pointer; box-shadow: 0 0 15px rgba(132,204,22,0.4);">
+                        <button type="button" onclick="openClassBookingModal('{{ $c->title }}', '{{ $c->day }}', '{{ $c->time }}', '{{ $c->branch }}')" class="btn glow-btn" style="background: #84cc16; color: #ffffff !important; border: none; padding: 0.55rem 1.15rem; border-radius: 99px; font-weight: 900; font-size: 0.825rem; cursor: pointer; box-shadow: 0 0 15px rgba(132,204,22,0.4);">
                             ⚡ Reservasi Slot
                         </button>
                     </div>
@@ -116,12 +116,12 @@
         <form onsubmit="handleClassBookingSubmit(event)">
             <div style="margin-bottom: 1rem;">
                 <label style="font-size: 0.8rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.4rem;">NAMA LENGKAP <span style="color: #ef4444;">*</span></label>
-                <input type="text" id="classMemberName" required placeholder="Masukkan nama Anda..." value="Bima Prasetya" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); padding: 0.75rem 1rem; border-radius: 0.75rem; color: white; font-size: 0.9rem; outline: none;">
+                <input type="text" id="classMemberName" required placeholder="Masukkan nama Anda..." value="{{ Auth::user()->name ?? '' }}" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); padding: 0.75rem 1rem; border-radius: 0.75rem; color: white; font-size: 0.9rem; outline: none;">
             </div>
 
             <div style="margin-bottom: 1.25rem;">
                 <label style="font-size: 0.8rem; font-weight: 800; color: #cbd5e1; display: block; margin-bottom: 0.4rem;">NO. WHATSAPP <span style="color: #ef4444;">*</span></label>
-                <input type="text" id="classMemberPhone" required placeholder="Contoh: 081234567890" value="081234567890" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); padding: 0.75rem 1rem; border-radius: 0.75rem; color: white; font-size: 0.9rem; outline: none;">
+                <input type="text" id="classMemberPhone" required placeholder="Contoh: 081234567890" value="{{ Auth::user()->phone ?? '' }}" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); padding: 0.75rem 1rem; border-radius: 0.75rem; color: white; font-size: 0.9rem; outline: none;">
             </div>
 
             <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.9rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
@@ -189,7 +189,8 @@
                 class_time: activeClassTime,
                 branch: activeClassBranch,
                 member_name: name,
-                member_id: 'FL-MBR-7782'
+                member_phone: phone,
+                member_id: '{{ Auth::user()->member_card_id ?? "GUEST" }}'
             })
         })
         .then(res => res.json())

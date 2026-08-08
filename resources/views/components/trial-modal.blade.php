@@ -115,8 +115,9 @@
 
                 <!-- Submit Action Buttons -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                    <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #090d0b; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
-                        <i class="fa-solid fa-ticket"></i> Dapatkan Tiket Trial
+                    <button type="submit" class="btn glow-btn" style="width: 100%; background: #84cc16; color: #ffffff !important; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>KIRIM PENDAFTARAN TRIAL</span>
                     </button>
                     <button type="button" onclick="submitTrialToWA()" class="btn" style="width: 100%; background: #25d366; color: #ffffff; border: none; padding: 0.85rem; border-radius: 99px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(37,211,102,0.4);">
                         <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i> Booking via WA
