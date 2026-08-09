@@ -123,5 +123,73 @@ Buka portal member Anda di {{ url('/login') }} untuk klaim promo sekarang! 💪<
         </form>
     </div>
 
+    <!-- Automated Renewal Alert Section (H-7 & H-3 Expired Engine) -->
+    <div class="admin-card" style="padding: 2rem; border-radius: 1.5rem; background: var(--admin-card-bg, #0d1410); border: 1.5px solid #eab308; margin-top: 2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.4);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h4 style="font-size: 1.2rem; color: #eab308; margin: 0 0 0.2rem; font-weight: 900; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.6rem;">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Engine Auto-Alert WA Perpanjangan Member Expired (H-7, H-3 &amp; H-1)
+                </h4>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin: 0;">
+                    Sistem mendeteksi member yang paketnya akan berakhir dalam 7 hari &amp; mengirimkan WA ramah dengan Link Perpanjangan 1-Klik.
+                </p>
+            </div>
+
+            <form action="{{ route('admin.wa-broadcast.trigger-renewal') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn glow-btn" style="background: linear-gradient(135deg, #eab308 0%, #84cc16 100%); color: #060907 !important; border: none; padding: 0.75rem 1.5rem; border-radius: 99px; font-weight: 900; font-size: 0.925rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(234, 179, 8, 0.4);">
+                    <i class="fa-solid fa-bolt"></i> ⚡ JALANKAN AUTO-ALERT PERPANJANGAN SEKARANG
+                </button>
+            </form>
+        </div>
+
+        <!-- Expiring Members Table -->
+        <div style="overflow-x: auto; margin-top: 1rem;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #eab308; font-size: 0.775rem; text-transform: uppercase;">
+                        <th style="padding: 0.75rem;">Member</th>
+                        <th style="padding: 0.75rem;">No. WA</th>
+                        <th style="padding: 0.75rem;">Paket</th>
+                        <th style="padding: 0.75rem;">Tgl Expired</th>
+                        <th style="padding: 0.75rem;">Sisa Sesi</th>
+                        <th style="padding: 0.75rem;">Status Alert Terakhir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($expiringMembers ?? [] as $m)
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 0.75rem;">
+                            <div style="font-weight: 800; color: white;">{{ $m->name }}</div>
+                            <div style="font-size: 0.725rem; font-family: monospace; color: #38bdf8;">{{ $m->member_card_id }}</div>
+                        </td>
+                        <td style="padding: 0.75rem; color: #cbd5e1; font-family: monospace;">{{ $m->phone }}</td>
+                        <td style="padding: 0.75rem; color: #84cc16; font-weight: 800;">{{ $m->membership_type }}</td>
+                        <td style="padding: 0.75rem; color: #f87171; font-weight: 800;">
+                            {{ $m->membership_expires_at ? $m->membership_expires_at->format('d M Y') : 'Segera' }}
+                        </td>
+                        <td style="padding: 0.75rem; font-weight: 800; color: {{ $m->remaining_sessions <= 2 ? '#f87171' : '#38bdf8' }};">
+                            {{ $m->remaining_sessions }} Sesi
+                        </td>
+                        <td style="padding: 0.75rem; color: #94a3b8; font-size: 0.775rem;">
+                            @if($m->last_renewal_alert_at)
+                                ✅ Terkirim {{ \Carbon\Carbon::parse($m->last_renewal_alert_at)->diffForHumans() }}
+                            @else
+                                ⏳ Belum Dikirim Hari Ini
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" style="padding: 1.5rem; text-align: center; color: #94a3b8;">
+                            Semua keanggotaan member masih aktif panjang &amp; sisa sesi melimpah!
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 @endsection

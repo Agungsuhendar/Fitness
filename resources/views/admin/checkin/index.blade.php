@@ -117,18 +117,25 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
-                        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.85rem; margin-bottom: 1.25rem;">
+                        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 0.85rem;">
                             <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800;">STATUS SESI PT</span>
-                            <div style="font-size: 1.1rem; font-weight: 900; color: #ef4444; margin-top: 0.2rem;" id="resPtDeducted">
+                            <div style="font-size: 1rem; font-weight: 900; color: #ef4444; margin-top: 0.2rem;" id="resPtDeducted">
                                 -1 Sesi Terpakai
                             </div>
                         </div>
 
-                        <div style="background: rgba(132,204,22,0.1); border: 1.5px solid #84cc16; border-radius: 1rem; padding: 1rem;">
+                        <div style="background: rgba(132,204,22,0.1); border: 1.5px solid #84cc16; border-radius: 1rem; padding: 0.85rem;">
                             <span style="font-size: 0.725rem; color: #84cc16; font-weight: 800;">SISA SESI TERSISA</span>
-                            <div style="font-size: 1.1rem; font-weight: 900; color: #84cc16; margin-top: 0.2rem;" id="resRemainingSessions">
+                            <div style="font-size: 1rem; font-weight: 900; color: #84cc16; margin-top: 0.2rem;" id="resRemainingSessions">
                                 6 Sesi Tersisa
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(56,189,248,0.1); border: 1.5px solid #38bdf8; border-radius: 1rem; padding: 0.85rem;">
+                            <span style="font-size: 0.725rem; color: #38bdf8; font-weight: 800;">🔑 NOMOR LOKER</span>
+                            <div style="font-size: 1rem; font-weight: 900; color: #38bdf8; margin-top: 0.2rem;" id="resLockerNumber">
+                                L-12
                             </div>
                         </div>
                     </div>
@@ -222,6 +229,7 @@
                 document.getElementById('resMemberName').innerHTML = `<span style="color:#ffffff;">${data.name}</span> <span style="font-size:0.9rem; color:#84cc16;">(${data.member_id})</span>`;
                 document.getElementById('resPtDeducted').innerText = data.pt_deducted;
                 document.getElementById('resRemainingSessions').innerText = data.remaining_sessions;
+                document.getElementById('resLockerNumber').innerText = data.assigned_locker || 'L-12';
                 document.getElementById('resBranch').innerText = data.branch || 'Sleman HQ';
                 document.getElementById('resCoach').innerText = data.assigned_coach || 'Coach Hendra Wijaya';
 
@@ -229,7 +237,7 @@
 
                 // TTS Voice Announcement
                 if (document.getElementById('ttsToggle') && document.getElementById('ttsToggle').checked) {
-                    speakAnnouncement(`Selamat Datang Kak ${data.name}! Akses pintu studio diizinkan. ${data.remaining_sessions}.`);
+                    speakAnnouncement(`Selamat Datang Kak ${data.name}! Check in berhasil. Loker Anda Nomor ${data.assigned_locker || 'L-12'}. ${data.remaining_sessions}.`);
                 }
 
                 // Add to Log Table

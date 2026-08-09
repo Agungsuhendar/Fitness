@@ -452,6 +452,14 @@ class LeadController extends Controller
                 }
             } catch (\Exception $e) {}
 
+            // Auto Assign Locker for Member
+            $assignedLocker = null;
+            try {
+                $assignedLocker = \App\Models\Locker::autoAssignForUser($user);
+            } catch (\Throwable $t) {}
+
+            $lockerNumberStr = $assignedLocker ? $assignedLocker->locker_number : 'L-12';
+
             return response()->json([
                 'success' => true,
                 'access_granted' => true,
@@ -463,7 +471,8 @@ class LeadController extends Controller
                 'pt_deducted' => '-1 Sesi PT Terpakai',
                 'remaining_sessions' => $user->remaining_sessions . ' Sesi Tersisa',
                 'assigned_coach' => $user->assigned_coach ?? 'Coach Hendra Wijaya',
-                'message' => 'Check-in Studio Berhasil! Kuota berkurang 1 sesi (' . $user->remaining_sessions . ' Sesi tersisa).'
+                'assigned_locker' => $lockerNumberStr,
+                'message' => 'Check-in Studio Berhasil! Loker Anda Nomor ' . $lockerNumberStr . ' (' . $user->remaining_sessions . ' Sesi tersisa).'
             ]);
         }
 

@@ -100,4 +100,24 @@ class WhatsAppService
 
         return self::sendMessage($user->phone, urldecode($msg));
     }
+
+    /**
+     * Send Membership Expiry Warning Notification (H-7, H-3, H-1 Renewal Alert)
+     */
+    public static function sendMembershipExpiryWarningNotification(User $user, int $daysRemaining): bool
+    {
+        $expiryDateStr = $user->membership_expires_at ? $user->membership_expires_at->format('d M Y') : 'segera';
+        $renewalUrl = url('/invoice?id=' . ($user->member_card_id ?: $user->id));
+
+        $msg = "⏳ *PENGINGAT PERPANJANGAN KEANGGOTAAN FITLIFE*%0A%0A"
+            . "Halo Kak *{$user->name}*, keanggotaan paket FitLife Gym Anda akan berakhir dalam *{$daysRemaining} hari lagi* ({$expiryDateStr})!%0A%0A"
+            . "🆔 *ID Member:* `{$user->member_card_id}`%0A"
+            . "🏋️ *Paket:* {$user->membership_type}%0A"
+            . "📊 *Sisa Sesi PT:* {$user->remaining_sessions} Sesi%0A%0A"
+            . "Agar akses studio & progres latihan fisik Anda tidak terputus, yuk perpanjang keanggotaan Anda sekarang secara instan via QRIS/VA: %0A"
+            . "🔗 *Link Perpanjangan 1-Klik:* {$renewalUrl}%0A%0A"
+            . "Terima kasih & Salam Sehat, FitLife Center Jogja 💪✨";
+
+        return self::sendMessage($user->phone, urldecode($msg));
+    }
 }

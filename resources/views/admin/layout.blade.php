@@ -687,6 +687,12 @@
                         <span class="nav-text">Presensi Kiosk</span>
                     </a>
                 </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.lockers.index') }}" class="{{ request()->routeIs('admin.lockers.*') ? 'active' : '' }}" title="Loker Gym">
+                        <i class="fa-solid fa-key"></i>
+                        <span class="nav-text">Loker Gym</span>
+                    </a>
+                </li>
                 @endif
 
                 @if($canAccess('payments'))
@@ -703,6 +709,18 @@
                     <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}" title="Laporan">
                         <i class="fa-solid fa-chart-pie"></i>
                         <span class="nav-text">Laporan Keuangan</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.pt-commissions.index') }}" class="{{ request()->routeIs('admin.pt-commissions.*') ? 'active' : '' }}" title="Komisi PT">
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <span class="nav-text">Komisi Trainer</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.staff-shifts.index') }}" class="{{ request()->routeIs('admin.staff-shifts.*') ? 'active' : '' }}" title="Shift Pegawai">
+                        <i class="fa-solid fa-user-clock"></i>
+                        <span class="nav-text">Shift Pegawai</span>
                     </a>
                 </li>
                 @endif

@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\TutorialApiController;
 use App\Http\Controllers\Api\NotificationApiController;
 use App\Http\Controllers\Api\MembershipPlanApiController;
 use App\Http\Controllers\Api\TrainingProgramApiController;
+use App\Http\Controllers\Api\StaffAttendanceApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,6 +135,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/training/workout-sessions/complete', [TrainingProgramApiController::class, 'completeSession']);
         Route::get('/training/progress', [TrainingProgramApiController::class, 'getProgress']);
         Route::post('/training/progress', [TrainingProgramApiController::class, 'storeProgress']);
+
+        // Flutter Mobile HR Professional Staff Attendance Endpoints (Face AI & Geofencing GPS)
+        Route::prefix('staff')->group(function () {
+            Route::post('/clock-in', [StaffAttendanceApiController::class, 'clockIn']);
+            Route::post('/clock-out', [StaffAttendanceApiController::class, 'clockOut']);
+            Route::get('/shift-today', [StaffAttendanceApiController::class, 'todayShift']);
+            Route::get('/attendance-history', [StaffAttendanceApiController::class, 'history']);
+        });
 
         // AI Chatbot Handoff Endpoint for Flutter
         Route::post('/chatbot', [AiChatbotController::class, 'ask']);

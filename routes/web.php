@@ -23,6 +23,9 @@ use App\Http\Controllers\Admin\AdminInventoryLogController;
 use App\Http\Controllers\Admin\AdminAiToolsController;
 use App\Http\Controllers\Admin\AdminAiForecastingController;
 use App\Http\Controllers\Admin\AdminPurchaseOrderController;
+use App\Http\Controllers\Admin\AdminLockerController;
+use App\Http\Controllers\Admin\AdminPtCommissionController;
+use App\Http\Controllers\Admin\AdminStaffShiftController;
 use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\AiPlannerController;
 use App\Http\Controllers\AiChatbotController;
@@ -307,6 +310,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         // Mass WhatsApp Broadcast Engine
         Route::get('/wa-broadcast', [AdminWaBroadcastController::class, 'index'])->name('wa-broadcast.index');
         Route::post('/wa-broadcast/send', [AdminWaBroadcastController::class, 'sendBroadcast'])->name('wa-broadcast.send');
+        Route::post('/wa-broadcast/trigger-renewal', [AdminWaBroadcastController::class, 'triggerRenewalAlerts'])->name('wa-broadcast.trigger-renewal');
 
         // Studio Group Fitness Classes Schedule
         Route::get('/classes', [AdminClassController::class, 'index'])->name('classes.index');
@@ -391,7 +395,27 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('/purchase-orders', [AdminPurchaseOrderController::class, 'store'])->name('purchase-orders.store');
         Route::get('/purchase-orders/{id}', [AdminPurchaseOrderController::class, 'show'])->name('purchase-orders.show');
         Route::post('/purchase-orders/{id}/receive', [AdminPurchaseOrderController::class, 'receiveGoods'])->name('purchase-orders.receive');
+
+        // Locker Management Routes
+        Route::get('/lockers', [AdminLockerController::class, 'index'])->name('lockers.index');
+        Route::post('/lockers', [AdminLockerController::class, 'store'])->name('lockers.store');
+        Route::post('/lockers/batch', [AdminLockerController::class, 'batchGenerate'])->name('lockers.batch');
+        Route::post('/lockers/assign', [AdminLockerController::class, 'assign'])->name('lockers.assign');
+        Route::post('/lockers/{id}/release', [AdminLockerController::class, 'release'])->name('lockers.release');
+        Route::post('/lockers/{id}/maintenance', [AdminLockerController::class, 'toggleMaintenance'])->name('lockers.maintenance');
         Route::post('/suppliers', [AdminPurchaseOrderController::class, 'storeSupplier'])->name('suppliers.store');
+
+        // PT Commission Routes
+        Route::get('/pt-commissions', [AdminPtCommissionController::class, 'index'])->name('pt-commissions.index');
+        Route::post('/pt-commissions/generate', [AdminPtCommissionController::class, 'generateMonthlyPayouts'])->name('pt-commissions.generate');
+        Route::post('/pt-commissions/{id}/mark-paid', [AdminPtCommissionController::class, 'markAsPaid'])->name('pt-commissions.mark-paid');
+        Route::get('/pt-commissions/{id}/slip', [AdminPtCommissionController::class, 'printSlip'])->name('pt-commissions.slip');
+
+        // Staff Shift & HR Attendance Routes (Dual-Mode Web & Flutter Mobile API Ready)
+        Route::get('/staff-shifts', [AdminStaffShiftController::class, 'index'])->name('staff-shifts.index');
+        Route::post('/staff-shifts', [AdminStaffShiftController::class, 'storeShift'])->name('staff-shifts.store');
+        Route::post('/staff-shifts/clock-in', [AdminStaffShiftController::class, 'webClockIn'])->name('staff-shifts.clock-in');
+        Route::post('/staff-shifts/{id}/clock-out', [AdminStaffShiftController::class, 'webClockOut'])->name('staff-shifts.clock-out');
 
         Route::get('/payments', [LeadController::class, 'adminPaymentsIndex'])->name('payments.index');
         Route::post('/payments/{id}/approve', [LeadController::class, 'approvePayment'])->name('payments.approve');

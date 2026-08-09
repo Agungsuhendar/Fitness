@@ -6,19 +6,37 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 
 class AdminWaBroadcastController extends Controller
 {
     public function index()
     {
+        $today = Carbon::today();
+
+        $expiringMembers = User::whereNotNull('phone')
+            ->where(function($q) {
+                $q->where('status', 'like', '%Active%')
+                  ->orWhere('status', 'like', '%LUNAS%')
+                  ->orWhere('status', 'like', '%Approved%')
+                  ->orWhere('status', 'like', '%Aktif%');
+            })
+            ->where(function($q) use ($today) {
+                $q->whereBetween('membership_expires_at', [$today, $today->copy()->addDays(7)])
+                  ->orWhere('remaining_sessions', '<=', 2);
+            })
+            ->get();
+
         $targetCounts = [
             'all' => User::whereNotNull('phone')->count(),
-            'active' => User::where('status', 'like', '%Aktif%')->whereNotNull('phone')->count(),
+            'active' => User::where('status', 'like', '%Aktif%')->orWhere('status', 'like', '%Active%')->whereNotNull('phone')->count(),
             'low_sessions' => User::where('remaining_sessions', '<=', 2)->whereNotNull('phone')->count(),
+            'expiring_soon' => $expiringMembers->count(),
             'members' => User::where('role', 'member')->whereNotNull('phone')->count(),
         ];
 
-        return view('admin.wa_broadcast.index', compact('targetCounts'));
+        return view('admin.wa_broadcast.index', compact('targetCounts', 'expiringMembers'));
     }
 
     public function sendBroadcast(Request $request)
@@ -34,7 +52,9 @@ class AdminWaBroadcastController extends Controller
         $query = User::whereNotNull('phone')->where('phone', '!=', '');
 
         if ($group === 'active') {
-            $query->where('status', 'like', '%Aktif%');
+            $query->where(function($q) {
+                $q->where('status', 'like', '%Aktif%')->orWhere('status', 'like', '%Active%');
+            });
         } elseif ($group === 'low_sessions') {
             $query->where('remaining_sessions', '<=', 2);
         } elseif ($group === 'members') {
@@ -62,5 +82,14 @@ class AdminWaBroadcastController extends Controller
 
         return redirect()->route('admin.wa-broadcast.index')
             ->with('success', "Broadcast WhatsApp BERHASIL DITERUSKAN! {$successCount} Pesan Terkirim Sukses, {$failedCount} Gagal.");
+    }
+
+    public function triggerRenewalAlerts(Request $request)
+    {
+        Artisan::call('fitness:send-renewal-alerts');
+        $output = Artisan::output();
+
+        return redirect()->route('admin.wa-broadcast.index')
+            ->with('success', "Engine Auto-Alert WA Perpanjangan (Renewal Alerts) Sukses Dijalankan! Rincian: " . trim($output));
     }
 }
