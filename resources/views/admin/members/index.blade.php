@@ -139,8 +139,14 @@
             </table>
         </div>
 
-        <div style="margin-top: 1.5rem;">
-            {{ $members->links() }}
+        <!-- Sleek Pagination Bar -->
+        <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; background: #0d1310; border: 1.5px solid rgba(255,255,255,0.08); padding: 1rem 1.35rem; border-radius: 1.25rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+            <div style="color: #94a3b8; font-size: 0.85rem; font-weight: 700;">
+                Menampilkan Data Member Halaman <strong style="color: #84cc16;">{{ $members->currentPage() }}</strong> dari <strong style="color: white;">{{ $members->lastPage() }}</strong> (Total <strong style="color: white;">{{ $members->total() }}</strong> Member)
+            </div>
+            <div>
+                {{ $members->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     </div>
 

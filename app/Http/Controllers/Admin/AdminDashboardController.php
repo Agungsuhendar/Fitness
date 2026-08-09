@@ -55,21 +55,21 @@ class AdminDashboardController extends Controller
         $monthlyRegData = array_fill(0, 12, 0);
         $monthlyTrialData = array_fill(0, 12, 0);
 
-        $allRegistrations = Registration::all();
-        $allTrials = TrialBooking::all();
+        $regDates = Registration::whereNotNull('created_at')->pluck('created_at');
+        $trialDates = TrialBooking::whereNotNull('created_at')->pluck('created_at');
 
-        foreach ($allRegistrations as $reg) {
-            if ($reg->created_at) {
-                $m = (int) $reg->created_at->format('n');
+        foreach ($regDates as $dt) {
+            if ($dt) {
+                $m = (int) $dt->format('n');
                 if ($m >= 1 && $m <= 12) {
                     $monthlyRegData[$m - 1]++;
                 }
             }
         }
 
-        foreach ($allTrials as $tr) {
-            if ($tr->created_at) {
-                $m = (int) $tr->created_at->format('n');
+        foreach ($trialDates as $dt) {
+            if ($dt) {
+                $m = (int) $dt->format('n');
                 if ($m >= 1 && $m <= 12) {
                     $monthlyTrialData[$m - 1]++;
                 }
@@ -84,12 +84,13 @@ class AdminDashboardController extends Controller
 
         // 2. Program Favorit Distribution (Registration + Trial Combined)
         $programChart = [];
-        foreach ($allRegistrations as $reg) {
-            $p = $reg->program_name;
+        $regPrograms = Registration::whereNotNull('program_name')->pluck('program_name');
+        $trialPrograms = TrialBooking::whereNotNull('program_name')->pluck('program_name');
+
+        foreach ($regPrograms as $p) {
             if ($p) $programChart[$p] = ($programChart[$p] ?? 0) + 1;
         }
-        foreach ($allTrials as $tr) {
-            $p = $tr->program_name;
+        foreach ($trialPrograms as $p) {
             if ($p) $programChart[$p] = ($programChart[$p] ?? 0) + 1;
         }
 
@@ -105,12 +106,13 @@ class AdminDashboardController extends Controller
 
         // 3. Lokasi Studio Gym Favorit (Registration + Trial Combined)
         $locationChart = [];
-        foreach ($allRegistrations as $reg) {
-            $l = $reg->preferred_location;
+        $regLocations = Registration::whereNotNull('preferred_location')->pluck('preferred_location');
+        $trialLocations = TrialBooking::whereNotNull('preferred_location')->pluck('preferred_location');
+
+        foreach ($regLocations as $l) {
             if ($l) $locationChart[$l] = ($locationChart[$l] ?? 0) + 1;
         }
-        foreach ($allTrials as $tr) {
-            $l = $tr->preferred_location;
+        foreach ($trialLocations as $l) {
             if ($l) $locationChart[$l] = ($locationChart[$l] ?? 0) + 1;
         }
 

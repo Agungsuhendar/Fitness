@@ -8,14 +8,18 @@ use App\Models\Coach;
 use App\Models\Location;
 use App\Models\MembershipPlan;
 use App\Models\Program;
+use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminMemberController extends Controller
 {
     public function index(Request $request)
     {
         $q = trim($request->input('q'));
-        $query = User::where('role', 'member')->orWhereNull('role');
+        $query = User::where(function($b) {
+            $b->where('role', 'member')->orWhereNull('role');
+        });
 
         if ($q) {
             $query->where(function($builder) use ($q) {
@@ -27,8 +31,17 @@ class AdminMemberController extends Controller
         }
 
         $members = $query->orderByDesc('created_at')->paginate(15);
-        $totalMembers = User::where('role', 'member')->count();
-        $totalActiveSessions = User::where('role', 'member')->sum('remaining_sessions');
+
+        // Single SQL Query for User Metrics
+        $userMetrics = DB::table('users')
+            ->where(function($b) {
+                $b->where('role', 'member')->orWhereNull('role');
+            })
+            ->selectRaw('COUNT(*) as total_members, SUM(COALESCE(remaining_sessions, 0)) as total_sessions')
+            ->first();
+
+        $totalMembers = (int)($userMetrics->total_members ?? 0);
+        $totalActiveSessions = (int)($userMetrics->total_sessions ?? 0);
 
         return view('admin.members.index', compact('members', 'q', 'totalMembers', 'totalActiveSessions'));
     }
@@ -88,6 +101,11 @@ class AdminMemberController extends Controller
         $nextId = $lastUser ? ($lastUser->id + 1) : 1;
         $memberCardId = 'FL-MEM-' . str_pad($nextId, 3, '0', STR_PAD_LEFT);
 
+        $isPending = str_contains(strtolower((string)$validated['status']), 'pending') || str_contains(strtolower((string)($validated['payment_method'] ?? '')), 'qris');
+
+        $finalStatus = $isPending ? 'Pending Verifikasi (Menunggu Scan QRIS)' : $validated['status'];
+        $initialSessions = $isPending ? 0 : (int) ($validated['remaining_sessions'] ?? 0);
+
         $memberData = [
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -98,9 +116,9 @@ class AdminMemberController extends Controller
             'membership_type' => $validated['membership_type'],
             'membership_price' => $validated['membership_price'] ?? null,
             'payment_method' => $validated['payment_method'] ?? 'Cash (Tunai)',
-            'status' => $validated['status'],
+            'status' => $finalStatus,
             'branch' => $validated['branch'] ?? 'Sleman HQ (Jl. Kaliurang)',
-            'remaining_sessions' => (int) ($validated['remaining_sessions'] ?? 0),
+            'remaining_sessions' => $initialSessions,
             'total_sessions' => (int) ($validated['remaining_sessions'] ?? 0),
             'assigned_coach' => $validated['assigned_coach'] ?? null,
             'initial_weight' => $validated['initial_weight'] ?? null,
@@ -119,13 +137,50 @@ class AdminMemberController extends Controller
 
         $member = User::create($memberData);
 
+        $invStamp = 'INV' . date('YmdHis');
+        $newInvoiceId = $memberCardId . '-' . $invStamp;
+        $pkgTitle = $validated['membership_type'];
+        $amount = (int) ($validated['membership_price'] ?? 300000);
+
+        try {
+            \App\Models\Payment::create([
+                'order_id' => $newInvoiceId,
+                'user_id' => $member->id,
+                'member_name' => $member->name,
+                'member_phone' => $member->phone,
+                'package_name' => $pkgTitle,
+                'gross_amount' => $amount,
+                'net_amount' => $amount,
+                'payment_type' => $isPending ? 'qris' : 'cash',
+                'payment_method_detail' => $validated['payment_method'] ?? 'Cash (Tunai)',
+                'transaction_status' => $isPending ? 'pending' : 'settlement',
+                'paid_at' => $isPending ? null : now(),
+            ]);
+        } catch (\Exception $e) {}
+
+        if ($isPending) {
+            return redirect()->route('invoice.show', ['id' => $newInvoiceId])
+                ->with('success', 'Member "' . $member->name . '" berhasil didaftarkan! Tagihan QRIS Baru (' . $newInvoiceId . ') berhasil diterbitkan.');
+        }
+
         return redirect()->route('admin.members.index')
-            ->with('success', 'Akun member baru "' . $member->name . '" (ID Card: ' . $memberCardId . ') BERHASIL DIDAFTARKAN!');
+            ->with('success', 'Akun member baru "' . $member->name . '" (ID Card: ' . $memberCardId . ') & e-Kuitansi Lunas (' . $newInvoiceId . ') BERHASIL DIDAFTARKAN!');
     }
 
     public function edit($id)
     {
         $member = User::findOrFail($id);
+
+        try {
+            $cardId = $member->member_card_id ?: ('FL-MBR-' . str_pad($member->id, 4, '0', STR_PAD_LEFT));
+            $paymentHistory = \App\Models\Payment::where('user_id', $member->id)
+                ->orWhere('order_id', 'LIKE', $cardId . '%')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } catch (\Throwable $e) {
+            $paymentHistory = collect();
+        }
+
         try {
             $coaches = Coach::active()->ordered()->get();
         } catch (\Exception $e) {
@@ -153,7 +208,7 @@ class AdminMemberController extends Controller
             $programs = collect();
         }
 
-        return view('admin.members.edit', compact('member', 'coaches', 'branches', 'membershipPlans', 'programs'));
+        return view('admin.members.edit', compact('member', 'paymentHistory', 'coaches', 'branches', 'membershipPlans', 'programs'));
     }
 
     public function update(Request $request, $id)
@@ -186,6 +241,7 @@ class AdminMemberController extends Controller
 
         $topup = (int) $request->input('topup_sessions', 0);
         $newRemaining = (int) $validated['remaining_sessions'] + $topup;
+        $isQrisPayment = str_contains(strtolower((string)($validated['payment_method'] ?? '')), 'qris') || str_contains(strtolower((string)$validated['status']), 'pending');
 
         $updateData = [
             'name' => $validated['name'],
@@ -194,7 +250,7 @@ class AdminMemberController extends Controller
             'membership_type' => $validated['membership_type'],
             'membership_price' => $validated['membership_price'] ?? $member->membership_price,
             'payment_method' => $validated['payment_method'] ?? $member->payment_method,
-            'status' => $validated['status'],
+            'status' => $isQrisPayment ? 'Pending Verifikasi (Menunggu Scan QRIS)' : $validated['status'],
             'branch' => $validated['branch'] ?? $member->branch,
             'remaining_sessions' => $newRemaining,
             'total_sessions' => max((int) $member->total_sessions, $newRemaining),
@@ -217,8 +273,34 @@ class AdminMemberController extends Controller
 
         $member->update($updateData);
 
+        $invStamp = 'INV' . date('YmdHis');
+        $newInvoiceId = ($member->member_card_id ?: ('FL-MBR-' . str_pad($member->id, 4, '0', STR_PAD_LEFT))) . '-' . $invStamp;
+        $pkgTitle = $validated['membership_type'] . ($topup > 0 ? " (+Top-Up {$topup} Sesi)" : ' (Perpanjangan)');
+        $amount = (int) ($validated['membership_price'] ?? $member->membership_price ?? 300000);
+
+        try {
+            \App\Models\Payment::create([
+                'order_id' => $newInvoiceId,
+                'user_id' => $member->id,
+                'member_name' => $member->name,
+                'member_phone' => $member->phone,
+                'package_name' => $pkgTitle,
+                'gross_amount' => $amount,
+                'net_amount' => $amount,
+                'payment_type' => $isQrisPayment ? 'qris' : 'cash',
+                'payment_method_detail' => $validated['payment_method'] ?? 'Cash (Tunai)',
+                'transaction_status' => $isQrisPayment ? 'pending' : 'settlement',
+                'paid_at' => $isQrisPayment ? null : now(),
+            ]);
+        } catch (\Exception $e) {}
+
+        if ($isQrisPayment) {
+            return redirect()->route('invoice.show', ['id' => $newInvoiceId])
+                ->with('success', 'Tagihan QRIS perpanjangan/top-up untuk "' . $member->name . '" ("' . $newInvoiceId . '") berhasil diterbitkan! Silakan scan QRIS di bawah ini.');
+        }
+
         return redirect()->route('admin.members.index')
-            ->with('success', 'Data member "' . $member->name . '" & Kuota Sesi berhasil diperbarui!');
+            ->with('success', 'Data member "' . $member->name . '" & e-Kuitansi Pembayaran Lunas ("' . $newInvoiceId . '") BERHASIL DITERBITKAN!');
     }
 
     public function destroy($id)

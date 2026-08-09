@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\AdminClassController;
 use App\Http\Controllers\Admin\AdminInventoryLogController;
 use App\Http\Controllers\Admin\AdminAiToolsController;
 use App\Http\Controllers\Admin\AdminAiForecastingController;
+use App\Http\Controllers\Admin\AdminPurchaseOrderController;
 use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\AiPlannerController;
 use App\Http\Controllers\AiChatbotController;
@@ -370,10 +371,22 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('/pos', [AdminPosController::class, 'index'])->name('pos.index');
         Route::get('/pos/search-members', [AdminPosController::class, 'searchMembers'])->name('pos.search-members');
         Route::post('/pos/checkout', [AdminPosController::class, 'checkout'])->name('pos.checkout');
+        Route::get('/pos/check-status/{id}', [AdminPosController::class, 'checkTransactionStatus'])->name('pos.check-status');
         Route::get('/pos/receipt/{id}', [AdminPosController::class, 'showReceipt'])->name('pos.receipt');
         Route::get('/products', [AdminPosController::class, 'productsIndex'])->name('pos.products');
+        Route::get('/products/{id}/barcode', [AdminPosController::class, 'printBarcodeLabel'])->name('products.barcode');
         Route::post('/products', [AdminPosController::class, 'storeProduct'])->name('products.store');
         Route::put('/products/{id}', [AdminPosController::class, 'updateProduct'])->name('products.update');
+        Route::post('/products/{id}/opname', [AdminPosController::class, 'stockOpname'])->name('products.opname');
+        Route::delete('/products/{id}', [AdminPosController::class, 'destroyProduct'])->name('products.destroy');
+
+        // Purchase Order (PO) Supplier Routes
+        Route::get('/purchase-orders', [AdminPurchaseOrderController::class, 'index'])->name('purchase-orders.index');
+        Route::get('/purchase-orders/create', [AdminPurchaseOrderController::class, 'create'])->name('purchase-orders.create');
+        Route::post('/purchase-orders', [AdminPurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+        Route::get('/purchase-orders/{id}', [AdminPurchaseOrderController::class, 'show'])->name('purchase-orders.show');
+        Route::post('/purchase-orders/{id}/receive', [AdminPurchaseOrderController::class, 'receiveGoods'])->name('purchase-orders.receive');
+        Route::post('/suppliers', [AdminPurchaseOrderController::class, 'storeSupplier'])->name('suppliers.store');
 
         Route::get('/payments', [LeadController::class, 'adminPaymentsIndex'])->name('payments.index');
         Route::post('/payments/{id}/approve', [LeadController::class, 'approvePayment'])->name('payments.approve');

@@ -24,14 +24,21 @@
     <div style="width: 100%;">
         <div style="background: #0d1410; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 2.25rem; box-shadow: 0 25px 50px rgba(0,0,0,0.6); width: 100%;">
             
-            <div style="margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1.25rem;">
-                <h3 style="font-size: 1.5rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0 0 0.35rem; display: flex; align-items: center; gap: 0.65rem;">
-                    <i class="fa-solid fa-user-gear" style="color: var(--brand-lime, #84cc16);"></i>
-                    <span>Edit Member: {{ $member->name }}</span>
-                </h3>
-                <p style="color: #94a3b8; font-size: 0.875rem; margin: 0;">
-                    ID Card: <span style="color: var(--brand-lime, #84cc16); font-weight: 800;">{{ $member->member_card_id ?: ('FL-MBR-' . str_pad($member->id, 4, '0', STR_PAD_LEFT)) }}</span> • Terdaftar sejak: {{ $member->created_at ? $member->created_at->format('d M Y, H:i') : 'Baru saja' }}
-                </p>
+            <div style="margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="font-size: 1.5rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0 0 0.35rem; display: flex; align-items: center; gap: 0.65rem;">
+                        <i class="fa-solid fa-user-gear" style="color: var(--brand-lime, #84cc16);"></i>
+                        <span>Edit Member: {{ $member->name }}</span>
+                    </h3>
+                    <p style="color: #94a3b8; font-size: 0.875rem; margin: 0;">
+                        ID Card: <span style="color: var(--brand-lime, #84cc16); font-weight: 800;">{{ $member->member_card_id ?: ('FL-MBR-' . str_pad($member->id, 4, '0', STR_PAD_LEFT)) }}</span> • Terdaftar sejak: {{ $member->created_at ? $member->created_at->format('d M Y, H:i') : 'Baru saja' }}
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ route('invoice.show', ['id' => $member->member_card_id ?: ('FL-MBR-' . str_pad($member->id, 4, '0', STR_PAD_LEFT))]) }}" target="_blank" class="btn" style="background: rgba(132, 204, 22, 0.15); border: 1.5px solid #84cc16; color: #84cc16; padding: 0.5rem 1.1rem; border-radius: 99px; font-weight: 800; font-size: 0.825rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-qrcode"></i> Buka Kuitansi / Kode QRIS Pembayaran
+                    </a>
+                </div>
             </div>
 
             <form method="POST" action="{{ route('admin.members.update', $member->id) }}">
@@ -120,8 +127,16 @@
                         <input type="number" name="membership_price" id="membershipPriceInput" class="form-control bg-dark text-white border-secondary fw-bold" value="{{ old('membership_price', $member->membership_price ?: 300000) }}" placeholder="e.g. 300000" style="color: var(--brand-lime, #84cc16) !important;">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">METODE PEMBAYARAN</label>
-                        <input type="text" name="payment_method" class="form-control bg-dark text-white border-secondary" value="{{ old('payment_method', $member->payment_method ?: 'Cash (Tunai)') }}">
+                        <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">METODE PEMBAYARAN *</label>
+                        @php
+                            $pm = strtolower($member->payment_method ?? 'cash');
+                        @endphp
+                        <select name="payment_method" class="form-select bg-dark text-white border-secondary" required>
+                            <option value="Cash (Tunai)" {{ str_contains($pm, 'cash') || str_contains($pm, 'tunai') ? 'selected' : '' }}>Cash (Tunai di Kasir Studio)</option>
+                            <option value="QRIS / GoPay / OVO" {{ str_contains($pm, 'qris') || str_contains($pm, 'gopay') || str_contains($pm, 'ovo') ? 'selected' : '' }}>QRIS / GoPay / OVO</option>
+                            <option value="Transfer Bank BCA/Mandiri" {{ str_contains($pm, 'transfer') || str_contains($pm, 'bca') || str_contains($pm, 'mandiri') ? 'selected' : '' }}>Transfer Bank BCA/Mandiri</option>
+                            <option value="EDC Debit / Kartu Kredit" {{ str_contains($pm, 'edc') || str_contains($pm, 'debit') || str_contains($pm, 'kredit') ? 'selected' : '' }}>EDC Debit / Kartu Kredit</option>
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #fbbf24; text-transform: uppercase;">
@@ -201,6 +216,72 @@
                     </button>
                 </div>
             </form>
+
+            <!-- Section 5: Riwayat Pembayaran & Kuitansi Member -->
+            <div style="margin-top: 3rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 2rem;">
+                <h5 style="font-size: 1.15rem; font-weight: 900; color: #ffffff; margin: 0 0 1.25rem; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.65rem;">
+                    <i class="fa-solid fa-receipt" style="color: var(--brand-lime, #84cc16);"></i>
+                    <span>Riwayat Transaksi, Perpanjangan &amp; e-Kuitansi Member</span>
+                </h5>
+                
+                <div style="background: #060907; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 1.25rem; box-shadow: 0 15px 30px rgba(0,0,0,0.5);">
+                    @if(isset($paymentHistory) && $paymentHistory->count() > 0)
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.75rem; text-transform: uppercase;">
+                                        <th style="padding: 0.75rem;">No. Invoice</th>
+                                        <th style="padding: 0.75rem;">Paket / Transaksi</th>
+                                        <th style="padding: 0.75rem;">Nominal</th>
+                                        <th style="padding: 0.75rem;">Metode</th>
+                                        <th style="padding: 0.75rem;">Tanggal</th>
+                                        <th style="padding: 0.75rem;">Status</th>
+                                        <th style="padding: 0.75rem; text-align: right;">Aksi Kuitansi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($paymentHistory as $pay)
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                        <td style="padding: 0.75rem; font-weight: 800; color: #84cc16;">
+                                            {{ $pay->order_id }}
+                                        </td>
+                                        <td style="padding: 0.75rem; color: #ffffff; font-weight: 700;">
+                                            {{ $pay->package_name }}
+                                        </td>
+                                        <td style="padding: 0.75rem; font-weight: 800; color: #ffffff;">
+                                            Rp {{ number_format($pay->gross_amount ?: $pay->net_amount, 0, ',', '.') }}
+                                        </td>
+                                        <td style="padding: 0.75rem; font-size: 0.8rem; color: #cbd5e1;">
+                                            <span style="background: rgba(255,255,255,0.08); padding: 0.2rem 0.5rem; border-radius: 6px;">{{ $pay->payment_method_detail ?: $pay->payment_type }}</span>
+                                        </td>
+                                        <td style="padding: 0.75rem; font-size: 0.8rem; color: #94a3b8;">
+                                            {{ $pay->created_at ? $pay->created_at->format('d M Y, H:i') : '-' }}
+                                        </td>
+                                        <td style="padding: 0.75rem;">
+                                            @if($pay->isSettled())
+                                                <span style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-weight: 900; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 99px;">✔ LUNAS</span>
+                                            @else
+                                                <span style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; font-weight: 900; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 99px;">⏳ PENDING</span>
+                                            @endif
+                                        </td>
+                                        <td style="padding: 0.75rem; text-align: right;">
+                                            <a href="{{ route('invoice.show', ['id' => $pay->order_id]) }}" target="_blank" style="background: rgba(132, 204, 22, 0.15); color: #84cc16; border: 1px solid #84cc16; padding: 0.35rem 0.75rem; border-radius: 8px; font-size: 0.775rem; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                                <i class="fa-solid fa-file-invoice"></i> Lihat Kuitansi
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div style="text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.875rem;">
+                            <i class="fa-solid fa-receipt" style="font-size: 2rem; color: rgba(255,255,255,0.2); margin-bottom: 0.5rem; display: block;"></i>
+                            Belum ada riwayat transaksi pembayaran tercatat untuk member ini.
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </div>

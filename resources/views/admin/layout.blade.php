@@ -183,6 +183,42 @@
             padding: 0.75rem 0;
         }
 
+        /* Sleek Dark Theme Pagination Styling */
+        .pagination {
+            display: flex !important;
+            padding-left: 0 !important;
+            list-style: none !important;
+            gap: 0.4rem !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+        }
+        .pagination .page-item .page-link {
+            background: #0d1410 !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+            color: #cbd5e1 !important;
+            padding: 0.45rem 0.85rem !important;
+            border-radius: 0.65rem !important;
+            font-weight: 800 !important;
+            font-size: 0.825rem !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+        }
+        .pagination .page-item.active .page-link,
+        .pagination .page-item .page-link:hover {
+            background: #84cc16 !important;
+            border-color: #84cc16 !important;
+            color: #090d0b !important;
+            box-shadow: 0 0 15px rgba(132, 204, 22, 0.4) !important;
+        }
+        .pagination .page-item.disabled .page-link {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-color: rgba(255, 255, 255, 0.05) !important;
+            color: #64748b !important;
+            cursor: not-allowed !important;
+        }
+
         .admin-brand {
             display: flex;
             align-items: center;
@@ -610,9 +646,21 @@
 
                 @if($canAccess('pos'))
                 <li class="admin-nav-item">
-                    <a href="{{ route('admin.pos.index') }}" class="{{ request()->routeIs('admin.pos.*') ? 'active' : '' }}" title="Kasir (POS)">
+                    <a href="{{ route('admin.pos.index') }}" class="{{ request()->routeIs('admin.pos.index') ? 'active' : '' }}" title="Kasir (POS)">
                         <i class="fa-solid fa-cart-shopping"></i>
                         <span class="nav-text">Kasir (POS)</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.pos.products') }}" class="{{ request()->routeIs('admin.pos.products') ? 'active' : '' }}" title="Produk & Stok">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                        <span class="nav-text">Produk &amp; Stok</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.purchase-orders.index') }}" class="{{ request()->routeIs('admin.purchase-orders.*') ? 'active' : '' }}" title="PO Supplier">
+                        <i class="fa-solid fa-truck"></i>
+                        <span class="nav-text">PO Supplier</span>
                     </a>
                 </li>
                 @endif
@@ -944,9 +992,11 @@
         </main>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle & CKEditor -->
+    <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @if(View::hasSection('use_ckeditor') || isset($useCkeditor))
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    @endif
     <style>
         .ck-editor__editable_inline {
             min-height: 240px;

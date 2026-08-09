@@ -431,6 +431,16 @@ class PaymentController extends Controller
                 } catch (\Throwable $e) {}
             }
 
+            // POS Transaction Callback Match
+            $refId = $payload['reference_id'] ?? ($payload['trx_id'] ?? null);
+            if ($refId && str_starts_with($refId, 'POS-')) {
+                $posTx = \App\Models\PosTransaction::where('invoice_number', $refId)->first();
+                if ($posTx) {
+                    $posTx->payment_status = 'paid';
+                    $posTx->save();
+                }
+            }
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'iPaymu webhook verified & member auto-approved!'

@@ -19,6 +19,7 @@ class PosTransaction extends Model
         'pay_amount',
         'change_amount',
         'payment_method',
+        'payment_status',
         'notes',
         'transacted_at',
     ];

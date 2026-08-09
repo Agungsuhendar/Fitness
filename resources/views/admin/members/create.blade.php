@@ -103,11 +103,12 @@
                         <input type="date" name="membership_expires_at" id="membershipExpiresAtInput" class="form-control bg-dark text-white border-secondary fw-bold" value="{{ date('Y-m-d', strtotime('+30 days')) }}" required style="color: #fbbf24 !important;">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">STATUS KEANGGOTAAN *</label>
-                        <select name="status" class="form-select bg-dark text-white border-secondary" required>
-                            <option value="Active">Active (Berlaku)</option>
-                            <option value="Pending">Pending Verifikasi</option>
-                        </select>
+                        <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">STATUS KEANGGOTAAN * (OTOMATIS)</label>
+                        <input type="text" id="statusDisplayInput" class="form-control bg-dark border-secondary fw-bold" readonly style="color: #4ade80; cursor: not-allowed;" value="Active (Berlaku Lunas)">
+                        <input type="hidden" name="status" id="statusHiddenInput" value="Active">
+                        <div id="statusHelpText" style="font-size: 0.75rem; margin-top: 0.35rem;">
+                            <span style="color:#4ade80;"><i class="fa-solid fa-lock"></i> Otomatis ACTIVE: Pembayaran tunai/transfer/EDC langsung disahkan lunas.</span>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">CABANG STUDIO GYM *</label>
@@ -135,7 +136,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">METODE PEMBAYARAN *</label>
-                        <select name="payment_method" class="form-select bg-dark text-white border-secondary" required>
+                        <select name="payment_method" id="paymentMethodSelect" class="form-select bg-dark text-white border-secondary" required onchange="updateStatusByPaymentMethod()">
                             <option value="Cash (Tunai)">Cash (Tunai di Kasir Studio)</option>
                             <option value="QRIS / GoPay / OVO">QRIS / GoPay / OVO</option>
                             <option value="Transfer Bank BCA/Mandiri">Transfer Bank BCA/Mandiri</option>
@@ -210,11 +211,39 @@ function autoFillMembershipPlan(selectEl) {
     }
 }
 
+function updateStatusByPaymentMethod() {
+    const payMethodEl = document.getElementById('paymentMethodSelect');
+    if (!payMethodEl) return;
+    const val = payMethodEl.value.toLowerCase();
+    const displayInput = document.getElementById('statusDisplayInput');
+    const hiddenInput = document.getElementById('statusHiddenInput');
+    const statusHelp = document.getElementById('statusHelpText');
+
+    if (val.includes('qris') || val.includes('gopay') || val.includes('ovo')) {
+        if (displayInput) {
+            displayInput.value = 'Pending Verifikasi (Menunggu Scan QRIS)';
+            displayInput.style.color = '#fbbf24';
+            displayInput.style.borderColor = '#fbbf24';
+        }
+        if (hiddenInput) hiddenInput.value = 'Pending Verifikasi';
+        if (statusHelp) statusHelp.innerHTML = '<span style="color:#fbbf24;"><i class="fa-solid fa-lock"></i> Otomatis PENDING: Member akan diarahkan ke layar QRIS Kuitansi untuk bayar mandiri.</span>';
+    } else {
+        if (displayInput) {
+            displayInput.value = 'Active (Berlaku Lunas)';
+            displayInput.style.color = '#4ade80';
+            displayInput.style.borderColor = '#4ade80';
+        }
+        if (hiddenInput) hiddenInput.value = 'Active';
+        if (statusHelp) statusHelp.innerHTML = '<span style="color:#4ade80;"><i class="fa-solid fa-lock"></i> Otomatis ACTIVE: Pembayaran tunai/transfer/EDC langsung disahkan lunas.</span>';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const sel = document.getElementById('membershipTypeSelect');
     if (sel) {
         autoFillMembershipPlan(sel);
     }
+    updateStatusByPaymentMethod();
 });
 </script>
 @endsection

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fitlife-hub-cache-v2';
+const CACHE_NAME = 'fitlife-hub-cache-v3';
 const urlsToCache = [
   '/',
   '/images/icon-192.png',
@@ -32,9 +32,16 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch Assets with Cache Fallback
+// Fetch Assets with Cache Fallback (Bypasses Admin Routes & Safely Catches Cache Errors)
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+
+  // Bypass Service Worker Cache for Admin Routes & Non-HTTP Schemes
+  if (url.pathname.startsWith('/admin') || !url.protocol.startsWith('http')) {
+    return;
+  }
 
   event.respondWith(
     fetch(event.request)
@@ -42,8 +49,8 @@ self.addEventListener('fetch', event => {
         if (response && response.status === 200 && response.type === 'basic') {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseToCache);
-          });
+            cache.put(event.request, responseToCache).catch(() => {});
+          }).catch(() => {});
         }
         return response;
       })

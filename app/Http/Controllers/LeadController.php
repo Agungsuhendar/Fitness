@@ -486,19 +486,29 @@ class LeadController extends Controller
 
     public function showInvoice(Request $request)
     {
-        $id = strtoupper(trim($request->input('id', 'FL-MBR-0015')));
+        $rawId = strtoupper(trim($request->input('id', 'FL-MBR-0015')));
         $promo = strtoupper(trim($request->input('promo', '')));
-        $orderId = $request->input('order_id');
+        $orderId = $request->input('order_id', $rawId);
         $activeGateway = \App\Models\Setting::get('active_payment_gateway', 'midtrans');
 
-        $user = User::where('member_card_id', $id)
-            ->orWhere('id', $id)
-            ->orWhere('email', $id)
+        // Extract base card ID e.g. FL-MEM-032-INV20260809021443 -> FL-MEM-032
+        $baseCardId = preg_replace('/-INV\d+$/i', '', $rawId);
+
+        $payment = Payment::where('order_id', $rawId)
+            ->orWhere('order_id', $orderId)
             ->first();
 
-        $payment = null;
-        if ($orderId) {
-            $payment = Payment::where('order_id', $orderId)->first();
+        $user = null;
+        if ($payment && $payment->user_id) {
+            $user = User::find($payment->user_id);
+        }
+
+        if (!$user) {
+            $user = User::where('member_card_id', $rawId)
+                ->orWhere('member_card_id', $baseCardId)
+                ->orWhere('id', is_numeric($baseCardId) ? $baseCardId : -1)
+                ->orWhere('email', $rawId)
+                ->first();
         }
 
         if (!$payment && $user) {
@@ -509,12 +519,14 @@ class LeadController extends Controller
                 ->first();
         }
 
-        $invNo = $payment ? $payment->order_id : ('INV/FL/' . date('Y/m/') . (strlen($id) >= 4 ? substr($id, -4) : rand(1000, 9999)));
+        $refIdToSend = $payment ? $payment->order_id : $rawId;
+        $invNo = $refIdToSend;
         $memberName = $user ? $user->name : ($payment ? $payment->member_name : 'Member FitLife');
-        $memberPhone = $user ? ($user->phone ?: '-') : ($payment ? $payment->member_phone : '-');
-        $packageName = $user ? ($user->membership_type ?: 'Regular Gym Pass (Bulanan)') : ($payment ? $payment->package_name : 'Regular Gym Pass (Bulanan)');
-        $originalPrice = $user ? ($user->membership_price ?: 300000) : ($payment ? $payment->gross_amount : 300000);
-        $discountAmount = $payment ? $payment->discount_amount : 0;
+        $rawPhone = $user ? ($user->phone ?: ($payment ? $payment->member_phone : '081234567890')) : ($payment ? $payment->member_phone : '081234567890');
+        $memberPhone = preg_replace('/[^0-9]/', '', (string)$rawPhone) ?: '081234567890';
+        $packageName = $payment ? $payment->package_name : ($user ? ($user->membership_type ?: 'Regular Gym Pass (Bulanan)') : 'Regular Gym Pass (Bulanan)');
+        $originalPrice = $payment ? $payment->gross_amount : ($user ? ($user->membership_price ?: 300000) : 300000);
+        $discountAmount = $payment ? ($payment->discount_amount ?: 0) : 0;
         $totalPaid = max(0, $originalPrice - $discountAmount);
         $paymentMethodDetail = $user ? ($user->payment_method ?: 'QRIS Instant') : ($payment ? $payment->payment_method_detail : 'QRIS Instant');
         $branchName = $user ? ($user->branch ?: 'Sleman HQ (Jl. Kaliurang KM 5.5)') : 'Sleman HQ (Jl. Kaliurang KM 5.5)';
@@ -535,7 +547,7 @@ class LeadController extends Controller
                     $userOrderIds = Payment::where('user_id', $user->id)->pluck('order_id')->toArray();
                 }
                 $checkIds = array_unique(array_filter(array_merge([
-                    $id,
+                    $rawId,
                     $user ? $user->member_card_id : null,
                     $payment ? $payment->order_id : null,
                 ], $userOrderIds)));
@@ -646,48 +658,47 @@ class LeadController extends Controller
             ];
 
             $jsonBody = json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            $bodyHash = strtolower(hash('sha256', $jsonBody));
+            $bodyHashLower = strtolower(hash('sha256', $jsonBody));
+            $bodyHashUpper = strtoupper(hash('sha256', $jsonBody));
             $timestamp = date('YmdHis');
-            $stringToSign = "POST:" . $va . ":" . $bodyHash . ":" . $apiKey;
-            $signature = hash_hmac('sha256', $stringToSign, $apiKey);
 
-            try {
-                $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders([
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'va' => $va,
-                    'signature' => $signature,
-                    'timestamp' => $timestamp,
-                ])->post($directEndpoint, $body);
+            $signaturesToTry = [
+                hash_hmac('sha256', "POST:" . $va . ":" . $bodyHashLower . ":" . $apiKey, $apiKey),
+                hash_hmac('sha256', "POST:" . $va . ":" . $jsonBody . ":" . $apiKey, $apiKey),
+                hash_hmac('sha256', "POST:" . $va . ":" . $bodyHashUpper . ":" . $apiKey, $apiKey),
+            ];
 
-                if (!$response->successful() && str_contains(strtolower($response->body()), 'signature')) {
-                    $altSign = hash_hmac('sha256', "POST:" . $va . ":" . $jsonBody . ":" . $apiKey, $apiKey);
+            $response = null;
+            foreach ($signaturesToTry as $sig) {
+                try {
                     $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders([
                         'Accept' => 'application/json',
                         'Content-Type' => 'application/json',
                         'va' => $va,
-                        'signature' => $altSign,
+                        'signature' => $sig,
                         'timestamp' => $timestamp,
-                    ])->post($directEndpoint, $body);
-                }
+                    ])->withBody($jsonBody, 'application/json')->post($directEndpoint);
 
-                if ($response->successful()) {
-                    $resData = $response->json();
-                    if (isset($resData['Data']['QrImage'])) {
-                        $qrisImage = $resData['Data']['QrImage'];
+                    if ($response->successful()) {
+                        break;
                     }
-                    if (isset($resData['Data']['QrString'])) {
-                        $qrisString = $resData['Data']['QrString'];
-                    }
-                    if (isset($resData['Data']['Url'])) {
-                        $paymentUrl = $resData['Data']['Url'];
-                    }
-                } else {
-                    $resData = $response->json();
-                    $ipaymuError = is_array($resData) ? ($resData['Message'] ?? ($resData['message'] ?? 'iPaymu HTTP ' . $response->status())) : 'iPaymu HTTP ' . $response->status();
+                } catch (\Throwable $t) {}
+            }
+
+            if ($response && $response->successful()) {
+                $resData = $response->json();
+                if (isset($resData['Data']['QrImage'])) {
+                    $qrisImage = $resData['Data']['QrImage'];
                 }
-            } catch (\Throwable $e) {
-                $ipaymuError = $e->getMessage();
+                if (isset($resData['Data']['QrString'])) {
+                    $qrisString = $resData['Data']['QrString'];
+                }
+                if (isset($resData['Data']['Url'])) {
+                    $paymentUrl = $resData['Data']['Url'];
+                }
+            } else {
+                $resData = $response ? $response->json() : null;
+                $ipaymuError = is_array($resData) ? ($resData['Message'] ?? ($resData['message'] ?? 'iPaymu HTTP ' . ($response ? $response->status() : 'Error'))) : 'Koneksi API iPaymu Gagal';
             }
         }
 
