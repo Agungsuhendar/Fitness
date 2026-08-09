@@ -26,7 +26,7 @@
             </div>
 
             <div style="display: flex; gap: 0.85rem; flex-wrap: wrap;">
-                <a href="{{ route('admin.reports.export') }}" class="btn" style="background: linear-gradient(135deg, #84cc16 0%, #10b981 100%); color: #060907 !important; border-radius: 0.85rem; font-weight: 900; box-shadow: 0 0 20px rgba(132, 204, 22, 0.35); text-decoration: none; padding: 0.75rem 1.35rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                <a href="{{ route('admin.reports.export', request()->all()) }}" class="btn" style="background: linear-gradient(135deg, #84cc16 0%, #10b981 100%); color: #060907 !important; border-radius: 0.85rem; font-weight: 900; box-shadow: 0 0 20px rgba(132, 204, 22, 0.35); text-decoration: none; padding: 0.75rem 1.35rem; display: inline-flex; align-items: center; gap: 0.5rem;">
                     <i class="fa-solid fa-file-csv"></i> Export Laporan Keuangan (CSV)
                 </a>
                 <button type="button" onclick="window.print()" class="btn" style="background: rgba(255, 255, 255, 0.08); color: white !important; border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 0.85rem; font-weight: 800; cursor: pointer; padding: 0.75rem 1.25rem; backdrop-filter: blur(10px);">
@@ -65,43 +65,53 @@
     </div>
 
     <!-- Summary Metrics Cards Grid -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem;" class="grid-2">
-        <div class="admin-card admin-card-hover" style="padding: 1.5rem; border-radius: 1.25rem; border-top: 4px solid var(--brand-lime, #84cc16); background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
-            <span style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">TOTAL OMSET GABUNGAN</span>
-            <div style="font-size: 1.85rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 2rem;" class="grid-2">
+        <div class="admin-card admin-card-hover" style="padding: 1.35rem; border-radius: 1.25rem; border-top: 4px solid var(--brand-lime, #84cc16); background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
+            <span style="font-size: 0.725rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">TOTAL OMSET GABUNGAN</span>
+            <div style="font-size: 1.6rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
                 Rp {{ number_format($totalCombinedRevenue, 0, ',', '.') }}
             </div>
-            <div style="font-size: 0.775rem; color: var(--brand-lime, #84cc16); font-weight: 800; margin-top: 0.4rem;">
+            <div style="font-size: 0.75rem; color: var(--brand-lime, #84cc16); font-weight: 800; margin-top: 0.35rem;">
                 <i class="fa-solid fa-circle-check"></i> Total Kasir + Membership
             </div>
         </div>
 
-        <div class="admin-card admin-card-hover" style="padding: 1.5rem; border-radius: 1.25rem; border-top: 4px solid #06b6d4; background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
-            <span style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">OMSET POS KASIR RITEL</span>
-            <div style="font-size: 1.85rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
+        <div class="admin-card admin-card-hover" style="padding: 1.35rem; border-radius: 1.25rem; border-top: 4px solid #06b6d4; background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
+            <span style="font-size: 0.725rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">OMSET POS KASIR</span>
+            <div style="font-size: 1.6rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
                 Rp {{ number_format($totalPosRevenue, 0, ',', '.') }}
             </div>
-            <div style="font-size: 0.775rem; color: #06b6d4; font-weight: 800; margin-top: 0.4rem;">
+            <div style="font-size: 0.75rem; color: #06b6d4; font-weight: 800; margin-top: 0.35rem;">
                 {{ $posTransactions->count() }} Transaksi Kasir
             </div>
         </div>
 
-        <div class="admin-card admin-card-hover" style="padding: 1.5rem; border-radius: 1.25rem; border-top: 4px solid #f59e0b; background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
-            <span style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">OMSET MEMBERSHIP &amp; PT</span>
-            <div style="font-size: 1.85rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
+        <div class="admin-card admin-card-hover" style="padding: 1.35rem; border-radius: 1.25rem; border-top: 4px solid #10b981; background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
+            <span style="font-size: 0.725rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">LABA KOTOR POS (PROFIT)</span>
+            <div style="font-size: 1.6rem; font-weight: 900; color: #10b981; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
+                Rp {{ number_format($totalPosGrossProfit, 0, ',', '.') }}
+            </div>
+            <div style="font-size: 0.725rem; color: #94a3b8; font-weight: 700; margin-top: 0.35rem;">
+                HPP Produk: Rp {{ number_format($totalPosCost, 0, ',', '.') }}
+            </div>
+        </div>
+
+        <div class="admin-card admin-card-hover" style="padding: 1.35rem; border-radius: 1.25rem; border-top: 4px solid #f59e0b; background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
+            <span style="font-size: 0.725rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">OMSET MEMBERSHIP &amp; PT</span>
+            <div style="font-size: 1.6rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
                 Rp {{ number_format($totalMembershipRevenue, 0, ',', '.') }}
             </div>
-            <div style="font-size: 0.775rem; color: #f59e0b; font-weight: 800; margin-top: 0.4rem;">
+            <div style="font-size: 0.75rem; color: #f59e0b; font-weight: 800; margin-top: 0.35rem;">
                 {{ $payments->count() }} Paket Terjual
             </div>
         </div>
 
-        <div class="admin-card admin-card-hover" style="padding: 1.5rem; border-radius: 1.25rem; border-top: 4px solid #8b5cf6; background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
-            <span style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">TOTAL PRESENSI CHECK-IN</span>
-            <div style="font-size: 1.85rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
+        <div class="admin-card admin-card-hover" style="padding: 1.35rem; border-radius: 1.25rem; border-top: 4px solid #8b5cf6; background: var(--admin-card-bg, #0d1410); border-left: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-right: 1px solid var(--admin-border, rgba(255,255,255,0.08)); border-bottom: 1px solid var(--admin-border, rgba(255,255,255,0.08));">
+            <span style="font-size: 0.725rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">PRESENSI CHECK-IN</span>
+            <div style="font-size: 1.6rem; font-weight: 900; color: #ffffff; font-family: 'Outfit', sans-serif; margin-top: 0.25rem;">
                 {{ $totalAttendances }} Kunjungan
             </div>
-            <div style="font-size: 0.775rem; color: #8b5cf6; font-weight: 800; margin-top: 0.4rem;">
+            <div style="font-size: 0.75rem; color: #8b5cf6; font-weight: 800; margin-top: 0.35rem;">
                 Log Kiosk Studio
             </div>
         </div>
@@ -160,6 +170,31 @@
                     </tbody>
                 </table>
             </div>
+
+            <div style="margin-top: 0.85rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 0.55rem 0.85rem; border-radius: 0.65rem; border: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 0.5rem;">
+                <div style="font-size: 0.775rem; color: #94a3b8; font-weight: 700;">
+                    Showing {{ $posTransactions->firstItem() ?? 0 }} to {{ $posTransactions->lastItem() ?? 0 }} of {{ $posTransactions->total() }} results (Hal {{ $posTransactions->currentPage() }} dari {{ $posTransactions->lastPage() }})
+                </div>
+                <div>
+                    @if($posTransactions->hasPages())
+                        {{ $posTransactions->links('pagination::bootstrap-5') }}
+                    @else
+                        <nav role="navigation" aria-label="Pagination Navigation">
+                            <ul class="pagination mb-0" style="margin: 0;">
+                                <li class="page-item disabled" aria-disabled="true" aria-label="&laquo; Previous">
+                                    <span class="page-link" aria-hidden="true" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #64748b; cursor: not-allowed; border-radius: 0.4rem 0 0 0.4rem;">&lsaquo;</span>
+                                </li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link" style="background: var(--brand-lime, #84cc16); border-color: var(--brand-lime, #84cc16); color: #000000; font-weight: 900;">1</span>
+                                </li>
+                                <li class="page-item disabled" aria-disabled="true" aria-label="Next &raquo;">
+                                    <span class="page-link" aria-hidden="true" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #64748b; cursor: not-allowed; border-radius: 0 0.4rem 0.4rem 0;">&rsaquo;</span>
+                                </li>
+                            </ul>
+                        </nav>
+                    @endif
+                </div>
+            </div>
         </div>
 
         <!-- Table 2: Penjualan Membership & PT -->
@@ -202,6 +237,31 @@
                     </tbody>
                 </table>
             </div>
+
+            <div style="margin-top: 0.85rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 0.55rem 0.85rem; border-radius: 0.65rem; border: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 0.5rem;">
+                <div style="font-size: 0.775rem; color: #94a3b8; font-weight: 700;">
+                    Showing {{ $payments->firstItem() ?? 0 }} to {{ $payments->lastItem() ?? 0 }} of {{ $payments->total() }} results (Hal {{ $payments->currentPage() }} dari {{ $payments->lastPage() }})
+                </div>
+                <div>
+                    @if($payments->hasPages())
+                        {{ $payments->links('pagination::bootstrap-5') }}
+                    @else
+                        <nav role="navigation" aria-label="Pagination Navigation">
+                            <ul class="pagination mb-0" style="margin: 0;">
+                                <li class="page-item disabled" aria-disabled="true" aria-label="&laquo; Previous">
+                                    <span class="page-link" aria-hidden="true" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #64748b; cursor: not-allowed; border-radius: 0.4rem 0 0 0.4rem;">&lsaquo;</span>
+                                </li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link" style="background: var(--brand-lime, #84cc16); border-color: var(--brand-lime, #84cc16); color: #000000; font-weight: 900;">1</span>
+                                </li>
+                                <li class="page-item disabled" aria-disabled="true" aria-label="Next &raquo;">
+                                    <span class="page-link" aria-hidden="true" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #64748b; cursor: not-allowed; border-radius: 0 0.4rem 0.4rem 0;">&rsaquo;</span>
+                                </li>
+                            </ul>
+                        </nav>
+                    @endif
+                </div>
+            </div>
         </div>
 
     </div>
@@ -217,11 +277,11 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Hari Ini'],
+                labels: {!! json_encode($weeklyLabels) !!},
                 datasets: [
                     {
                         label: 'Omset Toko POS Kasir (Rp)',
-                        data: [1250000, 2100000, 1850000, 3200000, {{ (int)$totalPosRevenue }}],
+                        data: {!! json_encode($weeklyPosChart) !!},
                         borderColor: '#06b6d4',
                         backgroundColor: 'rgba(6, 182, 212, 0.15)',
                         fill: true,
@@ -230,7 +290,7 @@
                     },
                     {
                         label: 'Omset Membership & PT (Rp)',
-                        data: [7500000, 12500000, 9800000, 15000000, {{ (int)$totalMembershipRevenue }}],
+                        data: {!! json_encode($weeklyMemChart) !!},
                         borderColor: '#84cc16',
                         backgroundColor: 'rgba(132, 204, 22, 0.15)',
                         fill: true,

@@ -486,9 +486,20 @@
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
+            }
         }
 
         /* Fullscreen Standalone Kiosk & POS Mode - Separate Rules to Prevent Parser Invalidation */
+        html.is-fullscreen-mode .admin-sidebar,
+        html.is-fullscreen-mode .admin-header,
+        html.is-fullscreen-mode .sidebar-backdrop,
+        html.is-fullscreen-mode footer,
+        html.is-fullscreen-mode header,
+        html.is-fullscreen-mode nav,
+        html.is-fullscreen-mode .floating-action-stack,
+        html.is-fullscreen-mode #aiChatbotModal,
+        html.is-fullscreen-mode #pwaInstallBanner,
+        html.is-fullscreen-mode #pwaInstructionModal,
         body.is-fullscreen-mode .admin-sidebar,
         body.is-fullscreen-mode .admin-header,
         body.is-fullscreen-mode .sidebar-backdrop,
@@ -507,20 +518,22 @@
             visibility: hidden !important;
         }
 
+        html.is-fullscreen-mode .admin-wrapper,
         body.is-fullscreen-mode .admin-wrapper {
             grid-template-columns: 1fr !important;
             display: block !important;
             padding: 0 !important;
             margin: 0 !important;
-            width: 100% !important;
+            width: 100vw !important;
             min-height: 100vh !important;
         }
 
+        html.is-fullscreen-mode .admin-main,
         body.is-fullscreen-mode .admin-main {
-            padding: 0.75rem 1rem !important;
+            padding: 0.5rem 0.85rem !important;
             margin: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
         }
 
         :fullscreen .admin-sidebar,
@@ -534,6 +547,7 @@
         :fullscreen #pwaInstallBanner,
         :fullscreen #pwaInstructionModal {
             display: none !important;
+            visibility: hidden !important;
         }
 
         :fullscreen .admin-wrapper {
@@ -541,13 +555,13 @@
             display: block !important;
             padding: 0 !important;
             margin: 0 !important;
-            width: 100% !important;
+            width: 100vw !important;
         }
 
         :fullscreen .admin-main {
-            padding: 0.75rem 1rem !important;
+            padding: 0.5rem 0.85rem !important;
             margin: 0 !important;
-            width: 100% !important;
+            width: 100vw !important;
         }
 
         :-webkit-full-screen .admin-sidebar,
@@ -561,6 +575,7 @@
         :-webkit-full-screen #pwaInstallBanner,
         :-webkit-full-screen #pwaInstructionModal {
             display: none !important;
+            visibility: hidden !important;
         }
 
         :-webkit-full-screen .admin-wrapper {
@@ -568,13 +583,13 @@
             display: block !important;
             padding: 0 !important;
             margin: 0 !important;
-            width: 100% !important;
+            width: 100vw !important;
         }
 
         :-webkit-full-screen .admin-main {
-            padding: 0.75rem 1rem !important;
+            padding: 0.5rem 0.85rem !important;
             margin: 0 !important;
-            width: 100% !important;
+            width: 100vw !important;
         }
     </style>
 </head>

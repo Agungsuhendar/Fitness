@@ -4,6 +4,43 @@
 @section('header_title', 'POS Kasir Studio & Toko Suplemen')
 
 @section('admin_content')
+<style>
+    body.is-fullscreen-mode .admin-sidebar,
+    body.is-fullscreen-mode .admin-header,
+    body.is-fullscreen-mode .sidebar-backdrop,
+    html.is-fullscreen-mode .admin-sidebar,
+    html.is-fullscreen-mode .admin-header,
+    html.is-fullscreen-mode .sidebar-backdrop,
+    :fullscreen .admin-sidebar,
+    :fullscreen .admin-header,
+    :-webkit-full-screen .admin-sidebar,
+    :-webkit-full-screen .admin-header {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        pointer-events: none !important;
+    }
+
+    body.is-fullscreen-mode .admin-wrapper,
+    html.is-fullscreen-mode .admin-wrapper {
+        display: block !important;
+        grid-template-columns: 1fr !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100vw !important;
+    }
+
+    body.is-fullscreen-mode .admin-main,
+    html.is-fullscreen-mode .admin-main {
+        padding: 0.5rem 0.85rem !important;
+        margin: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+    }
+</style>
+
 <div style="width: 100%;">
     <div class="container-fluid" style="padding: 0 1rem;">
         
@@ -705,17 +742,37 @@
     });
 
     function togglePosFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {});
-            document.getElementById('posFsIcon').className = 'fa-solid fa-compress';
-            document.getElementById('posFsText').innerText = 'Exit Fullscreen';
+        const isFsNow = !document.body.classList.contains('is-fullscreen-mode');
+        document.body.classList.toggle('is-fullscreen-mode', isFsNow);
+        document.documentElement.classList.toggle('is-fullscreen-mode', isFsNow);
+
+        const fsIcon = document.getElementById('posFsIcon');
+        const fsText = document.getElementById('posFsText');
+
+        if (fsIcon) fsIcon.className = isFsNow ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+        if (fsText) fsText.innerText = isFsNow ? 'Exit Fullscreen' : 'Fullscreen';
+
+        if (isFsNow) {
+            if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => {});
+            }
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-                document.getElementById('posFsIcon').className = 'fa-solid fa-expand';
-                document.getElementById('posFsText').innerText = 'Fullscreen';
+            if (document.fullscreenElement && document.exitFullscreen) {
+                document.exitFullscreen().catch(err => {});
             }
         }
     }
+
+    document.addEventListener('fullscreenchange', function() {
+        const isNativeFs = !!document.fullscreenElement;
+        document.body.classList.toggle('is-fullscreen-mode', isNativeFs);
+        document.documentElement.classList.toggle('is-fullscreen-mode', isNativeFs);
+
+        const fsIcon = document.getElementById('posFsIcon');
+        const fsText = document.getElementById('posFsText');
+
+        if (fsIcon) fsIcon.className = isNativeFs ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+        if (fsText) fsText.innerText = isNativeFs ? 'Exit Fullscreen' : 'Fullscreen';
+    });
 </script>
 @endsection
