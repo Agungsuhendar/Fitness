@@ -212,33 +212,90 @@ class PaymentController extends Controller
         return response()->json(['status' => 'pending', 'message' => 'Payment pending']);
     }
 
+    public static function verifyIpaymuPaymentData($cData)
+    {
+        if (empty($cData) || !is_array($cData)) {
+            return false;
+        }
+
+        $data = $cData['Data'] ?? null;
+        if (empty($data)) {
+            return false;
+        }
+
+        $items = isset($data['Transaction']) ? $data['Transaction'] : (isset($data[0]) ? $data : [$data]);
+
+        foreach ($items as $item) {
+            if (!is_array($item)) continue;
+
+            $tStatus = (string)($item['Status'] ?? ($item['StatusCode'] ?? ($item['status'] ?? ($item['status_code'] ?? ''))));
+            $tDesc = strtolower((string)($item['StatusDesc'] ?? ($item['status_desc'] ?? '')));
+            $settlement = strtolower((string)($item['SettlementStatus'] ?? ($item['settlement_status'] ?? '')));
+
+            if ($tStatus === '1' || $tStatus === '200') {
+                return true;
+            }
+
+            if (in_array($tDesc, ['berhasil', 'berhasil_diterima', 'berhasil diterima', 'success', 'paid', 'lunas', 'settled'])) {
+                return true;
+            }
+
+            if (in_array($settlement, ['settled', 'berhasil', 'paid'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function findUserAndPaymentByRef($refId)
+    {
+        if (empty($refId)) {
+            return [null, null];
+        }
+
+        $cleanRef = strtoupper(trim((string)$refId));
+        // Strip trailing INV stamp e.g. FL-MBR-20260807-001-INV20260809021430 -> FL-MBR-20260807-001
+        $baseCardId = preg_replace('/-INV\d+$/i', '', $cleanRef);
+        
+        // Extract card ID pattern e.g. FL-MBR-20260807-001
+        $cardIdPattern = null;
+        if (preg_match('/(FL-MBR-\d{8}-\d+)/i', $cleanRef, $m)) {
+            $cardIdPattern = strtoupper($m[1]);
+        }
+
+        $candidates = array_unique(array_filter([$cleanRef, $baseCardId, $cardIdPattern]));
+
+        // Search User
+        $user = User::whereIn('member_card_id', $candidates)
+            ->orWhereIn('id', $candidates)
+            ->orWhereIn('email', array_map('strtolower', $candidates))
+            ->first();
+
+        // Search Payment
+        $payment = Payment::whereIn('order_id', $candidates)->first();
+        if (!$payment) {
+            foreach ($candidates as $cand) {
+                $payment = Payment::where('order_id', 'like', '%' . $cand . '%')->first();
+                if ($payment) break;
+            }
+        }
+
+        if (!$payment && $user) {
+            $payment = Payment::where('user_id', $user->id)->latest()->first();
+        }
+
+        if (!$user && $payment && $payment->user_id) {
+            $user = User::find($payment->user_id);
+        }
+
+        return [$user, $payment];
+    }
+
     public function simulatePaymentSuccess(Request $request, $orderId)
     {
         try {
-            $orderId = strtoupper(trim($orderId));
-
-            $cardPrefix = $orderId;
-            $parts = explode('-', $orderId);
-            if (count($parts) >= 3) {
-                $cardPrefix = $parts[0] . '-' . $parts[1] . '-' . $parts[2];
-            }
-
-            $user = User::where('member_card_id', $orderId)
-                ->orWhere('member_card_id', $cardPrefix)
-                ->orWhere('id', $orderId)
-                ->orWhere('email', $orderId)
-                ->first();
-
-            $payment = Payment::where('order_id', $orderId)
-                ->orWhere('order_id', 'like', '%' . $orderId . '%')
-                ->first();
-
-            if (!$payment && $user) {
-                $payment = Payment::where('user_id', $user->id)
-                    ->orWhere('member_name', $user->name)
-                    ->latest()
-                    ->first();
-            }
+            list($user, $payment) = $this->findUserAndPaymentByRef($orderId);
 
             if ($user) {
                 $user->status = 'Active (LUNAS Auto-Approved)';
@@ -256,21 +313,6 @@ class PaymentController extends Controller
                 $payment->transaction_status = 'settlement';
                 $payment->paid_at = now();
                 $payment->save();
-
-                if (!$user && $payment->user_id) {
-                    $user = User::find($payment->user_id);
-                    if ($user) {
-                        $user->status = 'Active (LUNAS Auto-Approved)';
-                        $user->remaining_sessions = max(12, ($user->remaining_sessions ?? 0) + 12);
-                        $user->total_sessions = max(12, ($user->total_sessions ?? 0) + 12);
-                        try {
-                            $user->save();
-                        } catch (\Throwable $t) {
-                            unset($user->membership_expires_at);
-                            $user->save();
-                        }
-                    }
-                }
 
                 try {
                     \App\Services\WhatsAppService::sendPaymentReceiptNotification($payment);
@@ -292,30 +334,7 @@ class PaymentController extends Controller
     public function simulatePaymentPending(Request $request, $orderId)
     {
         try {
-            $orderId = strtoupper(trim($orderId));
-
-            $cardPrefix = $orderId;
-            $parts = explode('-', $orderId);
-            if (count($parts) >= 3) {
-                $cardPrefix = $parts[0] . '-' . $parts[1] . '-' . $parts[2];
-            }
-
-            $user = User::where('member_card_id', $orderId)
-                ->orWhere('member_card_id', $cardPrefix)
-                ->orWhere('id', $orderId)
-                ->orWhere('email', $orderId)
-                ->first();
-
-            $payment = Payment::where('order_id', $orderId)
-                ->orWhere('order_id', 'like', '%' . $orderId . '%')
-                ->first();
-
-            if (!$payment && $user) {
-                $payment = Payment::where('user_id', $user->id)
-                    ->orWhere('member_name', $user->name)
-                    ->latest()
-                    ->first();
-            }
+            list($user, $payment) = $this->findUserAndPaymentByRef($orderId);
 
             if ($user) {
                 $user->status = 'Pending Verifikasi (Menunggu Scan QRIS)';
@@ -347,46 +366,47 @@ class PaymentController extends Controller
 
     public function handleIpaymuWebhook(Request $request)
     {
-        $trxId = $request->input('trx_id') ?: ($request->input('sid') ?: $request->input('transaction_id'));
-        $status = $request->input('status') ?: ($request->input('status_code') ?: ($request->input('transaction_status') ?: $request->input('statusCode')));
-        $referenceId = $request->input('reference_id') ?: ($request->input('referenceId') ?: $request->input('merchant_ref_id'));
+        $payload = array_merge($request->query(), $request->all());
+        $rawContent = $request->getContent();
+        if ($rawContent && is_string($rawContent)) {
+            $jsonParsed = json_decode($rawContent, true);
+            if (is_array($jsonParsed)) {
+                $payload = array_merge($payload, $jsonParsed);
+            }
+        }
 
-        Log::info('iPaymu Webhook Received Payload:', $request->all());
+        Log::info('iPaymu Webhook Received Payload:', [
+            'payload' => $payload,
+            'query' => $request->query(),
+        ]);
 
-        $isSuccess = in_array(strtolower((string)$status), ['berhasil', 'berhasil_diterima', 'success', 'settlement', '1', '200']);
+        $trxId = $payload['trx_id'] ?? ($payload['sid'] ?? ($payload['transaction_id'] ?? null));
+        $status = $payload['status'] ?? ($payload['status_code'] ?? ($payload['transaction_status'] ?? ($payload['statusCode'] ?? null)));
+        $referenceId = $payload['reference_id'] ?? ($payload['referenceId'] ?? ($payload['merchant_ref_id'] ?? null));
+
+        $statusStr = strtolower(trim((string)$status));
+        $isSuccess = in_array($statusStr, ['berhasil', 'berhasil_diterima', 'berhasil diterima', 'success', 'settlement', '1', '200', 'paid'])
+            || str_contains($statusStr, 'berhasil')
+            || str_contains($statusStr, 'settle')
+            || str_contains($statusStr, 'paid')
+            || str_contains($statusStr, 'success');
 
         if ($isSuccess) {
-            $user = null;
-            if ($referenceId) {
-                $cleanRef = trim($referenceId);
-                $parts = explode('-', $cleanRef);
-                $cardPrefix = (count($parts) >= 3) ? ($parts[0] . '-' . $parts[1] . '-' . $parts[2]) : $cleanRef;
+            list($user, $payment) = $this->findUserAndPaymentByRef($referenceId);
 
-                $user = User::where('member_card_id', $cleanRef)
-                    ->orWhere('member_card_id', $cardPrefix)
-                    ->orWhere('id', $cleanRef)
-                    ->orWhere('email', $cleanRef)
-                    ->first();
+            if (!$user && isset($payload['buyer_email'])) {
+                $user = User::where('email', trim($payload['buyer_email']))->first();
             }
 
-            if (!$user && $request->input('buyer_email')) {
-                $user = User::where('email', trim($request->input('buyer_email')))->first();
+            if (!$user && isset($payload['buyer_phone'])) {
+                $phone = preg_replace('/[^0-9]/', '', $payload['buyer_phone']);
+                if (strlen($phone) >= 8) {
+                    $user = User::where('phone', 'like', '%' . substr($phone, -8) . '%')->first();
+                }
             }
-
-            if (!$user && $request->input('buyer_phone')) {
-                $phone = preg_replace('/[^0-9]/', '', $request->input('buyer_phone'));
-                $user = User::where('phone', 'like', '%' . $phone . '%')->first();
-            }
-
-            $payment = Payment::where('order_id', $referenceId)
-                ->orWhere('order_id', 'like', '%' . $referenceId . '%')
-                ->first();
 
             if (!$payment && $user) {
-                $payment = Payment::where('user_id', $user->id)
-                    ->orWhere('member_name', $user->name)
-                    ->latest()
-                    ->first();
+                $payment = Payment::where('user_id', $user->id)->latest()->first();
             }
 
             if ($user) {
@@ -423,26 +443,7 @@ class PaymentController extends Controller
     public function checkStatus(Request $request)
     {
         $id = strtoupper(trim($request->input('id')));
-
-        $cardPrefix = $id;
-        $parts = explode('-', $id);
-        if (count($parts) >= 3) {
-            $cardPrefix = $parts[0] . '-' . $parts[1] . '-' . $parts[2];
-        }
-
-        $user = User::where('member_card_id', $id)
-            ->orWhere('member_card_id', $cardPrefix)
-            ->orWhere('id', $id)
-            ->orWhere('email', $id)
-            ->first();
-
-        $payment = Payment::where('order_id', $id)
-            ->orWhere('order_id', 'like', '%' . $id . '%')
-            ->first();
-
-        if (!$payment && $user) {
-            $payment = Payment::where('user_id', $user->id)->latest()->first();
-        }
+        list($user, $payment) = $this->findUserAndPaymentByRef($id);
 
         $isSettled = ($payment && $payment->isSettled()) || ($user && (str_contains(strtolower((string)$user->status), 'lunas') || str_contains(strtolower((string)$user->status), 'approved') || str_contains(strtolower((string)$user->status), 'active')));
 
@@ -452,17 +453,12 @@ class PaymentController extends Controller
             $isProduction = \App\Models\Setting::get('ipaymu_is_production', '0') === '1';
             $baseUrl = $isProduction ? 'https://my.ipaymu.com' : 'https://sandbox.ipaymu.com';
 
-            $userOrderIds = [];
-            if ($user) {
-                $userOrderIds = Payment::where('user_id', $user->id)->pluck('order_id')->toArray();
-            }
-
-            $candidateIds = array_unique(array_filter(array_merge([
+            $candidateIds = array_unique(array_filter([
                 $id,
-                $cardPrefix,
+                preg_replace('/-INV\d+$/i', '', $id),
                 $payment ? $payment->order_id : null,
                 $user ? $user->member_card_id : null,
-            ], $userOrderIds)));
+            ]));
 
             // 1. Single Transaction API Check
             foreach ($candidateIds as $cId) {
@@ -486,28 +482,9 @@ class PaymentController extends Controller
                             'timestamp' => date('YmdHis'),
                         ])->post($baseUrl . '/api/v2/transaction', $checkBody);
 
-                        if (!$checkRes->successful()) {
-                            $altSig = hash_hmac('sha256', "POST:" . $va . ":" . $jsonCheck . ":" . $apiKey, $apiKey);
-                            $checkRes = Http::timeout(4)->withHeaders([
-                                'Accept' => 'application/json',
-                                'Content-Type' => 'application/json',
-                                'va' => $va,
-                                'signature' => $altSig,
-                                'timestamp' => date('YmdHis'),
-                            ])->post($baseUrl . '/api/v2/transaction', $checkBody);
-                        }
-
                         if ($checkRes->successful()) {
                             $cData = $checkRes->json();
-                            $jsonStr = strtolower(json_encode($cData));
-
-                            $isPaidInIpaymu = str_contains($jsonStr, 'berhasil')
-                                || str_contains($jsonStr, 'settled')
-                                || str_contains($jsonStr, 'success')
-                                || str_contains($jsonStr, 'lunas')
-                                || str_contains($jsonStr, '"status":1')
-                                || str_contains($jsonStr, '"status_code":1')
-                                || str_contains($jsonStr, '"transaction_status_code":1');
+                            $isPaidInIpaymu = self::verifyIpaymuPaymentData($cData);
 
                             if ($isPaidInIpaymu) {
                                 if ($user) {
@@ -538,7 +515,7 @@ class PaymentController extends Controller
             // 2. Transaction History API Check (Fallback)
             if (!$isSettled) {
                 try {
-                    $histBody = ['list' => 20];
+                    $histBody = ['list' => 25];
                     $histJson = json_encode($histBody);
                     $histHash = strtolower(hash('sha256', $histJson));
                     $histSig = hash_hmac('sha256', "POST:" . $va . ":" . $histHash . ":" . $apiKey, $apiKey);
@@ -551,31 +528,33 @@ class PaymentController extends Controller
                         'timestamp' => date('YmdHis'),
                     ])->post($baseUrl . '/api/v2/transaction/history', $histBody);
 
-                    if (!$histRes->successful()) {
-                        $altHistSig = hash_hmac('sha256', "POST:" . $va . ":" . $histJson . ":" . $apiKey, $apiKey);
-                        $histRes = Http::timeout(4)->withHeaders([
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                            'va' => $va,
-                            'signature' => $altHistSig,
-                            'timestamp' => date('YmdHis'),
-                        ])->post($baseUrl . '/api/v2/transaction/history', $histBody);
-                    }
-
                     if ($histRes->successful()) {
                         $hData = $histRes->json();
                         $transactions = $hData['Data']['Transaction'] ?? ($hData['Data'] ?? []);
                         if (is_array($transactions)) {
                             foreach ($transactions as $tx) {
-                                $txStr = strtolower(json_encode($tx));
-                                $txRef = strtolower((string)($tx['ReferenceId'] ?? ($tx['reference_id'] ?? ($tx['sid'] ?? ''))));
+                                if (!is_array($tx)) continue;
+                                $txRef = strtoupper((string)($tx['ReferenceId'] ?? ($tx['reference_id'] ?? ($tx['sid'] ?? ''))));
                                 $txEmail = strtolower((string)($tx['BuyerEmail'] ?? ($tx['buyer_email'] ?? '')));
 
-                                $matchesUser = ($cardPrefix && str_contains($txRef, strtolower($cardPrefix)))
-                                    || ($user && $user->email && str_contains($txEmail, strtolower($user->email)))
-                                    || str_contains($txRef, strtolower($id));
+                                $matchesUser = false;
+                                foreach ($candidateIds as $cand) {
+                                    if ($cand && strlen($cand) >= 4 && str_contains($txRef, strtoupper($cand))) {
+                                        $matchesUser = true;
+                                        break;
+                                    }
+                                }
+                                if ($user && $user->email && str_contains($txEmail, strtolower($user->email))) {
+                                    $matchesUser = true;
+                                }
 
-                                $txPaid = str_contains($txStr, 'berhasil') || str_contains($txStr, 'settled') || str_contains($txStr, 'success') || str_contains($txStr, '"status":1') || str_contains($txStr, '"status_code":1');
+                                $txStatus = (string)($tx['Status'] ?? ($tx['status'] ?? ($tx['StatusCode'] ?? ($tx['status_code'] ?? ''))));
+                                $txDesc = strtolower((string)($tx['StatusDesc'] ?? ($tx['status_desc'] ?? '')));
+                                $txSettlement = strtolower((string)($tx['SettlementStatus'] ?? ($tx['settlement_status'] ?? '')));
+
+                                $txPaid = ($txStatus === '1' || $txStatus === '200')
+                                    || in_array($txDesc, ['berhasil', 'berhasil_diterima', 'berhasil diterima', 'success', 'paid', 'lunas', 'settled'])
+                                    || in_array($txSettlement, ['settled', 'berhasil', 'paid']);
 
                                 if ($matchesUser && $txPaid) {
                                     if ($user) {
@@ -608,6 +587,12 @@ class PaymentController extends Controller
         return response()->json([
             'is_settled' => (bool) $isSettled,
             'status' => $user ? $user->status : ($payment ? $payment->transaction_status : 'pending'),
+            'user' => $user ? [
+                'id' => $user->id,
+                'name' => $user->name,
+                'status' => $user->status,
+                'remaining_sessions' => $user->remaining_sessions,
+            ] : null,
         ]);
     }
 

@@ -144,7 +144,7 @@ class MemberAuthController extends Controller
             'branch' => $branch,
             'total_sessions' => $sessions,
             'completed_sessions' => 0,
-            'remaining_sessions' => $sessions,
+            'remaining_sessions' => 0,
             'assigned_coach' => $sessions > 0 ? 'Coach Hendra Wijaya (APKI Certified)' : null,
             'reward_points' => 50,
             'level_badge' => '🔥 Member Baru',
@@ -184,8 +184,8 @@ class MemberAuthController extends Controller
             \App\Services\WhatsAppService::sendWelcomeNotification($user);
         } catch (\Throwable $e) {}
 
-        return redirect()->route('invoice.show', ['id' => $user->member_card_id, 'auto_pay' => 1])
-            ->with('success', 'Pendaftaran akun member berhasil! Silakan lakukan pemindaian QRIS atau transfer untuk mengaktifkan keanggotaan Anda.');
+        return redirect()->route('invoice.show', ['id' => $user->member_card_id])
+            ->with('success', 'Pendaftaran akun member berhasil! Silakan lakukan pemindaian QRIS untuk mengaktifkan keanggotaan Anda.');
     }
 
     public function logout(Request $request)

@@ -567,21 +567,7 @@ class LeadController extends Controller
 
                     if ($checkRes->successful()) {
                         $cData = $checkRes->json();
-                        $item = isset($cData['Data'][0]) ? $cData['Data'][0] : ($cData['Data'] ?? []);
-                        $tStatus = $item['Status'] ?? ($item['StatusCode'] ?? ($item['status'] ?? ($item['status_code'] ?? null)));
-                        $tDesc = strtolower((string)($item['StatusDesc'] ?? ($item['Message'] ?? ($item['status_desc'] ?? ''))));
-                        $jsonStr = strtolower(json_encode($cData));
-
-                        $isPaidInIpaymu = in_array((string)$tStatus, ['1', '200'])
-                            || str_contains($tDesc, 'berhasil')
-                            || str_contains($tDesc, 'success')
-                            || str_contains($tDesc, 'lunas')
-                            || str_contains($tDesc, 'settled')
-                            || str_contains($jsonStr, 'berhasil')
-                            || str_contains($jsonStr, 'settled')
-                            || str_contains($jsonStr, '"status":1')
-                            || str_contains($jsonStr, '"status_code":1')
-                            || str_contains($jsonStr, '"transaction_status_code":1');
+                        $isPaidInIpaymu = PaymentController::verifyIpaymuPaymentData($cData);
 
                         if ($isPaidInIpaymu) {
                             $user->status = 'Active (LUNAS Auto-Approved)';
@@ -633,87 +619,76 @@ class LeadController extends Controller
             'order_id' => $refIdToSend,
         ];
 
-        $directEndpoint = $baseUrl . '/api/v2/payment/direct';
-
-        $body = [
-            'name' => $memberName,
-            'phone' => preg_replace('/[^0-9]/', '', $memberPhone),
-            'email' => $user ? ($user->email ?: 'member@fitlife.id') : 'member@fitlife.id',
-            'amount' => (int) $totalPaid,
-            'notifyUrl' => url('/api/ipaymu/webhook'),
-            'paymentMethod' => 'qris',
-            'paymentChannel' => 'qris',
-            'feeDirection' => 'MERCHANT',
-            'fee_direction' => 'MERCHANT',
-            'referenceId' => $refIdToSend,
-            'product' => [$packageName],
-            'qty' => [1],
-            'price' => [(int) $totalPaid],
-        ];
-
-        $jsonBody = json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $bodyHash = strtolower(hash('sha256', $jsonBody));
-        $timestamp = date('YmdHis');
-        $stringToSign = "POST:" . $va . ":" . $bodyHash . ":" . $apiKey;
-        $signature = hash_hmac('sha256', $stringToSign, $apiKey);
-
         $qrisImage = null;
         $qrisString = null;
         $paymentUrl = null;
         $ipaymuError = null;
 
-        try {
-            $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'va' => $va,
-                'signature' => $signature,
-                'timestamp' => $timestamp,
-            ])->post($directEndpoint, $body);
+        $isAlreadyPaid = str_contains(strtolower((string)$statusText), 'lunas') || str_contains(strtolower((string)$statusText), 'approved');
 
-            if (!$response->successful() && str_contains(strtolower($response->body()), 'signature')) {
-                $altSign = hash_hmac('sha256', "POST:" . $va . ":" . $jsonBody . ":" . $apiKey, $apiKey);
+        if (!$isAlreadyPaid) {
+            $directEndpoint = $baseUrl . '/api/v2/payment/direct';
+
+            $body = [
+                'name' => $memberName,
+                'phone' => preg_replace('/[^0-9]/', '', $memberPhone),
+                'email' => $user ? ($user->email ?: 'member@fitlife.id') : 'member@fitlife.id',
+                'amount' => (int) $totalPaid,
+                'notifyUrl' => url('/api/ipaymu/webhook'),
+                'paymentMethod' => 'qris',
+                'paymentChannel' => 'qris',
+                'feeDirection' => 'MERCHANT',
+                'fee_direction' => 'MERCHANT',
+                'referenceId' => $refIdToSend,
+                'product' => [$packageName],
+                'qty' => [1],
+                'price' => [(int) $totalPaid],
+            ];
+
+            $jsonBody = json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $bodyHash = strtolower(hash('sha256', $jsonBody));
+            $timestamp = date('YmdHis');
+            $stringToSign = "POST:" . $va . ":" . $bodyHash . ":" . $apiKey;
+            $signature = hash_hmac('sha256', $stringToSign, $apiKey);
+
+            try {
                 $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders([
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                     'va' => $va,
-                    'signature' => $altSign,
+                    'signature' => $signature,
                     'timestamp' => $timestamp,
                 ])->post($directEndpoint, $body);
-            }
 
-            if ($response->successful()) {
-                $resData = $response->json();
-                if (isset($resData['Data']['QrImage'])) {
-                    $qrisImage = $resData['Data']['QrImage'];
-                }
-                if (isset($resData['Data']['QrString'])) {
-                    $qrisString = $resData['Data']['QrString'];
-                }
-                if (isset($resData['Data']['Url'])) {
-                    $paymentUrl = $resData['Data']['Url'];
+                if (!$response->successful() && str_contains(strtolower($response->body()), 'signature')) {
+                    $altSign = hash_hmac('sha256', "POST:" . $va . ":" . $jsonBody . ":" . $apiKey, $apiKey);
+                    $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders([
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'va' => $va,
+                        'signature' => $altSign,
+                        'timestamp' => $timestamp,
+                    ])->post($directEndpoint, $body);
                 }
 
-                // If qris-basic URL is returned, extract direct PNG QR image if possible
-                if ($qrisImage && str_contains($qrisImage, 'qris-basic')) {
-                    $rawPageUrl = $qrisImage;
-                    try {
-                        $htmlPage = \Illuminate\Support\Facades\Http::timeout(3)->get($rawPageUrl)->body();
-                        if (preg_match('/src=["\']([^"\']+\.(png|svg|jpg)[^"\']*)["\']/i', $htmlPage, $m)) {
-                            $qrisPngUrl = $m[1];
-                            if (!str_starts_with($qrisPngUrl, 'http')) {
-                                $qrisPngUrl = (str_contains($rawPageUrl, 'sandbox') ? 'https://sandbox.ipaymu.com' : 'https://my.ipaymu.com') . $qrisPngUrl;
-                            }
-                            $qrisImage = $qrisPngUrl;
-                        }
-                    } catch (\Throwable $t) {}
+                if ($response->successful()) {
+                    $resData = $response->json();
+                    if (isset($resData['Data']['QrImage'])) {
+                        $qrisImage = $resData['Data']['QrImage'];
+                    }
+                    if (isset($resData['Data']['QrString'])) {
+                        $qrisString = $resData['Data']['QrString'];
+                    }
+                    if (isset($resData['Data']['Url'])) {
+                        $paymentUrl = $resData['Data']['Url'];
+                    }
+                } else {
+                    $resData = $response->json();
+                    $ipaymuError = is_array($resData) ? ($resData['Message'] ?? ($resData['message'] ?? 'iPaymu HTTP ' . $response->status())) : 'iPaymu HTTP ' . $response->status();
                 }
-            } else {
-                $resData = $response->json();
-                $ipaymuError = is_array($resData) ? ($resData['Message'] ?? ($resData['message'] ?? 'iPaymu HTTP ' . $response->status())) : 'iPaymu HTTP ' . $response->status();
+            } catch (\Throwable $e) {
+                $ipaymuError = $e->getMessage();
             }
-        } catch (\Throwable $e) {
-            $ipaymuError = $e->getMessage();
         }
 
         return view('invoice', compact('invoice', 'activeGateway', 'qrisImage', 'qrisString', 'paymentUrl', 'ipaymuError'));

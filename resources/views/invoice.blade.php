@@ -410,27 +410,30 @@
             qrisBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        @if(request('auto_pay'))
-            setTimeout(function() {
-                const qrisBox = document.getElementById('qrisDisplayBox');
-                if (qrisBox) {
-                    qrisBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 400);
-        @endif
-
         @if(!str_contains(strtolower($invoice->status), 'lunas') && !str_contains(strtolower($invoice->status), 'approved'))
-        setInterval(function() {
+        let statusPollInterval = setInterval(function() {
             fetch('/api/payment-status?id={{ $invoice->order_id ?: $invoice->member_id }}')
                 .then(res => res.json())
                 .then(data => {
                     if (data.is_settled) {
+                        clearInterval(statusPollInterval);
                         speakAnnouncement('Pembayaran Berhasil Diterima via Webhook iPaymu! Status keanggotaan Anda LUNAS.');
-                        window.location.reload();
+                        
+                        const pollKey = 'reloaded_' + '{{ $invoice->order_id ?: $invoice->member_id }}';
+                        if (!sessionStorage.getItem(pollKey)) {
+                            sessionStorage.setItem(pollKey, 'true');
+                            setTimeout(function() { window.location.reload(); }, 1200);
+                        } else {
+                            const statusBadge = document.querySelector('.badge-status');
+                            if (statusBadge) {
+                                statusBadge.className = 'badge bg-success badge-status';
+                                statusBadge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> LUNAS (APPROVED)';
+                            }
+                        }
                     }
                 })
                 .catch(err => {});
-        }, 3500);
+        }, 4000);
         @endif
     });
 </script>
