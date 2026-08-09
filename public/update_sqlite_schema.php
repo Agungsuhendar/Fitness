@@ -57,6 +57,14 @@ try {
         }
     }
 
+    // Check users table columns for pos_pin
+    $userStmt = $pdo->query("PRAGMA table_info(users)");
+    $userColumns = $userStmt->fetchAll(PDO::FETCH_COLUMN, 1);
+    if (!in_array('pos_pin', $userColumns)) {
+        $pdo->exec("ALTER TABLE users ADD COLUMN pos_pin VARCHAR(10) DEFAULT '1234'");
+        echo "✅ SQLite: Column 'pos_pin' added to users table.<br>";
+    }
+
     // Check inventory_logs table
     $logsStmt = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='inventory_logs'");
     if (!$logsStmt->fetch()) {
@@ -132,7 +140,48 @@ try {
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_inv_log_prod ON inventory_logs(product_id)");
     echo "✅ SQLite: Full-system High-Performance Indexes created for Users, Products, POs, Registrations, POS & Inventory Logs.<br>";
 
-    echo "<h3 style='color: green;'>🎉 SQLITE DATABASE SCHEMA SUCCESSFULLY UPDATED!</h3>";
+    // Check pos_shifts table
+    $posShiftsCheck = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='pos_shifts'");
+    if (!$posShiftsCheck->fetch()) {
+        $pdo->exec("CREATE TABLE pos_shifts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            cashier_name VARCHAR(255) NOT NULL,
+            opened_at DATETIME NOT NULL,
+            closed_at DATETIME NULL,
+            initial_cash NUMERIC DEFAULT 0,
+            expected_cash NUMERIC DEFAULT 0,
+            actual_cash NUMERIC DEFAULT 0,
+            difference NUMERIC DEFAULT 0,
+            total_cash_sales NUMERIC DEFAULT 0,
+            total_non_cash_sales NUMERIC DEFAULT 0,
+            total_cash_in NUMERIC DEFAULT 0,
+            total_cash_out NUMERIC DEFAULT 0,
+            status VARCHAR(50) DEFAULT 'open',
+            notes TEXT NULL,
+            created_at DATETIME NULL,
+            updated_at DATETIME NULL
+        )");
+        echo "✅ SQLite: Table 'pos_shifts' CREATED.<br>";
+    }
+
+    // Check pos_cash_movements table
+    $posMoveCheck = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='pos_cash_movements'");
+    if (!$posMoveCheck->fetch()) {
+        $pdo->exec("CREATE TABLE pos_cash_movements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pos_shift_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            type VARCHAR(50) NOT NULL,
+            amount NUMERIC DEFAULT 0,
+            notes TEXT NULL,
+            created_at DATETIME NULL,
+            updated_at DATETIME NULL
+        )");
+        echo "✅ SQLite: Table 'pos_cash_movements' CREATED.<br>";
+    }
+
+    echo "<h3>🎉 SQLite Schema Sync Completed Cleanly!</h3>";
 } catch (\Throwable $e) {
     echo "<h3 style='color: red;'>❌ SQLite Error: " . $e->getMessage() . "</h3>";
 }

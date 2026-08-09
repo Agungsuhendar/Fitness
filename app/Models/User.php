@@ -44,6 +44,7 @@ class User extends Authenticatable
         'reward_points',
         'level_badge',
         'streak_days',
+        'pos_pin',
     ];
 
     protected $casts = [

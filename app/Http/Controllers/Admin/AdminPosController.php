@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PosShift;
+use App\Models\PosCashMovement;
 use App\Models\Product;
 use App\Models\PosTransaction;
 use App\Models\PosTransactionItem;
@@ -17,6 +19,7 @@ class AdminPosController extends Controller
     public function index(Request $request)
     {
         $this->ensureSeedProducts();
+        $this->ensureShiftTablesExist();
 
         $category = $request->input('category', 'all');
         $q = trim($request->input('q'));
@@ -27,7 +30,16 @@ class AdminPosController extends Controller
 
         $recentTransactions = PosTransaction::with('items')->latest()->take(10)->get();
 
-        return view('admin.pos.index', compact('products', 'categories', 'category', 'q', 'recentTransactions'));
+        $activeShift = null;
+        if (auth()->check()) {
+            try {
+                $activeShift = PosShift::where('user_id', auth()->id())->where('status', 'open')->latest()->first();
+            } catch (\Throwable $t) {
+                $activeShift = null;
+            }
+        }
+
+        return view('admin.pos.index', compact('products', 'categories', 'category', 'q', 'recentTransactions', 'activeShift'));
     }
 
     public function searchMembers(Request $request)
@@ -229,39 +241,9 @@ class AdminPosController extends Controller
 
     public function checkTransactionStatus($id)
     {
-        $transaction = PosTransaction::findOrFail($id);
-
-        if ($transaction->payment_status === 'pending') {
-            try {
-                $va = \App\Models\Setting::get('ipaymu_va', '0000002447990145');
-                $apiKey = \App\Models\Setting::get('ipaymu_api_key', 'SANDBOX67650-XXXXXXXX-XXXX');
-                $isProd = \App\Models\Setting::get('ipaymu_is_production', '0') == '1';
-                $baseUrl = $isProd ? 'https://my.ipaymu.com' : 'https://sandbox.ipaymu.com';
-                $endpoint = $baseUrl . '/api/v2/transaction';
-
-                $body = ['transactionId' => $transaction->invoice_number];
-                $jsonBody = json_encode($body);
-                $bodyHash = strtolower(hash('sha256', $jsonBody));
-                $timestamp = date('YmdHis');
-                $stringToSign = "POST:" . $va . ":" . $bodyHash . ":" . $apiKey;
-                $signature = hash_hmac('sha256', $stringToSign, $apiKey);
-
-                $response = \Illuminate\Support\Facades\Http::withHeaders([
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'va' => $va,
-                    'signature' => $signature,
-                    'timestamp' => $timestamp,
-                ])->post($endpoint, $body);
-
-                if ($response->successful()) {
-                    $res = $response->json();
-                    if (isset($res['Data']['Status']) && ($res['Data']['Status'] == 1 || strtolower($res['Data']['StatusName'] ?? '') === 'berhasil')) {
-                        $transaction->payment_status = 'paid';
-                        $transaction->save();
-                    }
-                }
-            } catch (\Throwable $t) {}
+        $transaction = PosTransaction::find($id);
+        if (!$transaction) {
+            return response()->json(['success' => false, 'status' => 'not_found'], 404);
         }
 
         $isPaid = ($transaction->payment_status === 'paid' || $transaction->payment_status === 'settlement' || empty($transaction->payment_status));
@@ -473,6 +455,247 @@ class AdminPosController extends Controller
             foreach ($defaultProducts as $p) {
                 Product::create($p);
             }
+        }
+    }
+
+
+
+    public function verifyPin(Request $request)
+    {
+        $pin = trim($request->input('pin'));
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Sesi login telah berakhir.'], 401);
+        }
+
+        // Check if PIN matches pos_pin (default 1234) or user password
+        $userPin = $user->pos_pin ?: '1234';
+
+        if ($pin === $userPin || \Illuminate\Support\Facades\Hash::check($pin, $user->password)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Akses Kasir Berhasil Terbuka!',
+                'user_name' => $user->name,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'PIN Kasir Salah! Silakan coba lagi.'
+        ], 422);
+    }
+
+    public function getActiveShiftInfo()
+    {
+        try {
+            $this->ensureShiftTablesExist();
+            $userId = auth()->id() ?: 1;
+            $shift = PosShift::where('user_id', $userId)->where('status', 'open')->latest()->first();
+
+            if (!$shift) {
+                return response()->json(['active' => false]);
+            }
+
+            // Calculate live sales and cash movements for this shift
+            $cashSales = (float) PosTransaction::where('created_at', '>=', $shift->opened_at)
+                ->where(function($q) {
+                    $q->where('payment_status', 'paid')->orWhere('payment_status', 'settlement')->orWhereNull('payment_status');
+                })
+                ->where('payment_method', 'like', '%Tunai%')
+                ->sum('total');
+
+            $nonCashSales = (float) PosTransaction::where('created_at', '>=', $shift->opened_at)
+                ->where(function($q) {
+                    $q->where('payment_status', 'paid')->orWhere('payment_status', 'settlement')->orWhereNull('payment_status');
+                })
+                ->where('payment_method', 'not like', '%Tunai%')
+                ->sum('total');
+
+            $cashIn = (float) PosCashMovement::where('pos_shift_id', $shift->id)->where('type', 'in')->sum('amount');
+            $cashOut = (float) PosCashMovement::where('pos_shift_id', $shift->id)->where('type', 'out')->sum('amount');
+
+            $initialCash = (float) $shift->initial_cash;
+            $expectedCash = $initialCash + $cashSales + $cashIn - $cashOut;
+
+            return response()->json([
+                'active' => true,
+                'shift' => $shift,
+                'cashier_name' => $shift->cashier_name,
+                'opened_at_formatted' => $shift->opened_at ? $shift->opened_at->format('d/m/Y H:i') : date('d/m/Y H:i'),
+                'initial_cash' => $initialCash,
+                'cash_sales' => $cashSales,
+                'non_cash_sales' => $nonCashSales,
+                'cash_in' => $cashIn,
+                'cash_out' => $cashOut,
+                'expected_cash' => $expectedCash,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json(['active' => false, 'error' => $e->getMessage()]);
+        }
+    }
+
+    public function openShift(Request $request)
+    {
+        try {
+            $this->ensureShiftTablesExist();
+            $userId = auth()->id() ?: 1;
+
+            // Check if shift is already open
+            $existingShift = PosShift::where('user_id', $userId)->where('status', 'open')->first();
+            if ($existingShift) {
+                return response()->json(['success' => true, 'shift' => $existingShift, 'message' => 'Shift sudah terbuka.']);
+            }
+
+            $initialCash = (float) $request->input('initial_cash', 0);
+            $userName = auth()->check() ? auth()->user()->name : 'Kasir Studio';
+
+            $shift = PosShift::create([
+                'user_id' => $userId,
+                'cashier_name' => $userName,
+                'opened_at' => now(),
+                'initial_cash' => $initialCash,
+                'status' => 'open',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Shift Kasir Berhasil Dibuka!',
+                'shift' => $shift,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membuka shift kasir: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function recordCashMovement(Request $request)
+    {
+        try {
+            $this->ensureShiftTablesExist();
+            $userId = auth()->id() ?: 1;
+            $shift = PosShift::where('user_id', $userId)->where('status', 'open')->latest()->first();
+
+            if (!$shift) {
+                return response()->json(['success' => false, 'message' => 'Silakan buka shift kasir terlebih dahulu.'], 422);
+            }
+
+            $validated = $request->validate([
+                'type' => 'required|in:in,out',
+                'amount' => 'required|numeric|min:1',
+                'notes' => 'required|string|max:255',
+            ]);
+
+            PosCashMovement::create([
+                'pos_shift_id' => $shift->id,
+                'user_id' => $userId,
+                'type' => $validated['type'],
+                'amount' => $validated['amount'],
+                'notes' => $validated['notes'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Catatan Kas ' . strtoupper($validated['type']) . ' Berhasil Disimpan!']);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal mencatat kas: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function closeShift(Request $request)
+    {
+        try {
+            $this->ensureShiftTablesExist();
+            $userId = auth()->id() ?: 1;
+            $shift = PosShift::where('user_id', $userId)->where('status', 'open')->latest()->first();
+
+            if (!$shift) {
+                return response()->json(['success' => false, 'message' => 'Tidak ada shift kasir yang sedang aktif.'], 422);
+            }
+
+            $actualCash = (float) $request->input('actual_cash', 0);
+            $notes = trim($request->input('notes'));
+
+            // Calculate final shift totals
+            $cashSales = (float) PosTransaction::where('created_at', '>=', $shift->opened_at)
+                ->where(function($q) {
+                    $q->where('payment_status', 'paid')->orWhere('payment_status', 'settlement')->orWhereNull('payment_status');
+                })
+                ->where('payment_method', 'like', '%Tunai%')
+                ->sum('total');
+
+            $nonCashSales = (float) PosTransaction::where('created_at', '>=', $shift->opened_at)
+                ->where(function($q) {
+                    $q->where('payment_status', 'paid')->orWhere('payment_status', 'settlement')->orWhereNull('payment_status');
+                })
+                ->where('payment_method', 'not like', '%Tunai%')
+                ->sum('total');
+
+            $cashIn = (float) PosCashMovement::where('pos_shift_id', $shift->id)->where('type', 'in')->sum('amount');
+            $cashOut = (float) PosCashMovement::where('pos_shift_id', $shift->id)->where('type', 'out')->sum('amount');
+
+            $initialCash = (float) $shift->initial_cash;
+            $expectedCash = $initialCash + $cashSales + $cashIn - $cashOut;
+            $difference = $actualCash - $expectedCash;
+
+            $shift->update([
+                'closed_at' => now(),
+                'expected_cash' => $expectedCash,
+                'actual_cash' => $actualCash,
+                'difference' => $difference,
+                'total_cash_sales' => $cashSales,
+                'total_non_cash_sales' => $nonCashSales,
+                'total_cash_in' => $cashIn,
+                'total_cash_out' => $cashOut,
+                'status' => 'closed',
+                'notes' => $notes,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Shift Kasir Berhasil Ditutup!',
+                'shift' => $shift,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal menutup shift: ' . $e->getMessage()], 500);
+        }
+    }
+
+    private function ensureShiftTablesExist()
+    {
+        try {
+            DB::statement("CREATE TABLE IF NOT EXISTS pos_shifts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                cashier_name VARCHAR(255) NOT NULL,
+                opened_at DATETIME NOT NULL,
+                closed_at DATETIME NULL,
+                initial_cash NUMERIC DEFAULT 0,
+                expected_cash NUMERIC DEFAULT 0,
+                actual_cash NUMERIC DEFAULT 0,
+                difference NUMERIC DEFAULT 0,
+                total_cash_sales NUMERIC DEFAULT 0,
+                total_non_cash_sales NUMERIC DEFAULT 0,
+                total_cash_in NUMERIC DEFAULT 0,
+                total_cash_out NUMERIC DEFAULT 0,
+                status VARCHAR(50) DEFAULT 'open',
+                notes TEXT NULL,
+                created_at DATETIME NULL,
+                updated_at DATETIME NULL
+            )");
+
+            DB::statement("CREATE TABLE IF NOT EXISTS pos_cash_movements (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pos_shift_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                type VARCHAR(50) NOT NULL,
+                amount NUMERIC DEFAULT 0,
+                notes TEXT NULL,
+                created_at DATETIME NULL,
+                updated_at DATETIME NULL
+            )");
+        } catch (\Throwable $t) {
+            // Ignore if already exists
         }
     }
 }

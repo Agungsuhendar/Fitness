@@ -373,6 +373,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('/pos/checkout', [AdminPosController::class, 'checkout'])->name('pos.checkout');
         Route::get('/pos/check-status/{id}', [AdminPosController::class, 'checkTransactionStatus'])->name('pos.check-status');
         Route::get('/pos/receipt/{id}', [AdminPosController::class, 'showReceipt'])->name('pos.receipt');
+        Route::post('/pos/verify-pin', [AdminPosController::class, 'verifyPin'])->name('pos.verify-pin');
+        Route::post('/pos/open-shift', [AdminPosController::class, 'openShift'])->name('pos.open-shift');
+        Route::post('/pos/close-shift', [AdminPosController::class, 'closeShift'])->name('pos.close-shift');
+        Route::post('/pos/cash-movement', [AdminPosController::class, 'recordCashMovement'])->name('pos.cash-movement');
+        Route::get('/pos/active-shift', [AdminPosController::class, 'getActiveShiftInfo'])->name('pos.active-shift');
         Route::get('/products', [AdminPosController::class, 'productsIndex'])->name('pos.products');
         Route::get('/products/{id}/barcode', [AdminPosController::class, 'printBarcodeLabel'])->name('products.barcode');
         Route::post('/products', [AdminPosController::class, 'storeProduct'])->name('products.store');

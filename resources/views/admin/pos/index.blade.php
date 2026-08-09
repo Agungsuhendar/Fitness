@@ -63,10 +63,25 @@
             <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
                 <!-- Shortcut Hints -->
                 <div style="display: flex; gap: 0.35rem; font-size: 0.725rem; color: #94a3b8; font-family: monospace;">
-                    <span style="background: rgba(255,255,255,0.06); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">F2 / /: Cari</span>
-                    <span style="background: rgba(255,255,255,0.06); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">F4: Member</span>
+                    <span style="background: rgba(255,255,255,0.06); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">F2: Cari</span>
                     <span style="background: rgba(255,255,255,0.06); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">F8: Bayar</span>
+                    <span style="background: rgba(255,255,255,0.06); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">F9: Shift</span>
+                    <span style="background: rgba(255,255,255,0.06); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">F12: Lock</span>
                 </div>
+
+                @if(isset($activeShift) && $activeShift)
+                <button type="button" onclick="openShiftManagerModal()" id="shiftStatusBtn" style="background: rgba(132, 204, 22, 0.18); border: 1px solid #84cc16; color: #84cc16; padding: 0.5rem 1rem; border-radius: 99px; font-weight: 900; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                    <i class="fa-solid fa-cash-register"></i> Shift Aktif (Modal: Rp {{ number_format($activeShift->initial_cash, 0, ',', '.') }})
+                </button>
+                @else
+                <button type="button" onclick="openOpenShiftModal()" id="shiftStatusBtn" style="background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; color: #facc15; padding: 0.5rem 1rem; border-radius: 99px; font-weight: 900; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                    <i class="fa-solid fa-door-open"></i> Buka Kasir (Start Shift)
+                </button>
+                @endif
+
+                <button type="button" onclick="lockPosScreen()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 0.5rem 1rem; border-radius: 99px; font-weight: 800; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;" title="Kunci Layar Kasir">
+                    <i class="fa-solid fa-lock"></i> Kunci Kasir
+                </button>
 
                 <button type="button" onclick="openRecentTransactionsModal()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 0.5rem 1rem; border-radius: 99px; font-weight: 800; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
                     <i class="fa-solid fa-clock-rotate-left" style="color: #38bdf8;"></i> Riwayat Transaksi
@@ -83,6 +98,52 @@
         </div>
 
         <!-- Main Dual-Column POS Layout -->
+        @if(!isset($activeShift) || !$activeShift)
+        <!-- Fullscreen Shift Lockdown Overlay (Blocking 100% clicks until shift is opened) -->
+        <div id="posShiftLockOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: rgba(6, 9, 7, 0.95); backdrop-filter: blur(25px); display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+            <div style="background: #0d1410; border: 1.5px solid rgba(234, 179, 8, 0.5); border-radius: 2rem; padding: 2.5rem 2rem; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 50px rgba(234, 179, 8, 0.15); position: relative;">
+                
+                <!-- Lock Warning Icon & Header -->
+                <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(234, 179, 8, 0.15); border: 2px solid #eab308; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: 0 0 25px rgba(234, 179, 8, 0.3);">
+                    <i class="fa-solid fa-door-open" style="font-size: 2rem; color: #facc15;"></i>
+                </div>
+
+                <h3 style="color: #ffffff; font-weight: 900; font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin: 0 0 0.35rem;">
+                    SHIFT KASIR BELUM DIBUKA
+                </h3>
+                <p style="color: #cbd5e1; font-size: 0.85rem; margin: 0 0 1.5rem; line-height: 1.5;">
+                    Petugas: <strong style="color: #84cc16;">{{ auth()->user()->name ?? 'Kasir Studio' }}</strong><br>
+                    Seluruh transaksi POS dikunci. Masukkan <strong>Modal Uang Kembalian di Laci Kasir</strong> untuk membuka shift baru.
+                </p>
+
+                <!-- Initial Cash Input Form -->
+                <div style="text-align: left; margin-bottom: 1.25rem;">
+                    <label style="font-size: 0.775rem; font-weight: 900; color: #94a3b8; margin-bottom: 0.35rem; display: block; text-transform: uppercase;">MODAL AWAL UANG LACI (RP)</label>
+                    <input type="number" id="inputInitialCash" value="200000" style="width: 100%; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(234, 179, 8, 0.5); border-radius: 0.85rem; padding: 0.75rem 1rem; color: #ffffff; font-size: 1.3rem; font-weight: 900; outline: none; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">
+                </div>
+
+                <!-- Quick Cash Select Buttons -->
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                    <button type="button" onclick="document.getElementById('inputInitialCash').value='100000'" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.5rem; border-radius: 0.6rem; font-weight: 800; font-size: 0.8rem; cursor: pointer;">100 Ribu</button>
+                    <button type="button" onclick="document.getElementById('inputInitialCash').value='200000'" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.5rem; border-radius: 0.6rem; font-weight: 800; font-size: 0.8rem; cursor: pointer;">200 Ribu</button>
+                    <button type="button" onclick="document.getElementById('inputInitialCash').value='500000'" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.5rem; border-radius: 0.6rem; font-weight: 800; font-size: 0.8rem; cursor: pointer;">500 Ribu</button>
+                </div>
+
+                <button type="button" onclick="submitOpenShift()" style="width: 100%; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); border: none; color: #060907; font-weight: 900; padding: 0.9rem; border-radius: 1rem; font-size: 1.05rem; cursor: pointer; box-shadow: 0 10px 25px rgba(234, 179, 8, 0.4); display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-bolt"></i> 🚀 BUKA SHIFT KASIR NOW (F9)
+                </button>
+
+                <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; margin-top: 0.85rem; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.15); color: #cbd5e1; font-weight: 800; padding: 0.75rem; border-radius: 0.85rem; font-size: 0.9rem; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'; this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'; this.style.borderColor='rgba(255,255,255,0.15)'">
+                    <i class="fa-solid fa-house"></i> 🏠 Kembali ke Dashboard Admin
+                </a>
+
+                <div style="font-size: 0.75rem; color: #64748b; margin-top: 1.25rem;">
+                    🔒 Proteksi Laci Shift • FitLife POS System Guard
+                </div>
+            </div>
+        </div>
+        @endif
+
         <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem; align-items: start;" class="grid-2">
             
             <!-- Left Side: Product Catalog Grid -->
@@ -486,6 +547,13 @@
     }
 
     function processPosCheckout() {
+        const isShiftActive = {{ (isset($activeShift) && $activeShift) ? 'true' : 'false' }};
+        if (!isShiftActive && !currentShiftData) {
+            alert('⚠️ SHIFT KASIR BELUM DIBUKA!\n\nAnda harus membuka shift kasir & menginput modal uang kembalian di laci kasir terlebih dahulu sebelum melakukan transaksi.');
+            openOpenShiftModal();
+            return;
+        }
+
         if (cart.length === 0) {
             alert('Keranjang kasir masih kosong!');
             return;
@@ -724,7 +792,7 @@
         filterPosCategory(activeCat, activeBtn);
     }
 
-    // Keyboard Shortcuts (F2: Search, F4: Member, F8: Checkout, Esc: Clear/Close)
+    // Capture Keyboard Shortcuts (F2: Search, F4: Member, F8: Checkout, F9: Shift, F12: Lock, Esc: Clear/Close)
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F2' || (e.key === '/' && document.activeElement.tagName !== 'INPUT')) {
             e.preventDefault();
@@ -735,11 +803,259 @@
         } else if (e.key === 'F8') {
             e.preventDefault();
             processPosCheckout();
+        } else if (e.key === 'F9') {
+            e.preventDefault();
+            @if(isset($activeShift) && $activeShift)
+                openShiftManagerModal();
+            @else
+                openOpenShiftModal();
+            @endif
         } else if (e.key === 'Escape') {
             closeReceiptModal();
             closeRecentTransactionsModal();
         }
     });
+
+    // POS Shift Controller Logic (Zero-Dependency Custom Modals)
+    let currentShiftData = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // posShiftLockOverlay is already displayed by Blade HTML if shift is inactive!
+    });
+
+    function showCustomModal(id) {
+        const modalEl = document.getElementById(id);
+        if (modalEl) {
+            modalEl.classList.add('show');
+            modalEl.style.display = 'flex';
+            modalEl.style.position = 'fixed';
+            modalEl.style.top = '0';
+            modalEl.style.left = '0';
+            modalEl.style.width = '100vw';
+            modalEl.style.height = '100vh';
+            modalEl.style.zIndex = '999999';
+            modalEl.style.backgroundColor = 'rgba(0, 0, 0, 0.88)';
+            modalEl.style.backdropFilter = 'blur(15px)';
+            modalEl.style.alignItems = 'center';
+            modalEl.style.justifyContent = 'center';
+        }
+    }
+
+    function hideCustomModal(id) {
+        const modalEl = document.getElementById(id);
+        if (modalEl) {
+            modalEl.classList.remove('show');
+            modalEl.style.display = 'none';
+        }
+    }
+
+    function openOpenShiftModal() {
+        const lockOverlay = document.getElementById('posShiftLockOverlay');
+        if (lockOverlay) {
+            lockOverlay.style.display = 'flex';
+        } else {
+            showCustomModal('openShiftModal');
+        }
+    }
+
+    function closeOpenShiftModal() {
+        const lockOverlay = document.getElementById('posShiftLockOverlay');
+        if (lockOverlay) {
+            lockOverlay.style.display = 'none';
+        }
+        hideCustomModal('openShiftModal');
+    }
+
+    function submitOpenShift() {
+        const initialCash = parseFloat(document.getElementById('inputInitialCash').value) || 0;
+
+        fetch("{{ route('admin.pos.open-shift') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ initial_cash: initialCash })
+        })
+        .then(res => res.text())
+        .then(text => {
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch(e) {
+                console.error('Non-JSON response:', text);
+                alert('Shift berhasil diproses! Memuat ulang layar POS...');
+                location.reload();
+                return;
+            }
+
+            if (data.success) {
+                const overlay = document.getElementById('posShiftLockOverlay');
+                if (overlay) overlay.style.display = 'none';
+                hideCustomModal('openShiftModal');
+                location.reload();
+            } else {
+                alert(data.message || 'Gagal membuka shift kasir.');
+            }
+        })
+        .catch(err => {
+            location.reload();
+        });
+    }
+
+    function openShiftManagerModal() {
+        showCustomModal('shiftManagerModal');
+
+        fetch("{{ route('admin.pos.active-shift') }}", {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.active) {
+                currentShiftData = data;
+                if (document.getElementById('shiftCashierName')) document.getElementById('shiftCashierName').innerText = data.cashier_name || 'Kasir Studio';
+                if (document.getElementById('shiftOpenedTime')) document.getElementById('shiftOpenedTime').innerText = 'Buka: ' + (data.opened_at_formatted || '');
+                if (document.getElementById('shiftInitialCashText')) document.getElementById('shiftInitialCashText').innerText = 'Rp ' + (data.initial_cash || 0).toLocaleString('id-ID');
+                if (document.getElementById('shiftCashSalesText')) document.getElementById('shiftCashSalesText').innerText = 'Rp ' + (data.cash_sales || 0).toLocaleString('id-ID');
+                if (document.getElementById('shiftNonCashSalesText')) document.getElementById('shiftNonCashSalesText').innerText = 'Rp ' + (data.non_cash_sales || 0).toLocaleString('id-ID');
+                if (document.getElementById('shiftCashInText')) document.getElementById('shiftCashInText').innerText = 'Rp ' + (data.cash_in || 0).toLocaleString('id-ID');
+                if (document.getElementById('shiftCashOutText')) document.getElementById('shiftCashOutText').innerText = 'Rp ' + (data.cash_out || 0).toLocaleString('id-ID');
+                if (document.getElementById('shiftExpectedCashText')) document.getElementById('shiftExpectedCashText').innerText = 'Rp ' + (data.expected_cash || 0).toLocaleString('id-ID');
+                if (document.getElementById('inputActualCash')) document.getElementById('inputActualCash').value = data.expected_cash || 0;
+                calculateShiftDifference();
+            }
+        })
+        .catch(err => {
+            console.log('Opened shift manager modal.');
+        });
+    }
+
+    function closeShiftManagerModal() {
+        hideCustomModal('shiftManagerModal');
+    }
+
+    function calculateShiftDifference() {
+        if (!currentShiftData) return;
+        const actual = parseFloat(document.getElementById('inputActualCash').value) || 0;
+        const expected = currentShiftData.expected_cash;
+        const diff = actual - expected;
+
+        const diffEl = document.getElementById('shiftDiffStatusText');
+        if (diff === 0) {
+            diffEl.style.color = '#84cc16';
+            diffEl.innerText = 'Rp 0 (PAS - AKURAT)';
+        } else if (diff < 0) {
+            diffEl.style.color = '#ef4444';
+            diffEl.innerText = '-Rp ' + Math.abs(diff).toLocaleString('id-ID') + ' (SELISIH KURANG)';
+        } else {
+            diffEl.style.color = '#38bdf8';
+            diffEl.innerText = '+Rp ' + diff.toLocaleString('id-ID') + ' (SELISIH LEBIH)';
+        }
+    }
+
+    function openCashMovementModal(type) {
+        document.getElementById('cashMovementType').value = type;
+        document.getElementById('cashMovementModalTitle').innerText = type === 'in' ? '📥 Catat Kas Masuk (+)' : '📤 Catat Kas Keluar (-)';
+        document.getElementById('inputMovementAmount').value = '';
+        document.getElementById('inputMovementNotes').value = '';
+        showCustomModal('cashMovementModal');
+    }
+
+    function closeCashMovementModal() {
+        hideCustomModal('cashMovementModal');
+    }
+
+    function submitCashMovement() {
+        const type = document.getElementById('cashMovementType').value;
+        const amount = parseFloat(document.getElementById('inputMovementAmount').value) || 0;
+        const notes = document.getElementById('inputMovementNotes').value.trim();
+
+        if (amount <= 0 || !notes) {
+            alert('Nominal dan keterangan kas harus diisi!');
+            return;
+        }
+
+        fetch("{{ route('admin.pos.cash-movement') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ type, amount, notes })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                hideCustomModal('cashMovementModal');
+                openShiftManagerModal();
+            } else {
+                alert(data.message || 'Gagal mencatat movement kas.');
+            }
+        });
+    }
+
+    function submitCloseShift() {
+        const actualCash = parseFloat(document.getElementById('inputActualCash').value) || 0;
+
+        if (document.getElementById('confirmCashierName')) {
+            document.getElementById('confirmCashierName').innerText = (currentShiftData ? currentShiftData.cashier_name : 'Kasir Studio');
+        }
+        if (document.getElementById('confirmActualCashText')) {
+            document.getElementById('confirmActualCashText').innerText = 'Rp ' + actualCash.toLocaleString('id-ID');
+        }
+        if (document.getElementById('confirmDiffStatusText') && document.getElementById('shiftDiffStatusText')) {
+            document.getElementById('confirmDiffStatusText').innerText = document.getElementById('shiftDiffStatusText').innerText;
+        }
+
+        showCustomModal('confirmCloseShiftModal');
+    }
+
+    function executeCloseShiftFinal() {
+        const actualCash = parseFloat(document.getElementById('inputActualCash').value) || 0;
+        const notes = (document.getElementById('inputShiftNotes').value || '').trim();
+
+        const btn = document.getElementById('btnFinalCloseShift');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menutup Shift...';
+        }
+
+        fetch("{{ route('admin.pos.close-shift') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ actual_cash: actualCash, notes: notes })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                hideCustomModal('confirmCloseShiftModal');
+                hideCustomModal('shiftManagerModal');
+                alert('🏁 Shift Kasir Berhasil Ditutup!\nUang Setor Laci: Rp ' + actualCash.toLocaleString('id-ID'));
+                location.reload();
+            } else {
+                alert(data.message || 'Gagal menutup shift kasir.');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🏁 Ya, Tutup Shift';
+                }
+            }
+        })
+        .catch(err => {
+            location.reload();
+        });
+    }
 
     function togglePosFullscreen() {
         const isFsNow = !document.body.classList.contains('is-fullscreen-mode');
@@ -774,5 +1090,346 @@
         if (fsIcon) fsIcon.className = isNativeFs ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
         if (fsText) fsText.innerText = isNativeFs ? 'Exit Fullscreen' : 'Fullscreen';
     });
+
+    // POS PIN Lock Screen Controller Logic
+    let currentEnteredPin = '';
+    let isPosLocked = false;
+
+    function lockPosScreen() {
+        isPosLocked = true;
+        currentEnteredPin = '';
+        updatePinDotsDisplay();
+        document.getElementById('pinErrorAlert').style.display = 'none';
+        document.getElementById('posLockOverlay').style.display = 'flex';
+    }
+
+    function pressPinNum(num) {
+        if (!isPosLocked) return;
+        if (currentEnteredPin.length < 10) {
+            currentEnteredPin += num;
+            updatePinDotsDisplay();
+            if (currentEnteredPin.length === 4) {
+                submitPinUnlock();
+            }
+        }
+    }
+
+    function clearPinInput() {
+        currentEnteredPin = '';
+        updatePinDotsDisplay();
+        document.getElementById('pinErrorAlert').style.display = 'none';
+    }
+
+    function updatePinDotsDisplay() {
+        for (let i = 0; i < 4; i++) {
+            const dot = document.getElementById('pinDot' + i);
+            if (dot) {
+                if (i < currentEnteredPin.length) {
+                    dot.style.background = '#84cc16';
+                    dot.style.borderColor = '#84cc16';
+                    dot.style.boxShadow = '0 0 10px #84cc16';
+                } else {
+                    dot.style.background = 'transparent';
+                    dot.style.borderColor = 'rgba(255,255,255,0.3)';
+                    dot.style.boxShadow = 'none';
+                }
+            }
+        }
+    }
+
+    function submitPinUnlock() {
+        if (!currentEnteredPin) return;
+
+        fetch("{{ route('admin.pos.verify-pin') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ pin: currentEnteredPin })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                isPosLocked = false;
+                document.getElementById('posLockOverlay').style.display = 'none';
+                currentEnteredPin = '';
+            } else {
+                document.getElementById('pinErrorAlert').innerText = '⚠️ ' + (data.message || 'PIN / Password Kasir Salah!');
+                document.getElementById('pinErrorAlert').style.display = 'block';
+                const card = document.getElementById('posLockCard');
+                if (card) {
+                    card.style.transform = 'scale(0.98)';
+                    setTimeout(() => card.style.transform = 'none', 200);
+                }
+                currentEnteredPin = '';
+                updatePinDotsDisplay();
+            }
+        })
+        .catch(err => {
+            document.getElementById('pinErrorAlert').innerText = '⚠️ PIN / Password Kasir Salah!';
+            document.getElementById('pinErrorAlert').style.display = 'block';
+            currentEnteredPin = '';
+            updatePinDotsDisplay();
+        });
+    }
+
+    // Capture Keyboard F12 or Physical Keypad typing while locked
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12') {
+            e.preventDefault();
+            if (!isPosLocked) {
+                lockPosScreen();
+            }
+            return;
+        }
+
+        if (isPosLocked) {
+            if (e.key >= '0' && e.key <= '9') {
+                pressPinNum(e.key);
+            } else if (e.key === 'Backspace') {
+                clearPinInput();
+            } else if (e.key === 'Enter') {
+                submitPinUnlock();
+            }
+        }
+    });
 </script>
+
+<!-- Fullscreen PIN Lock Screen Overlay -->
+<div id="posLockOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: rgba(6, 9, 7, 0.96); backdrop-filter: blur(25px); align-items: center; justify-content: center;">
+    <div style="background: #0d1410; border: 1.5px solid rgba(132, 204, 22, 0.4); border-radius: 2rem; padding: 2.25rem 2rem; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 50px rgba(132, 204, 22, 0.15); transition: transform 0.2s ease;" id="posLockCard">
+        
+        <!-- Lock Icon & Header -->
+        <div style="width: 65px; height: 65px; border-radius: 50%; background: rgba(132, 204, 22, 0.15); border: 2px solid #84cc16; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.15rem; box-shadow: 0 0 25px rgba(132, 204, 22, 0.3);">
+            <i class="fa-solid fa-lock" style="font-size: 1.8rem; color: #84cc16;"></i>
+        </div>
+
+        <h3 style="color: #ffffff; font-weight: 900; font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin: 0 0 0.35rem;">
+            SESI KASIR TERKUNCI
+        </h3>
+        <p style="color: #94a3b8; font-size: 0.825rem; margin: 0 0 1.25rem; line-height: 1.4;">
+            Petugas: <strong style="color: #84cc16;">{{ auth()->user()->name ?? 'Kasir Studio' }}</strong><br>
+            Ketik 4-digit PIN Kasir (Default: <code style="color: #38bdf8;">1234</code>) atau Password untuk Membuka.
+        </p>
+
+        <!-- PIN Mask Dots Display -->
+        <div style="display: flex; justify-content: center; gap: 0.85rem; margin-bottom: 1.25rem;" id="pinDotsContainer">
+            <span class="pin-dot" id="pinDot0" style="width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); background: transparent; transition: all 0.2s;"></span>
+            <span class="pin-dot" id="pinDot1" style="width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); background: transparent; transition: all 0.2s;"></span>
+            <span class="pin-dot" id="pinDot2" style="width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); background: transparent; transition: all 0.2s;"></span>
+            <span class="pin-dot" id="pinDot3" style="width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); background: transparent; transition: all 0.2s;"></span>
+        </div>
+
+        <div id="pinErrorAlert" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; font-size: 0.8rem; font-weight: 800; padding: 0.5rem; border-radius: 0.65rem; margin-bottom: 1rem;">
+            ⚠️ PIN / Password Kasir Salah!
+        </div>
+
+        <!-- Touch Numpad Grid -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem; margin-bottom: 1.25rem;">
+            @foreach([1,2,3,4,5,6,7,8,9] as $num)
+                <button type="button" onclick="pressPinNum('{{ $num }}')" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: white; border-radius: 0.85rem; font-size: 1.3rem; font-weight: 900; padding: 0.75rem 0; cursor: pointer; transition: all 0.15s;" onmouseover="this.style.background='rgba(132,204,22,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">
+                    {{ $num }}
+                </button>
+            @endforeach
+            <button type="button" onclick="clearPinInput()" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; border-radius: 0.85rem; font-size: 0.85rem; font-weight: 800; padding: 0.75rem 0; cursor: pointer;">
+                Clear
+            </button>
+            <button type="button" onclick="pressPinNum('0')" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: white; border-radius: 0.85rem; font-size: 1.3rem; font-weight: 900; padding: 0.75rem 0; cursor: pointer;">
+                0
+            </button>
+            <button type="button" onclick="submitPinUnlock()" style="background: #84cc16; border: 1px solid #84cc16; color: #060907; border-radius: 0.85rem; font-size: 1.1rem; font-weight: 900; padding: 0.75rem 0; cursor: pointer;">
+                <i class="fa-solid fa-key"></i>
+            </button>
+        </div>
+
+        <div style="font-size: 0.75rem; color: #64748b;">
+            🔒 Sesi Terproteksi • FitLife Cashier Guard
+        </div>
+    </div>
+</div>
+
+<!-- Modal Buka Shift Kasir (Start Shift) -->
+<div id="openShiftModal" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: rgba(6, 9, 7, 0.94); backdrop-filter: blur(25px); align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #0d1410; border: 1.5px solid rgba(234, 179, 8, 0.5); border-radius: 2rem; padding: 2.25rem 2rem; width: 100%; max-width: 420px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 50px rgba(234, 179, 8, 0.15); position: relative;">
+        <button type="button" onclick="closeOpenShiftModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: transparent; border: none; color: #94a3b8; font-size: 1.25rem; cursor: pointer;">✕</button>
+        
+        <div style="width: 65px; height: 65px; border-radius: 50%; background: rgba(234, 179, 8, 0.15); border: 2px solid #eab308; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.15rem; box-shadow: 0 0 25px rgba(234, 179, 8, 0.3);">
+            <i class="fa-solid fa-door-open" style="font-size: 1.8rem; color: #facc15;"></i>
+        </div>
+
+        <h3 style="color: #ffffff; font-weight: 900; font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin: 0 0 0.35rem;">
+            BUKA SHIFT KASIR STUDIO
+        </h3>
+        <p style="color: #cbd5e1; font-size: 0.825rem; margin: 0 0 1.25rem; line-height: 1.4;">
+            Petugas: <strong style="color: #84cc16;">{{ auth()->user()->name ?? 'Kasir Studio' }}</strong><br>
+            Masukkan nominal <strong>Modal Uang Kembalian di Laci Kasir</strong> untuk membuka shift baru.
+        </p>
+
+        <div style="text-align: left; margin-bottom: 1.15rem;">
+            <label style="font-size: 0.775rem; font-weight: 900; color: #94a3b8; margin-bottom: 0.35rem; display: block; text-transform: uppercase;">MODAL AWAL UANG LACI (RP)</label>
+            <input type="number" id="inputInitialCash" value="200000" style="width: 100%; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(234, 179, 8, 0.5); border-radius: 0.85rem; padding: 0.75rem 1rem; color: #ffffff; font-size: 1.25rem; font-weight: 900; outline: none; text-align: center;">
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.35rem;">
+            <button type="button" onclick="document.getElementById('inputInitialCash').value='100000'" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.45rem; border-radius: 0.6rem; font-weight: 800; font-size: 0.775rem; cursor: pointer;">100 Ribu</button>
+            <button type="button" onclick="document.getElementById('inputInitialCash').value='200000'" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.45rem; border-radius: 0.6rem; font-weight: 800; font-size: 0.775rem; cursor: pointer;">200 Ribu</button>
+            <button type="button" onclick="document.getElementById('inputInitialCash').value='500000'" style="flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 0.45rem; border-radius: 0.6rem; font-weight: 800; font-size: 0.775rem; cursor: pointer;">500 Ribu</button>
+        </div>
+
+        <button type="button" onclick="submitOpenShift()" style="width: 100%; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); border: none; color: #060907; font-weight: 900; padding: 0.85rem; border-radius: 0.85rem; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(234, 179, 8, 0.4); display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fa-solid fa-bolt"></i> 🚀 BUKA SHIFT KASIR NOW (F9)
+        </button>
+    </div>
+</div>
+
+<!-- Modal Kelola & Tutup Shift Kasir (Closing Cash Audit) -->
+<div id="shiftManagerModal" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: rgba(6, 9, 7, 0.94); backdrop-filter: blur(25px); align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #0d1410; border: 1.5px solid rgba(132, 204, 22, 0.4); border-radius: 1.75rem; padding: 2rem; width: 100%; max-width: 650px; color: white; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 50px rgba(132, 204, 22, 0.15); position: relative; max-height: 90vh; overflow-y: auto;">
+        <button type="button" onclick="closeShiftManagerModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: transparent; border: none; color: #94a3b8; font-size: 1.25rem; cursor: pointer;">✕</button>
+
+        <h4 style="font-weight: 900; font-family: 'Outfit', sans-serif; color: #ffffff; display: flex; align-items: center; gap: 0.5rem; margin: 0 0 1.25rem;">
+            <i class="fa-solid fa-cash-register" style="color: #84cc16;"></i> Audit Shift &amp; Closing Kas Laci Kasir
+        </h4>
+
+        <!-- Info Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.15rem;">
+            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.85rem; padding: 0.85rem;">
+                <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800; text-transform: uppercase;">PETUGAS KASIR</span>
+                <div style="font-size: 1.1rem; font-weight: 900; color: white; margin-top: 0.15rem;" id="shiftCashierName">{{ auth()->user()->name ?? 'Kasir Studio' }}</div>
+                <div style="font-size: 0.725rem; color: #84cc16; margin-top: 0.15rem;" id="shiftOpenedTime">Shift Aktif</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.85rem; padding: 0.85rem;">
+                <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 800; text-transform: uppercase;">MODAL AWAL LACI</span>
+                <div style="font-size: 1.1rem; font-weight: 900; color: #facc15; margin-top: 0.15rem;" id="shiftInitialCashText">Rp {{ isset($activeShift) ? number_format((float)$activeShift->initial_cash, 0, ',', '.') : '0' }}</div>
+                <div style="font-size: 0.725rem; color: #cbd5e1; margin-top: 0.15rem;">Uang Kembalian Awal</div>
+            </div>
+        </div>
+
+        <!-- Financial Breakdown Grid -->
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.85rem; padding: 1rem; margin-bottom: 1.15rem;">
+            <h6 style="font-size: 0.775rem; color: #94a3b8; font-weight: 800; margin-bottom: 0.75rem; text-transform: uppercase;">RINGKASAN ARUS KAS SHIFT THIS SHIFT</h6>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.65rem; text-align: center;">
+                <div style="background: rgba(132, 204, 22, 0.1); border: 1px solid rgba(132, 204, 22, 0.2); padding: 0.6rem; border-radius: 0.65rem;">
+                    <span style="font-size: 0.675rem; color: #94a3b8;">Penjualan Tunai</span>
+                    <div style="font-weight: 900; color: #84cc16; font-size: 0.9rem; margin-top: 0.15rem;" id="shiftCashSalesText">Rp 0</div>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); padding: 0.6rem; border-radius: 0.65rem;">
+                    <span style="font-size: 0.675rem; color: #94a3b8;">Penjualan Non-Tunai</span>
+                    <div style="font-weight: 900; color: #06b6d4; font-size: 0.9rem; margin-top: 0.15rem;" id="shiftNonCashSalesText">Rp 0</div>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 0.6rem; border-radius: 0.65rem;">
+                    <span style="font-size: 0.675rem; color: #94a3b8;">Kas Masuk (+)</span>
+                    <div style="font-weight: 900; color: #10b981; font-size: 0.9rem; margin-top: 0.15rem;" id="shiftCashInText">Rp 0</div>
+                </div>
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.6rem; border-radius: 0.65rem;">
+                    <span style="font-size: 0.675rem; color: #94a3b8;">Kas Keluar (-)</span>
+                    <div style="font-weight: 900; color: #ef4444; font-size: 0.9rem; margin-top: 0.15rem;" id="shiftCashOutText">Rp 0</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 0.85rem; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="button" onclick="openCashMovementModal('in')" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; font-weight: 800; font-size: 0.775rem; padding: 0.35rem 0.75rem; border-radius: 0.5rem; cursor: pointer;">
+                    <i class="fa-solid fa-plus"></i> Catat Kas Masuk
+                </button>
+                <button type="button" onclick="openCashMovementModal('out')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; font-weight: 800; font-size: 0.775rem; padding: 0.35rem 0.75rem; border-radius: 0.5rem; cursor: pointer;">
+                    <i class="fa-solid fa-minus"></i> Catat Kas Keluar
+                </button>
+            </div>
+        </div>
+
+        <!-- Expected Cash & Actual Cash Count Form -->
+        <div style="background: linear-gradient(135deg, #112218 0%, #09130d 100%); border: 1.5px solid #84cc16; border-radius: 1rem; padding: 1.15rem; margin-bottom: 1.15rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-weight: 800; color: #cbd5e1; font-size: 0.85rem;">TOTAL UANG LACI SEHARUSNYA (EXPECTED):</span>
+                <span style="font-size: 1.3rem; font-weight: 900; color: #84cc16; font-family: 'Outfit', sans-serif;" id="shiftExpectedCashText">Rp 0</span>
+            </div>
+
+            <div style="margin-bottom: 0.75rem;">
+                <label style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.3rem; display: block;">HITUNGAN UANG FISIK DI LACI (ACTUAL CASH)</label>
+                <input type="number" id="inputActualCash" oninput="calculateShiftDifference()" placeholder="Ketik nominal uang fisik hasil hitungan laci..." style="width: 100%; background: #060907; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 0.65rem; padding: 0.6rem 0.85rem; color: white; font-size: 1.1rem; font-weight: 900; outline: none;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 0.55rem 0.75rem; border-radius: 0.5rem;">
+                <span style="font-size: 0.8rem; font-weight: 800; color: #94a3b8;">STATUS SELISIH LACI:</span>
+                <span style="font-weight: 900; font-size: 0.95rem;" id="shiftDiffStatusText">Rp 0 (PAS)</span>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.15rem;">
+            <label style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.3rem; display: block;">CATATAN CLOSING SHIFT (OPSIONAL)</label>
+            <input type="text" id="inputShiftNotes" placeholder="Misal: Uang pas, pecahan 50rb 4 lembar..." style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 0.6rem; padding: 0.5rem 0.75rem; color: white; font-size: 0.825rem;">
+        </div>
+
+        <button type="button" onclick="submitCloseShift()" style="width: 100%; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; color: white; font-weight: 900; padding: 0.85rem; border-radius: 0.85rem; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);">
+            🏁 TUTUP SHIFT &amp; AUDIT SETOR KASIR
+        </button>
+    </div>
+</div>
+
+<!-- Modal Record Cash Movement -->
+<div id="cashMovementModal" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: rgba(6, 9, 7, 0.94); backdrop-filter: blur(25px); align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #0d1410; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 1.25rem; color: white; width: 100%; max-width: 360px; padding: 1.5rem; position: relative;">
+        <button type="button" onclick="closeCashMovementModal()" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer;">✕</button>
+        
+        <h5 style="font-weight: 900; font-size: 1.1rem; margin: 0 0 1rem;" id="cashMovementModalTitle">Catat Kas Movement</h5>
+
+        <input type="hidden" id="cashMovementType" value="in">
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.25rem; display: block;">NOMINAL (RP)</label>
+            <input type="number" id="inputMovementAmount" placeholder="0" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 0.65rem; padding: 0.55rem 0.75rem; color: white; font-size: 1rem; font-weight: 800; outline: none;">
+        </div>
+        <div style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.25rem; display: block;">KETERANGAN / ALASAN</label>
+            <input type="text" id="inputMovementNotes" placeholder="Misal: Beli galon air / Setor modal..." style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 0.65rem; padding: 0.55rem 0.75rem; color: white; font-size: 0.825rem; outline: none;">
+        </div>
+        <button type="button" onclick="submitCashMovement()" style="width: 100%; background: #84cc16; border: none; color: #060907; font-weight: 900; padding: 0.75rem; border-radius: 0.65rem; font-size: 0.95rem; cursor: pointer;">
+            Simpan Catatan Kas
+        </button>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Tutup Shift (#confirmCloseShiftModal) -->
+<div id="confirmCloseShiftModal" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999999; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(25px); align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #0d1410; border: 1.5px solid rgba(239, 68, 68, 0.5); border-radius: 2rem; padding: 2.25rem 2rem; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 50px rgba(239, 68, 68, 0.2); position: relative;">
+        <button type="button" onclick="hideCustomModal('confirmCloseShiftModal')" style="position: absolute; top: 1.25rem; right: 1.25rem; background: transparent; border: none; color: #94a3b8; font-size: 1.25rem; cursor: pointer;">✕</button>
+
+        <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: 0 0 25px rgba(239, 68, 68, 0.3);">
+            <i class="fa-solid fa-flag-checkered" style="font-size: 2rem; color: #ef4444;"></i>
+        </div>
+
+        <h3 style="color: #ffffff; font-weight: 900; font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin: 0 0 0.35rem;">
+            KONFIRMASI TUTUP SHIFT
+        </h3>
+        <p style="color: #cbd5e1; font-size: 0.85rem; margin: 0 0 1.25rem; line-height: 1.4;">
+            Apakah Anda yakin ingin <strong>MENUTUP SHIFT Kasir</strong> dan melakukan Setor Uang Laci sekarang?
+        </p>
+
+        <!-- Summary Preview Box -->
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem; text-align: left; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.825rem; margin-bottom: 0.4rem;">
+                <span style="color: #94a3b8;">Petugas Kasir:</span>
+                <strong style="color: white;" id="confirmCashierName">-</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.825rem; margin-bottom: 0.4rem;">
+                <span style="color: #94a3b8;">Uang Fisik Laci:</span>
+                <strong style="color: #84cc16;" id="confirmActualCashText">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.825rem;">
+                <span style="color: #94a3b8;">Status Selisih:</span>
+                <strong style="color: #38bdf8;" id="confirmDiffStatusText">Rp 0 (PAS)</strong>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            <button type="button" onclick="hideCustomModal('confirmCloseShiftModal')" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; padding: 0.8rem; border-radius: 0.85rem; font-size: 0.9rem; cursor: pointer;">
+                Batal
+            </button>
+            <button type="button" onclick="executeCloseShiftFinal()" id="btnFinalCloseShift" style="flex: 1.4; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; color: white; font-weight: 900; padding: 0.8rem; border-radius: 0.85rem; font-size: 0.9rem; cursor: pointer; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);">
+                🏁 Ya, Tutup Shift
+            </button>
+        </div>
+    </div>
+</div>
 @endsection
