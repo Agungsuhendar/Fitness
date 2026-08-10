@@ -1,5 +1,5 @@
-<div class="modal-overlay" id="trialModal">
-    <div class="modal-card" style="background: #0d1310; border: 1.5px solid rgba(132, 204, 22, 0.4); color: #ffffff; max-width: 620px; border-radius: 1.75rem; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.85); overflow: hidden; position: relative;">
+<div class="modal-overlay" id="trialModal" style="z-index: 9999999 !important; padding: 2.5rem 1rem 1.5rem 1rem;">
+    <div class="modal-card" style="background: #0d1310; border: 1.5px solid rgba(132, 204, 22, 0.4); color: #ffffff; max-width: 620px; width: 100%; border-radius: 1.75rem; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.85); max-height: 82vh; overflow-y: auto; scrollbar-width: thin; position: relative; margin-top: auto; margin-bottom: auto;">
         <button class="modal-close" onclick="closeTrialModal()" style="color: #ffffff; background: rgba(255,255,255,0.1); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; top: 1.25rem; right: 1.25rem;">&times;</button>
         
         <!-- Booking Form Container -->
@@ -29,32 +29,53 @@
                     </div>
                 </div>
 
+                @php
+                    $dbLocations = \App\Models\Location::all();
+                    $dbPrograms = \App\Models\Program::all();
+                    $firstLocName = $dbLocations->first() ? $dbLocations->first()->name . ' (' . ($dbLocations->first()->city ?: 'Yogyakarta') . ')' : 'FitLife HQ Kaliurang (Sleman)';
+                @endphp
+
                 <!-- 2. Program Selection -->
                 <div style="margin-bottom: 1.15rem;">
                     <label style="display: block; font-weight: 700; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 0.35rem;">Program Fitness Pilihan <span style="color:#ef4444;">*</span></label>
                     <select name="program_name" id="trialProgramSelect" class="form-control" required style="background: #161f19; border: 1.5px solid rgba(255,255,255,0.15); color: #ffffff; border-radius: 0.75rem; padding: 0.65rem 0.85rem; font-weight: 700; font-size: 0.9rem; outline: none; width: 100%;">
-                        <option value="Weight Loss & Fat Burn">Weight Loss & Fat Burn (Defisit Kalori)</option>
-                        <option value="Muscle Building & Hypertrophy">Muscle Building & Hypertrophy (Massa Otot)</option>
-                        <option value="Female Fitness & Body Shaping">Female Fitness & Shaping (Privat Wanita)</option>
-                        <option value="Strength & Persiapan TNI-POLRI">Persiapan Fisik TNI / POLRI</option>
-                        <option value="Posture Correction & Rehab">Posture Correction & Rehab Fungsional</option>
+                        @if($dbPrograms->count() > 0)
+                            @foreach($dbPrograms as $prog)
+                                <option value="{{ $prog->title ?: $prog->name }}">{{ $prog->title ?: $prog->name }} ({{ $prog->category ?: 'Program FitLife' }})</option>
+                            @endforeach
+                        @else
+                            <option value="Weight Loss & Fat Burn">Weight Loss & Fat Burn (Defisit Kalori)</option>
+                            <option value="Muscle Building & Hypertrophy">Muscle Building & Hypertrophy (Massa Otot)</option>
+                            <option value="Female Fitness & Body Shaping">Female Fitness & Shaping (Privat Wanita)</option>
+                            <option value="Strength & Persiapan TNI-POLRI">Persiapan Fisik TNI / POLRI</option>
+                            <option value="Posture Correction & Rehab">Posture Correction & Rehab Fungsional</option>
+                        @endif
                     </select>
                 </div>
 
                 <!-- 3. Studio Branch Location Pills -->
                 <div style="margin-bottom: 1.15rem;">
                     <label style="display: block; font-weight: 700; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 0.35rem;">Pilih Lokasi Studio Gym <span style="color:#ef4444;">*</span></label>
-                    <input type="hidden" name="preferred_location" id="trialInputLoc" value="FitLife HQ Kaliurang (Sleman)">
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem;">
-                        <button type="button" class="loc-pill-btn active" onclick="selectLocPill(this, 'FitLife HQ Kaliurang (Sleman)')" style="background: rgba(132,204,22,0.15); border: 1.5px solid #84cc16; color: white; border-radius: 0.75rem; padding: 0.65rem 0.5rem; text-align: center; cursor: pointer; font-size: 0.775rem; font-weight: 700; transition: all 0.2s;">
-                            🏢 Sleman HQ
-                        </button>
-                        <button type="button" class="loc-pill-btn" onclick="selectLocPill(this, 'FitLife Studio Seturan (UGM/Depok)')" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; border-radius: 0.75rem; padding: 0.65rem 0.5rem; text-align: center; cursor: pointer; font-size: 0.775rem; font-weight: 700; transition: all 0.2s;">
-                            🎓 Seturan UGM
-                        </button>
-                        <button type="button" class="loc-pill-btn" onclick="selectLocPill(this, 'FitLife Studio Sewon (Bantul)')" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; border-radius: 0.75rem; padding: 0.65rem 0.5rem; text-align: center; cursor: pointer; font-size: 0.775rem; font-weight: 700; transition: all 0.2s;">
-                            📍 Sewon Bantul
-                        </button>
+                    <input type="hidden" name="preferred_location" id="trialInputLoc" value="{{ $firstLocName }}">
+                    <div style="display: grid; grid-template-columns: repeat({{ count($dbLocations) > 0 ? min(count($dbLocations), 3) : 3 }}, 1fr); gap: 0.6rem;">
+                        @if($dbLocations->count() > 0)
+                            @foreach($dbLocations as $idx => $loc)
+                                @php $fullName = $loc->name . ' (' . ($loc->city ?: 'Jogja') . ')'; @endphp
+                                <button type="button" class="loc-pill-btn {{ $idx === 0 ? 'active' : '' }}" onclick="selectLocPill(this, '{{ addslashes($fullName) }}')" style="background: {{ $idx === 0 ? 'rgba(132,204,22,0.15)' : 'rgba(255,255,255,0.05)' }}; border: 1.5px solid {{ $idx === 0 ? '#84cc16' : 'rgba(255,255,255,0.12)' }}; color: {{ $idx === 0 ? 'white' : '#cbd5e1' }}; border-radius: 0.75rem; padding: 0.65rem 0.5rem; text-align: center; cursor: pointer; font-size: 0.775rem; font-weight: 700; transition: all 0.2s;">
+                                    🏢 {{ $loc->name }}
+                                </button>
+                            @endforeach
+                        @else
+                            <button type="button" class="loc-pill-btn active" onclick="selectLocPill(this, 'FitLife HQ Kaliurang (Sleman)')" style="background: rgba(132,204,22,0.15); border: 1.5px solid #84cc16; color: white; border-radius: 0.75rem; padding: 0.65rem 0.5rem; text-align: center; cursor: pointer; font-size: 0.775rem; font-weight: 700; transition: all 0.2s;">
+                                🏢 Sleman HQ
+                            </button>
+                            <button type="button" class="loc-pill-btn" onclick="selectLocPill(this, 'FitLife Studio Seturan (UGM/Depok)')" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; border-radius: 0.75rem; padding: 0.65rem 0.5rem; text-align: center; cursor: pointer; font-size: 0.775rem; font-weight: 700; transition: all 0.2s;">
+                                🎓 Seturan UGM
+                            </button>
+                            <button type="button" class="loc-pill-btn" onclick="selectLocPill(this, 'FitLife Studio Sewon (Bantul)')" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); color: #cbd5e1; border-radius: 0.75rem; padding: 0.65rem 0.5rem; text-align: center; cursor: pointer; font-size: 0.775rem; font-weight: 700; transition: all 0.2s;">
+                                📍 Sewon Bantul
+                            </button>
+                        @endif
                     </div>
                 </div>
 

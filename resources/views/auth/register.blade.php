@@ -93,6 +93,17 @@
                 </div>
 
                 <!-- Paket Membership & Harga -->
+                @php
+                    if (!isset($membershipPlans) || $membershipPlans->isEmpty()) {
+                        try { $membershipPlans = \App\Models\MembershipPlan::all(); } catch (\Throwable $e) { $membershipPlans = collect(); }
+                    }
+                    if (!isset($programs) || $programs->isEmpty()) {
+                        try { $programs = \App\Models\Program::all(); } catch (\Throwable $e) { $programs = collect(); }
+                    }
+                    if (!isset($branches) || $branches->isEmpty()) {
+                        try { $branches = \App\Models\Location::all(); } catch (\Throwable $e) { $branches = collect(); }
+                    }
+                @endphp
                 <div>
                     <label for="membershipTypeSelect" style="display: block; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.5rem;">
                         Paket Membership &amp; Harga *
@@ -102,35 +113,36 @@
                             <i class="fa-solid fa-id-card"></i>
                         </span>
                         <select id="membershipTypeSelect" name="membership_type" required onchange="autoFillMembershipRegister(this)"
-                            style="width: 100%; background: rgba(13, 19, 16, 0.95); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 0.85rem; padding: 0.85rem 1rem 0.85rem 2.75rem; color: #ffffff; font-size: 0.9rem; outline: none; transition: all 0.25s ease;"
+                            style="width: 100%; background: rgba(13, 19, 16, 0.95); border: 1.5px solid rgba(132, 204, 22, 0.5); border-radius: 0.85rem; padding: 0.85rem 1rem 0.85rem 2.75rem; color: #ffffff; font-size: 0.9rem; outline: none; transition: all 0.25s ease;"
                             onfocus="this.style.borderColor='#84cc16';"
                             onblur="this.style.borderColor='rgba(255, 255, 255, 0.15)';">
-                            @if((isset($membershipPlans) && $membershipPlans->count() > 0) || (isset($programs) && $programs->count() > 0))
+                            <optgroup label="💳 PAKET KEANGGOTAAN GYM (MEMBERSHIP PLANS)" style="background: #0d1310; color: #84cc16; font-weight: 800;">
+                                <option value="Regular Gym Pass (Bulanan)" data-price="300000" data-sessions="0" data-duration="30" style="background: #161f19; color: #ffffff;">Regular Gym Pass (Bulanan) — Rp 300.000 (30 Hari)</option>
+                                <option value="VIP Personal Trainer Pass 1-on-1" data-price="1200000" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">VIP Personal Trainer Pass 1-on-1 — Rp 1.200.000 (30 Hari)</option>
+                                <option value="Student Promo Gym Pass" data-price="200000" data-sessions="0" data-duration="30" style="background: #161f19; color: #ffffff;">Student Promo Gym Pass — Rp 200.000 (30 Hari)</option>
+                                <option value="Daily Pass (Harian)" data-price="35000" data-sessions="1" data-duration="1" style="background: #161f19; color: #ffffff;">Daily Pass (Harian) — Rp 35.000 (1 Hari)</option>
                                 @if(isset($membershipPlans) && $membershipPlans->count() > 0)
-                                    <optgroup label="💳 PAKET KEANGGOTAAN GYM (MEMBERSHIP PLANS)">
-                                        @foreach($membershipPlans as $plan)
-                                            <option value="{{ $plan->name }}" data-price="{{ $plan->promo_price ?: $plan->price }}" data-sessions="{{ $plan->session_count ?: 0 }}" data-duration="{{ $plan->duration_days ?: 30 }}">
-                                                {{ $plan->name }} — Rp {{ number_format($plan->promo_price ?: $plan->price, 0, ',', '.') }} ({{ $plan->duration_days ?: 30 }} Hari) {{ $plan->badge ? '('.$plan->badge.')' : '' }}
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
+                                    @foreach($membershipPlans as $plan)
+                                        <option value="{{ $plan->name }}" data-price="{{ $plan->promo_price ?: $plan->price }}" data-sessions="{{ $plan->session_count ?: 0 }}" data-duration="{{ $plan->duration_days ?: 30 }}" style="background: #161f19; color: #ffffff;">
+                                            {{ $plan->name }} — Rp {{ number_format($plan->promo_price ?: $plan->price, 0, ',', '.') }} ({{ $plan->duration_days ?: 30 }} Hari) {{ $plan->badge ? '('.$plan->badge.')' : '' }}
+                                        </option>
+                                    @endforeach
                                 @endif
+                            </optgroup>
 
+                            <optgroup label="🏋️ PROGRAM FITNESS & PT KHUSUS (PROGRAMS)" style="background: #0d1310; color: #84cc16; font-weight: 800;">
+                                <option value="Program: Weight Loss & Fat Burn" data-price="450000" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">Program Weight Loss & Fat Burn — Rp 450.000 (30 Hari)</option>
+                                <option value="Program: Muscle Building & Hypertrophy" data-price="500000" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">Program Muscle Building & Bulking — Rp 500.000 (30 Hari)</option>
+                                <option value="Program: Female Fitness & Body Shaping" data-price="450000" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">Program Female Fitness (Khusus Wanita) — Rp 450.000 (30 Hari)</option>
+                                <option value="Program: Persiapan Fisik TNI / POLRI" data-price="600000" data-sessions="16" data-duration="30" style="background: #161f19; color: #ffffff;">Program Persiapan Fisik TNI / POLRI — Rp 600.000 (30 Hari)</option>
                                 @if(isset($programs) && $programs->count() > 0)
-                                    <optgroup label="🏋️ PROGRAM FITNESS & PT KHUSUS (PROGRAMS)">
-                                        @foreach($programs as $prog)
-                                            <option value="Program: {{ $prog->title }}" data-price="{{ $prog->price_start ?: 450000 }}" data-sessions="12" data-duration="30">
-                                                Program {{ $prog->title }} — Rp {{ number_format($prog->price_start ?: 450000, 0, ',', '.') }} {{ $prog->badge ? '('.$prog->badge.')' : '' }}
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
+                                    @foreach($programs as $prog)
+                                        <option value="Program: {{ $prog->title }}" data-price="{{ $prog->price_start ?: 450000 }}" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">
+                                            Program {{ $prog->title }} — Rp {{ number_format($prog->price_start ?: 450000, 0, ',', '.') }} {{ $prog->badge ? '('.$prog->badge.')' : '' }}
+                                        </option>
+                                    @endforeach
                                 @endif
-                            @else
-                                <option value="Regular Gym Pass (Bulanan)" data-price="300000" data-sessions="0" data-duration="30">Regular Gym Pass (Bulanan) — Rp 300.000 (30 Hari)</option>
-                                <option value="VIP Personal Trainer Pass 1-on-1" data-price="1200000" data-sessions="12" data-duration="30">VIP Personal Trainer Pass 1-on-1 — Rp 1.200.000 (30 Hari)</option>
-                                <option value="Daily Pass (Harian)" data-price="35000" data-sessions="1" data-duration="1">Daily Pass (Harian) — Rp 35.000 (1 Hari)</option>
-                                <option value="Student Promo Gym Pass" data-price="200000" data-sessions="0" data-duration="30">Student Promo Gym Pass — Rp 200.000 (30 Hari)</option>
-                            @endif
+                            </optgroup>
                         </select>
                     </div>
                 </div>
@@ -148,16 +160,15 @@
                             style="width: 100%; background: rgba(13, 19, 16, 0.95); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 0.85rem; padding: 0.85rem 1rem 0.85rem 2.75rem; color: #ffffff; font-size: 0.9rem; outline: none; transition: all 0.25s ease;"
                             onfocus="this.style.borderColor='#84cc16';"
                             onblur="this.style.borderColor='rgba(255, 255, 255, 0.15)';">
+                            <option value="Sleman HQ (Jl. Kaliurang KM 5.5)" style="background: #161f19; color: #ffffff;">🏢 Sleman HQ (Jl. Kaliurang KM 5.5)</option>
+                            <option value="FitLife Studio Seturan (UGM)" style="background: #161f19; color: #ffffff;">🏢 Seturan Studio (UGM)</option>
+                            <option value="FitLife Branch Sewon (Bantul)" style="background: #161f19; color: #ffffff;">🏢 Sewon Bantul</option>
                             @if(isset($branches) && $branches->count() > 0)
                                 @foreach($branches as $b)
-                                    <option value="{{ $b->name }}{{ $b->city ? ' ('.$b->city.')' : '' }}">
+                                    <option value="{{ $b->name }}{{ $b->city ? ' ('.$b->city.')' : '' }}" style="background: #161f19; color: #ffffff;">
                                         🏢 {{ $b->name }} {{ $b->city ? ' ('.$b->city.')' : '' }}
                                     </option>
                                 @endforeach
-                            @else
-                                <option value="Sleman HQ (Jl. Kaliurang KM 5.5)">🏢 Sleman HQ (Jl. Kaliurang KM 5.5)</option>
-                                <option value="UGM Kampus Branch">🏢 UGM Kampus Branch (Jl. Pancasila)</option>
-                                <option value="Malioboro Studio Center">🏢 Malioboro Studio Center</option>
                             @endif
                         </select>
                     </div>
@@ -176,10 +187,10 @@
                             style="width: 100%; background: rgba(13, 19, 16, 0.95); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 0.85rem; padding: 0.85rem 1rem 0.85rem 2.75rem; color: #ffffff; font-size: 0.9rem; outline: none; transition: all 0.25s ease;"
                             onfocus="this.style.borderColor='#84cc16';"
                             onblur="this.style.borderColor='rgba(255, 255, 255, 0.15)';">
-                            <option value="QRIS (GoPay/OVO/ShopeePay/DANA)">📱 QRIS Instant (Langsung Aktif)</option>
-                            <option value="Transfer Bank BCA / Mandiri">🏦 Transfer Bank (Pending Verifikasi)</option>
-                            <option value="EDC Debit / Kartu Kredit">💳 Kartu Kredit / Debit (Langsung Aktif)</option>
-                            <option value="Bayar di Kasir Studio (Walk-In)">💵 Bayar Cash di Kasir Studio (Pending Bayar)</option>
+                            <option value="QRIS (GoPay/OVO/ShopeePay/DANA)" style="background: #161f19; color: #ffffff;">📱 QRIS Instant (Langsung Aktif)</option>
+                            <option value="Transfer Bank BCA / Mandiri" style="background: #161f19; color: #ffffff;">🏦 Transfer Bank (Pending Verifikasi)</option>
+                            <option value="EDC Debit / Kartu Kredit" style="background: #161f19; color: #ffffff;">💳 Kartu Kredit / Debit (Langsung Aktif)</option>
+                            <option value="Bayar di Kasir Studio (Walk-In)" style="background: #161f19; color: #ffffff;">💵 Bayar Cash di Kasir Studio (Pending Bayar)</option>
                         </select>
                     </div>
                 </div>

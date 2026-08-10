@@ -87,6 +87,37 @@ class LeadController extends Controller
 
         $registration = Registration::create($validated);
 
+        // Auto-create real User Account in DB so applicant can immediately login as Member!
+        try {
+            $cleanPhone = preg_replace('/[^0-9]/', '', $request->phone);
+            $user = User::where('phone', $cleanPhone)->orWhere('phone', $request->phone)->first();
+            if (!$user && $request->filled('email')) {
+                $user = User::where('email', strtolower(trim($request->email)))->first();
+            }
+
+            if (!$user) {
+                $pass = $request->filled('password') ? $request->password : 'password123';
+                $email = $request->filled('email') ? strtolower(trim($request->email)) : ($cleanPhone . '@fitlife.id');
+                $lastUser = User::orderBy('id', 'desc')->first();
+                $nextId = $lastUser ? ($lastUser->id + 1) : 1;
+                $cardId = 'FL-MBR-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+
+                User::create([
+                    'name' => $registration->name,
+                    'email' => $email,
+                    'phone' => $cleanPhone,
+                    'password' => \Illuminate\Support\Facades\Hash::make($pass),
+                    'role' => 'member',
+                    'member_card_id' => $cardId,
+                    'membership_type' => $registration->program_name,
+                    'status' => 'Pending (Verifikasi Admin)',
+                    'branch' => $registration->preferred_location,
+                    'reward_points' => 50,
+                    'level_badge' => '🔥 Member Baru',
+                ]);
+            }
+        } catch (\Throwable $e) {}
+
         // Target WhatsApp phone number (Admin FitLife Gym Jogja)
         $targetWa = '6281234567890'; // Default admin contact
 
