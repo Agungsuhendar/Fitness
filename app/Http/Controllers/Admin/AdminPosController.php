@@ -459,7 +459,7 @@ class AdminPosController extends Controller
                 ['code' => 'SUP-02', 'name' => 'Creatine Monohydrate 5g (Pre-Workout)', 'category' => 'Suplemen & Minuman', 'price' => 15000, 'stock' => 100],
                 ['code' => 'DRK-01', 'name' => 'Air Mineral Aqua 600ml', 'category' => 'Suplemen & Minuman', 'price' => 5000, 'stock' => 200],
                 ['code' => 'DRK-02', 'name' => 'Pocari Sweat Isotonik 500ml', 'category' => 'Suplemen & Minuman', 'price' => 10000, 'stock' => 150],
-                ['code' => 'TKT-01', 'name' => 'Tiket Masuk Gym Harian (Drop-In Non-Member)', 'category' => 'Tiket Harian', 'price' => 35000, 'stock' => 999],
+                ['code' => 'TKT-01', 'name' => 'Tiket Masuk Gym Harian (Drop-In Non-Member)', 'category' => 'Tiket Harian', 'price' => 50000, 'stock' => 999],
                 ['code' => 'TKT-02', 'name' => 'Tiket Kolam Renang Harian', 'category' => 'Tiket Harian', 'price' => 25000, 'stock' => 999],
                 ['code' => 'ACC-01', 'name' => 'Sewa Handuk Gym Steril', 'category' => 'Perlengkapan & Sewa', 'price' => 10000, 'stock' => 50],
                 ['code' => 'ACC-02', 'name' => 'Shaker Bottle FitLife 700ml', 'category' => 'Perlengkapan & Sewa', 'price' => 65000, 'stock' => 30],

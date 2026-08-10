@@ -55,16 +55,17 @@
                 <select name="membership_type" id="modalMembershipSelect" required onchange="updateModalPriceDisplay(this)"
                     style="width: 100%; background: #161f19; border: 1.5px solid rgba(132, 204, 22, 0.5); border-radius: 0.65rem; padding: 0.65rem 0.85rem; color: #ffffff; font-size: 0.875rem; font-weight: 700; outline: none;">
                     <optgroup label="💳 PAKET KEANGGOTAAN GYM (MEMBERSHIP PLANS)" style="background: #0d1310; color: #84cc16; font-weight: 800;">
-                        <option value="Regular Gym Pass (Bulanan)" data-price="300000" data-duration="30" style="background: #161f19; color: #ffffff;">Regular Gym Pass (Bulanan) — Rp 300.000 (30 Hari)</option>
-                        <option value="VIP Personal Trainer Pass 1-on-1" data-price="1200000" data-duration="30" style="background: #161f19; color: #ffffff;">VIP Personal Trainer Pass 1-on-1 — Rp 1.200.000 (30 Hari)</option>
-                        <option value="Student Promo Gym Pass" data-price="200000" data-duration="30" style="background: #161f19; color: #ffffff;">Student Promo Gym Pass — Rp 200.000 (30 Hari)</option>
-                        <option value="Daily Pass (Harian)" data-price="35000" data-duration="1" style="background: #161f19; color: #ffffff;">Daily Pass (Harian) — Rp 35.000 (1 Hari)</option>
                         @if($modalPlans->count() > 0)
                             @foreach($modalPlans as $plan)
                                 <option value="{{ $plan->name }}" data-price="{{ $plan->promo_price ?: $plan->price }}" data-duration="{{ $plan->duration_days ?: 30 }}" style="background: #161f19; color: #ffffff;">
                                     {{ $plan->name }} — Rp {{ number_format($plan->promo_price ?: $plan->price, 0, ',', '.') }} ({{ $plan->duration_days ?: 30 }} Hari) {{ $plan->badge ? '('.$plan->badge.')' : '' }}
                                 </option>
                             @endforeach
+                        @else
+                            <option value="Regular Member 1 Bulan" data-price="299000" data-duration="30" style="background: #161f19; color: #ffffff;">Regular Member 1 Bulan — Rp 299.000 (30 Hari)</option>
+                            <option value="VIP Personal Trainer Pass 1-on-1" data-price="1250000" data-duration="60" style="background: #161f19; color: #ffffff;">Personal Trainer 1-on-1 (10 Sesi) — Rp 1.250.000 (60 Hari)</option>
+                            <option value="Student Pass (Pelajar/Mahasiswa)" data-price="199000" data-duration="30" style="background: #161f19; color: #ffffff;">Student Pass (Pelajar/Mahasiswa) — Rp 199.000 (30 Hari)</option>
+                            <option value="Daily Pass Harian" data-price="50000" data-duration="1" style="background: #161f19; color: #ffffff;">Daily Pass Harian — Rp 50.000 (1 Hari)</option>
                         @endif
                     </optgroup>
 

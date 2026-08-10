@@ -61,39 +61,55 @@
                 </div>
 
                 <!-- Section 2: Paket Membership -->
+                @php
+                    if (!isset($membershipPlans) || $membershipPlans->isEmpty()) {
+                        try { $membershipPlans = \App\Models\MembershipPlan::all(); } catch (\Throwable $e) { $membershipPlans = collect(); }
+                    }
+                    if (!isset($programs) || $programs->isEmpty()) {
+                        try { $programs = \App\Models\Program::all(); } catch (\Throwable $e) { $programs = collect(); }
+                    }
+                    if (!isset($branches) || $branches->isEmpty()) {
+                        try { $branches = \App\Models\Location::all(); } catch (\Throwable $e) { $branches = collect(); }
+                    }
+                    if (!isset($coaches) || $coaches->isEmpty()) {
+                        try { $coaches = \App\Models\Coach::all(); } catch (\Throwable $e) { $coaches = collect(); }
+                    }
+                @endphp
                 <h5 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fa-solid fa-id-card" style="color: #38bdf8;"></i> Paket Membership &amp; Lokasi Cabang
                 </h5>
                 <div class="row g-3" style="margin-bottom: 2rem;">
                     <div class="col-md-6">
                         <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">PAKET MEMBERSHIP *</label>
-                        <select name="membership_type" id="membershipTypeSelect" class="form-select bg-dark text-white border-secondary" required onchange="autoFillMembershipPlan(this)">
-                            @if((isset($membershipPlans) && $membershipPlans->count() > 0) || (isset($programs) && $programs->count() > 0))
+                        <select name="membership_type" id="membershipTypeSelect" class="form-select bg-dark text-white border-secondary" required onchange="autoFillMembershipPlan(this)" style="background: #161f19; color: #ffffff;">
+                            <optgroup label="💳 PAKET KEANGGOTAAN GYM (MEMBERSHIP PLANS)" style="background: #0d1310; color: #84cc16; font-weight: 800;">
                                 @if(isset($membershipPlans) && $membershipPlans->count() > 0)
-                                    <optgroup label="💳 PAKET KEANGGOTAAN GYM (MEMBERSHIP PLANS)">
-                                        @foreach($membershipPlans as $plan)
-                                            <option value="{{ $plan->name }}" data-price="{{ $plan->promo_price ?: $plan->price }}" data-sessions="{{ $plan->session_count ?: 0 }}" data-duration="{{ $plan->duration_days ?: 30 }}">
-                                                {{ $plan->name }} — Rp {{ number_format($plan->promo_price ?: $plan->price, 0, ',', '.') }} ({{ $plan->duration_days ?: 30 }} Hari) {{ $plan->badge ? '('.$plan->badge.')' : '' }}
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
+                                    @foreach($membershipPlans as $plan)
+                                        <option value="{{ $plan->name }}" data-price="{{ $plan->promo_price ?: $plan->price }}" data-sessions="{{ $plan->session_count ?: 0 }}" data-duration="{{ $plan->duration_days ?: 30 }}" style="background: #161f19; color: #ffffff;">
+                                            {{ $plan->name }} — Rp {{ number_format($plan->promo_price ?: $plan->price, 0, ',', '.') }} ({{ $plan->duration_days ?: 30 }} Hari) {{ $plan->badge ? '('.$plan->badge.')' : '' }}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    <option value="Regular Member 1 Bulan" data-price="299000" data-sessions="0" data-duration="30" style="background: #161f19; color: #ffffff;">Regular Member 1 Bulan — Rp 299.000 (30 Hari)</option>
+                                    <option value="VIP Personal Trainer Pass 1-on-1" data-price="1250000" data-sessions="10" data-duration="60" style="background: #161f19; color: #ffffff;">Personal Trainer 1-on-1 (10 Sesi) — Rp 1.250.000 (60 Hari)</option>
+                                    <option value="Student Pass (Pelajar/Mahasiswa)" data-price="199000" data-sessions="0" data-duration="30" style="background: #161f19; color: #ffffff;">Student Pass (Pelajar/Mahasiswa) — Rp 199.000 (30 Hari)</option>
+                                    <option value="Daily Pass Harian" data-price="50000" data-sessions="1" data-duration="1" style="background: #161f19; color: #ffffff;">Daily Pass Harian — Rp 50.000 (1 Hari)</option>
                                 @endif
+                            </optgroup>
 
+                            <optgroup label="🏋️ PROGRAM FITNESS & PT KHUSUS (PROGRAMS)" style="background: #0d1310; color: #84cc16; font-weight: 800;">
+                                <option value="Program: Weight Loss & Fat Burn" data-price="450000" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">Program Weight Loss & Fat Burn — Rp 450.000 (30 Hari)</option>
+                                <option value="Program: Muscle Building & Hypertrophy" data-price="500000" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">Program Muscle Building & Bulking — Rp 500.000 (30 Hari)</option>
+                                <option value="Program: Female Fitness & Body Shaping" data-price="450000" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">Program Female Fitness (Khusus Wanita) — Rp 450.000 (30 Hari)</option>
+                                <option value="Program: Persiapan Fisik TNI / POLRI" data-price="600000" data-sessions="16" data-duration="30" style="background: #161f19; color: #ffffff;">Program Persiapan Fisik TNI / POLRI — Rp 600.000 (30 Hari)</option>
                                 @if(isset($programs) && $programs->count() > 0)
-                                    <optgroup label="🏋️ PROGRAM FITNESS & PT KHUSUS (PROGRAMS)">
-                                        @foreach($programs as $prog)
-                                            <option value="Program: {{ $prog->title }}" data-price="{{ $prog->price_start ?: 450000 }}" data-sessions="12" data-duration="30">
-                                                Program {{ $prog->title }} — Rp {{ number_format($prog->price_start ?: 450000, 0, ',', '.') }} {{ $prog->badge ? '('.$prog->badge.')' : '' }}
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
+                                    @foreach($programs as $prog)
+                                        <option value="Program: {{ $prog->title }}" data-price="{{ $prog->price_start ?: 450000 }}" data-sessions="12" data-duration="30" style="background: #161f19; color: #ffffff;">
+                                            Program {{ $prog->title }} — Rp {{ number_format($prog->price_start ?: 450000, 0, ',', '.') }} {{ $prog->badge ? '('.$prog->badge.')' : '' }}
+                                        </option>
+                                    @endforeach
                                 @endif
-                            @else
-                                <option value="Regular Gym Pass (Bulanan)" data-price="300000" data-sessions="0" data-duration="30">Regular Gym Pass (Bulanan) — Rp 300.000 (30 Hari)</option>
-                                <option value="VIP Personal Trainer Pass 1-on-1" data-price="1200000" data-sessions="12" data-duration="30">VIP Personal Trainer Pass 1-on-1 — Rp 1.200.000 (30 Hari)</option>
-                                <option value="Daily Pass (Harian)" data-price="35000" data-sessions="1" data-duration="1">Daily Pass (Harian) — Rp 35.000 (1 Hari)</option>
-                                <option value="Student Promo Gym Pass" data-price="200000" data-sessions="0" data-duration="30">Student Promo Gym Pass — Rp 200.000 (30 Hari)</option>
-                            @endif
+                            </optgroup>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -112,17 +128,16 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">CABANG STUDIO GYM *</label>
-                        <select name="branch" class="form-select bg-dark text-white border-secondary" required>
+                        <select name="branch" class="form-select bg-dark text-white border-secondary" required style="background: #161f19; color: #ffffff;">
+                            <option value="Sleman HQ (Jl. Kaliurang KM 5.5)" style="background: #161f19; color: #ffffff;">🏢 Sleman HQ (Jl. Kaliurang KM 5.5)</option>
+                            <option value="FitLife Studio Seturan (UGM)" style="background: #161f19; color: #ffffff;">🏢 Seturan Studio (UGM)</option>
+                            <option value="FitLife Branch Sewon (Bantul)" style="background: #161f19; color: #ffffff;">🏢 Sewon Bantul</option>
                             @if(isset($branches) && $branches->count() > 0)
                                 @foreach($branches as $b)
-                                    <option value="{{ $b->name }}{{ $b->city ? ' ('.$b->city.')' : '' }}">
+                                    <option value="{{ $b->name }}{{ $b->city ? ' ('.$b->city.')' : '' }}" style="background: #161f19; color: #ffffff;">
                                         🏢 {{ $b->name }} {{ $b->city ? ' ('.$b->city.')' : '' }}
                                     </option>
                                 @endforeach
-                            @else
-                                <option value="Sleman HQ (Jl. Kaliurang)">🏢 Sleman HQ (Jl. Kaliurang KM 5.5)</option>
-                                <option value="UGM Kampus Branch">🏢 UGM Kampus Branch (Jl. Pancasila)</option>
-                                <option value="Malioboro Studio">🏢 Malioboro Studio Center</option>
                             @endif
                         </select>
                     </div>
@@ -136,11 +151,11 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">METODE PEMBAYARAN *</label>
-                        <select name="payment_method" id="paymentMethodSelect" class="form-select bg-dark text-white border-secondary" required onchange="updateStatusByPaymentMethod()">
-                            <option value="Cash (Tunai)">Cash (Tunai di Kasir Studio)</option>
-                            <option value="QRIS / GoPay / OVO">QRIS / GoPay / OVO</option>
-                            <option value="Transfer Bank BCA/Mandiri">Transfer Bank BCA/Mandiri</option>
-                            <option value="EDC Debit / Kartu Kredit">EDC Debit / Kartu Kredit</option>
+                        <select name="payment_method" id="paymentMethodSelect" class="form-select bg-dark text-white border-secondary" required onchange="updateStatusByPaymentMethod()" style="background: #161f19; color: #ffffff;">
+                            <option value="Cash (Tunai)" style="background: #161f19; color: #ffffff;">Cash (Tunai di Kasir Studio)</option>
+                            <option value="QRIS / GoPay / OVO" style="background: #161f19; color: #ffffff;">QRIS / GoPay / OVO</option>
+                            <option value="Transfer Bank BCA/Mandiri" style="background: #161f19; color: #ffffff;">Transfer Bank BCA/Mandiri</option>
+                            <option value="EDC Debit / Kartu Kredit" style="background: #161f19; color: #ffffff;">EDC Debit / Kartu Kredit</option>
                         </select>
                     </div>
                 </div>
@@ -152,16 +167,15 @@
                 <div class="row g-3" style="margin-bottom: 2rem;">
                     <div class="col-md-6">
                         <label class="form-label" style="font-size: 0.775rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">PERSONAL TRAINER ASSIGNED (OPSIONAL)</label>
-                        <select name="assigned_coach" class="form-select bg-dark text-white border-secondary">
-                            <option value="">-- Belum Ditempatkan (Unassigned) --</option>
+                        <select name="assigned_coach" class="form-select bg-dark text-white border-secondary" style="background: #161f19; color: #ffffff;">
+                            <option value="" style="background: #161f19; color: #ffffff;">-- Belum Ditempatkan (Unassigned) --</option>
+                            <option value="Coach Hendra APKI" style="background: #161f19; color: #ffffff;">🏋️ Coach Hendra APKI (Senior PT)</option>
+                            <option value="Coach Rina Kusuma, S.Gz." style="background: #161f19; color: #ffffff;">🏋️ Coach Rina Kusuma, S.Gz. (Nutritionist)</option>
+                            <option value="Coach Danu Prasetya" style="background: #161f19; color: #ffffff;">🏋️ Coach Danu Prasetya (Persiapan TNI/POLRI)</option>
                             @if(isset($coaches) && $coaches->count() > 0)
                                 @foreach($coaches as $coach)
-                                    <option value="{{ $coach->name }}">🏋️ {{ $coach->name }} {{ $coach->specialty ? '('.$coach->specialty.')' : '' }}</option>
+                                    <option value="{{ $coach->name }}" style="background: #161f19; color: #ffffff;">🏋️ {{ $coach->name }} {{ $coach->specialty ? '('.$coach->specialty.')' : '' }}</option>
                                 @endforeach
-                            @else
-                                <option value="Coach Hendra APKI">🏋️ Coach Hendra APKI (Senior PT)</option>
-                                <option value="Coach Rina Kusuma, S.Gz.">🏋️ Coach Rina Kusuma, S.Gz. (Nutritionist)</option>
-                                <option value="Coach Danu Prasetya">🏋️ Coach Danu Prasetya (Persiapan TNI/POLRI)</option>
                             @endif
                         </select>
                     </div>
