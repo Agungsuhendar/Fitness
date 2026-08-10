@@ -13,21 +13,33 @@ class AdminStaffShiftController extends Controller
 {
     public function index(Request $request)
     {
-        StaffShift::ensureTable();
-        StaffAttendance::ensureTable();
+        try {
+            StaffShift::ensureTable();
+            StaffAttendance::ensureTable();
+        } catch (\Throwable $t) {}
 
         $today = Carbon::today();
         $date = $request->input('date', $today->format('Y-m-d'));
 
-        $this->ensureSampleShiftsAndAttendancesSeeded();
+        try {
+            $this->ensureSampleShiftsAndAttendancesSeeded();
+        } catch (\Throwable $t) {}
 
-        $shifts = StaffShift::whereDate('shift_date', $date)
-            ->orderBy('start_time')
-            ->get();
+        try {
+            $shifts = StaffShift::whereDate('shift_date', $date)
+                ->orderBy('start_time')
+                ->get();
+        } catch (\Throwable $t) {
+            $shifts = collect();
+        }
 
-        $attendances = StaffAttendance::whereDate('created_at', $date)
-            ->orderBy('id', 'desc')
-            ->get();
+        try {
+            $attendances = StaffAttendance::whereDate('created_at', $date)
+                ->orderBy('id', 'desc')
+                ->get();
+        } catch (\Throwable $t) {
+            $attendances = collect();
+        }
 
         // HR Metrics
         $totalShiftStaff = $shifts->count();

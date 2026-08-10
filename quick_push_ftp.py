@@ -2,7 +2,7 @@ import os
 import time
 from ftplib import FTP, error_perm
 
-FTP_HOST = "ftpupload.net"
+FTP_HOST = "185.27.134.11"
 FTP_USER = "if0_42586885"
 FTP_PASS = "Arkanza0123456"
 REMOTE_ROOT = "fitlifehub.site.je/htdocs"
@@ -26,6 +26,14 @@ FILES_TO_PUSH = [
     'app/Models/WorkoutSession.php',
     'app/Models/MemberProgress.php',
     'app/Models/Video.php',
+    'app/Models/Product.php',
+    'app/Models/PurchaseOrder.php',
+    'app/Models/PurchaseOrderItem.php',
+    'app/Models/Locker.php',
+    'app/Models/PtCommissionPayout.php',
+    'app/Models/StaffShift.php',
+    'app/Models/StaffAttendance.php',
+    'app/Models/ClassBooking.php',
     'app/Http/Controllers/Api/BookingApiController.php',
     'app/Http/Controllers/Api/PaymentApiController.php',
     'app/Http/Controllers/Api/WorkoutLogApiController.php',
@@ -36,6 +44,7 @@ FILES_TO_PUSH = [
     'app/Http/Controllers/Api/NotificationApiController.php',
     'app/Http/Controllers/Api/MembershipPlanApiController.php',
     'app/Http/Controllers/Api/TrainingProgramApiController.php',
+    'app/Http/Controllers/Api/StaffAttendanceApiController.php',
     'app/Http/Controllers/Admin/AdminWorkoutLogController.php',
     'app/Http/Controllers/Admin/AdminNutritionLogController.php',
     'app/Http/Controllers/Admin/AdminLeaderboardController.php',
@@ -44,6 +53,14 @@ FILES_TO_PUSH = [
     'app/Http/Controllers/Admin/AdminMembershipPlanController.php',
     'app/Http/Controllers/Admin/AdminTrainingProgramController.php',
     'app/Http/Controllers/Admin/AdminMemberController.php',
+    'app/Http/Controllers/Admin/AdminPosController.php',
+    'app/Http/Controllers/Admin/AdminPurchaseOrderController.php',
+    'app/Http/Controllers/Admin/AdminLockerController.php',
+    'app/Http/Controllers/Admin/AdminPtCommissionController.php',
+    'app/Http/Controllers/Admin/AdminStaffShiftController.php',
+    'app/Http/Controllers/Admin/AdminClassController.php',
+    'app/Http/Controllers/Admin/AdminWaBroadcastController.php',
+    'app/Services/WhatsAppService.php',
     'resources/views/admin/layout.blade.php',
     'resources/views/admin/members/edit.blade.php',
     'resources/views/admin/members/create.blade.php',
@@ -54,21 +71,22 @@ FILES_TO_PUSH = [
     'resources/views/admin/notifications/index.blade.php',
     'resources/views/admin/membership_plans/index.blade.php',
     'resources/views/admin/training_programs/index.blade.php',
-    'database/migrations/2026_08_08_000001_create_workout_logs_table.php',
-    'database/migrations/2026_08_08_000002_create_nutrition_logs_table.php',
-    'database/migrations/2026_08_08_000003_add_reward_points_and_level_badge_to_users_table.php',
-    'database/migrations/2026_08_08_000004_add_crowd_meter_to_locations_table.php',
-    'database/migrations/2026_08_08_000005_create_notifications_table.php',
-    'database/migrations/2026_08_08_000006_create_membership_plans_table.php',
-    'database/migrations/2026_08_08_000007_create_exercises_table.php',
-    'database/migrations/2026_08_08_000008_create_program_templates_table.php',
-    'database/migrations/2026_08_08_000009_create_program_template_workouts_table.php',
-    'database/migrations/2026_08_08_000010_create_workout_exercises_table.php',
-    'database/migrations/2026_08_08_000011_create_member_programs_table.php',
-    'database/migrations/2026_08_08_000012_create_member_program_workouts_table.php',
-    'database/migrations/2026_08_08_000013_create_workout_sessions_table.php',
-    'database/migrations/2026_08_08_000014_create_member_progress_table.php',
-    'database/migrations/2026_08_08_000015_add_membership_price_to_users_table.php',
+    'resources/views/admin/pos/products.blade.php',
+    'resources/views/admin/pos/barcode_print.blade.php',
+    'resources/views/admin/purchase_orders/index.blade.php',
+    'resources/views/admin/purchase_orders/create.blade.php',
+    'resources/views/admin/purchase_orders/show.blade.php',
+    'resources/views/admin/lockers/index.blade.php',
+    'resources/views/admin/pt_commissions/index.blade.php',
+    'resources/views/admin/pt_commissions/slip.blade.php',
+    'resources/views/admin/staff_shifts/index.blade.php',
+    'resources/views/admin/classes/index.blade.php',
+    'resources/views/admin/wa_broadcast/index.blade.php',
+    'database/migrations/2026_08_09_000009_create_purchase_orders_table.php',
+    'database/migrations/2026_08_09_000010_create_lockers_table.php',
+    'database/migrations/2026_08_09_000011_create_pt_commission_payouts_table.php',
+    'database/migrations/2026_08_09_000012_create_staff_shifts_and_attendances_tables.php',
+    'database/migrations/2026_08_09_000013_create_class_bookings_table.php',
 ]
 
 def connect_ftp():
@@ -98,20 +116,39 @@ def upload_file(ftp, local_path, remote_path):
         ftp.storbinary(f"STOR {remote_path}", f)
 
 def quick_push():
-    print(f"Connecting to {FTP_HOST}...")
+    print("🚀 Starting FTP Quick Sync to fitlifehub.site.je...", flush=True)
     ftp = connect_ftp()
-    print("Connected successfully! Uploading modified files...")
-
-    uploaded = 0
-    for rel_path in FILES_TO_PUSH:
-        if os.path.exists(rel_path):
-            remote_file = f"{REMOTE_ROOT}/{rel_path}"
-            print(f" -> Uploading {rel_path} ...")
-            upload_file(ftp, rel_path, remote_file)
-            uploaded += 1
-
-    ftp.quit()
-    print(f"SUCCESS: {uploaded} files deployed to FTP server!")
+    
+    success = 0
+    failed = 0
+    for local_file in FILES_TO_PUSH:
+        if not os.path.exists(local_file):
+            print(f"⚠️ File local tidak ditemukan: {local_file}", flush=True)
+            failed += 1
+            continue
+            
+        remote_path = f"{REMOTE_ROOT}/{local_file}"
+        try:
+            upload_file(ftp, local_file, remote_path)
+            print(f"✅ Uploaded: {local_file}", flush=True)
+            success += 1
+        except Exception as e:
+            print(f"❌ Error uploading {local_file}: {e}", flush=True)
+            failed += 1
+            # Reconnect if dropped
+            try:
+                ftp.quit()
+            except:
+                pass
+            time.sleep(1)
+            ftp = connect_ftp()
+            
+    try:
+        ftp.quit()
+    except:
+        pass
+        
+    print(f"\n🎉 FTP Sync Finished! Success: {success}, Failed: {failed}", flush=True)
 
 if __name__ == "__main__":
     quick_push()

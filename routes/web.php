@@ -312,9 +312,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('/wa-broadcast/send', [AdminWaBroadcastController::class, 'sendBroadcast'])->name('wa-broadcast.send');
         Route::post('/wa-broadcast/trigger-renewal', [AdminWaBroadcastController::class, 'triggerRenewalAlerts'])->name('wa-broadcast.trigger-renewal');
 
-        // Studio Group Fitness Classes Schedule
+        // Studio Group Fitness Classes Schedule & Auto-Waitlist
         Route::get('/classes', [AdminClassController::class, 'index'])->name('classes.index');
         Route::post('/classes', [AdminClassController::class, 'store'])->name('classes.store');
+        Route::post('/classes/book', [AdminClassController::class, 'bookClass'])->name('classes.book');
+        Route::post('/classes/cancel/{id}', [AdminClassController::class, 'cancelBooking'])->name('classes.cancel');
         Route::delete('/classes/{id}', [AdminClassController::class, 'destroy'])->name('classes.destroy');
 
         // Inventory Stock Mutation Log

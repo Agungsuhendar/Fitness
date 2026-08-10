@@ -181,6 +181,26 @@ try {
         echo "✅ SQLite: Table 'pos_cash_movements' CREATED.<br>";
     }
 
+    // Check class_bookings table
+    $classBookingCheck = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='class_bookings'");
+    if (!$classBookingCheck->fetch()) {
+        $pdo->exec("CREATE TABLE class_bookings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fitness_class_id INTEGER NOT NULL,
+            user_id INTEGER NULL,
+            member_name VARCHAR(255) NOT NULL,
+            member_phone VARCHAR(255) NULL,
+            booking_type VARCHAR(50) DEFAULT 'member',
+            waitlist_position INTEGER DEFAULT 0,
+            status VARCHAR(50) DEFAULT 'confirmed',
+            promoted_at DATETIME NULL,
+            cancelled_at DATETIME NULL,
+            created_at DATETIME NULL,
+            updated_at DATETIME NULL
+        )");
+        echo "✅ SQLite: Table 'class_bookings' CREATED.<br>";
+    }
+
     echo "<h3>🎉 SQLite Schema Sync Completed Cleanly!</h3>";
 } catch (\Throwable $e) {
     echo "<h3 style='color: red;'>❌ SQLite Error: " . $e->getMessage() . "</h3>";

@@ -120,4 +120,27 @@ class WhatsAppService
 
         return self::sendMessage($user->phone, urldecode($msg));
     }
+
+    /**
+     * Send Class Waitlist Promotion Notification via WhatsApp
+     */
+    public static function sendClassWaitlistPromotionNotification(\App\Models\ClassBooking $booking): bool
+    {
+        $className = $booking->fitnessClass->name ?? 'Kelas Studio Gym';
+        $classTime = $booking->fitnessClass->schedule_time ?? 'Hari Ini';
+        $instructor = $booking->fitnessClass->instructor ?? 'Coach Studio';
+        $phone = $booking->member_phone ?: ($booking->user->phone ?? '');
+
+        if (!$phone) return false;
+
+        $msg = "🎉 *KABAR GEMBIRA! PROMOSI KELAS STUDIO FITLIFE*%0A%0A"
+            . "Halo Kak *{$booking->member_name}*, terdapat pembatalan peserta pada kelas *{$className}*!%0A%0A"
+            . "Status antrean Waitlist Anda otomatis *DIPROMOSIKAN menjadi PESERTA RESMI (CONFIRMED)*! 🥳%0A%0A"
+            . "📅 *Kelas:* {$className}%0A"
+            . "⏰ *Jadwal:* {$classTime}%0A"
+            . "🏋️ *Instruktur:* {$instructor}%0A%0A"
+            . "Silakan hadir 10 menit sebelum kelas dimulai & tunjukkan QR Card saat masuk studio. Sampai jumpa di kelas! 💪✨";
+
+        return self::sendMessage($phone, urldecode($msg));
+    }
 }

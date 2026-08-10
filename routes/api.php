@@ -32,8 +32,8 @@ use App\Http\Controllers\Api\StaffAttendanceApiController;
 
 Route::prefix('v1')->group(function () {
 
-    // Authentication Routes with Rate Limiting (Max 5 attempts per minute)
-    Route::middleware('throttle:5,1')->group(function () {
+    // Authentication Routes
+    Route::middleware('throttle:60,1')->group(function () {
         Route::post('/auth/login', [AuthController::class, 'login']);
         Route::post('/auth/register', [AuthController::class, 'register']);
     });

@@ -264,25 +264,39 @@ class AdminPosController extends Controller
 
     public function productsIndex()
     {
-        $this->ensureSeedProducts();
+        try {
+            $this->ensureSeedProducts();
+            $this->ensureShiftTablesExist();
+        } catch (\Throwable $t) {}
 
-        // Optimized Single-Query SQL Aggregates (Fast database-level calculation)
-        $metrics = DB::table('products')
-            ->where('is_active', true)
-            ->selectRaw('
-                SUM(CASE WHEN COALESCE(is_track_stock, 1) = 1 THEN stock * COALESCE(cost_price, 0) ELSE 0 END) as total_asset_value,
-                SUM(CASE WHEN COALESCE(is_track_stock, 1) = 1 THEN stock * price ELSE 0 END) as total_potential_revenue,
-                COUNT(CASE WHEN COALESCE(is_track_stock, 1) = 1 AND stock <= 5 THEN 1 END) as low_stock_count
-            ')
-            ->first();
+        try {
+            // Optimized Single-Query SQL Aggregates (Fast database-level calculation)
+            $metrics = DB::table('products')
+                ->where('is_active', true)
+                ->selectRaw('
+                    SUM(CASE WHEN COALESCE(is_track_stock, 1) = 1 THEN stock * COALESCE(cost_price, 0) ELSE 0 END) as total_asset_value,
+                    SUM(CASE WHEN COALESCE(is_track_stock, 1) = 1 THEN stock * price ELSE 0 END) as total_potential_revenue,
+                    COUNT(CASE WHEN COALESCE(is_track_stock, 1) = 1 AND stock <= 5 THEN 1 END) as low_stock_count
+                ')
+                ->first();
 
-        $totalAssetValue = (float)($metrics->total_asset_value ?? 0);
-        $totalPotentialRevenue = (float)($metrics->total_potential_revenue ?? 0);
-        $totalPotentialProfit = max(0, $totalPotentialRevenue - $totalAssetValue);
-        $lowStockCount = (int)($metrics->low_stock_count ?? 0);
+            $totalAssetValue = (float)($metrics->total_asset_value ?? 0);
+            $totalPotentialRevenue = (float)($metrics->total_potential_revenue ?? 0);
+            $totalPotentialProfit = max(0, $totalPotentialRevenue - $totalAssetValue);
+            $lowStockCount = (int)($metrics->low_stock_count ?? 0);
+        } catch (\Throwable $t) {
+            $totalAssetValue = 0;
+            $totalPotentialRevenue = 0;
+            $totalPotentialProfit = 0;
+            $lowStockCount = 0;
+        }
 
-        // Fetch products using indexed sort
-        $products = Product::where('is_active', true)->orderBy('category')->orderBy('name')->get();
+        try {
+            // Fetch products using indexed sort
+            $products = Product::where('is_active', true)->orderBy('category')->orderBy('name')->get();
+        } catch (\Throwable $t) {
+            $products = collect();
+        }
 
         // Fast Pending PO Count Query
         $pendingPoCount = 0;

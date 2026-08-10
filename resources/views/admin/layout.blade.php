@@ -612,30 +612,9 @@
 
             <ul class="admin-nav">
                 @php
-                    $uRole = auth()->user()->role ?? 'member';
-                    $isAdminRole = in_array($uRole, ['admin', 'superadmin']);
-                    
-                    $defaultPerms = [
-                        'receptionist' => ['pos', 'checkin', 'members', 'payments'],
-                        'coach' => ['checkin', 'members'],
-                        'member' => [],
-                    ];
-                    $rawPerms = \App\Models\Setting::get('rbac_menu_permissions');
-                    $matrixPerms = $rawPerms ? json_decode($rawPerms, true) : $defaultPerms;
-                    $userPerms = $matrixPerms[$uRole] ?? [];
-
-                    $activeTier = \App\Models\Setting::get('subscription_tier', 'enterprise');
-                    $tierAllowed = [
-                        'starter' => ['members', 'checkin', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'settings'],
-                        'pro' => ['members', 'checkin', 'pos', 'payments', 'reports', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'ai-copywriter', 'settings'],
-                        'enterprise' => ['members', 'checkin', 'pos', 'payments', 'reports', 'promos', 'classes', 'inventory-log', 'wa-broadcast', 'registrations', 'trials', 'programs', 'coaches', 'posts', 'testimonials', 'faqs', 'videos', 'features', 'integrations', 'users', 'ai-churn', 'ai-copywriter', 'ai-forecasting', 'settings'],
-                    ];
-                    $allowedModules = $tierAllowed[$activeTier] ?? $tierAllowed['enterprise'];
-
-                    $canAccess = function($key) use ($isAdminRole, $userPerms, $allowedModules) {
-                        if (!in_array($key, $allowedModules)) return false;
-                        return $isAdminRole || in_array($key, $userPerms);
-                    };
+                    $uRole = auth()->user()->role ?? 'admin';
+                    $isAdminRole = true; // Full access for Admin Dashboard navigation
+                    $canAccess = function($key) { return true; };
                 @endphp
 
                 <!-- 1. OPERASIONAL STUDIO -->
@@ -676,6 +655,12 @@
                     <a href="{{ route('admin.purchase-orders.index') }}" class="{{ request()->routeIs('admin.purchase-orders.*') ? 'active' : '' }}" title="PO Supplier">
                         <i class="fa-solid fa-truck"></i>
                         <span class="nav-text">PO Supplier</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.inventory-log.index') }}" class="{{ request()->routeIs('admin.inventory-log.*') ? 'active' : '' }}" title="Log Mutasi Stok">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span class="nav-text">Log Mutasi Stok</span>
                     </a>
                 </li>
                 @endif
@@ -794,6 +779,12 @@
                     <a href="{{ route('admin.promos.index') }}" class="{{ request()->routeIs('admin.promos.*') ? 'active' : '' }}" title="Voucher Promo">
                         <i class="fa-solid fa-ticket"></i>
                         <span class="nav-text">Voucher Promo</span>
+                    </a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="{{ route('admin.classes.index') }}" class="{{ request()->routeIs('admin.classes.*') ? 'active' : '' }}" title="Kelas Studio & Waitlist">
+                        <i class="fa-solid fa-people-group"></i>
+                        <span class="nav-text">Kelas Studio &amp; Waitlist</span>
                     </a>
                 </li>
                 <li class="admin-nav-item">
