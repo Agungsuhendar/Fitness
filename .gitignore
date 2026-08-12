@@ -27,3 +27,14 @@ Homestead.yaml
 Thumbs.db
 ._*
 *.zip
+
+# Database dumps — NEVER commit these
+*.sql
+*.dump
+*.sql.gz
+*.sqlite
+database/*.sqlite*
+
+# Public debug/test scripts — only index.php should be in public/
+public/*.php
+!public/index.php

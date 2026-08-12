@@ -26,8 +26,6 @@ return Application::configure(basePath: dirname(__DIR__))
             '/api/ipaymu/webhook',
             '/api/midtrans/webhook',
             '/api/payment-status',
-            '/payment/simulate-success/*',
-            '/payment/simulate-pending/*',
         ]);
         $middleware->redirectGuestsTo(function (Request $request) {
             if ($request->is('admin*')) {

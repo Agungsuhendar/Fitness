@@ -169,6 +169,22 @@ class PaymentController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Invalid order_id'], 400);
         }
 
+        // ── Midtrans Signature Verification ──
+        // Formula: SHA512(order_id + status_code + gross_amount + server_key)
+        $serverKey = \App\Models\Setting::get('midtrans_server_key', config('services.midtrans.server_key', env('MIDTRANS_SERVER_KEY', '')));
+        if ($serverKey) {
+            $expectedSignature = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
+            if (!$signatureKey || !hash_equals($expectedSignature, $signatureKey)) {
+                Log::warning('Midtrans Webhook INVALID SIGNATURE', [
+                    'order_id' => $orderId,
+                    'received_signature' => $signatureKey ? substr($signatureKey, 0, 16) . '...' : 'null',
+                ]);
+                return response()->json(['status' => 'error', 'message' => 'Invalid signature'], 403);
+            }
+        } else {
+            Log::warning('Midtrans Webhook: server_key not configured, signature verification skipped', ['order_id' => $orderId]);
+        }
+
         // Search Payment
         $payment = Payment::where('order_id', $orderId)->first();
         if (!$payment) {
@@ -294,6 +310,14 @@ class PaymentController extends Controller
 
     public function simulatePaymentSuccess(Request $request, $orderId)
     {
+        // ── Security: Only allow in non-production, authenticated admin ──
+        if (app()->environment('production')) {
+            return response()->json(['status' => 'error', 'message' => 'Simulation disabled in production'], 403);
+        }
+        if (!Auth::check() || !in_array(Auth::user()->role ?? '', ['admin', 'owner'])) {
+            return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 401);
+        }
+
         try {
             list($user, $payment) = $this->findUserAndPaymentByRef($orderId);
 
@@ -333,6 +357,14 @@ class PaymentController extends Controller
 
     public function simulatePaymentPending(Request $request, $orderId)
     {
+        // ── Security: Only allow in non-production, authenticated admin ──
+        if (app()->environment('production')) {
+            return response()->json(['status' => 'error', 'message' => 'Simulation disabled in production'], 403);
+        }
+        if (!Auth::check() || !in_array(Auth::user()->role ?? '', ['admin', 'owner'])) {
+            return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 401);
+        }
+
         try {
             list($user, $payment) = $this->findUserAndPaymentByRef($orderId);
 
@@ -380,6 +412,31 @@ class PaymentController extends Controller
             'query' => $request->query(),
         ]);
 
+        // ── iPaymu Signature Verification ──
+        // iPaymu sends signature via POST body or header; verify using HMAC-SHA256
+        $receivedSig = $payload['signature'] ?? $request->header('signature') ?? $request->header('X-Signature') ?? null;
+        $apiKey = \App\Models\Setting::get('ipaymu_api_key', env('IPAYMU_API_KEY', ''));
+        $va = \App\Models\Setting::get('ipaymu_va', env('IPAYMU_VA', ''));
+
+        if ($apiKey && $receivedSig) {
+            // Reconstruct the body hash for verification
+            $bodyForSig = $rawContent ?: json_encode($request->all());
+            $bodyHash = strtolower(hash('sha256', $bodyForSig));
+            $stringToSign = "POST:" . $va . ":" . $bodyHash . ":" . $apiKey;
+            $expectedSig = hash_hmac('sha256', $stringToSign, $apiKey);
+
+            if (!hash_equals($expectedSig, $receivedSig)) {
+                Log::warning('iPaymu Webhook INVALID SIGNATURE', [
+                    'received_sig' => substr($receivedSig, 0, 16) . '...',
+                ]);
+                return response()->json(['status' => 'error', 'message' => 'Invalid signature'], 403);
+            }
+        } elseif ($apiKey && !$receivedSig) {
+            Log::warning('iPaymu Webhook: No signature provided in payload or headers');
+            // Continue processing but log the warning — iPaymu may not always send signature
+            // depending on configuration. Amount verification below provides secondary check.
+        }
+
         $trxId = $payload['trx_id'] ?? ($payload['sid'] ?? ($payload['transaction_id'] ?? null));
         $status = $payload['status'] ?? ($payload['status_code'] ?? ($payload['transaction_status'] ?? ($payload['statusCode'] ?? null)));
         $referenceId = $payload['reference_id'] ?? ($payload['referenceId'] ?? ($payload['merchant_ref_id'] ?? null));
@@ -407,6 +464,20 @@ class PaymentController extends Controller
 
             if (!$payment && $user) {
                 $payment = Payment::where('user_id', $user->id)->latest()->first();
+            }
+
+            // ── Amount Verification: Ensure webhook amount matches stored payment ──
+            $webhookAmount = isset($payload['amount']) ? (float) $payload['amount'] : null;
+            if ($payment && $webhookAmount !== null) {
+                $storedAmount = (float) $payment->gross_amount;
+                if (abs($webhookAmount - $storedAmount) > 1) {
+                    Log::warning('iPaymu Webhook AMOUNT MISMATCH', [
+                        'order_id' => $payment->order_id,
+                        'webhook_amount' => $webhookAmount,
+                        'stored_amount' => $storedAmount,
+                    ]);
+                    return response()->json(['status' => 'error', 'message' => 'Amount mismatch'], 403);
+                }
             }
 
             if ($user) {

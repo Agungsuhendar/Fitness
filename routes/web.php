@@ -435,6 +435,6 @@ Route::get('/invoice', [LeadController::class, 'showInvoice'])->name('invoice.sh
 Route::post('/payment/snap-token', [PaymentController::class, 'createSnapToken'])->name('payment.snap');
 Route::post('/api/midtrans/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 Route::post('/api/ipaymu/webhook', [PaymentController::class, 'handleIpaymuWebhook'])->name('payment.ipaymu.webhook')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
-Route::post('/payment/simulate-success/{orderId}', [PaymentController::class, 'simulatePaymentSuccess'])->name('payment.simulate')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
-Route::post('/payment/simulate-pending/{orderId}', [PaymentController::class, 'simulatePaymentPending'])->name('payment.simulate-pending')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+Route::post('/payment/simulate-success/{orderId}', [PaymentController::class, 'simulatePaymentSuccess'])->name('payment.simulate')->middleware(['auth', 'role:admin']);
+Route::post('/payment/simulate-pending/{orderId}', [PaymentController::class, 'simulatePaymentPending'])->name('payment.simulate-pending')->middleware(['auth', 'role:admin']);
 Route::get('/api/payment-status', [PaymentController::class, 'checkStatus'])->name('payment.check-status');
